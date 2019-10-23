@@ -26,4 +26,12 @@ public class Program {
 	private static final Dimension screen_size = toolkit.getScreenSize();
 	
 	public static final int SCREEN_WIDTH = screen_size.width, SCREEN_HEIGHT = screen_size.height;
+
+	public static Panel panel;
+	public static Frame frame;
+	
+	public static void initFrame() {
+		panel = new Panel();
+		frame = new Frame(GAME_NAME + " " + getVersionString() + " | "+DEVELOPMENT_PERIOD,panel);
+	}
 }
