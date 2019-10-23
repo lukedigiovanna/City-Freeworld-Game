@@ -1,7 +1,9 @@
 package main;
 
+import javax.swing.JFrame;
+
 public class Main {
 	public static void main(String[] args) {
-		//test comment from dumb fuck laptop
+		new Frame(Program.GAME_NAME+" | "+Program.getVersionString(),new Panel());
 	}
 }
