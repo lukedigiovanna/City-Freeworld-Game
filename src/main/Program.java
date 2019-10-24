@@ -7,9 +7,9 @@ import java.awt.Toolkit;
 public class Program {
 	public static final int DISPLAY_WIDTH = 780, DISPLAY_HEIGHT = 585;
 	
-	public static final int VERSION_MAJOR = 0, VERSION_MINOR = 0, VERSION_TINY = 1;
+	public static final int VERSION_MAJOR = 0, VERSION_MINOR = 0, VERSION_TINY = 0;
 	
-	public static final String GAME_NAME = "ddg (tbd)",
+	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
 							   DEVELOPMENT_PERIOD = "October 2019";
 	

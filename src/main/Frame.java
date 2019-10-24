@@ -7,8 +7,11 @@ public class Frame {
 	
 	public Frame(String name, JPanel panel) {
 		frame = new JFrame(name);
-		frame.setSize(Program.SCREEN_WIDTH/2,Program.SCREEN_HEIGHT/2);
-		this.center();
+		double defaultRatio = 4.0/3; //W:H
+		int width = (int)(Program.SCREEN_WIDTH * 0.45);
+		int height = (int)(width/defaultRatio);
+		frame.setSize(width,height);
+		frame.setLocation(20,20);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(panel);
 		frame.requestFocus();
