@@ -1,13 +1,16 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
+import misc.Color8;
 import misc.ImageTools;
 
 //static class that holds some innate information about this application
 public class Program {
-	public static final int DISPLAY_WIDTH = 780, DISPLAY_HEIGHT = 585;
+	public static final int DISPLAY_WIDTH = 1000, DISPLAY_HEIGHT = 800;
 	
 	public static final int VERSION_MAJOR = 0, VERSION_MINOR = 0, VERSION_TINY = 0;
 	
@@ -39,9 +42,5 @@ public class Program {
 	public static void initFrame() {
 		panel = new GamePanel();
 		frame = new Frame(GAME_NAME + " " + getVersionString() + " | "+DEVELOPMENT_PERIOD,panel);
-		java.awt.Graphics g = panel.getGraphics();
-		java.awt.Image background = ImageTools.getImage("city.jpg");
-		System.out.println(background);
-		g.drawImage(background, 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, null);
 	}
 }

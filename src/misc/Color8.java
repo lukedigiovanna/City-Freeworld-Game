@@ -30,7 +30,7 @@ public class Color8 extends Color {
 	}
 	
 	public static Color8 to8Bit(Color c) {
-		Color8 c8 = new Color8(c.getRed()/8,c.getGreen()/8,c.getBlue()/8);
+		Color8 c8 = new Color8(c.getRed()/(255/8),c.getGreen()/(255/8),c.getBlue()/(255/4));
 		c8 = c8.setAlpha(c.getAlpha());
 		return c8;
 	}
