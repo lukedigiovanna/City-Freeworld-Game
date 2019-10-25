@@ -31,28 +31,16 @@ public class GamePanel extends JPanel {
 				}
 			}
 		});
-		repaintThread.start();
+		//repaintThread.start();
 	}
 	
 	public Graphics2D getGraphics() {
-		return graphics;
-	}
-	
-	public void repaint() {
-		if (graphics == null) {
-			super.repaint();
-			return;
-		}
-		Graphics g = graphics;
-		Image i = ImageTools.getImage("city.jpg");
-		i = ImageTools.convertTo8Bit(i);
-		g.drawImage(i, 0, 0, screen.getWidth(), screen.getHeight(), null);
-		g.setColor(Color.RED);
-		g.fillRect(0, 0, 50, 50);
-		super.repaint();
+		return screen.createGraphics();
 	}
 	
 	public void paintComponent(Graphics g) {
+		graphics.setColor(Color.RED);
+		graphics.fillRect(0, 0, 50, 50);
 		g.drawImage(screen, 0, 0, this.getWidth(), this.getHeight(), null);
 	}
 }

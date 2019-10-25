@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import misc.Color8;
 import misc.ImageTools;
+import rendering.Renderer;
 
 //static class that holds some innate information about this application
 public class Program {
@@ -39,7 +40,12 @@ public class Program {
 	public static GamePanel panel;
 	public static Frame frame;
 	
-	public static void initFrame() {
+	public static void init() {
+		initFrame(); //opens up the window and creates a game panel object
+		Renderer.initialize();
+	}
+	
+	private static void initFrame() {
 		panel = new GamePanel();
 		frame = new Frame(GAME_NAME + " " + getVersionString() + " | "+DEVELOPMENT_PERIOD,panel);
 	}
