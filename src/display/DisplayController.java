@@ -1,4 +1,4 @@
-package rendering;
+package display;
 
 import java.awt.*;
 
@@ -15,38 +15,37 @@ public class DisplayController {
 	public static final int REPAINT_RATE = 50;
 	
 	public static enum Screen {
-		MAIN,
-		GAME;
+		MAIN(new MainScreenDisplay()),
+		GAME(new GameDisplay());
 		
-		
-		Screen() {
-			
+		Display display;
+		Screen(Display d) {
+			display = d;
 		}
 	}
 	
 	private static Screen currentScreen = Screen.MAIN;
 	
-	private static Image cityBackground = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
-	
-	public static void redraw(Graphics g) {
+	private static int captures = 0;
+	private static float dt = 0;
+	public static void redraw(Graphics2D g) {
 		if (!initialized) 
 			return;
 		
-		switch (currentScreen) {
-		case MAIN:
-			fillBackground(g, cityBackground);
-			break;
-		case GAME:
-			break;
-		default:
-			fillBackground(g, Color8.GRAY);
-		}
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
+		
+		currentScreen.display.draw(g);
 		
 		//get the time it took to draw this frame
-		float dt = frameTimer.mark();
-		curFps = 1.0f/dt;
-		
-		System.out.println(curFps);
+		dt += frameTimer.mark();
+		if (captures > 5) {
+			curFps = 1.0f/(dt/captures);
+			captures = 1;
+			dt = 0;
+		} else {
+			captures++;
+		}
 		
 		//now draw the fps if that is enabled
 		if (showFps) {
@@ -57,15 +56,6 @@ public class DisplayController {
 		}
 		
 	}
-	
-	public static void fillBackground(Graphics g, Color color) {
-		g.setColor(color);
-		g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
-	}
-	
-	public static void fillBackground(Graphics g, Image image) {
-		g.drawImage(image, 0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT, null);
-	} 
 	
 	public static void setScreen(Screen screen) {
 		currentScreen = screen;

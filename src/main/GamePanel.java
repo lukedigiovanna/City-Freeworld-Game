@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import display.DisplayController;
 import misc.Color8;
 import misc.ImageTools;
-import rendering.DisplayController;
 
 public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ public class GamePanel extends JPanel {
 	
 	public void repaint() {
 		if (screen != null) {
-			Graphics gf = screen.createGraphics();
+			Graphics2D gf = screen.createGraphics();
 			DisplayController.redraw(gf);
 		}
 		super.repaint();

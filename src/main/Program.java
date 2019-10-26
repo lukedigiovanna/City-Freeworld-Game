@@ -1,14 +1,11 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
+import java.awt.*;
 
+import display.DisplayController;
 import misc.Color8;
 import misc.ImageTools;
 import misc.MathUtils;
-import rendering.DisplayController;
 
 //static class that holds some innate information about this application
 public class Program {
