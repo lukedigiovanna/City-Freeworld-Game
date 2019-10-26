@@ -40,7 +40,11 @@ public class GamePanel extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		graphics.setColor(Color.RED);
-		graphics.fillRect(0, 0, 50, 50);
+		graphics.fillRect(0,0,Program.DISPLAY_WIDTH/2,Program.DISPLAY_HEIGHT/2);
+		graphics.fillRect(Program.DISPLAY_WIDTH/2, Program.DISPLAY_HEIGHT/2, Program.DISPLAY_WIDTH/2, Program.DISPLAY_HEIGHT/2);
+		graphics.setColor(Color.GREEN);
+		graphics.fillRect(Program.DISPLAY_WIDTH/2, 0, Program.DISPLAY_WIDTH/2,Program.DISPLAY_HEIGHT/2);
+		graphics.fillRect(0, Program.DISPLAY_HEIGHT/2, Program.DISPLAY_WIDTH/2, Program.DISPLAY_HEIGHT/2);
 		g.drawImage(screen, 0, 0, this.getWidth(), this.getHeight(), null);
 	}
 }
