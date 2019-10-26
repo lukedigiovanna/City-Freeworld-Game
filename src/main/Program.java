@@ -7,7 +7,8 @@ import java.awt.image.BufferedImage;
 
 import misc.Color8;
 import misc.ImageTools;
-import rendering.Renderer;
+import misc.MathUtils;
+import rendering.DisplayController;
 
 //static class that holds some innate information about this application
 public class Program {
@@ -41,8 +42,9 @@ public class Program {
 	public static Frame frame;
 	
 	public static void init() {
+		Settings.initialize();
 		initFrame(); //opens up the window and creates a game panel object
-		Renderer.initialize();
+		DisplayController.initialize();
 	}
 	
 	private static void initFrame() {

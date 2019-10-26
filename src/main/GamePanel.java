@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import misc.Color8;
 import misc.ImageTools;
+import rendering.DisplayController;
 
 public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +24,7 @@ public class GamePanel extends JPanel {
 			public void run() {
 				while (true) {
 					try {
-						Thread.sleep(50);
+						Thread.sleep(1000/Integer.parseInt(Settings.getSetting("max_fps")));
 						repaint();
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -31,20 +32,18 @@ public class GamePanel extends JPanel {
 				}
 			}
 		});
-		//repaintThread.start();
+		repaintThread.start();
 	}
 	
-	public Graphics2D getGraphics() {
-		return screen.createGraphics();
+	public void repaint() {
+		if (screen != null) {
+			Graphics gf = screen.createGraphics();
+			DisplayController.redraw(gf);
+		}
+		super.repaint();
 	}
 	
 	public void paintComponent(Graphics g) {
-		graphics.setColor(Color.RED);
-		graphics.fillRect(0,0,Program.DISPLAY_WIDTH/2,Program.DISPLAY_HEIGHT/2);
-		graphics.fillRect(Program.DISPLAY_WIDTH/2, Program.DISPLAY_HEIGHT/2, Program.DISPLAY_WIDTH/2, Program.DISPLAY_HEIGHT/2);
-		graphics.setColor(Color.GREEN);
-		graphics.fillRect(Program.DISPLAY_WIDTH/2, 0, Program.DISPLAY_WIDTH/2,Program.DISPLAY_HEIGHT/2);
-		graphics.fillRect(0, Program.DISPLAY_HEIGHT/2, Program.DISPLAY_WIDTH/2, Program.DISPLAY_HEIGHT/2);
 		g.drawImage(screen, 0, 0, this.getWidth(), this.getHeight(), null);
 	}
 }
