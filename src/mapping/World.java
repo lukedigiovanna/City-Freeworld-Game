@@ -19,7 +19,10 @@ public class World {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell();
-				c.setImage(ImageTools.getBufferedImage("grass.png"));
+				if (Math.random() < 0.5)
+					c.setImage(ImageTools.getBufferedImage("grass.png"));
+				else
+					c.setImage(ImageTools.getBufferedImage("water.png"));
 				grid.set(x, y, c);
 			}
 		}
