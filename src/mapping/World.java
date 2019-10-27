@@ -20,9 +20,11 @@ public class World {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell();
 				if (Math.random() < 0.5)
-					c.setImage(ImageTools.getBufferedImage("grass.png"));
-				else
-					c.setImage(ImageTools.getBufferedImage("water.png"));
+					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")));
+				else {
+					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")));
+					c.addAttrib(Cell.Attribute.OBSTACLE);
+				}
 				grid.set(x, y, c);
 			}
 		}

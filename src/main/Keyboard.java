@@ -59,6 +59,20 @@ public class Keyboard {
 		return false;
 	}
 	
+	/**
+	 * //returns true if the keycode is in the list and removes it so it is only called once
+	 * @param keycode key event keycode
+	 * @return true if the key is in the lest
+	 */
+	public boolean keyPressed(int keycode) {
+		for (Key k : keys)
+			if (k.keycode() == keycode) {
+				keys.remove(k);
+				return true;
+			}
+		return false;
+	}
+	
 	private class Key {
 		private int keycode;
 		private char c;

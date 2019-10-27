@@ -1,6 +1,7 @@
 package mapping;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cell {
@@ -9,7 +10,7 @@ public class Cell {
 	private String typeName;
 	
 	public Cell() {
-		
+		attribs = new ArrayList<Attribute>();
 	}
 	
 	public void setImage(BufferedImage image) {
