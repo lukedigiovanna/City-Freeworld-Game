@@ -77,8 +77,22 @@ public class DisplayController {
 	private static boolean showFps = true;
 	private static FrameTimer frameTimer;
 	private static boolean initialized = false;
+	private static Thread compCheckThread;
 	
 	public static void initialize() {
+		compCheckThread = new Thread(new Runnable() {
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(50);
+						currentScreen.display.checkComponents();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		compCheckThread.start();
 		frameTimer = new FrameTimer();
 		initialized = true;
 	}

@@ -1,7 +1,11 @@
 package display;
 
 import java.awt.*;
+import java.util.List;
+import java.util.*;
 
+import display.component.*;
+import display.component.Component;
 import main.Program;
 
 /**
@@ -10,6 +14,22 @@ import main.Program;
  */
 public abstract class Display {
 	public abstract void draw(Graphics2D g);
+	
+	private List<Component> components;
+	
+	public Display() {
+		components = new ArrayList<Component>();
+	}
+	
+	public void add(Component component) {
+		components.add(component);
+	}
+	
+	public void checkComponents() {
+		for (Component c : components) {
+			c.check();
+		}
+	}
 	
 	public void fillBackground(Graphics2D g, Color color) {
 		g.setColor(color);

@@ -38,9 +38,12 @@ public class Program {
 	public static GamePanel panel;
 	public static Frame frame;
 	
+	public static Mouse mouse;
+	
 	public static void init() {
 		Settings.initialize();
 		initFrame(); //opens up the window and creates a game panel object
+		mouse = new Mouse(panel);
 		DisplayController.initialize();
 	}
 	

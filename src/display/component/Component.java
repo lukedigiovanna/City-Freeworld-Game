@@ -1,5 +1,58 @@
 package display.component;
 
-public abstract class Component {
+import java.awt.Graphics2D;
 
+import main.Program;
+
+public abstract class Component {
+	protected int x, y, width, height;
+	
+	public Component(int x, int y, int w, int h) {
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+	}
+	
+	private boolean active = true;
+	
+	public void activate() {
+		active = true;
+	}
+	
+	public void deactivate() {
+		active = false;
+	}
+	
+	public abstract void draw(Graphics2D g);
+	
+	public abstract void onMouseDown();
+	public abstract void onMouseUp();
+	public abstract void onMouseMoved(int dx, int dy);
+	public abstract void onMouseOver();
+	
+	private boolean mouseDown = false;
+	private int lastX = 0, lastY = 0;
+	/**
+	 * captures some mouse info and calls methods based on that
+	 */
+	public void check() {
+		System.out.println("oik");
+		//first check if the mouse is inside the component area
+		int mx = Program.mouse.getX(), my = Program.mouse.getY();
+		if (active && mx > x && mx < x + width && my > y && my < y + height) {
+			if (Program.mouse.isMouseDown()) {
+				if (!mouseDown) {
+					onMouseDown();
+				}
+				mouseDown = true;
+			} else {
+				if (mouseDown) {
+					onMouseUp();
+				}
+				mouseDown = false;
+			}
+			onMouseOver();
+		}
+	}
 }
