@@ -67,6 +67,18 @@ public class MathUtils {
 		return val;
 	}
 	
+	public static float round(float val, float decimal) {
+		float scale = 1.0f/decimal;
+		val *= scale;
+		return Math.round(val)/scale;
+	}
+	
+	public static double round(double val, double decimal) {
+		double scale = 1.0/decimal;
+		val *= scale;
+		return Math.round(val)/scale;
+	}
+	
 	//give in y = mx + b form
 	public static Vector2 intersects(double m1, double b1, double m2, double b2) {
 		if (m1 == m2) //parallel so they will never intersect or will have infinite intersections

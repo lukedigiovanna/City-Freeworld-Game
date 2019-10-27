@@ -1,23 +1,24 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
+import java.awt.*;
 
+import display.DisplayController;
 import misc.Color8;
 import misc.ImageTools;
-import rendering.Renderer;
+import misc.MathUtils;
 
 //static class that holds some innate information about this application
 public class Program {
-	public static final int DISPLAY_WIDTH = 1000, DISPLAY_HEIGHT = 800;
+	private static final double ratio = 4.0/3.0f;
+	public static final int DISPLAY_WIDTH = 1000, DISPLAY_HEIGHT = (int)(DISPLAY_WIDTH/ratio);
 	
 	public static final int VERSION_MAJOR = 0, VERSION_MINOR = 0, VERSION_TINY = 0;
 	
 	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
 							   DEVELOPMENT_PERIOD = "October 2019";
+	
+	public static final String FONT_FAMILY = "BolsterBold";
 	
 	@SuppressWarnings("unused")
 	public static String getVersionString() {
@@ -40,13 +41,30 @@ public class Program {
 	public static GamePanel panel;
 	public static Frame frame;
 	
+	public static Mouse mouse;
+	public static Keyboard keyboard;
+	
+	private static boolean initialized = false;
+	
 	public static void init() {
+		Settings.initialize();
 		initFrame(); //opens up the window and creates a game panel object
-		Renderer.initialize();
+		mouse = new Mouse(panel);
+		keyboard = new Keyboard(panel);
+		DisplayController.initialize();
+		initialized = true;
 	}
 	
 	private static void initFrame() {
 		panel = new GamePanel();
 		frame = new Frame(GAME_NAME + " " + getVersionString() + " | "+DEVELOPMENT_PERIOD,panel);
+	}
+	
+	public static boolean initialized() {
+		return initialized;
+	}
+	
+	public static void exit() {
+		System.exit(0);
 	}
 }

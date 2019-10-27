@@ -5,13 +5,12 @@ public class FrameTimer {
 		
 	}
 	
-	private float last = System.currentTimeMillis();
+	private long last = System.currentTimeMillis();
 	
 	public float mark() {
-		float now = System.currentTimeMillis();
-		System.out.println(now+", "+last);
-		float dt = now-last;
+		long now = System.currentTimeMillis();
+		long dt = now-last;
 		last = now;
-		return dt;
+		return dt/1000.0f;
 	}
 }

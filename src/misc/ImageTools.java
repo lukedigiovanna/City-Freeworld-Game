@@ -9,6 +9,9 @@ import javax.swing.ImageIcon;
 import main.Program;
 
 public class ImageTools {
+	public static final BufferedImage IMAGE_NOT_FOUND = getImageNotFound(),
+										BLANK = getBlank();
+	
 	public static BufferedImage convertTo8Bit(BufferedImage image) {
 		if (image == null)
 			return null;
@@ -31,18 +34,18 @@ public class ImageTools {
 	
 	public static Image getImage(String filePath) {
 		//for now lets just follow the file path to our images folder : "assets/images/"
-		filePath = "assets/images/"+filePath;
+		if (filePath.indexOf("/") < 0)
+			filePath = "assets/images/"+filePath;
 		Image image = (new ImageIcon(filePath)).getImage();
 		if (image == null) { //ie there is no image with that filePath
 			//create the image not found image
-			BufferedImage notFound = new BufferedImage(2,2,BufferedImage.TYPE_INT_ARGB);
-			notFound.setRGB(0, 0, Color.black.getRGB());
-			notFound.setRGB(1, 1, Color.black.getRGB());
-			notFound.setRGB(0, 1, Color.magenta.getRGB());
-			notFound.setRGB(1, 0, Color.magenta.getRGB());
-			return notFound;
+			return IMAGE_NOT_FOUND;
 		}
 		return image;
+	}
+	
+	public static BufferedImage getBufferedImage(String filePath) {
+		return toBufferedImage(getImage(filePath));
 	}
 	
 	public static BufferedImage toBufferedImage(Image image) {
@@ -55,5 +58,19 @@ public class ImageTools {
 		BufferedImage img = new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
 		img.getGraphics().drawImage(image, 0, 0, null);
 		return img;
+	}
+	
+	private static BufferedImage getImageNotFound() {
+		BufferedImage notFound = new BufferedImage(2,2,BufferedImage.TYPE_INT_ARGB);
+		notFound.setRGB(0, 0, Color.black.getRGB());
+		notFound.setRGB(1, 1, Color.black.getRGB());
+		notFound.setRGB(0, 1, Color.magenta.getRGB());
+		notFound.setRGB(1, 0, Color.magenta.getRGB());
+		return notFound;
+	}
+	
+	private static BufferedImage getBlank() {
+		BufferedImage blank = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
+		return blank;
 	}
 }
