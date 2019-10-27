@@ -28,17 +28,26 @@ public class Mouse {
 			public void mouseMoved(MouseEvent e) {
 				lastMouse = e;
 			}
+			
+			public void mouseDragged(MouseEvent e) {
+				lastMouse = e;
+			}
 		});
+		
 	}
 	
 	/**
 	 * @return the x coordinate on the display (not the panel)
 	 */
 	public int getX() {
+		if (lastMouse == null)
+			return 0;
 		return (int)((double)lastMouse.getX()/panel.getWidth()*Program.DISPLAY_WIDTH);
 	}
 	
 	public int getY() {
+		if (lastMouse == null)
+			return 0;
 		return (int)((double)lastMouse.getY()/panel.getHeight()*Program.DISPLAY_HEIGHT);
 	}
 	

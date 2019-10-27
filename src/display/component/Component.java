@@ -30,14 +30,15 @@ public abstract class Component {
 	public abstract void onMouseUp();
 	public abstract void onMouseMoved(int dx, int dy);
 	public abstract void onMouseOver();
+	public abstract void onMouseOut();
 	
 	private boolean mouseDown = false;
+	private boolean mouseOver = false;
 	private int lastX = 0, lastY = 0;
 	/**
 	 * captures some mouse info and calls methods based on that
 	 */
 	public void check() {
-		System.out.println("oik");
 		//first check if the mouse is inside the component area
 		int mx = Program.mouse.getX(), my = Program.mouse.getY();
 		if (active && mx > x && mx < x + width && my > y && my < y + height) {
@@ -52,7 +53,14 @@ public abstract class Component {
 				}
 				mouseDown = false;
 			}
-			onMouseOver();
+			if (!mouseOver)
+				onMouseOver();
+			mouseOver = true;
+		} else if (active) {
+			if (mouseOver)
+				onMouseOut();
+			mouseOver = false;
+			mouseDown = false;
 		}
 	}
 }

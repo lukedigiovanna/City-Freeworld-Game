@@ -14,6 +14,7 @@ import main.Program;
  */
 public abstract class Display {
 	public abstract void draw(Graphics2D g);
+	public abstract void set(); //called when the controller sets the display
 	
 	private List<Component> components;
 	

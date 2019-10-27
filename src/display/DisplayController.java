@@ -59,6 +59,7 @@ public class DisplayController {
 	
 	public static void setScreen(Screen screen) {
 		currentScreen = screen;
+		currentScreen.display.set();
 	}
 	
 	public static Screen getCurrentScreen() {
@@ -95,5 +96,6 @@ public class DisplayController {
 		compCheckThread.start();
 		frameTimer = new FrameTimer();
 		initialized = true;
+		currentScreen.display.set();
 	}
 }
