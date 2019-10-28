@@ -85,11 +85,6 @@ public class Game {
 	private int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
 	
 	public void draw(Graphics2D g) {
-		if (paused) {
-			g.setColor(Color.RED);
-			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
-			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
-		}
 		camera.draw(world);
 		g.drawImage(camera.getView(), 0, 0, cameraWidth, cameraHeight, null);
 		g.setColor(Color8.GRAY);
@@ -97,5 +92,10 @@ public class Game {
 		g.fillRect(cameraWidth, 0, 20, cameraHeight);
 		g.fillRect(0, 0, 20, cameraHeight);
 		g.fillRect(20, 0, cameraWidth, 20);
+		if (paused) {
+			g.setColor(Color.RED);
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
+			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
+		}
 	}
 }
