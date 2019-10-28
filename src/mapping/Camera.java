@@ -3,33 +3,55 @@ package mapping;
 import misc.Vector2;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Camera {
 	private Vector2 position;
-	private int cellSize = 48; //pixels... preferably a factor of 8 to maintain aspect ratio
+	private float width, height; //cell grid width and height
+	private BufferedImage image;
+	private int cellSize = 32;
 	
-	public Camera(float x, float y) {
+	public Camera(float x, float y, float width, float height) {
 		this.position = new Vector2(x, y);
+		this.width = width;
+		this.height = height;
+		image = new BufferedImage((int)(width * cellSize), (int)(height * cellSize), BufferedImage.TYPE_INT_ARGB);
 	}
 	
-	public void draw(Graphics2D g, World world, int px, int py, int width, int height){
+	/**
+	 * Getter for camera view
+	 * @return the camera view
+	 */
+	public BufferedImage getView() {
+		return image;
+	}
+	
+	/**
+	 * Redraws the camera view to a BufferedImage
+	 * Only draws what is in view of the camera. Ignores other cells.
+	 * @param world the world to draw. includes the grid and entities
+	 */
+	public void draw(World world){
+		Graphics g = image.getGraphics();
+		//first wipe the old view
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, image.getWidth(), image.getHeight());
+		
 		Region region = world.getCurrentRegion();
-		int indexWidth = width/cellSize+1, indexHeight = height/cellSize+1;
-		int startPX = (int)(1-(position.getX()-(int)position.getX())*cellSize), startPY = (int)(1-(position.getY()-(int)position.getY())*cellSize);
 		CellGrid grid = region.getGrid();
-		for (int ix = (int)position.getX(); ix < (int)position.getX()+indexWidth; ix++) {
-			for (int iy = (int)position.getY(); iy < (int)position.getY()+indexHeight; iy++) {
+		//find the index on the grid where we need to start
+		int startIndexX = (int)this.position.getX(), startIndexY = (int)this.position.getY();
+		//find where we need to start on the tile drawing
+		int startPX = (int)((1-(position.getX()%1.0f)) * cellSize)-cellSize,
+			startPY = (int)((1-(position.getY()%1.0f)) * cellSize)-cellSize;
+		//how many cells we need to get in the x, y directions
+		int gridWidth = (int)width+1, gridHeight = (int)height+1;
+		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) {
+			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				if (ix >= 0 && ix < grid.getWidth() && iy >= 0 && iy < grid.getHeight()) {
-					//then draw it
-					int cellHeight = cellSize;
-					int cellWidth = cellSize;
-					int cellX = px + (ix-(int)position.getX()) * cellSize + startPX,
-					    cellY = py + (iy-(int)position.getY()) * cellSize + startPY;
-//					if (cellY + cellHeight >= py + height)
-//						cellHeight = py + height - cellY; 
-//					if (cellX + cellWidth >= px + width)
-//						cellWidth = px + width - cellX;
-					g.drawImage(grid.get(ix, iy).getImage(), cellX, cellY, cellWidth, cellHeight, null);
+					int px = startPX + (ix-startIndexX) * cellSize;
+					int py = startPY + (iy-startIndexY) * cellSize;
+					g.drawImage(grid.get(ix, iy).getImage(), px, py, cellSize, cellSize, null);
 				}
 			}
 		}

@@ -3,6 +3,8 @@ package misc;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -15,6 +17,7 @@ public class FontViewer {
 		frame.setSize(SIZE,SIZE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		frame.requestFocus();
 		frame.setContentPane(new Panel());
 		frame.setVisible(true);
 	}
@@ -36,6 +39,24 @@ public class FontViewer {
 					if (position < 0)
 						position = 0;
 					repaint();
+				}
+			});
+			
+			this.setFocusable(true);
+			this.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					
+				}
+
+				@Override
+				public void keyPressed(KeyEvent e) {
+					System.out.println("Key Char: \'"+e.getKeyChar()+"\' Code: "+e.getKeyCode()+"\n");
+				}
+
+				@Override
+				public void keyReleased(KeyEvent e) {
+					
 				}
 			});
 		}

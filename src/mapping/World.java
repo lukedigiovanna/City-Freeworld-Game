@@ -9,7 +9,6 @@ import misc.ImageTools;
 public class World {
 	private List<Region> regions;
 	private int currentRegion;
-	private Camera camera;
 	
 	public World() {
 		regions = new ArrayList<Region>();
@@ -20,20 +19,15 @@ public class World {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell();
 				if (Math.random() < 0.5)
-					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")));
+					c.setImage(ImageTools.getBufferedImage("grass.png"));
 				else {
-					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")));
+					c.setImage(ImageTools.getBufferedImage("water.png"));
 					c.addAttrib(Cell.Attribute.OBSTACLE);
 				}
 				grid.set(x, y, c);
 			}
 		}
 		regions.add(temp);
-		camera = new Camera(0,0);
-	}
-	
-	public Camera getCamera() {
-		return this.camera;
 	}
 	
 	public Region getCurrentRegion() {

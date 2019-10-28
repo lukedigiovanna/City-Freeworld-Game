@@ -32,12 +32,12 @@ public abstract class Display {
 		}
 	}
 	
-	public void fillBackground(Graphics2D g, Color color) {
+	public static void fillBackground(Graphics2D g, Color color) {
 		g.setColor(color);
 		g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
 	}
 	
-	public void fillBackground(Graphics2D g, Image image) {
+	public static void fillBackground(Graphics2D g, Image image) {
 		g.drawImage(image, 0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT, null);
 	}
 	
@@ -51,7 +51,7 @@ public abstract class Display {
 	 * @param y bottom of the text
 	 * @param alignment integer value that determines alignment: LEFT, CENTER, RIGHT
 	 */
-	public void drawText(Graphics2D g, String str, int x, int y, int alignment) {
+	public static void drawText(Graphics g, String str, int x, int y, int alignment) {
 		switch (alignment) {
 		case CENTER_ALIGN:
 			g.drawString(str, x-g.getFontMetrics().stringWidth(str)/2, y);
@@ -65,11 +65,11 @@ public abstract class Display {
 		}
 	}
 	
-	public void drawText(Graphics2D g, String str, float x, float y, int alignment) {
+	public static void drawText(Graphics g, String str, float x, float y, int alignment) {
 		drawText(g,str,ptpX(x),ptpY(y),alignment);
 	}
 	
-	public void drawText(Graphics2D g, String str, CustomFont cf, int size, int x, int y, int alignment) {
+	public static void drawText(Graphics2D g, String str, CustomFont cf, int size, int x, int y, int alignment) {
 		int startX = x;
 		int length = str.length()*size;
 		switch (alignment) {
@@ -88,15 +88,15 @@ public abstract class Display {
 		}
 	}
 	
-	public void drawText(Graphics2D g, String str, CustomFont cf, float size, float x, float y, int alignment) {
+	public static void drawText(Graphics2D g, String str, CustomFont cf, float size, float x, float y, int alignment) {
 		drawText(g,str,cf,ptpY(size),ptpX(x),ptpY(y),alignment);
 	}
 	
-	public int ptpX(float x) {
+	public static int ptpX(float x) {
 		return (int)(x*Program.DISPLAY_WIDTH);
 	}
 	
-	public int ptpY(float y) {
+	public static int ptpY(float y) {
 		return (int)(y*Program.DISPLAY_HEIGHT);
 	}
 	

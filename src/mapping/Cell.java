@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cell {
+	public static final int PIXEL_SIZE = 8;
+	
 	private BufferedImage image;
 	private List<Attribute> attribs;
 	private String typeName;

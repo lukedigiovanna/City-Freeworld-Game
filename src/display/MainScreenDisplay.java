@@ -3,7 +3,8 @@ package display;
 import java.awt.*;
 
 import display.component.Button;
-import display.component.MainScreenButton;
+import display.component.Checkbox;
+import display.component.*;
 import main.Program;
 import misc.Color8;
 import misc.ImageTools;
@@ -11,6 +12,8 @@ import misc.ImageTools;
 public class MainScreenDisplay extends Display {
 
 	private Button playButton;
+	
+	private Checkbox boxTest;
 	
 	public MainScreenDisplay() {
 		super();
@@ -20,6 +23,9 @@ public class MainScreenDisplay extends Display {
 			}
 		};
 		add(playButton);
+		
+		boxTest = new Checkbox(100,100,50,50);
+		add(boxTest);
 	}
 	
 	private Image background = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
@@ -33,6 +39,8 @@ public class MainScreenDisplay extends Display {
 		drawText(g,Program.GAME_NAME,CustomFonts.HANDDRAWN,0.05f,0.5f,0.3f,Display.CENTER_ALIGN);
 		
 		playButton.draw(g);
+		
+		boxTest.draw(g);
 	}
 	
 	@Override

@@ -50,7 +50,7 @@ public class DisplayController {
 		//now draw the fps if that is enabled
 		if (showFps) {
 			g.setColor(Color.WHITE);
-			g.setFont(new Font("Arial",Font.BOLD,18));
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
 			String s = "FPS: "+(int)curFps;
 			g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 20);
 		}
