@@ -18,9 +18,9 @@ public class Vector2 {
 	 * get angle
 	 */
 	
-	private double x, y;
+	public float x, y;
 	
-	public Vector2(double x, double y) {
+	public Vector2(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -37,12 +37,12 @@ public class Vector2 {
 		this.y -= other.y;
 	}
 	
-	public void multiply(double scalar) {
+	public void multiply(float scalar) {
 		this.x *= scalar;
 		this.y *= scalar;
 	}
 	
-	public void divide(double scalar) {
+	public void divide(float scalar) {
 		if (scalar == 0)
 			return;
 		else {
@@ -51,33 +51,33 @@ public class Vector2 {
 		}
 	}
 	
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 	
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 	
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 	
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 	
 	//returns the radian value of the angle
-	public double getAngle() {
-		return MathUtils.getAngle(this.x, this.y);
+	public float getAngle() {
+		return (float)MathUtils.getAngle(this.x, this.y);
 	}
 	
-	public double getLength() {
-		return Math.sqrt(x*x+y*y);
+	public float getLength() {
+		return (float)Math.sqrt(x*x+y*y);
 	}
 	
 	public void normalize() {
-		double length = getLength();
+		float length = getLength();
 		if (length == 0)
 			return;
 		else

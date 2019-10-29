@@ -10,7 +10,7 @@ import main.Program;
 
 public class ImageTools {
 	public static final BufferedImage IMAGE_NOT_FOUND = getImageNotFound(),
-										BLANK = getBlank();
+									  BLANK = getBlank();
 	
 	public static BufferedImage convertTo8Bit(BufferedImage image) {
 		if (image == null)
@@ -58,6 +58,20 @@ public class ImageTools {
 		BufferedImage img = new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
 		img.getGraphics().drawImage(image, 0, 0, null);
 		return img;
+	}
+	
+	public static BufferedImage rescale(BufferedImage image, int newWidth, int newHeight) {
+		BufferedImage rescaled = new BufferedImage(newWidth, newHeight, image.getType());
+		float widthFactor = (float)image.getWidth()/newWidth, heightFactor = (float)image.getHeight()/newHeight; 
+		System.out.println(widthFactor);
+		for (int x = 0; x < newWidth; x++) 
+			for (int y = 0; y < newHeight; y++) 
+				rescaled.setRGB(x, y, image.getRGB((int)(x*widthFactor), (int)(y*heightFactor)));
+		return rescaled;
+	}
+	
+	public static BufferedImage rescale(Image image, int newWidth, int newHeight) {
+		return rescale(toBufferedImage(image),newWidth,newHeight);
 	}
 	
 	private static BufferedImage getImageNotFound() {

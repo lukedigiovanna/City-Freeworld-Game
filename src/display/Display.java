@@ -92,6 +92,19 @@ public abstract class Display {
 		drawText(g,str,cf,ptpY(size),ptpX(x),ptpY(y),alignment);
 	}
 	
+	/**
+	 * Primes the passing graphics object to draw 
+	 * @param g
+	 * @param rotation
+	 */
+	public static void setRotation(Graphics2D g, double rotation) {
+		
+	}
+	
+	public static void clearRotation(Graphics2D g) {
+		
+	}
+	
 	public static int ptpX(float x) {
 		return (int)(x*Program.DISPLAY_WIDTH);
 	}

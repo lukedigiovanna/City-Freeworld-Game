@@ -88,7 +88,7 @@ public class MathUtils {
 		double x = (b2-b1)/(m1-m2);
 		//just plug that x value back into either solution to get y
 		double y = m1 * x + b1;
-		return new Vector2(x,y);
+		return new Vector2((float)x,(float)y);
 	}
 	
 	//given as an origin and an angle
