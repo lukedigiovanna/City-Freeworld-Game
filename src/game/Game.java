@@ -6,8 +6,8 @@ import java.awt.event.KeyEvent;
 import display.Display;
 import main.Program;
 import main.Settings;
-import mapping.*;
 import misc.Color8;
+import world.*;
 
 public class Game {
 	

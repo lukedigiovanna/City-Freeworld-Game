@@ -74,6 +74,19 @@ public class ImageTools {
 		return rescale(toBufferedImage(image),newWidth,newHeight);
 	}
 	
+	public static BufferedImage colorscale(BufferedImage image, Color color) {
+		int[][] rgb = getRGB(image);
+		return null;
+	}
+	
+	private static int[][] getRGB(BufferedImage img) {
+		int[][] rgbs = new int[img.getWidth()][img.getHeight()];
+		for (int x = 0; x < rgbs.length; x++) 
+			for (int y = 0; y < rgbs[x].length; y++) 
+				rgbs[x][y] = img.getRGB(x, y);
+		return rgbs;
+	}
+	
 	private static BufferedImage getImageNotFound() {
 		BufferedImage notFound = new BufferedImage(2,2,BufferedImage.TYPE_INT_ARGB);
 		notFound.setRGB(0, 0, Color.black.getRGB());

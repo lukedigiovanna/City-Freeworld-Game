@@ -1,6 +1,8 @@
 package misc;
 
 public class MathUtils {
+	public static final float INFINITY = 99999999999999999999999999999999999999f;
+	
 	public static int max(int max, int val) {
 		if (val > max)
 			return max;
@@ -80,9 +82,22 @@ public class MathUtils {
 	}
 	
 	//give in y = mx + b form
+	/**
+	 * Returns the point of intersection on a line if it exists
+	 * @param m1 the slope of the first line
+	 * @param b1 the intercept of the first line
+	 * @param m2 the slope of the second line
+	 * @param b2 the intercept of the second line
+	 * @return the point of intersection as a vector if it exists, null if they are
+	 * parallel, and an infinity vector if there are infinite solutions.
+	 */
 	public static Vector2 intersects(double m1, double b1, double m2, double b2) {
-		if (m1 == m2) //parallel so they will never intersect or will have infinite intersections
-			return null;
+		if (m1 == m2) {//parallel so they will never intersect or will have infinite intersections
+			if (b1 != b2)
+				return null;
+			else 
+				return new Vector2(INFINITY, INFINITY);
+		}
 		//set the equations equal to each other to find x point of intersection
 		// m1x + b1 = m2x + b2
 		double x = (b2-b1)/(m1-m2);

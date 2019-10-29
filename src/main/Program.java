@@ -3,9 +3,6 @@ package main;
 import java.awt.*;
 
 import display.DisplayController;
-import misc.Color8;
-import misc.ImageTools;
-import misc.MathUtils;
 
 //static class that holds some innate information about this application
 public class Program {
