@@ -84,6 +84,11 @@ public class Vector2 {
 			this.divide(length);
 	}
 	
+	public void round(float decimalPoint) {
+		this.x = MathUtils.round(this.x, decimalPoint);
+		this.y = MathUtils.round(this.y, decimalPoint);
+	}
+	
 	public String toString() {
 		return "<"+this.x+", "+this.y+">";
 	}

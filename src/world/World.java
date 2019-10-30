@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.SampleEntity;
 import misc.ImageTools;
 
  public class World {
@@ -19,7 +20,7 @@ import misc.ImageTools;
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell();
 				if (Math.random() < 0.5)
-					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("tile.jpg")));
+					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")));
 				else {
 					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")));
 					c.addAttrib(Cell.Attribute.OBSTACLE);
@@ -27,6 +28,9 @@ import misc.ImageTools;
 				grid.set(x, y, c);
 			}
 		}
+		temp.getEntities().add(new SampleEntity(3.0f,3.0f));
+		temp.getEntities().add(new SampleEntity(3.3f,3.3f));
+		
 		regions.add(temp);
 	}
 	

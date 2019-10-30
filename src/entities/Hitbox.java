@@ -38,7 +38,7 @@ public class Hitbox {
 		lines = new Line[lineNum];
 		for (int i = 0; i < lineNum; i+=2) {
 			int next = (i+2)%lineNum;
-			lines[i/2] = Line.generateLine(model[i],model[i+1],model[next],model[next+1]);
+			lines[i/2] = Line.generateLine(owner.getX()+model[i],model[i+1],model[next],model[next+1]);
 		}
 	}
 	

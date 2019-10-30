@@ -66,14 +66,17 @@ public class Game {
 		if (this.paused)
 			return; //dont run the game loop if we are paused
 		
+		float speed = 1.0f;
+		if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
+			speed = 3.0f;
 		if (Program.keyboard.keyDown(Settings.getSetting("move_right").charAt(0))) 
-			camera.moveX(1*dt);
+			camera.moveX(speed*dt);
 		if (Program.keyboard.keyDown(Settings.getSetting("move_left").charAt(0)))
-			camera.moveX(-1*dt);
+			camera.moveX(-speed*dt);
 		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
-			camera.moveY(-1*dt);
+			camera.moveY(-speed*dt);
 		if (Program.keyboard.keyDown(Settings.getSetting("move_down").charAt(0)))
-			camera.moveY(1*dt);
+			camera.moveY(speed*dt);
 	}
 	
 	
