@@ -7,18 +7,31 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import entities.Entity;
+import entities.EntityList;
 
 public class Camera {
+	private static final int CELL_SIZE = 32;
+	
 	private Vector2 position;
 	private float width, height; //cell grid width and height
 	private BufferedImage image;
-	private int cellSize = 16;
 	
 	public Camera(float x, float y, float width, float height) {
 		this.position = new Vector2(x, y);
 		this.width = width;
 		this.height = height;
-		image = new BufferedImage((int)(width * cellSize), (int)(height * cellSize), BufferedImage.TYPE_INT_ARGB);
+		image = new BufferedImage((int)(width * CELL_SIZE), (int)(height * CELL_SIZE), BufferedImage.TYPE_INT_ARGB);
+	}
+	
+	/**
+	 * This one allows you to input the width / height in pixel format
+	 * @param x left starting point for x
+	 * @param y top starting point for y
+	 * @param width pixel width of camera
+	 * @param height pixel height of camera
+	 */
+	public Camera(float x, float y, int width, int height) {
+		this(x, y, (float)width/CELL_SIZE, (float)height/CELL_SIZE);
 	}
 	
 	/**
@@ -26,7 +39,7 @@ public class Camera {
 	 * @return
 	 */
 	public int getUnitSize() {
-		return cellSize;
+		return CELL_SIZE;
 	}
 	
 	public float getX() {
@@ -45,6 +58,7 @@ public class Camera {
 		return image;
 	}
 	
+	private int startPX = 0, startPY = 0;
 	/**
 	 * Redraws the camera view to a BufferedImage
 	 * Only draws what is in view of the camera. Ignores other cells.
@@ -56,24 +70,27 @@ public class Camera {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, image.getWidth(), image.getHeight());
 		
+		//Get the region for the grid and entities
 		Region region = world.getCurrentRegion();
 		CellGrid grid = region.getGrid();
+		EntityList entities = region.getEntities();
+		
 		//find the index on the grid where we need to start
 		int startIndexX = (int)this.position.getX(), startIndexY = (int)this.position.getY();
 		//find where we need to start on the tile drawing
-		int startPX = (int)((1-(position.getX()%1.0f)) * cellSize)-cellSize,
-			startPY = (int)((1-(position.getY()%1.0f)) * cellSize)-cellSize;
+		startPX = (int)((1-(position.getX()%1.0f)) * CELL_SIZE)-CELL_SIZE;
+		startPY = (int)((1-(position.getY()%1.0f)) * CELL_SIZE)-CELL_SIZE;
 		//how many cells we need to get in the x, y directions
 		int gridWidth = (int)width+1, gridHeight = (int)height+1;
 		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) {
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				if (ix >= 0 && ix < grid.getWidth() && iy >= 0 && iy < grid.getHeight()) {
-					int px = startPX + (ix-startIndexX) * cellSize;
-					int py = startPY + (iy-startIndexY) * cellSize;
-					//px = (int)((ix - this.getX())*cellSize);
-					//py = (int)((iy - this.getY())*cellSize);
-					g.drawImage(grid.get(ix, iy).getImage(), px, py, cellSize, cellSize, null);
-					//drawImage(grid.get(ix, iy).getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
+					int px = startPX + (ix-startIndexX) * CELL_SIZE;
+					int py = startPY + (iy-startIndexY) * CELL_SIZE;
+					px = (int)((ix - this.getX())*CELL_SIZE);
+					py = (int)((iy - this.getY())*CELL_SIZE);
+					//g.drawImage(grid.get(ix, iy).getImage(), px, py, CELL_SIZE, CELL_SIZE, null);
+					drawImage(grid.get(ix, iy).getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
 				}
 			}
 		}
@@ -111,23 +128,23 @@ public class Camera {
 	}
 	
 	private int toPX(float x) {
-		float rel = MathUtils.round(x-this.position.x,1.0f/cellSize);
-		int sx = Math.round(rel * cellSize);
+		float rel = MathUtils.round(x-this.position.x,1.0f/CELL_SIZE);
+		int sx = Math.round(rel * CELL_SIZE);
 		return sx;
 	}
 	
 	private int toPW(float width) {
-		return Math.round(width * cellSize);
+		return Math.round(width * CELL_SIZE);
 	}
 	
 	private int toPY(float y) {
-		float rel = MathUtils.round(y-this.position.y,1.0f/cellSize);
-		int sy = Math.round(rel * cellSize);
+		float rel = MathUtils.round(y-this.position.y,1.0f/CELL_SIZE);
+		int sy = Math.round(rel * CELL_SIZE);
 		return sy;
 	}
 	
 	private int toPH(float height) {
-		return Math.round(height * cellSize);
+		return Math.round(height * CELL_SIZE);
 	}
 	
 	public void move(float dx, float dy) {

@@ -24,7 +24,7 @@ public class Game {
 		ft = new FrameTimer();
 		world = new World();
 		
-		camera = new Camera(0, 0, 20, 16);
+		camera = new Camera(0, 0, cameraWidth, cameraHeight);
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
