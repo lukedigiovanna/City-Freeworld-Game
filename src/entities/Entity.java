@@ -11,7 +11,15 @@ public abstract class Entity {
 	
 	public Entity(float x, float y, float width, float height) {
 		this.position = new Vector2(x, y);
-		float[] model = {0.0f, 0.0f, 1.0f, -0.3f, 0.4f,1.2f};
+		int vertices = 10;
+		float[] model = new float[vertices*2];
+		float radius = 0.5f;
+		for (int i = 0; i < vertices; i++) {
+			float vx = (float)Math.cos(1.0/vertices * Math.PI * 2)*radius+radius,
+				  vy = (float)Math.sin(1.0/vertices * Math.PI * 2)*radius+radius;
+			model[i*2] = vx;
+			model[i*2+1] = vy;
+		}
 		this.hitbox = new Hitbox(this, model);
 	}
 	
@@ -41,8 +49,19 @@ public abstract class Entity {
 	 * This method should be written in terms of the 
 	 * @param g
 	 */
-	public abstract void draw(Graphics g, Camera camera);
+	public abstract void draw(Camera camera);
 	
+	/**
+	 * Called by the game loop to run entity type specific logic
+	 * Doesn't handle general logic like updating movement and collision checking
+	 * @param dt - The amount of time passed in seconds since the last call of the method.
+	 */
+	public abstract void update(float dt);
+	
+	/**
+	 * Draws the hitbox of the entity onto a camera
+	 * @param c The camera object that will draw it
+	 */
 	public void drawHitbox(Camera c) {
 		c.setColor(Color.RED);
 		

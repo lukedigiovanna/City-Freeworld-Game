@@ -13,14 +13,19 @@ public class Camera {
 	private static final int CELL_SIZE = 32;
 	
 	private Vector2 position;
+	private Region region;
 	private float width, height; //cell grid width and height
+	private int pixelWidth, pixelHeight;
 	private BufferedImage image;
 	
-	public Camera(float x, float y, float width, float height) {
+	public Camera(Region region, float x, float y, float width, float height) {
 		this.position = new Vector2(x, y);
 		this.width = width;
 		this.height = height;
-		image = new BufferedImage((int)(width * CELL_SIZE), (int)(height * CELL_SIZE), BufferedImage.TYPE_INT_ARGB);
+		this.pixelWidth = (int)(width * CELL_SIZE);
+		this.pixelHeight = (int)(height * CELL_SIZE);
+		this.region = region;
+		image = new BufferedImage(pixelWidth, pixelHeight, BufferedImage.TYPE_INT_ARGB);
 	}
 	
 	/**
@@ -30,8 +35,8 @@ public class Camera {
 	 * @param width pixel width of camera
 	 * @param height pixel height of camera
 	 */
-	public Camera(float x, float y, int width, int height) {
-		this(x, y, (float)width/CELL_SIZE, (float)height/CELL_SIZE);
+	public Camera(Region region, float x, float y, int width, int height) {
+		this(region, x, y, (float)width/CELL_SIZE, (float)height/CELL_SIZE);
 	}
 	
 	/**
@@ -64,38 +69,31 @@ public class Camera {
 	 * Only draws what is in view of the camera. Ignores other cells.
 	 * @param world the world to draw. includes the grid and entities
 	 */
-	public void draw(World world){
+	public void draw(){
 		refreshGraphics();
 		//first wipe the old view
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, image.getWidth(), image.getHeight());
+		//g.fillRect(0, 0, image.getWidth(), image.getHeight());
 		
-		//Get the region for the grid and entities
-		Region region = world.getCurrentRegion();
+		//Get the new grid and entities
 		CellGrid grid = region.getGrid();
 		EntityList entities = region.getEntities();
 		
 		//find the index on the grid where we need to start
 		int startIndexX = (int)this.position.getX(), startIndexY = (int)this.position.getY();
-		//find where we need to start on the tile drawing
-		startPX = (int)((1-(position.getX()%1.0f)) * CELL_SIZE)-CELL_SIZE;
-		startPY = (int)((1-(position.getY()%1.0f)) * CELL_SIZE)-CELL_SIZE;
 		//how many cells we need to get in the x, y directions
 		int gridWidth = (int)width+1, gridHeight = (int)height+1;
-		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) {
-			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
-				if (ix >= 0 && ix < grid.getWidth() && iy >= 0 && iy < grid.getHeight()) {
-					int px = startPX + (ix-startIndexX) * CELL_SIZE;
-					int py = startPY + (iy-startIndexY) * CELL_SIZE;
-					px = (int)((ix - this.getX())*CELL_SIZE);
-					py = (int)((iy - this.getY())*CELL_SIZE);
-					//g.drawImage(grid.get(ix, iy).getImage(), px, py, CELL_SIZE, CELL_SIZE, null);
-					drawImage(grid.get(ix, iy).getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
-				}
-			}
-		}
 		
-		for (Entity e : world.getCurrentRegion().getEntities().get()) {
+		//draw the grid
+		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) 
+			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
+				if (grid.checkBounds(ix, iy)) 
+					drawImage(grid.get(ix, iy).getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
+			}
+		
+		//draw the entities on top of the grid
+		for (Entity e : entities.get()) {
+			e.draw(this);
 			e.drawHitbox(this);
 		}
 	}
@@ -128,8 +126,8 @@ public class Camera {
 	}
 	
 	private int toPX(float x) {
-		float rel = MathUtils.round(x-this.position.x,1.0f/CELL_SIZE);
-		int sx = Math.round(rel * CELL_SIZE);
+		float rel = x-this.position.x;
+		int sx = (int)(rel/width * pixelWidth);
 		return sx;
 	}
 	
@@ -138,8 +136,8 @@ public class Camera {
 	}
 	
 	private int toPY(float y) {
-		float rel = MathUtils.round(y-this.position.y,1.0f/CELL_SIZE);
-		int sy = Math.round(rel * CELL_SIZE);
+		float rel = y-this.position.y;
+		int sy = (int)(rel/height * pixelHeight);
 		return sy;
 	}
 	
@@ -149,6 +147,16 @@ public class Camera {
 	
 	public void move(float dx, float dy) {
 		position.add(new Vector2(dx,dy));
+		position.round(1.0f/CELL_SIZE);
+		//now correct off the position
+		if (position.getX() < 0)
+			position.setX(0);
+		if (position.getX() > region.getWidth()-this.width)
+			position.setX(region.getWidth()-this.width);
+		if (position.getY() < 0)
+			position.setY(0);
+		if (position.getY() > region.getHeight()-this.height)
+			position.setY(region.getHeight()-this.height);
 	}
 	
 	public void moveX(float dx) {

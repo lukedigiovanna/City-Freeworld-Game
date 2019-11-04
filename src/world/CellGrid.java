@@ -17,13 +17,13 @@ public class CellGrid {
 	}
 	
 	public void set(int x, int y, Cell cell) {
-		checkBounds(x, y);
-		grid[x][y] = cell;
+		if (checkBounds(x,y))
+			grid[x][y] = cell;
 	}
 	
 	public boolean checkBounds(int x, int y) {
 		if (x < 0 || y < 0 || x > grid.length-1 || y > grid.length-1) 
-			throw new IndexOutOfBoundsException("coordinates out of array bounds");
+			return false;
 		return true;
 	}
 	

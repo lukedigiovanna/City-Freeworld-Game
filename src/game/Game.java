@@ -16,7 +16,10 @@ public class Game {
 	private Thread updateLoop;
 	private FrameTimer ft;
 	private World world;
-	private Camera camera;
+	
+	private float sidePadding = 0.2f;
+	private int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), 
+			    cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
 	
 	private boolean paused = true;
 	
@@ -24,7 +27,8 @@ public class Game {
 		ft = new FrameTimer();
 		world = new World();
 		
-		camera = new Camera(0, 0, cameraWidth, cameraHeight);
+		float worldViewWidth = 10.0f;
+		camera = new Camera(0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight));
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
@@ -69,23 +73,28 @@ public class Game {
 		float speed = 1.0f;
 		if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
 			speed = 3.0f;
-		if (Program.keyboard.keyDown(Settings.getSetting("move_right").charAt(0))) 
+		if (Program.keyboard.keyDown(Settings.getSetting("move_right").charAt(0))) {
 			camera.moveX(speed*dt);
+			System.out.println("right key down");
+		}
 		if (Program.keyboard.keyDown(Settings.getSetting("move_left").charAt(0)))
 			camera.moveX(-speed*dt);
 		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
 			camera.moveY(-speed*dt);
 		if (Program.keyboard.keyDown(Settings.getSetting("move_down").charAt(0)))
 			camera.moveY(speed*dt);
+		
+		main.Keyboard.Key[] keyList = Program.keyboard.getAllKeysDown();
+		for (main.Keyboard.Key k : keyList) {
+			System.out.print(k.character()+", ");
+		}
+		System.out.println();
 	}
 	
 	
 	/*
 	 * rendering stuff
 	 */
-	
-	private float sidePadding = 0.2f;
-	private int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
 	
 	public void draw(Graphics2D g) {
 		camera.draw(world);

@@ -60,7 +60,7 @@ public class Keyboard {
 	}
 	
 	/**
-	 * //returns true if the keycode is in the list and removes it so it is only called once
+	 * returns true if the keycode is in the list and removes it so it is only called once
 	 * @param keycode key event keycode
 	 * @return true if the key is in the lest
 	 */
@@ -73,12 +73,19 @@ public class Keyboard {
 		return false;
 	}
 	
-	private class Key {
+	public Keyboard.Key[] getAllKeysDown() {
+		Keyboard.Key[] arr = new Keyboard.Key[keys.size()];
+		for (int i = 0; i < arr.length; i++) 
+			arr[i] = keys.get(i);
+		return arr;
+	}
+	
+	public class Key {
 		private int keycode;
 		private char c;
 		public Key(KeyEvent e) {
 			keycode = e.getKeyCode();
-			c = e.getKeyChar();
+			c = Character.toLowerCase(e.getKeyChar());
 		}
 		
 		public int keycode() {

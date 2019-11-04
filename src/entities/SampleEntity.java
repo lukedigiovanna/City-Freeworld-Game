@@ -2,6 +2,7 @@ package entities;
 
 import java.awt.Graphics;
 
+import misc.Color8;
 import world.Camera;
 
 public class SampleEntity extends Entity {
@@ -11,8 +12,13 @@ public class SampleEntity extends Entity {
 	}
 
 	@Override
-	public void draw(Graphics g, Camera camera) {
-//		g.setColor(Color.RED);
-//		g.fillRect(0, 0, 1, 1);
+	public void draw(Camera c) {
+		c.setColor(Color8.BLUE);
+		c.fillRect(getX(), getY(), 1.0f, 1.0f);
+	}
+	
+	@Override
+	public void update(float dt) {
+		
 	}
 }
