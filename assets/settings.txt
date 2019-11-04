@@ -1,4 +1,4 @@
-max_fps:10
+max_fps:20
 music_volume:1.0
 sound_volume:1.0
 master_volume:1.0

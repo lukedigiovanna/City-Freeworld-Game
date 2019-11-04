@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import display.component.Button;
 import display.component.Checkbox;
@@ -28,7 +29,7 @@ public class MainScreenDisplay extends Display {
 		add(boxTest);
 	}
 	
-	private Image background = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
+	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
 	
 	@Override
 	public void draw(Graphics2D g) {

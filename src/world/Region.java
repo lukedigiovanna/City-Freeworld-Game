@@ -3,6 +3,7 @@ package world;
 import entities.EntityList;
 
 public class Region {
+	private World world;
 	private CellGrid cellGrid;
 	private EntityList entities;
 	private int width, height;
@@ -34,5 +35,13 @@ public class Region {
 	
 	public EntityList getEntities() {
 		return entities;
+	}
+	
+	/**
+	 * Updates region stuff
+	 * *Entity movement
+	 */
+	public void update(float dt) {
+		
 	}
 }

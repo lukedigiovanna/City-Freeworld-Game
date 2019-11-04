@@ -52,5 +52,6 @@ public class MainScreenButton extends Button {
 	@Override
 	public void onMouseUp() {
 		System.out.println("Mouse up");
+		color = Color.GRAY;
 	}
 }

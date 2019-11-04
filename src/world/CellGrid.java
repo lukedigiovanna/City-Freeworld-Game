@@ -12,8 +12,10 @@ public class CellGrid {
 	}
 	
 	public Cell get(int x, int y) {
-		checkBounds(x, y);
-		return grid[x][y];
+		if (checkBounds(x, y))
+			return grid[x][y];
+		else
+			return null;
 	}
 	
 	public void set(int x, int y, Cell cell) {
@@ -22,7 +24,7 @@ public class CellGrid {
 	}
 	
 	public boolean checkBounds(int x, int y) {
-		if (x < 0 || y < 0 || x > grid.length-1 || y > grid.length-1) 
+		if (x < 0 || y < 0 || x > grid.length-1 || y > grid[0].length-1) 
 			return false;
 		return true;
 	}

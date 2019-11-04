@@ -74,9 +74,67 @@ public class ImageTools {
 		return rescale(toBufferedImage(image),newWidth,newHeight);
 	}
 	
+	public static BufferedImage grayscale(BufferedImage image) {
+		return apply(image,new Modifiable() {
+			public Color modify(Color c) {
+				int avg = (c.getRed()+c.getGreen()+c.getBlue())/3;
+				return new Color(avg,avg,avg,c.getAlpha());
+			}
+		});
+	}
+	
 	public static BufferedImage colorscale(BufferedImage image, Color color) {
-		int[][] rgb = getRGB(image);
-		return null;
+		return apply(image,new Modifiable() {
+			public Color modify(Color c) {
+				int avg = (c.getRed()+c.getGreen()+c.getBlue())/3;
+				int red = (int)(color.getRed()/255.0*avg),
+					green = (int)(color.getGreen()/255.0*avg),
+					blue = (int)(color.getBlue()/255.0*avg);
+				return new Color(red,green,blue,c.getAlpha());
+			}
+		});
+	}
+	
+	public static BufferedImage invert(BufferedImage image) {
+		return apply(image,new Modifiable() {
+			public Color modify(Color c) {
+				return new Color(255-c.getRed(),255-c.getGreen(),255-c.getBlue(),c.getAlpha());
+			}
+		});
+	}
+	
+	public static BufferedImage flipHorizontal(BufferedImage image) {
+		int[][] rgbs = getRGB(image);
+		int[][] nrgb = new int[rgbs.length][rgbs[0].length];
+		for (int x = 0; x < rgbs.length; x++) 
+			for (int y = 0; y < rgbs[x].length; y++)
+				nrgb[x][y] = rgbs[x][rgbs[x].length-y-1];
+		return get(nrgb);
+		
+	}
+	
+	public static BufferedImage flipVertical(BufferedImage image) {
+		int[][] rgbs = getRGB(image);
+		int[][] nrgb = new int[rgbs.length][rgbs[0].length];
+		for (int x = 0; x < rgbs.length; x++) 
+			for (int y = 0; y < rgbs[x].length; y++)
+				nrgb[x][y] = rgbs[rgbs.length-x-1][y];
+		return get(nrgb);
+	}
+	
+	private static BufferedImage apply(BufferedImage image, Modifiable mod) {
+		int[][] rgbs = getRGB(image);
+		for (int x = 0; x < rgbs.length; x++) {
+			for (int y = 0; y < rgbs[x].length; y++) {
+				Color c = getColor(rgbs[x][y]);
+				rgbs[x][y] = mod.modify(c).getRGB();
+			}
+		}
+		return get(rgbs);
+	}
+	
+	private interface Modifiable {
+		public abstract Color modify(Color color);
 	}
 	
 	private static int[][] getRGB(BufferedImage img) {
@@ -86,6 +144,28 @@ public class ImageTools {
 				rgbs[x][y] = img.getRGB(x, y);
 		return rgbs;
 	}
+	
+	private static Color getColor(int rgb) {
+		return new Color(rgb);
+	}
+	
+	private static Color getColor(int r, int g, int b) {
+		return new Color(r,g,b);
+	}
+	
+	private static Color getColor(int r, int g, int b, int a) {
+		return new Color(r,g,b,a);
+	}
+	
+	private static BufferedImage get(int[][] rgbs) {
+		BufferedImage newImg = new BufferedImage(rgbs.length,rgbs[0].length,BufferedImage.TYPE_INT_ARGB);
+		for (int x = 0; x < rgbs.length; x++) 
+			for (int y = 0; y < rgbs[x].length; y++) 
+				newImg.setRGB(x, y, rgbs[x][y]);
+		return newImg;
+	}
+	
+	//for one time call to make static const of these
 	
 	private static BufferedImage getImageNotFound() {
 		BufferedImage notFound = new BufferedImage(2,2,BufferedImage.TYPE_INT_ARGB);

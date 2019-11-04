@@ -16,8 +16,9 @@ public class Game {
 	private Thread updateLoop;
 	private FrameTimer ft;
 	private World world;
+	private Camera camera;
 	
-	private float sidePadding = 0.2f;
+	private float sidePadding = 0.25f;
 	private int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), 
 			    cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
 	
@@ -29,6 +30,7 @@ public class Game {
 		
 		float worldViewWidth = 10.0f;
 		camera = new Camera(0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight));
+		camera.linkToRegion(world.getCurrentRegion());
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
@@ -84,11 +86,11 @@ public class Game {
 		if (Program.keyboard.keyDown(Settings.getSetting("move_down").charAt(0)))
 			camera.moveY(speed*dt);
 		
-		main.Keyboard.Key[] keyList = Program.keyboard.getAllKeysDown();
-		for (main.Keyboard.Key k : keyList) {
-			System.out.print(k.character()+", ");
-		}
-		System.out.println();
+//		main.Keyboard.Key[] keyList = Program.keyboard.getAllKeysDown();
+//		for (main.Keyboard.Key k : keyList) {
+//			System.out.print(k.character()+", ");
+//		}
+//		System.out.println();
 	}
 	
 	
@@ -96,14 +98,16 @@ public class Game {
 	 * rendering stuff
 	 */
 	
+	private int cameraBorderSize = 20;
 	public void draw(Graphics2D g) {
-		camera.draw(world);
-		g.drawImage(camera.getView(), 0, 0, cameraWidth, cameraHeight, null);
+		camera.draw();
+		g.drawImage(camera.getView(), cameraBorderSize, cameraBorderSize, cameraWidth, cameraHeight, null);
+		//draw the border around the camera
 		g.setColor(Color8.GRAY);
-		g.fillRect(0, cameraHeight, cameraWidth+20, 20);
-		g.fillRect(cameraWidth, 0, 20, cameraHeight);
-		g.fillRect(0, 0, 20, cameraHeight);
-		g.fillRect(20, 0, cameraWidth, 20);
+		g.fillRect(0, cameraBorderSize+cameraHeight, cameraWidth+cameraBorderSize*2, cameraBorderSize);
+		g.fillRect(cameraBorderSize+cameraWidth, 0, cameraBorderSize, cameraHeight+cameraBorderSize);
+		g.fillRect(0, 0, cameraBorderSize, cameraHeight+cameraBorderSize);
+		g.fillRect(cameraBorderSize, 0, cameraWidth, cameraBorderSize);
 		if (paused) {
 			g.setColor(Color.RED);
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));

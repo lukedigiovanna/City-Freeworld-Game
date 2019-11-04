@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import entities.Entity;
 import entities.EntityList;
+import main.Program;
 
 public class Camera {
 	private static final int CELL_SIZE = 32;
@@ -28,6 +29,10 @@ public class Camera {
 		image = new BufferedImage(pixelWidth, pixelHeight, BufferedImage.TYPE_INT_ARGB);
 	}
 	
+	public Camera(float x, float y, float width, float height) {
+		this(null,x,y,width,height);
+	}
+	
 	/**
 	 * This one allows you to input the width / height in pixel format
 	 * @param x left starting point for x
@@ -37,6 +42,10 @@ public class Camera {
 	 */
 	public Camera(Region region, float x, float y, int width, int height) {
 		this(region, x, y, (float)width/CELL_SIZE, (float)height/CELL_SIZE);
+	}
+	
+	public void linkToRegion(Region region) {
+		this.region = region;
 	}
 	
 	/**
@@ -71,9 +80,17 @@ public class Camera {
 	 */
 	public void draw(){
 		refreshGraphics();
-		//first wipe the old view
-		g.setColor(Color.BLACK);
-		//g.fillRect(0, 0, image.getWidth(), image.getHeight());
+		
+		if (region == null)  {
+			//draw something saying there is nothing to draw
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, pixelWidth, pixelHeight);
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,pixelHeight/10));
+			String str = "No Region to Draw";
+			g.setColor(Color.WHITE);
+			g.drawString(str, pixelWidth/2-g.getFontMetrics().stringWidth(str)/2, pixelHeight/2);
+			return;
+		}
 		
 		//Get the new grid and entities
 		CellGrid grid = region.getGrid();
@@ -82,12 +99,13 @@ public class Camera {
 		//find the index on the grid where we need to start
 		int startIndexX = (int)this.position.getX(), startIndexY = (int)this.position.getY();
 		//how many cells we need to get in the x, y directions
-		int gridWidth = (int)width+1, gridHeight = (int)height+1;
+		int gridWidth = (int)width+1, gridHeight = (int)height+2;
 		
 		//draw the grid
 		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) 
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
-				if (grid.checkBounds(ix, iy)) 
+				Cell cell = grid.get(ix, iy);
+				if (cell != null)
 					drawImage(grid.get(ix, iy).getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
 			}
 		

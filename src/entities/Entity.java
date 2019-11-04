@@ -11,20 +11,26 @@ public abstract class Entity {
 	
 	public Entity(float x, float y, float width, float height) {
 		this.position = new Vector2(x, y);
-		int vertices = 10;
+		int vertices = 4;
 		float[] model = new float[vertices*2];
 		float radius = 0.5f;
 		for (int i = 0; i < vertices; i++) {
-			float vx = (float)Math.cos(1.0/vertices * Math.PI * 2)*radius+radius,
-				  vy = (float)Math.sin(1.0/vertices * Math.PI * 2)*radius+radius;
+			float vx = (float)Math.cos((double)i/vertices * Math.PI * 2)*radius+radius,
+				  vy = (float)Math.sin((double)i/vertices * Math.PI * 2)*radius+radius;
 			model[i*2] = vx;
 			model[i*2+1] = vy;
+			System.out.println(vx+", "+vy);
 		}
 		this.hitbox = new Hitbox(this, model);
 	}
 	
+	/**
+	 * Moves the entities position based on the delta x and delta y inputes
+	 * @param dx distance to change x
+	 * @param dy distance to change y
+	 */
 	public void move(float dx, float dy) {
-		
+		position.add(new Vector2(dx,dy));
 	}
 	
 	public float getX() {

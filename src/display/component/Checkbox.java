@@ -32,7 +32,7 @@ public class Checkbox extends Component {
 //		}
 	}
 	
-	public boolean getValue() {
+	public boolean selected() {
 		return value;
 	}
 
