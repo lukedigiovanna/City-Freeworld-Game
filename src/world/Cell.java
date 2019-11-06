@@ -4,15 +4,23 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cell {
+public class Cell extends WorldObject {
 	public static final int PIXEL_SIZE = 8;
 	
 	private BufferedImage image;
 	private List<Attribute> attribs;
 	private String typeName;
 	
-	public Cell() {
+	public Cell(float x, float y) {
+		super(x,y,1.0f,1.0f);
 		attribs = new ArrayList<Attribute>();
+	}
+	
+	public boolean has(Attribute attrib) {
+		for (Attribute a : attribs)
+			if (attrib == a)
+				return true;
+		return false;
 	}
 	
 	public void setImage(BufferedImage image) {
@@ -32,8 +40,6 @@ public class Cell {
 	}
 	
 	public enum Attribute {
-		OBSTACLE,//entities cant walk throuh
-		ROAD, //cars can travel on
-		PATH;
+		COLLIDABLE
 	}
 }

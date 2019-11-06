@@ -1,5 +1,6 @@
 package world;
 
+import entities.Entity;
 import entities.EntityList;
 
 public class Region {
@@ -37,11 +38,19 @@ public class Region {
 		return entities;
 	}
 	
+	public void add(Entity e) {
+		entities.add(e);
+	}
+	
+	public void remove(Entity e) {
+		entities.remove(e);
+	}
+	
 	/**
 	 * Updates region stuff
 	 * *Entity movement
 	 */
 	public void update(float dt) {
-		
+		entities.update(dt);
 	}
 }

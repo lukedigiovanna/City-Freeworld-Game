@@ -7,6 +7,8 @@ import display.Display;
 import main.Program;
 import main.Settings;
 import misc.Color8;
+import misc.Line;
+import misc.Vector2;
 import world.*;
 
 public class Game {
@@ -72,25 +74,12 @@ public class Game {
 		if (this.paused)
 			return; //dont run the game loop if we are paused
 		
-		float speed = 1.0f;
-		if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
-			speed = 3.0f;
-		if (Program.keyboard.keyDown(Settings.getSetting("move_right").charAt(0))) {
-			camera.moveX(speed*dt);
-			System.out.println("right key down");
-		}
-		if (Program.keyboard.keyDown(Settings.getSetting("move_left").charAt(0)))
-			camera.moveX(-speed*dt);
-		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
-			camera.moveY(-speed*dt);
-		if (Program.keyboard.keyDown(Settings.getSetting("move_down").charAt(0)))
-			camera.moveY(speed*dt);
+		world.updateCurrentRegion(dt);
 		
-//		main.Keyboard.Key[] keyList = Program.keyboard.getAllKeysDown();
-//		for (main.Keyboard.Key k : keyList) {
-//			System.out.print(k.character()+", ");
-//		}
-//		System.out.println();
+		if (Program.keyboard.keyDown(' '))
+			test.rotate(0.1f);
+		if (Program.keyboard.keyDown('c'))
+			test.rotateAbout(new Vector2(3,3), (float)(Math.PI*2*0.1*dt));
 	}
 	
 	
@@ -99,8 +88,14 @@ public class Game {
 	 */
 	
 	private int cameraBorderSize = 20;
+	
+	private Line test = new Line(new Vector2(3,3), new Vector2(6,4));
+	
 	public void draw(Graphics2D g) {
-		camera.draw();
+		camera.draw();	
+		camera.setColor(Color.YELLOW);
+		Vector2[] ep = test.getEndpoints();
+		camera.drawLine(ep[0].x,ep[0].y,ep[1].x,ep[1].y);
 		g.drawImage(camera.getView(), cameraBorderSize, cameraBorderSize, cameraWidth, cameraHeight, null);
 		//draw the border around the camera
 		g.setColor(Color8.GRAY);

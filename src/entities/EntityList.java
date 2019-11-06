@@ -11,6 +11,11 @@ public class EntityList {
 		list = new ArrayList<Entity>();
 	}
 	
+	public void update(float dt) {
+		for (Entity e : list)
+			e.update(dt);
+	}
+	
 	public void add(Entity e) {
 		list.add(e);
 	}
@@ -29,5 +34,24 @@ public class EntityList {
 	
 	public List<Entity> get() {
 		return this.list;
+	}
+	
+	public List<Entity> get(String ... tags) {
+		List<Entity> getList = new ArrayList<Entity>();
+		for (Entity e : list) {
+			boolean cont = true;
+			for (String tag : e.getTags()) {
+				for (String tag2 : tags) {
+					if (tag.equals(tag2)) {
+						getList.add(e);
+						cont = false;
+						break;
+					}
+				}
+				if (!cont)
+					break;
+			}
+		}
+		return getList;
 	}
 }

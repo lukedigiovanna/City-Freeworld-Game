@@ -19,6 +19,6 @@ public class SampleEntity extends Entity {
 	
 	@Override
 	public void update(float dt) {
-		
+		this.hitbox.rotate((float)(Math.PI*2*dt));
 	}
 }

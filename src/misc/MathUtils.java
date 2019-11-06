@@ -1,44 +1,47 @@
 package misc;
 
 public class MathUtils {
+	/**
+	 * The greatest floating point value the computer can store.. represents infinity
+	 */
 	public static final float INFINITY = 99999999999999999999999999999999999999f;
 	
-	public static int max(int max, int val) {
+	public static int ceil(int max, int val) {
 		if (val > max)
 			return max;
 		else
 			return val;
 	}
 	
-	public static float max(float max, float val) {
+	public static float ceil(float max, float val) {
 		if (val > max)
 			return max;
 		else
 			return val;
 	}
 	
-	public static double max(double max, double val) {
+	public static double ceil(double max, double val) {
 		if (val > max)
 			return max;
 		else 
 			return val;
 	}
 	
-	public static int min(int min, int val) {
+	public static int floor(int min, int val) {
 		if (val < min)
 			return min;
 		else 
 			return val;
 	}
 	
-	public static float min(float min, float val) {
+	public static float floor(float min, float val) {
 		if (val < min)
 			return min;
 		else 
 			return val;
 	}
 	
-	public static double min(double min, double val) {
+	public static double floor(double min, double val) {
 		if (val < min)
 			return min;
 		else
@@ -46,25 +49,25 @@ public class MathUtils {
 	}
 	
 	public static int clip(int min, int max, int val) {
-		if (min(min,val) == min)
+		if (floor(min,val) == min)
 			return min;
-		if (max(max,val) == max)
+		if (ceil(max,val) == max)
 			return max;
 		return val;
 	}
 	
 	public static float clip(float min, float max, float val) {
-		if (min(min,val) == min)
+		if (floor(min,val) == min)
 			return min;
-		if (max(max,val) == max)
+		if (ceil(max,val) == max)
 			return max;
 		return val;
 	}
 	
 	public static double clip(double min, double max, double val) {
-		if (min(min,val) == min)
+		if (floor(min,val) == min)
 			return min;
-		if (max(max,val) == max)
+		if (ceil(max,val) == max)
 			return max;
 		return val;
 	}
@@ -79,6 +82,48 @@ public class MathUtils {
 		double scale = 1.0/decimal;
 		val *= scale;
 		return Math.round(val)/scale;
+	}
+	
+	public static int min(int num1, int num2) {
+		if (num1 < num2)
+			return num1;
+		else //also includes if they are the same, just return either number it doesn't matter
+			return num2;
+	}
+	
+	public static float min(float num1, float num2) {
+		if (num1 < num2)
+			return num1;
+		else
+			return num2;
+	}
+	
+	public static double min(double num1, double num2) {
+		if (num1 < num2)
+			return num1;
+		else
+			return num2;
+	}
+	
+	public static int max(int num1, int num2) {
+		if (num1 > num2)
+			return num1;
+		else
+			return num2;
+	}
+	
+	public static float max(float num1, float num2) {
+		if (num1 > num2)
+			return num1;
+		else
+			return num2;
+	}
+	
+	public static double max(double num1, double num2) {
+		if (num1 > num2)
+			return num1;
+		else
+			return num2;
 	}
 	
 	//give in y = mx + b form
@@ -118,7 +163,12 @@ public class MathUtils {
 		return intersects(m1,b1,m2,b2);
 	}
 	
-	//returns the angle given by two coordinate components
+	/**
+	 * Gets the angle from two input coordinates from the origin
+	 * @param x horizontal distance from origin
+	 * @param y vertical distance from origin
+	 * @return angle it makes
+	 */
 	public static double getAngle(double x, double y) {
 		//tan = y/x
 		if (x == 0) { //avoid the divide by 0 case
@@ -136,6 +186,14 @@ public class MathUtils {
 		return theta;
 	}
 	
+	/**
+	 * Gets the angle between two endpoints
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
 	public static double getAngle(double x1, double y1, double x2, double y2) {
 		return getAngle(x2-x1,y2-y1);
 	}

@@ -1,53 +1,55 @@
 package entities;
 
 import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 import misc.Vector2;
 import world.Camera;
+import world.Region;
+import world.WorldObject;
 
-public abstract class Entity {
-	private Vector2 position;
-	private Hitbox hitbox;
+public abstract class Entity extends WorldObject {
+	private Vector2 dimension;
+	private Vector2 velocity;
+	private Region currentRegion;
+	
+	protected List<String> tags;
+	
+	public static enum Attribs {
+		INVULNERABLE,
+		NO_COLLISION,
+		
+	}
 	
 	public Entity(float x, float y, float width, float height) {
-		this.position = new Vector2(x, y);
-		int vertices = 4;
-		float[] model = new float[vertices*2];
-		float radius = 0.5f;
-		for (int i = 0; i < vertices; i++) {
-			float vx = (float)Math.cos((double)i/vertices * Math.PI * 2)*radius+radius,
-				  vy = (float)Math.sin((double)i/vertices * Math.PI * 2)*radius+radius;
-			model[i*2] = vx;
-			model[i*2+1] = vy;
-			System.out.println(vx+", "+vy);
-		}
-		this.hitbox = new Hitbox(this, model);
+		super(x,y,width,height);
+		this.dimension = new Vector2(width,height);
+		tags = new ArrayList<String>();
+		tags.add("entity");
 	}
 	
-	/**
-	 * Moves the entities position based on the delta x and delta y inputes
-	 * @param dx distance to change x
-	 * @param dy distance to change y
-	 */
-	public void move(float dx, float dy) {
-		position.add(new Vector2(dx,dy));
+	public Region getRegion() {
+		return this.currentRegion;
 	}
 	
-	public float getX() {
-		return position.x;
+	public void send(Region region, float x, float y) {
+		region.remove(this);
+		this.currentRegion = region;
+		this.currentRegion.add(this);
+		this.setPosition(x, y);
 	}
 	
-	public float getY() {
-		return position.y;
+	public List<String> getTags() {
+		return tags;
 	}
 	
-	/**
-	 * Checks if the hitboxes are colliding with each other
-	 * @param other
-	 * @return
-	 */
-	public boolean colliding(Entity other) {
-		return this.hitbox.intersecting(other.hitbox);
+	public float getWidth() {
+		return dimension.x;
+	}
+	
+	public float getHeight() {
+		return dimension.y;
 	}
 	
 	/**
@@ -63,18 +65,4 @@ public abstract class Entity {
 	 * @param dt - The amount of time passed in seconds since the last call of the method.
 	 */
 	public abstract void update(float dt);
-	
-	/**
-	 * Draws the hitbox of the entity onto a camera
-	 * @param c The camera object that will draw it
-	 */
-	public void drawHitbox(Camera c) {
-		c.setColor(Color.RED);
-		
-		float[] model = hitbox.model;
-		for (int i = 0; i < model.length; i+=2) {
-			int next = (i + 2)%model.length;
-			c.drawLine(this.getX()+model[i], this.getY()+model[i+1], this.getX()+model[next], this.getY()+model[next+1]);
-		}
-	}
 }
