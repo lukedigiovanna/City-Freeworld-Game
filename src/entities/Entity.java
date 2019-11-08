@@ -13,7 +13,7 @@ public abstract class Entity extends WorldObject {
 	protected Vector2 dimension;
 	protected Vector2 velocity;
 	
-	protected List<String> tags;
+	private List<String> tags;
 	
 	public static enum Attribs {
 		INVULNERABLE,
@@ -26,6 +26,12 @@ public abstract class Entity extends WorldObject {
 		this.dimension = new Vector2(width,height);
 		tags = new ArrayList<String>();
 		tags.add("entity");
+	}
+	
+	@Override
+	public void generalUpdate(float dt) {
+		super.generalUpdate(dt);
+		//entity general update.... just overrides the world object general update but calls that method
 	}
 	
 	public void send(Region region, float x, float y) {
@@ -42,11 +48,32 @@ public abstract class Entity extends WorldObject {
 		return tags;
 	}
 	
+	/**
+	 * Checks whether or not the entity contains a particular tag
+	 * @param tag
+	 * @return
+	 */
 	public boolean hasTag(String tag) {
 		for (String t : tags) 
 			if (tag.contentEquals(t))
 				return true;
 		return false;
+	}
+	
+	public void addTag(String tag) {
+		tags.add(tag);
+	}
+	
+	public float centerX() {
+		if (dimension == null)
+			return 0; //fuck you
+		return getX() + dimension.x/2;
+	}
+	
+	public float centerY() {
+		if (dimension == null)
+			return 0;
+		return getY() + dimension.y/2;
 	}
 	
 	public float getWidth() {

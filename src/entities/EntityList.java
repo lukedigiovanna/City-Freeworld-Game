@@ -19,8 +19,10 @@ public class EntityList {
 	}
 	
 	public void update(float dt) {
-		for (Entity e : list)
+		for (Entity e : list) {
 			e.update(dt);
+			e.generalUpdate(dt);
+		}
 		
 		//get rid of entities that we want to get rid of
 		for (Entity e : toRemove)

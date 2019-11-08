@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import display.Display;
+import display.DisplayController;
+import entities.Entity;
 import main.Program;
 import main.Settings;
 import misc.Color8;
@@ -66,16 +68,27 @@ public class Game {
 		//across varying operating system performances
 		float dt = ft.mark();
 		
-		if (this.paused)
+		if (this.paused) {
+			//check to return to the main menu
+			if (Program.keyboard.keyPressed('q'))
+				DisplayController.setScreen(DisplayController.Screen.MAIN);
 			return; //dont run the game loop if we are paused
-		
+		}
 		world.update(dt);
 		
 		if (Program.keyboard.keyDown(' '))
-			test.rotate(0.1f);
+			world.getCamera().zoom(0.01f);
 		if (Program.keyboard.keyDown('c'))
-			test.rotateAbout(new Vector2(3,3), (float)(Math.PI*2*dt));
+			world.getCamera().zoom(-0.01f);
+
+		if (Program.keyboard.keyPressed('r'))
+			rotate = !rotate;
+		
+		if (rotate)
+			world.getCurrentRegion().getGrid().get((int)(Math.random()*10), (int)(Math.random()*10)).rotate(dt*(float)Math.PI*2);
 	}
+	
+	private boolean rotate = false;
 	
 	
 	/*

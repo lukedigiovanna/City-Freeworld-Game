@@ -33,9 +33,10 @@ public class Hitbox {
 		for (int i = 0; i < num; i+=2) {
 			int next = (i+2)%num;
 			Vector2 ep1 = new Vector2(owner.getX()+model[i],owner.getY()+model[i+1]),
-					   ep2 = new Vector2(owner.getX()+model[next],owner.getY()+model[next+1]);
+					ep2 = new Vector2(owner.getX()+model[next],owner.getY()+model[next+1]);
 			lines[i/2] = new Line(ep1,ep2);
 		}
+		this.rotate(this.owner.rotation);
 	}
 	
 	/**

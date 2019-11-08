@@ -32,6 +32,18 @@ public class CellGrid {
 		return true;
 	}
 	
+	public void update(float dt) {
+		for (int x = 0; x < getWidth(); x++)
+			for (int y = 0; y < getHeight(); y++) {
+				Cell cell = get(x,y);
+				if (cell != null) {
+					cell.update(dt);
+					cell.generalUpdate(dt);
+				}
+			}
+				
+	}
+	
 	public int getWidth() {
 		return this.width;
 	}

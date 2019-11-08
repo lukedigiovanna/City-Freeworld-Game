@@ -73,6 +73,20 @@ public class Keyboard {
 		return false;
 	}
 	
+	/**
+	 * returns true if the character is in the list and removes it so it is only called once
+	 * @param c
+	 * @return
+	 */
+	public boolean keyPressed(char c) {
+		for (Key k : keys)
+			if (k.character() == c) {
+				keys.remove(k);
+				return true;
+			}
+		return false;
+	}
+	
 	public Keyboard.Key[] getAllKeysDown() {
 		Keyboard.Key[] arr = new Keyboard.Key[keys.size()];
 		for (int i = 0; i < arr.length; i++) 

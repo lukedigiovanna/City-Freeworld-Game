@@ -13,10 +13,38 @@ public abstract class WorldObject {
 	protected Hitbox hitbox;
 	protected float rotation = 0;
 	
+	private static final float regenPeriod = 30.0f;
+	private float regenTimer = 0.0f;
+	
 	public WorldObject(float x, float y, float width, float height) {
 		this.position = new Vector2(x,y);
 		float[] model = {0.0f,0.0f,width,0.0f,width,height,0.0f,height};
 		this.hitbox = new Hitbox(this, model);
+		//this staggers regeneration so not every object regenerates its hitbox at the same time
+		// *reduces the chance of a lag spike
+		regenTimer = (float)Math.random()*regenPeriod; 
+	}
+	
+	/**
+	 * An update method for logic that every single world object
+	 * should have
+	 * @param dt amount of time in seconds since last call
+	 */
+	public void generalUpdate(float dt) {
+		//logic for regenerating a hitbox
+		//this is needed because sometimes the hitbox and entity's rotation fall out of sync
+		regenTimer += dt;
+		
+		if (regenTimer >= regenPeriod) {
+			regenerateHitbox();
+			regenTimer = 0;
+		}
+	}
+	
+	public void regenerateHitbox() {
+		this.hitbox.generateLines();
+		if (this instanceof Entity)
+			System.out.println("regenerated a hitbox");
 	}
 	
 	public float getX() {

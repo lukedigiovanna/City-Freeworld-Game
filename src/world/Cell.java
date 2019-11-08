@@ -16,6 +16,10 @@ public class Cell extends WorldObject {
 		attribs = new ArrayList<Attribute>();
 	}
 	
+	public void update(float dt) {
+		
+	}
+	
 	public boolean has(Attribute attrib) {
 		for (Attribute a : attribs)
 			if (attrib == a)

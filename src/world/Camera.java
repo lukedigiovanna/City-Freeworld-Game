@@ -16,26 +16,29 @@ public class Camera {
 	private static final int CELL_SIZE = 32;
 	
 	private Vector2 position;
-	private Region region;
-	private float width, height; //cell grid width and height
+	private Vector2 dimension; //cell grid width and height
 	private int pixelWidth, pixelHeight;
+	
 	private BufferedImage image;
-	private Entity focus;
+	
+	private Entity focus;	
+	private Region region;
 	
 	//rendering hints for more high quality graphics
 	private Map<RenderingHints.Key,Object> map = new HashMap<RenderingHints.Key,Object>();
 	private RenderingHints rh;
 	
-	public Camera(Region region, float x, float y, float width, float height) {
-		this.position = new Vector2(x, y);
-		this.width = width;
-		this.height = height;
-		this.pixelWidth = (int)(width * CELL_SIZE);
-		this.pixelHeight = (int)(height * CELL_SIZE);
-		this.region = region;
-		image = new BufferedImage(pixelWidth, pixelHeight, BufferedImage.TYPE_INT_ARGB);
+	public Camera(Region region, float x, float y, float width, float height, int pixelWidth, int pixelHeight) {
+		this.position = new Vector2(x,y);
+		this.dimension = new Vector2(width,height);
+		this.pixelWidth = pixelWidth;
+		this.pixelHeight = pixelHeight;
 		
-		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		image = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_ARGB);
+
+		this.region = region;
+		
+//		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 //		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 //		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 //		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
@@ -43,6 +46,9 @@ public class Camera {
 		rh = new RenderingHints(map);
 	}
 	
+	public Camera(Region region, float x, float y, float width, float height) {
+		this(region,x,y,width,height,(int)(width*CELL_SIZE),(int)(height*CELL_SIZE));
+	}
 	/**
 	 * Generates a camera given a world position and world dimension
 	 * @param x
@@ -94,10 +100,19 @@ public class Camera {
 	 */
 	private float margin = 0.2f;
 	public void adjustPosition(float dt) {
-		if (focus == null)
-			return; //don't adjust camera pos if there is no focus
-		float cx = position.x + width/2, cy = position.y + height/2;
+		//if (focus == null)
+		//	return; //don't adjust camera pos if there is no focus
+		float cx = position.x + dimension.x/2, cy = position.y + dimension.y/2;
 		move(focus.centerX()-cx,focus.centerY()-cy);
+	}
+	
+	/**
+	 * Zooms the dimensions of the camera view by some factor
+	 * @param factor
+	 */
+	public void zoom(float factor) {
+		dimension.x = dimension.x + dimension.x * factor;
+		dimension.y = dimension.y + dimension.y * factor;
 	}
 	
 	/**
@@ -115,6 +130,10 @@ public class Camera {
 	 */
 	public void draw(){
 		refreshGraphics();
+		
+		//clear the screen
+//		g.setColor(Color.WHITE); dont do now because of dumbass glitch
+//		g.fillRect(0, 0, pixelWidth, pixelHeight);
 		
 		if (region == null)  {
 			//draw something saying there is nothing to draw
@@ -134,15 +153,15 @@ public class Camera {
 		//find the index on the grid where we need to start
 		int startIndexX = (int)this.position.getX(), startIndexY = (int)this.position.getY();
 		//how many cells we need to get in the x, y directions
-		int gridWidth = (int)width+1, gridHeight = (int)height+2;
+		int gridWidth = (int)dimension.x+2, gridHeight = (int)dimension.y+2;
 		
 		//draw the grid
 		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) 
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
-					drawImage(cell.getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
-					//cell.drawHitbox(this);
+					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
+					cell.drawHitbox(this);
 				}
 			}
 		
@@ -199,36 +218,38 @@ public class Camera {
 	
 	private int toPX(float x) {
 		float rel = x-this.position.x;
-		int sx = (int)(rel/width * pixelWidth);
+		int sx = (int)(rel/dimension.x * pixelWidth);
 		return sx;
 	}
 	
 	private int toPW(float width) {
-		return Math.round(width * CELL_SIZE);
+		return (int)(width/dimension.x * pixelWidth + 1);
 	}
 	
 	private int toPY(float y) {
 		float rel = y-this.position.y;
-		int sy = (int)(rel/height * pixelHeight);
+		int sy = (int)(rel/dimension.y * pixelHeight);
 		return sy;
 	}
 	
 	private int toPH(float height) {
-		return Math.round(height * CELL_SIZE);
+		return (int)(height/dimension.y * pixelHeight + 1);
 	}
 
 	public void move(float dx, float dy) {
 		position.add(new Vector2(dx,dy));
-		position.round(1.0f/CELL_SIZE);
+		//position.round(1.0f/CELL_SIZE);
 		//now correct off the position
-		if (position.getX() < 0)
-			position.setX(0);
-		if (position.getX() > region.getWidth()-this.width)
-			position.setX(region.getWidth()-this.width);
-		if (position.getY() < 0)
-			position.setY(0);
-		if (position.getY() > region.getHeight()-this.height)
-			position.setY(region.getHeight()-this.height);
+		if (region != null) {
+			if (position.getX() < 0)
+				position.setX(0);
+			if (position.getX() > region.getWidth()-this.dimension.x)
+				position.setX(region.getWidth()-this.dimension.x);
+			if (position.getY() < 0)
+				position.setY(0);
+			if (position.getY() > region.getHeight()-this.dimension.y)
+				position.setY(region.getHeight()-this.dimension.y);
+		}
 	}
 	
 	public void moveX(float dx) {

@@ -58,5 +58,6 @@ public class Region {
 	 */
 	public void update(float dt) {
 		entities.update(dt);
+		cellGrid.update(dt);
 	}
 }

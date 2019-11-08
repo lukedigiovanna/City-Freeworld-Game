@@ -24,7 +24,7 @@ public class World {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
-				if (Math.random() < 0.5)
+				if (Math.random() < 0.75)
 					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")));
 				else {
 					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")));
@@ -54,12 +54,13 @@ public class World {
 		regions.add(temp);
 		regions.add(other);
 		
+		getCurrentRegion().update(0);
+		
 		float sidePadding = 0.25f;
 		int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), 
 				    cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
 		float worldViewWidth = 10.0f;
-		camera = new Camera(0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight));
-		camera.linkToRegion(getCurrentRegion());
+		camera = new Camera(getCurrentRegion(), 0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight),cameraWidth,cameraHeight);
 		camera.setFocus(getPlayer());
 	}
 	
@@ -70,7 +71,6 @@ public class World {
 	private int newRegion = -1;
 	public void setCurrentRegion(Region region) {
 		newRegion = regions.indexOf(region);
-		System.out.println(newRegion);
 	}
 	
 	public void update(float dt) {
@@ -80,6 +80,7 @@ public class World {
 			camera.linkToRegion(getCurrentRegion());
 			newRegion = -1;
 		}
+		camera.adjustPosition(dt);
 	}
 	
 	public void draw() {
