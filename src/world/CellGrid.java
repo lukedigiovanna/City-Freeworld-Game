@@ -4,8 +4,9 @@ public class CellGrid {
 	//stored such that the x value is the first element and the y value is the second element
 	private Cell[][] grid;
 	private int width, height;
+	private Region region;
 	
-	public CellGrid(int width, int height) {
+	public CellGrid(Region region, int width, int height) {
 		grid = new Cell[width][height];
 		this.width = width;
 		this.height = height;
@@ -19,8 +20,10 @@ public class CellGrid {
 	}
 	
 	public void set(int x, int y, Cell cell) {
-		if (checkBounds(x,y))
+		if (checkBounds(x,y)) {
 			grid[x][y] = cell;
+			cell.setRegion(region);
+		}
 	}
 	
 	public boolean checkBounds(int x, int y) {

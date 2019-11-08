@@ -45,15 +45,24 @@ public class Hitbox {
 	 */
 	public boolean intersecting(Hitbox other) {
 		for (Line l : lines) 
-			for (Line o : other.lines) 
-				if (l.intersects(o) != null)
+			for (Line o : other.lines) {
+				Vector2 intersection = l.intersects(o);
+				if (intersection != null) {
+					System.out.println(intersection);
 					return true;
+				}
+			}
 		return false;
 	}
 	
 	public void rotate(float radians) {
 		for (Line l : lines)
-			l.rotateAbout(midpoint(),radians);
+			l.rotateAbout(owner.center(),radians);
+	}
+	
+	public void translate(float dx, float dy) {
+		for (Line l : lines)
+			l.translate(dx, dy);
 	}
 	
 	/**
@@ -67,7 +76,9 @@ public class Hitbox {
 			x+=mp.x;
 			y+=mp.y;
 		}
-		return new Vector2(x/lines.length,y/lines.length);
+		Vector2 mp = new Vector2(x/lines.length,y/lines.length);
+		mp.round(0.01f);
+		return mp;
 	}
 	
 	public void updatePosition() {

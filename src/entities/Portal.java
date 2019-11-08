@@ -1,6 +1,7 @@
 package entities;
 
 import java.awt.Color;
+import java.util.List;
 
 import world.Camera;
 import world.Region;
@@ -22,17 +23,20 @@ public class Portal extends Entity {
 
 	@Override
 	public void update(float dt) {
-		
+		List<Entity> checkers = this.region.getEntities().get("player");
+		for (Entity e : checkers)
+			if (this.colliding(e))
+				e.send(destination.region, destination.x, destination.y);
 	}
 	
-	public class Destination {
+	public static class Destination {
 		public float x, y;
-		public Region destinationRegion;
+		public Region region;
 		
 		public Destination(Region reg, float x, float y) {
 			this.x = x;
 			this.y = y;
-			this.destinationRegion = reg;
+			this.region = reg;
 		}
 	}
 }

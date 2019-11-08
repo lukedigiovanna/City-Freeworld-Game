@@ -4,11 +4,19 @@ import java.awt.*;
 
 public abstract class Button extends Component {
 
-	private String title = "button";
+	protected String title = "button";
+	
+	public Button(String s, int x, int y, int w, int h, int formation) {
+		super(x,y,w,h,formation);
+		title = s;
+	}
 	
 	public Button(String s, int x, int y, int w, int h) {
-		super(x,y,w,h);
-		title = s;
+		this(s,x,y,w,h,Component.FORM_LEFT);
+	}
+	
+	public Button(String s) {
+		this(s,0,0,0,0);
 	}
 	
 	@Override

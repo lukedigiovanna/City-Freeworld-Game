@@ -8,7 +8,7 @@ public class Checkbox extends Component {
 	private boolean value = false;
 	
 	public Checkbox(int x, int y, int w, int h) {
-		super(x, y, w, h);
+		super(x, y, w, h, Component.FORM_LEFT);
 	}
 
 	private float padding = 0.075f;

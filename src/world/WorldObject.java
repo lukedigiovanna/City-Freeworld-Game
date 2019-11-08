@@ -8,9 +8,10 @@ import misc.Vector2;
  *
  */
 public abstract class WorldObject {
+	protected Region region;
 	protected Vector2 position;
 	protected Hitbox hitbox;
-	protected float rotation = 0.0f;
+	protected float rotation = 0;
 	
 	public WorldObject(float x, float y, float width, float height) {
 		this.position = new Vector2(x,y);
@@ -24,6 +25,18 @@ public abstract class WorldObject {
 	
 	public float getY() {
 		return position.y;
+	}
+	
+	public float centerX() {
+		return getX() + 0.5f;
+	}
+	
+	public float centerY() {
+		return getY() + 0.5f;
+	}
+	
+	public Vector2 center() {
+		return new Vector2(centerX(),centerY());
 	}
 	
 	public void rotate(float radians) {
@@ -61,11 +74,11 @@ public abstract class WorldObject {
 	 * @param pos the vector
 	 */
 	public void setPosition(Vector2 pos) {
+		hitbox.translate(pos.x-position.x,pos.y-position.y);
 		this.position = pos;
 		//check for collision with the grid
 		//lets look at the cells that the entity is overlapping with..
 		//we will be using the hitbox of the entity to check for collision
-		hitbox.updatePosition();
 	}
 	
 	/**
@@ -75,5 +88,13 @@ public abstract class WorldObject {
 	 */
 	public boolean colliding(WorldObject other) {
 		return this.hitbox.intersecting(other.hitbox);
+	}
+	
+	public void setRegion(Region region) {
+		this.region = region;
+	}
+	
+	public Region getRegion() {
+		return region;
 	}
 }

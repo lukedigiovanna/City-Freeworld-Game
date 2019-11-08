@@ -10,9 +10,8 @@ import world.Region;
 import world.WorldObject;
 
 public abstract class Entity extends WorldObject {
-	private Vector2 dimension;
-	private Vector2 velocity;
-	private Region currentRegion;
+	protected Vector2 dimension;
+	protected Vector2 velocity;
 	
 	protected List<String> tags;
 	
@@ -29,19 +28,25 @@ public abstract class Entity extends WorldObject {
 		tags.add("entity");
 	}
 	
-	public Region getRegion() {
-		return this.currentRegion;
-	}
-	
 	public void send(Region region, float x, float y) {
-		region.remove(this);
-		this.currentRegion = region;
-		this.currentRegion.add(this);
+		this.region.remove(this);
+		this.region = region;
+		this.region.add(this);
 		this.setPosition(x, y);
+		if (this.hasTag("player")) {
+			this.region.getWorld().setCurrentRegion(this.region);
+		}
 	}
 	
 	public List<String> getTags() {
 		return tags;
+	}
+	
+	public boolean hasTag(String tag) {
+		for (String t : tags) 
+			if (tag.contentEquals(t))
+				return true;
+		return false;
 	}
 	
 	public float getWidth() {

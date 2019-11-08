@@ -15,11 +15,16 @@ public class Region {
 		
 	}
 	
-	public Region(int width, int height) {
+	public Region(World world, int width, int height) {
 		this.width = width;
 		this.height = height;
-		cellGrid = new CellGrid(width,height);
-		entities = new EntityList();
+		cellGrid = new CellGrid(this,width,height);
+		entities = new EntityList(this);
+		this.world = world;
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 	
 	public float getWidth() {
@@ -40,6 +45,7 @@ public class Region {
 	
 	public void add(Entity e) {
 		entities.add(e);
+		e.setRegion(this);
 	}
 	
 	public void remove(Entity e) {

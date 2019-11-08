@@ -42,4 +42,12 @@ public class Cell extends WorldObject {
 	public enum Attribute {
 		COLLIDABLE
 	}
+	
+	public float centerX() {
+		return getX() + 0.5f;
+	}
+	
+	public float centerY() {
+		return getY() + 0.5f;
+	}
 }

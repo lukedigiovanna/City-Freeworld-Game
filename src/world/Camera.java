@@ -5,6 +5,8 @@ import misc.Vector2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 import entities.Entity;
 import entities.EntityList;
@@ -18,6 +20,11 @@ public class Camera {
 	private float width, height; //cell grid width and height
 	private int pixelWidth, pixelHeight;
 	private BufferedImage image;
+	private Entity focus;
+	
+	//rendering hints for more high quality graphics
+	private Map<RenderingHints.Key,Object> map = new HashMap<RenderingHints.Key,Object>();
+	private RenderingHints rh;
 	
 	public Camera(Region region, float x, float y, float width, float height) {
 		this.position = new Vector2(x, y);
@@ -27,8 +34,22 @@ public class Camera {
 		this.pixelHeight = (int)(height * CELL_SIZE);
 		this.region = region;
 		image = new BufferedImage(pixelWidth, pixelHeight, BufferedImage.TYPE_INT_ARGB);
+		
+		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+//		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+//		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+//		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+		rh = new RenderingHints(map);
 	}
 	
+	/**
+	 * Generates a camera given a world position and world dimension
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public Camera(float x, float y, float width, float height) {
 		this(null,x,y,width,height);
 	}
@@ -48,6 +69,10 @@ public class Camera {
 		this.region = region;
 	}
 	
+	public void setFocus(Entity e) {
+		this.focus = e;
+	}
+	
 	/**
 	 * The value for 1 world unit converted to pixels.
 	 * @return
@@ -65,6 +90,17 @@ public class Camera {
 	}
 	
 	/**
+	 * Moves the camera to adjust for centering on the focused entity
+	 */
+	private float margin = 0.2f;
+	public void adjustPosition(float dt) {
+		if (focus == null)
+			return; //don't adjust camera pos if there is no focus
+		float cx = position.x + width/2, cy = position.y + height/2;
+		move(focus.centerX()-cx,focus.centerY()-cy);
+	}
+	
+	/**
 	 * Getter for camera view
 	 * @return the camera view
 	 */
@@ -72,7 +108,6 @@ public class Camera {
 		return image;
 	}
 	
-	private int startPX = 0, startPY = 0;
 	/**
 	 * Redraws the camera view to a BufferedImage
 	 * Only draws what is in view of the camera. Ignores other cells.
@@ -105,13 +140,17 @@ public class Camera {
 		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) 
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
-				if (cell != null)
-					drawImage(grid.get(ix, iy).getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
+				if (cell != null) {
+					drawImage(cell.getImage(), (float)ix, (float)iy, 1.0f, 1.0f);
+					//cell.drawHitbox(this);
+				}
 			}
 		
 		//draw the entities on top of the grid
 		for (Entity e : entities.get()) {
+			rotate(e.rotation,e.centerX(),e.centerY());
 			e.draw(this);
+			rotate(-e.rotation,e.centerX(),e.centerY());
 			e.drawHitbox(this);
 		}
 	}
@@ -121,10 +160,11 @@ public class Camera {
 	 * rather than in pixel coordinates
 	 */
 	
-	private Graphics g;
+	private Graphics2D g;
 	
 	public void refreshGraphics() {
-		g = image.getGraphics();
+		g = image.createGraphics();
+		g.setRenderingHints(rh);
 	}
 	
 	public void setColor(Color color) {
@@ -135,12 +175,26 @@ public class Camera {
 		g.fillRect(toPX(x), toPY(y), toPW(width), toPH(height));
 	}
 	
+	public void drawRect(float x, float y, float width, float height) {
+		g.drawRect(toPX(x), toPY(y), toPW(width), toPH(height));
+	}
+	
 	public void drawLine(float x1, float y1, float x2, float y2) {
+		float[] dash = {toPW(0.2f)};
+		g.setStroke(new BasicStroke(toPH(0.05f),BasicStroke.CAP_ROUND,BasicStroke.JOIN_BEVEL));
 		g.drawLine(toPX(x1), toPY(y1), toPX(x2), toPY(y2));
+	}
+	
+	public void drawLine(float width, float x1, float y1, float x2, float y2) {
+		g.setStroke(new BasicStroke(toPH(width)));
 	}
 	
 	public void drawImage(Image image, float x, float y, float width, float height) {
 		g.drawImage(image, toPX(x), toPY(y), toPW(width), toPH(height), null);
+	}
+	
+	public void rotate(float theta, float rx, float ry) {
+		g.rotate(theta,toPX(rx),toPY(ry));
 	}
 	
 	private int toPX(float x) {
@@ -162,7 +216,7 @@ public class Camera {
 	private int toPH(float height) {
 		return Math.round(height * CELL_SIZE);
 	}
-	
+
 	public void move(float dx, float dy) {
 		position.add(new Vector2(dx,dy));
 		position.round(1.0f/CELL_SIZE);

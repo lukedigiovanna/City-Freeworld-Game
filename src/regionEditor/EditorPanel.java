@@ -2,6 +2,7 @@ package regionEditor;
 
 import javax.swing.*;
 
+import main.Mouse;
 import misc.Color8;
 
 import java.awt.*;
@@ -12,8 +13,12 @@ public class EditorPanel extends JPanel {
 	
 	private BufferedImage image;
 	
+	private Mouse mouse;
+	
 	public EditorPanel() {
 		this.setFocusable(true);
+		
+		mouse = new Mouse(this);
 		
 		Thread repaintThread = new Thread( new Runnable() {
 			public void run() {
@@ -47,16 +52,8 @@ public class EditorPanel extends JPanel {
 	public void repaint() {
 		if (image == null)
 			image = new BufferedImage(DISPLAY_WIDTH,DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB);
-		Graphics g = image.getGraphics();
-		g.setColor(Color8.LIGHT_GRAY);
-		g.fillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-		//draw a border
-		int padding = 15;
-		g.setColor(Color8.GRAY);
-		g.fillRect(0, 0, DISPLAY_WIDTH, padding);
-		g.fillRect(DISPLAY_WIDTH-padding, 0, padding, DISPLAY_HEIGHT);
-		g.fillRect(0, DISPLAY_HEIGHT-padding, DISPLAY_WIDTH, padding);
-		g.fillRect(0, 0, padding, DISPLAY_HEIGHT);
+		Graphics2D g = image.createGraphics();
+		ScreenController.draw(g,mouse);
 		super.repaint();
 	}
 	

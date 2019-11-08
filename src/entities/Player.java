@@ -15,8 +15,16 @@ public class Player extends Entity {
 
 	@Override
 	public void draw(Camera camera) {
-		camera.setColor(Color.GREEN);
+		camera.setColor(new Color(255,0,255,125));
 		camera.fillRect(getX(), getY(), 0.8f, 1.6f);
+	}
+	
+	public float centerX() {
+		return getX() + 0.4f;
+	}
+	
+	public float centerY() {
+		return getY() + 0.8f;
 	}
 
 	@Override
@@ -29,5 +37,7 @@ public class Player extends Entity {
 			this.move(0, 1 * dt);
 		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
 			this.move(0, - 1 * dt);
+		
+		this.rotate((float)Math.PI*2*0.2f*dt);
 	}
 }

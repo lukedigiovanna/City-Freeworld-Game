@@ -18,7 +18,6 @@ public class Game {
 	private Thread updateLoop;
 	private FrameTimer ft;
 	private World world;
-	private Camera camera;
 	
 	private float sidePadding = 0.25f;
 	private int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), 
@@ -29,10 +28,6 @@ public class Game {
 	public Game() {
 		ft = new FrameTimer();
 		world = new World();
-		
-		float worldViewWidth = 10.0f;
-		camera = new Camera(0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight));
-		camera.linkToRegion(world.getCurrentRegion());
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
@@ -74,12 +69,12 @@ public class Game {
 		if (this.paused)
 			return; //dont run the game loop if we are paused
 		
-		world.updateCurrentRegion(dt);
+		world.update(dt);
 		
 		if (Program.keyboard.keyDown(' '))
 			test.rotate(0.1f);
 		if (Program.keyboard.keyDown('c'))
-			test.rotateAbout(new Vector2(3,3), (float)(Math.PI*2*0.1*dt));
+			test.rotateAbout(new Vector2(3,3), (float)(Math.PI*2*dt));
 	}
 	
 	
@@ -89,14 +84,11 @@ public class Game {
 	
 	private int cameraBorderSize = 20;
 	
-	private Line test = new Line(new Vector2(3,3), new Vector2(6,4));
+	private Line test = new Line(new Vector2(3,3), new Vector2(4,3));
 	
 	public void draw(Graphics2D g) {
-		camera.draw();	
-		camera.setColor(Color.YELLOW);
-		Vector2[] ep = test.getEndpoints();
-		camera.drawLine(ep[0].x,ep[0].y,ep[1].x,ep[1].y);
-		g.drawImage(camera.getView(), cameraBorderSize, cameraBorderSize, cameraWidth, cameraHeight, null);
+		world.draw();	
+		g.drawImage(world.getCamera().getView(), cameraBorderSize, cameraBorderSize, cameraWidth, cameraHeight, null);
 		//draw the border around the camera
 		g.setColor(Color8.GRAY);
 		g.fillRect(0, cameraBorderSize+cameraHeight, cameraWidth+cameraBorderSize*2, cameraBorderSize);

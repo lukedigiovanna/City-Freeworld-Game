@@ -73,8 +73,10 @@ public class Line {
 			return null;
 		else if (intersection.x == MathUtils.INFINITY && intersection.y == MathUtils.INFINITY)
 			return intersection;
-		else 
+		else if (intersection.x > ld && intersection.x < rd && intersection.x > other.ld && intersection.x < other.rd)
 			return intersection;
+		else
+			return null;
 	}
 	
 	/**
@@ -82,16 +84,7 @@ public class Line {
 	 * @param radians
 	 */
 	public void rotate(float radians) {
-		Vector2 mp = midpoint();
-		float length = length();
-		float r = length/2;
-		float newAngle = radians+angle();
-		endpoint1.setX((float) (mp.x + Math.cos(newAngle)*r));
-		endpoint1.setY((float) (mp.y + Math.sin(newAngle)*r));
-		endpoint2.setX((float) (mp.x - Math.cos(newAngle)*r));
-		endpoint2.setY((float) (mp.y - Math.sin(newAngle)*r));
-		
-		this.setFromEP(endpoint1, endpoint2);
+		rotateAbout(midpoint(),radians);
 	}
 	
 	/**

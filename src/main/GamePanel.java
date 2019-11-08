@@ -13,13 +13,11 @@ public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private BufferedImage screen;
-	private Graphics2D graphics;
 	
 	public GamePanel() {
 		this.setFocusable(true);
 		screen = new BufferedImage(Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB);
-		graphics = screen.createGraphics();
-		
+	
 		Thread repaintThread = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
