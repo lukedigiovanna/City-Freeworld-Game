@@ -36,7 +36,7 @@ public class Hitbox {
 					ep2 = new Vector2(owner.getX()+model[next],owner.getY()+model[next+1]);
 			lines[i/2] = new Line(ep1,ep2);
 		}
-		this.rotate(this.owner.rotation);
+		this.rotate(this.owner.getRotation());
 	}
 	
 	/**

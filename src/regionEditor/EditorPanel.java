@@ -3,13 +3,14 @@ package regionEditor;
 import javax.swing.*;
 
 import main.Mouse;
+import main.Program;
 import misc.Color8;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class EditorPanel extends JPanel {
-	public static final int DISPLAY_WIDTH = 1000, DISPLAY_HEIGHT = 800; 
+	public static final int DISPLAY_WIDTH = Program.DISPLAY_WIDTH, DISPLAY_HEIGHT = Program.DISPLAY_HEIGHT; 
 	
 	private BufferedImage image;
 	

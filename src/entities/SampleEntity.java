@@ -3,6 +3,7 @@ package entities;
 import java.awt.Graphics;
 
 import misc.Color8;
+import misc.Vector2;
 import world.Camera;
 
 public class SampleEntity extends Entity {
@@ -21,6 +22,6 @@ public class SampleEntity extends Entity {
 	
 	@Override
 	public void update(float dt) {
-		this.hitbox.rotate((float)(Math.PI*2*dt*0.2));
+		this.velocity = new Vector2((float)Math.cos(age),(float)Math.sin(age),(float)Math.PI);
 	}
 }

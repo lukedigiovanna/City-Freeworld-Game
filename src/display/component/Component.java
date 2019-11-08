@@ -10,8 +10,21 @@ public abstract class Component {
 	
 	protected int x, y, width, height;
 	
+	private int formation = FORM_LEFT;
+	
 	public Component(int x, int y, int w, int h, int formation) {
-		adjust(x,y,w,h,formation);
+		this.width = w;
+		this.height = h;
+		this.y = y;
+		this.x = x;
+		switch (formation) {
+		case FORM_CENTER:
+			this.x = x-width/2;
+			break;
+		case FORM_RIGHT:
+			this.x = x-width;
+		}
+		this.formation = formation;
 	}
 	
 	private boolean active = true;
@@ -69,27 +82,6 @@ public abstract class Component {
 			mouseDown = false;
 		}
 	}	
-	public void adjust(int x, int y, int width, int height, int formation) {
-		this.width = width;
-		this.height = height;
-		switch (formation) {
-		case FORM_LEFT:
-			this.x = x;
-			this.y = y;
-			break;
-		case FORM_CENTER:
-			this.x = x-width/2;
-			this.y = y;
-			break;
-		case FORM_RIGHT:
-			this.x = x - width;
-			this.y = y;
-			break;
-		default:
-			this.x = x;
-			this.y = y;
-		}
-	}
 	
 	public void setX(int x) {
 		this.x = x;
@@ -108,11 +100,34 @@ public abstract class Component {
 	}
 	
 	public void setWidth(int width) {
-		this.width = width;
+		setDimension(width,0);
 	}
 	
 	public void setHeight(int height) {
+		setDimension(0,height);
+	}
+	
+	public void setDimension(int width, int height) {
+		switch (formation) {
+		case FORM_CENTER:
+			this.x+=this.width/2;
+			this.y+=this.height/2;
+			break;
+		case FORM_RIGHT:
+			this.x+=this.width;
+			this.y+=this.height;
+		}
+		this.width = width;
 		this.height = height;
+		switch (formation) {
+		case FORM_CENTER:
+			this.x-=this.width/2;
+			this.y-=this.height/2;
+			break;
+		case FORM_RIGHT:
+			this.x-=this.width;
+			this.y-=this.height;
+		}
 	}
 	
 	public int getWidth() {

@@ -24,6 +24,7 @@ public abstract class Entity extends WorldObject {
 	public Entity(float x, float y, float width, float height) {
 		super(x,y,width,height);
 		this.dimension = new Vector2(width,height);
+		this.velocity = new Vector2(0,0,0);
 		tags = new ArrayList<String>();
 		tags.add("entity");
 	}
@@ -32,6 +33,9 @@ public abstract class Entity extends WorldObject {
 	public void generalUpdate(float dt) {
 		super.generalUpdate(dt);
 		//entity general update.... just overrides the world object general update but calls that method
+		//apply the velocity vector
+		this.move(velocity.x*dt, velocity.y*dt);
+		this.rotate(velocity.r*dt);
 	}
 	
 	public void send(Region region, float x, float y) {

@@ -8,21 +8,24 @@ import misc.Vector2;
  *
  */
 public abstract class WorldObject {
+	protected PositionHistory positionHistory;
 	protected Region region;
 	protected Vector2 position;
 	protected Hitbox hitbox;
-	protected float rotation = 0;
+	
+	protected float age;
 	
 	private static final float regenPeriod = 30.0f;
 	private float regenTimer = 0.0f;
 	
 	public WorldObject(float x, float y, float width, float height) {
-		this.position = new Vector2(x,y);
+		this.position = new Vector2(x,y,0);
 		float[] model = {0.0f,0.0f,width,0.0f,width,height,0.0f,height};
 		this.hitbox = new Hitbox(this, model);
 		//this staggers regeneration so not every object regenerates its hitbox at the same time
 		// *reduces the chance of a lag spike
 		regenTimer = (float)Math.random()*regenPeriod; 
+		this.positionHistory = new PositionHistory(this);
 	}
 	
 	/**
@@ -39,6 +42,11 @@ public abstract class WorldObject {
 			regenerateHitbox();
 			regenTimer = 0;
 		}
+		
+		//update the position history..
+		this.positionHistory.update(dt);
+		
+		age += dt;
 	}
 	
 	public void regenerateHitbox() {
@@ -55,6 +63,10 @@ public abstract class WorldObject {
 		return position.y;
 	}
 	
+	public float getRotation() {
+		return position.r;
+	}
+	
 	public float centerX() {
 		return getX() + 0.5f;
 	}
@@ -69,7 +81,7 @@ public abstract class WorldObject {
 	
 	public void rotate(float radians) {
 		hitbox.rotate(radians);
-		rotation += radians;
+		position.r += radians;
 	}
 	
 	public void drawHitbox(Camera c) {
@@ -91,7 +103,7 @@ public abstract class WorldObject {
 	 * @param y y-coord
 	 */
 	public void setPosition(float x, float y) {
-		setPosition(new Vector2(x,y));
+		setPosition(new Vector2(x,y,position.r));
 		
 	}
 	

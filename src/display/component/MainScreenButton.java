@@ -6,42 +6,33 @@ import main.Program;
 
 public class MainScreenButton extends Button {
 	
-	private int ox;
-	
 	public MainScreenButton(String title, int x, int y) {
-		super(title,x,y,0,(int)(Program.DISPLAY_HEIGHT/15));
-		ox = x;
+		super(title,x,y,0,(int)(Program.DISPLAY_HEIGHT/15),Component.FORM_CENTER);
 	}
 	
-	private Color color = Color.GRAY;
+	private float fontSize = 0.05f;
 	
 	public void draw(Graphics2D g) {
-		double padding = 0.2;
-		g.setFont(new Font(Program.FONT_FAMILY,Font.PLAIN,(int)(height*(1-padding))));
-		int stringWidth = g.getFontMetrics().stringWidth(getText());
-		width = (int)(stringWidth*(1+padding));
-		x = ox-width/2;
+		int fs = (int)(fontSize*Program.DISPLAY_HEIGHT);
+		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,fs));
+		String str = "< "+this.getText()+" >";
+		int width = g.getFontMetrics().stringWidth(str);
+		this.setDimension(width,g.getFontMetrics().getHeight());
+		g.setColor(new Color(0,0,200,125));
+		g.drawString(str, x-1, y+this.getHeight()-1);
 		g.setColor(Color.BLACK);
-		g.fillRect(x, y, width, height);
-		g.setColor(color);
-		g.fillRect(x+1, y+1, width-2, height-2);
-		g.setColor(Color.WHITE);
-		g.drawString(getText(), x+width/2-stringWidth/2, (int) (y+height-(padding/2)*height));
+		g.drawString(str, x, y+this.getHeight());
 	}
 	
 	public void onMouseOver() {
-		System.out.println("Mouse over");
-		color = Color.DARK_GRAY;
+		fontSize = 0.06f;
 	}
 	
 	public void onMouseDown() {
-		System.out.println("Mouse down");
-		color = new Color(110, 130, 130);
 	}
 
 	public void onMouseOut() {
-		System.out.println("Mouse out");
-		color = Color.GRAY;
+		fontSize = 0.05f;
 	}
 	
 	@Override
@@ -51,7 +42,5 @@ public class MainScreenButton extends Button {
 
 	@Override
 	public void onMouseUp() {
-		System.out.println("Mouse up");
-		color = Color.GRAY;
 	}
 }

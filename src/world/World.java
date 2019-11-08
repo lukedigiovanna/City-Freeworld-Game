@@ -8,6 +8,7 @@ import entities.Entity;
 import entities.Player;
 import entities.Portal;
 import entities.SampleEntity;
+import entities.Portal.Destination;
 import main.Program;
 import misc.ImageTools;
 
@@ -15,6 +16,8 @@ public class World {
 	private Camera camera;
 	private List<Region> regions;
 	private int currentRegion;
+	
+	private float elapsedTime = 0.0f;
 	
 	public World() {
 		regions = new ArrayList<Region>();
@@ -33,8 +36,8 @@ public class World {
 				grid.set(x, y, c);
 			}
 		}
-		temp.add(new SampleEntity(3.0f,3.0f));
-		//temp.getEntities().add(new SampleEntity(3.3f,3.3f));
+//		temp.add(new SampleEntity(3.0f,3.0f));
+//		temp.add(new SampleEntity(3.3f,3.3f));
 		
 		temp.add(new Player(4.0f,4.0f));
 		
@@ -48,11 +51,22 @@ public class World {
 			}
 		}
 		
-		other.add(new Portal(new Portal.Destination(temp,5.0f,2.0f),5.0f,2.0f,0.5f,0.5f));
+		Region another = new Region(this,width,height);
+		grid = another.getGrid();
+		for (int x = 0; x < width; x++) 
+			for (int y = 0; y < height; y++) {
+				Cell c = new Cell((float)x,(float)y);
+				c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("cool_tile.png")));
+				grid.set(x, y, c);
+			}
+		
+		other.add(new Portal(new Portal.Destination(another,5.0f,2.0f),5.0f,2.0f,0.5f,0.5f));
 		temp.add(new Portal(new Portal.Destination(other, 3.0f, 3.0f),5.0f,7.0f,0.5f,0.5f));
+		another.add(new Portal(new Portal.Destination(temp,1.0f,7.0f),1.0f,7.0f,0.2f,0.2f));
 		
 		regions.add(temp);
 		regions.add(other);
+		regions.add(another);
 		
 		getCurrentRegion().update(0);
 		
@@ -74,6 +88,7 @@ public class World {
 	}
 	
 	public void update(float dt) {
+		elapsedTime += dt;
 		getCurrentRegion().update(dt);
 		if (newRegion > -1) {
 			currentRegion = newRegion;
@@ -97,5 +112,9 @@ public class World {
 			return (Player)players.get(0);
 		else
 			return null;
+	}
+	
+	public float getElapsedTime() {
+		return elapsedTime;
 	}
 }

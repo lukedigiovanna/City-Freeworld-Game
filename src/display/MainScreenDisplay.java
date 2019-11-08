@@ -12,24 +12,42 @@ import misc.ImageTools;
 
 public class MainScreenDisplay extends Display {
 
-	private Button playButton;
+	private Button[] buttons;
 	
 	private Checkbox boxTest;
 	
 	public MainScreenDisplay() {
 		super();
-		playButton = new MainScreenButton("Play",Program.DISPLAY_WIDTH/2,Program.DISPLAY_HEIGHT/2) {
-			public void onMouseUp() {
-				DisplayController.setScreen(DisplayController.Screen.GAME);
-			}
+		String[] buttonNames = {"Play","quork","quit"};
+		Runnable[] buttonActions = {
+				new Runnable() { public void run() {
+					DisplayController.setScreen(DisplayController.Screen.GAME);
+				} }, 
+				new Runnable() { public void run() {
+					
+				} },
+				new Runnable() { public void run() {
+					System.exit(0);
+				} }
 		};
-		add(playButton);
+		buttons = new Button[buttonNames.length];
+		for (int i = 0; i < buttonNames.length; i++) {
+			Runnable act = buttonActions[i];
+			buttons[i] = new MainScreenButton(buttonNames[i],Program.DISPLAY_WIDTH/2,Program.DISPLAY_HEIGHT/2+50*i) {
+				public void onMouseDown() {
+					act.run();
+				}
+			};
+		}
+		
+		for (Button b : buttons)
+			add(b);
 		
 		boxTest = new Checkbox(100,100,50,50);
 		add(boxTest);
 	}
 	
-	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
+	private BufferedImage background = ImageTools.invert(ImageTools.getBufferedImage("jungle.png"));
 	
 	@Override
 	public void draw(Graphics2D g) {
@@ -39,7 +57,8 @@ public class MainScreenDisplay extends Display {
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
 		drawText(g,Program.GAME_NAME,CustomFonts.HANDDRAWN,0.05f,0.5f,0.3f,Display.CENTER_ALIGN);
 		
-		playButton.draw(g);
+		for (Button b : buttons)
+			b.draw(g);
 		
 		boxTest.draw(g);
 	}

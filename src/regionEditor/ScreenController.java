@@ -9,7 +9,9 @@ import main.Program;
 
 public class ScreenController {
 	public static enum Screen {
-			MAIN;
+			MAIN,
+			NEW_WORLD,
+			LOAD_WORLD;
 	}
 	
 	private static Screen current = Screen.MAIN;
@@ -22,10 +24,10 @@ public class ScreenController {
 	private static int width = EditorPanel.DISPLAY_WIDTH, height = EditorPanel.DISPLAY_HEIGHT;
 	
 	private abstract static class MainScreenButton extends Button {
-		private Font font = new Font(ff,Font.BOLD,30);
+		private Font font = new Font(ff,Font.BOLD,26);
 		
 		public MainScreenButton(String text, int y) {
-			super(text,ScreenController.width/2,y,10,20,Component.FORM_CENTER);
+			super("< "+text+" >",ScreenController.width/2,y,0,0,Component.FORM_CENTER);
 		}
 		
 		@Override
@@ -33,9 +35,9 @@ public class ScreenController {
 			g.setFont(font);
 			this.setWidth(g.getFontMetrics().stringWidth(this.title));
 			this.setHeight(g.getFontMetrics().getHeight());
-			g.setColor(Color.BLACK);
-			g.drawString(title, x, y);
-			g.fillRect(x, y, width, height);
+			g.setColor(Color.YELLOW);
+			g.drawString(title, x, y+this.getHeight());
+			//g.fillRect(x, y+this.getHeight(), width, height);
 		}
 
 		@Override
@@ -59,22 +61,35 @@ public class ScreenController {
 		}
 	}
 	
-	private static MainScreenButton newWorldButton = new MainScreenButton("New World",height/2+height/4) {
+	private static MainScreenButton newWorldButton = new MainScreenButton("New World",height/2) {
 		@Override
 		public void onMouseDown() {
-			
+			ScreenController.current = ScreenController.Screen.NEW_WORLD;
+		}
+	},
+		loadWorldButton = new MainScreenButton("Load World",height/2+40) {
+		public void onMouseDown() {
+			ScreenController.current = ScreenController.Screen.LOAD_WORLD;
+		}
+	},
+		quitButton = new MainScreenButton("Exit",height/2+80) {
+		public void onMouseDown() {
+			System.exit(0);
 		}
 	};
+
 	
 	public static void draw(Graphics2D g, Mouse mouse) {
+		String str = "";
+		int y = 0;
 		switch (current) {
 		case MAIN:
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(0, 0, width, height);
 			g.setFont(new Font(ff,Font.BOLD,38));
 			g.setColor(Color.BLACK);
-			String str = Program.GAME_NAME+ " Region Editor";
-			int y = height/3;
+			str = Program.GAME_NAME+ " Region Editor";
+			y = height/3;
 			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
 			g.setColor(Color.GRAY);
 			str = "For version: "+Program.getVersionString();
@@ -83,6 +98,29 @@ public class ScreenController {
 			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
 			newWorldButton.check(mouse);
 			newWorldButton.draw(g);
+			loadWorldButton.check(mouse);
+			loadWorldButton.draw(g);
+			quitButton.check(mouse);
+			quitButton.draw(g);
+			break;
+		case NEW_WORLD:
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(0, 0, width, height);
+			g.setFont(new Font(ff,Font.BOLD,34));
+			g.setColor(Color.BLACK);
+			str = "New World!";
+			y = height/8;
+			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
+		case LOAD_WORLD:
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(0, 0, width, height);
+			g.setFont(new Font(ff,Font.BOLD,34));
+			g.setColor(Color.BLACK);
+			str = "Load World!";
+			y = height/8;
+			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
+			break;
+		default:
 			break;
 		}
 	}

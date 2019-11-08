@@ -38,7 +38,7 @@ public class Camera {
 
 		this.region = region;
 		
-//		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 //		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 //		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 //		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
@@ -132,8 +132,8 @@ public class Camera {
 		refreshGraphics();
 		
 		//clear the screen
-//		g.setColor(Color.WHITE); dont do now because of dumbass glitch
-//		g.fillRect(0, 0, pixelWidth, pixelHeight);
+		g.setColor(Color.WHITE); //dont do now because of dumbass glitch
+		g.fillRect(0, 0, pixelWidth, pixelHeight);
 		
 		if (region == null)  {
 			//draw something saying there is nothing to draw
@@ -156,20 +156,28 @@ public class Camera {
 		int gridWidth = (int)dimension.x+2, gridHeight = (int)dimension.y+2;
 		
 		//draw the grid
-		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) 
+		int pw = toPW(1.0f), ph = toPH(1.0f);
+		int px = toPX(startIndexX), py = 0;
+		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) { 
+			py = toPY(startIndexY);
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
-					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
-					cell.drawHitbox(this);
+					g.drawImage(cell.getImage(), px, py, pw, ph,null);
+					//drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
+					//cell.drawHitbox(this);
 				}
+				py+=ph;
 			}
+			px+=pw;
+		}
 		
 		//draw the entities on top of the grid
 		for (Entity e : entities.get()) {
-			rotate(e.rotation,e.centerX(),e.centerY());
+			rotate(e.getRotation(),e.centerX(),e.centerY());
 			e.draw(this);
-			rotate(-e.rotation,e.centerX(),e.centerY());
+			rotate(-e.getRotation(),e.centerX(),e.centerY());
+			
 			e.drawHitbox(this);
 		}
 	}
@@ -182,10 +190,11 @@ public class Camera {
 	private Graphics2D g;
 	
 	public void refreshGraphics() {
+		//image = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_ARGB);
 		g = image.createGraphics();
 		g.setRenderingHints(rh);
 	}
-	
+	 
 	public void setColor(Color color) {
 		g.setColor(color);
 	}
@@ -218,7 +227,7 @@ public class Camera {
 	
 	private int toPX(float x) {
 		float rel = x-this.position.x;
-		int sx = (int)(rel/dimension.x * pixelWidth);
+		int sx = Math.round(rel/dimension.x * pixelWidth);
 		return sx;
 	}
 	
@@ -228,7 +237,7 @@ public class Camera {
 	
 	private int toPY(float y) {
 		float rel = y-this.position.y;
-		int sy = (int)(rel/dimension.y * pixelHeight);
+		int sy = Math.round(rel/dimension.y * pixelHeight);
 		return sy;
 	}
 	
