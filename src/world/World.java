@@ -1,10 +1,12 @@
 package world;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
+import entities.EntityObject;
 import entities.Player;
 import entities.Portal;
 import entities.SampleEntity;
@@ -19,6 +21,11 @@ public class World {
 	
 	private float elapsedTime = 0.0f;
 	
+	private static final BufferedImage 
+		GRASS = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")),
+		WATER = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")),
+		TILE  =	ImageTools.convertTo8Bit(ImageTools.getBufferedImage("cool_tile.png"));
+	
 	public World() {
 		regions = new ArrayList<Region>();
 		int width = 30, height = 20;
@@ -28,14 +35,18 @@ public class World {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
 				if (Math.random() < 0.75)
-					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")));
+					c.setImage(GRASS);
 				else {
-					c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")));
+					c.setImage(WATER);
 					c.addAttrib(Cell.Attribute.COLLIDABLE);
 				}
 				grid.set(x, y, c);
 			}
 		}
+		
+		BufferedImage tree = ImageTools.getBufferedImage("tree.png");
+		for (int i = 0; i < 30; i++)
+			temp.add(new EntityObject(tree,(float)(Math.random()*30),(float)(Math.random()*20),1.0f,1.0f));
 //		temp.add(new SampleEntity(3.0f,3.0f));
 //		temp.add(new SampleEntity(3.3f,3.3f));
 		
@@ -46,7 +57,7 @@ public class World {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
-				c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")));
+				c.setImage(WATER);
 				grid.set(x, y, c);
 			}
 		}
@@ -56,7 +67,7 @@ public class World {
 		for (int x = 0; x < width; x++) 
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
-				c.setImage(ImageTools.convertTo8Bit(ImageTools.getBufferedImage("cool_tile.png")));
+				c.setImage(TILE);
 				grid.set(x, y, c);
 			}
 		

@@ -7,6 +7,7 @@ import java.util.*;
 import display.component.*;
 import display.component.Component;
 import main.Program;
+import misc.ImageTools;
 
 /**
  * abstract class for displays
@@ -71,7 +72,8 @@ public abstract class Display {
 	
 	public static void drawText(Graphics2D g, String str, CustomFont cf, int size, int x, int y, int alignment) {
 		int startX = x;
-		int length = str.length()*size;
+		int spacing = 5;
+		int length = str.length()*(size+spacing);
 		switch (alignment) {
 		case CENTER_ALIGN:
 			startX-=length/2;
@@ -83,8 +85,8 @@ public abstract class Display {
 			startX-=length;
 		}
 		for (int i = 0; i < str.length(); i++) {
-			g.drawImage(cf.getChar(str.charAt(i)), startX, y, size, size, null);
-			startX+=size;
+			g.drawImage(ImageTools.colorscale(cf.getChar(str.charAt(i)),g.getColor()), startX, y, size, size, null);
+			startX+=size+spacing;
 		}
 	}
 	

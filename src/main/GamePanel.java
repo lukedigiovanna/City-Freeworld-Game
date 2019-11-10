@@ -16,7 +16,7 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel() {
 		this.setFocusable(true);
-		screen = new BufferedImage(Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB);
+		screen = new BufferedImage(Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB_PRE);
 	
 		Thread repaintThread = new Thread(new Runnable() {
 			public void run() {

@@ -71,11 +71,11 @@ public class Line {
 		Vector2 intersection = MathUtils.intersects(this.slope, this.intercept, other.slope, other.intercept);
 		if (intersection == null)
 			return null;
-		else if (intersection.x == MathUtils.INFINITY && intersection.y == MathUtils.INFINITY)
+		else if (intersection.x == MathUtils.INFINITY && intersection.y == MathUtils.INFINITY && this.ld == other.ld) 
 			return intersection;
-		else if (intersection.x > ld && intersection.x < rd && intersection.x > other.ld && intersection.x < other.rd)
+		else if (intersection.x > ld && intersection.x < rd && intersection.x > other.ld && intersection.x < other.rd) 
 			return intersection;
-		else
+		else 
 			return null;
 	}
 	

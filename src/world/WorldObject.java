@@ -15,7 +15,7 @@ public abstract class WorldObject {
 	
 	protected float age;
 	
-	private static final float regenPeriod = 30.0f;
+	private static final float regenPeriod = 0.45f;
 	private float regenTimer = 0.0f;
 	
 	public WorldObject(float x, float y, float width, float height) {
@@ -51,8 +51,6 @@ public abstract class WorldObject {
 	
 	public void regenerateHitbox() {
 		this.hitbox.generateLines();
-		if (this instanceof Entity)
-			System.out.println("regenerated a hitbox");
 	}
 	
 	public float getX() {

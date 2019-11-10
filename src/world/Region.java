@@ -50,6 +50,7 @@ public class Region {
 	
 	public void remove(Entity e) {
 		entities.remove(e);
+		e.setRegion(null);
 	}
 	
 	/**

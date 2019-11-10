@@ -3,8 +3,9 @@ package display;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JFrame;
+
 import display.component.Button;
-import display.component.Checkbox;
 import display.component.*;
 import main.Program;
 import misc.Color8;
@@ -13,18 +14,16 @@ import misc.ImageTools;
 public class MainScreenDisplay extends Display {
 
 	private Button[] buttons;
-	
-	private Checkbox boxTest;
-	
+
 	public MainScreenDisplay() {
 		super();
-		String[] buttonNames = {"Play","quork","quit"};
+		String[] buttonNames = {"Play","Update Notes","Quit"};
 		Runnable[] buttonActions = {
 				new Runnable() { public void run() {
 					DisplayController.setScreen(DisplayController.Screen.GAME);
 				} }, 
 				new Runnable() { public void run() {
-					
+					DisplayController.setScreen(DisplayController.Screen.UPDATE_NOTES);
 				} },
 				new Runnable() { public void run() {
 					System.exit(0);
@@ -42,29 +41,26 @@ public class MainScreenDisplay extends Display {
 		
 		for (Button b : buttons)
 			add(b);
-		
-		boxTest = new Checkbox(100,100,50,50);
-		add(boxTest);
 	}
 	
-	private BufferedImage background = ImageTools.invert(ImageTools.getBufferedImage("jungle.png"));
-	
+	private BufferedImage background = ImageTools.getBufferedImage("lossantos.jpg");
+
 	@Override
 	public void draw(Graphics2D g) {
 		fillBackground(g,background);
 		//draw the game name
 		g.setColor(Color8.BLUE);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
-		drawText(g,Program.GAME_NAME,CustomFonts.HANDDRAWN,0.05f,0.5f,0.3f,Display.CENTER_ALIGN);
+		
+		drawText(g,Program.GAME_NAME,CustomFont.PIXEL,0.05f,0.5f,0.3f,Display.CENTER_ALIGN);
+		
 		
 		for (Button b : buttons)
 			b.draw(g);
-		
-		boxTest.draw(g);
 	}
 	
 	@Override
 	public void set() {
-		
+		Program.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

@@ -89,6 +89,13 @@ public abstract class Entity extends WorldObject {
 	}
 	
 	/**
+	 * Removes reference of this entity from the entity list
+	 */
+	public void destroy() {
+		this.getRegion().remove(this);
+	}
+	
+	/**
 	 * Called by the draw method from a camera class
 	 * This method should be written in terms of the 
 	 * @param g

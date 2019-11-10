@@ -18,6 +18,7 @@ public class Game {
 	public static final int REFRESH_RATE = 50; // milliseconds
 	
 	private Thread updateLoop;
+	private float elapsedTime = 0.0f;
 	private FrameTimer ft;
 	private World world;
 	
@@ -36,8 +37,10 @@ public class Game {
 				while (true) {
 					try {
 						Thread.sleep(REFRESH_RATE);
-						if (Program.initialized())
+						if (Program.initialized() && DisplayController.getCurrentScreen() == DisplayController.Screen.GAME)
 							gameLoop();
+						else 
+							ft.mark(); //keep the frame timer going so we dont add time that we weren't on the game screen
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -86,6 +89,8 @@ public class Game {
 		
 		if (rotate)
 			world.getCurrentRegion().getGrid().get((int)(Math.random()*10), (int)(Math.random()*10)).rotate(dt*(float)Math.PI*2);
+	
+		elapsedTime+=dt;
 	}
 	
 	private boolean rotate = false;

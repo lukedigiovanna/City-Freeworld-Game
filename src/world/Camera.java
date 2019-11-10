@@ -173,7 +173,8 @@ public class Camera {
 		}
 		
 		//draw the entities on top of the grid
-		for (Entity e : entities.get()) {
+		for (int i = 0; i < entities.size(); i++) {
+			Entity e = entities.get(i);
 			rotate(e.getRotation(),e.centerX(),e.centerY());
 			e.draw(this);
 			rotate(-e.getRotation(),e.centerX(),e.centerY());

@@ -95,6 +95,14 @@ public class ImageTools {
 		});
 	}
 	
+	public static BufferedImage setTransparency(BufferedImage image, int alpha) {
+		return apply(image,new Modifiable() {
+			public Color modify(Color c) {
+				return new Color(c.getRed(),c.getGreen(),c.getBlue(),alpha);
+			}
+		});
+	}
+	
 	public static BufferedImage invert(BufferedImage image) {
 		return apply(image,new Modifiable() {
 			public Color modify(Color c) {
@@ -146,15 +154,7 @@ public class ImageTools {
 	}
 	
 	private static Color getColor(int rgb) {
-		return new Color(rgb);
-	}
-	
-	private static Color getColor(int r, int g, int b) {
-		return new Color(r,g,b);
-	}
-	
-	private static Color getColor(int r, int g, int b, int a) {
-		return new Color(r,g,b,a);
+		return new Color(rgb,true);
 	}
 	
 	private static BufferedImage get(int[][] rgbs) {

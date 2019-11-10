@@ -16,7 +16,8 @@ public class DisplayController {
 	
 	public static enum Screen {
 		MAIN(new MainScreenDisplay()),
-		GAME(new GameDisplay());
+		GAME(new GameDisplay()),
+		UPDATE_NOTES(new UpdateNotesDisplay());
 		
 		Display display;
 		Screen(Display d) {

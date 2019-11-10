@@ -1,0 +1,10 @@
+max_fps:20
+music_volume:1.0
+sound_volume:1.0
+master_volume:1.0
+screen_brightness:0.5
+move_up:w
+move_left:a
+move_right:d
+move_down:s
+open_inventory:e
