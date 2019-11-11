@@ -30,14 +30,19 @@ public class ScreenController {
 			super("< "+text+" >",ScreenController.width/2,y,0,0,Component.FORM_CENTER);
 		}
 		
+		
 		@Override
 		public void draw(Graphics2D g) {
 			g.setFont(font);
-			this.setWidth(g.getFontMetrics().stringWidth(this.title));
+			int w = g.getFontMetrics().stringWidth(this.getText());
+			System.out.println(w);
+			this.setWidth(w);
 			this.setHeight(g.getFontMetrics().getHeight());
 			g.setColor(Color.YELLOW);
 			g.drawString(title, x, y+this.getHeight());
-			//g.fillRect(x, y+this.getHeight(), width, height);
+			g.setColor(Color.RED);
+			g.fillRect(x, y, width, height);
+			System.out.println(this.getText()+": "+x+", "+y+" "+this.getWidth()+" x "+height);
 		}
 
 		@Override
