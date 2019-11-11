@@ -35,14 +35,10 @@ public class ScreenController {
 		public void draw(Graphics2D g) {
 			g.setFont(font);
 			int w = g.getFontMetrics().stringWidth(this.getText());
-			System.out.println(w);
 			this.setWidth(w);
 			this.setHeight(g.getFontMetrics().getHeight());
 			g.setColor(Color.YELLOW);
 			g.drawString(title, x, y+this.getHeight());
-			g.setColor(Color.RED);
-			g.fillRect(x, y, width, height);
-			System.out.println(this.getText()+": "+x+", "+y+" "+this.getWidth()+" x "+height);
 		}
 
 		@Override
@@ -116,6 +112,7 @@ public class ScreenController {
 			str = "New World!";
 			y = height/8;
 			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
+			break;
 		case LOAD_WORLD:
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(0, 0, width, height);

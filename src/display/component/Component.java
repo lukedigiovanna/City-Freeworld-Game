@@ -100,11 +100,11 @@ public abstract class Component {
 	}
 	
 	public void setWidth(int width) {
-		setDimension(width,0);
+		setDimension(width,height);
 	}
 	
 	public void setHeight(int height) {
-		setDimension(0,height);
+		setDimension(width,height);
 	}
 	
 	public void setDimension(int width, int height) {
