@@ -62,8 +62,8 @@ public class ScreenController {
 		}
 	}
 	
-	private static MainScreenButton newWorldButton = new MainScreenButton("New World",height/2) {
-		@Override
+	private static MainScreenButton 
+		newWorldButton = new MainScreenButton("New World",height/2) {
 		public void onMouseDown() {
 			ScreenController.current = ScreenController.Screen.NEW_WORLD;
 		}
