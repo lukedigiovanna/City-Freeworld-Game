@@ -8,11 +8,7 @@ import display.component.*;
 import display.component.Button;
 import display.component.Component;
 
-public class UpdateNotesDisplay extends Display {
-	private String[] notes = {
-		"Added settings menu"
-	};
-	
+public class SettingsDisplay extends Display {
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
 		@Override
 		public void onMouseDown() {}
@@ -45,7 +41,7 @@ public class UpdateNotesDisplay extends Display {
 		}
 	};
 	
-	public UpdateNotesDisplay() {
+	public SettingsDisplay() {
 		super();
 		add(backButton);
 	}
@@ -58,25 +54,7 @@ public class UpdateNotesDisplay extends Display {
 		fillBackground(g, Color.BLACK);
 		g.setColor(Color.GRAY);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,ptpY(0.1f)));
-		drawText(g,"UPDATE NOTES",0.5f,0.15f,Display.CENTER_ALIGN);
-		g.setColor(Color.LIGHT_GRAY);
-		g.setFont(new Font(Program.FONT_FAMILY,Font.ITALIC,ptpY(0.05f)));
-		drawText(g,"Version "+Program.getVersionString(),0.5f,0.20f,Display.CENTER_ALIGN);
-		float size = 0.03f;
-		float y = 0.3f;
-		g.setColor(Color.WHITE);
-		g.setFont(new Font(Program.FONT_FAMILY,Font.PLAIN,ptpY(size)));
-		for (String s : notes) {
-			int i = 0;
-			String str = "";
-			while (s.charAt(i++) == ' ') {
-				str+=" ";
-				s = s.substring(1);
-			}
-			str+="* "+s;
-			drawText(g,str,0.1f,y,Display.LEFT_ALIGN);
-			y+=size;
-		}
+		drawText(g,"Settings",0.5f,0.15f,Display.CENTER_ALIGN);
 		
 		backButton.draw(g);
 	}

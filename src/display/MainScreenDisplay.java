@@ -17,11 +17,14 @@ public class MainScreenDisplay extends Display {
 
 	public MainScreenDisplay() {
 		super();
-		String[] buttonNames = {"Play","Update Notes","Quit"};
+		String[] buttonNames = {"Play","Settings","Update Notes","Quit"};
 		Runnable[] buttonActions = {
 				new Runnable() { public void run() {
 					DisplayController.setScreen(DisplayController.Screen.GAME);
 				} }, 
+				new Runnable() { public void run() {
+					DisplayController.setScreen(DisplayController.Screen.SETTINGS);
+				} },
 				new Runnable() { public void run() {
 					DisplayController.setScreen(DisplayController.Screen.UPDATE_NOTES);
 				} },

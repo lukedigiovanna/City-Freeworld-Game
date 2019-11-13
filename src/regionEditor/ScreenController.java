@@ -11,7 +11,8 @@ public class ScreenController {
 	public static enum Screen {
 			MAIN,
 			NEW_WORLD,
-			LOAD_WORLD;
+			LOAD_WORLD,
+			ASSET_MAKER;
 	}
 	
 	private static Screen current = Screen.MAIN;
@@ -73,7 +74,12 @@ public class ScreenController {
 			ScreenController.current = ScreenController.Screen.LOAD_WORLD;
 		}
 	},
-		quitButton = new MainScreenButton("Exit",height/2+80) {
+		assetMakerButton = new MainScreenButton("Create Assets",height/2+80) {
+		public void onMouseDown() {
+			ScreenController.current = ScreenController.Screen.ASSET_MAKER;
+		}
+	},
+		quitButton = new MainScreenButton("Exit",height/2+120) {
 		public void onMouseDown() {
 			System.exit(0);
 		}
@@ -101,6 +107,8 @@ public class ScreenController {
 			newWorldButton.draw(g);
 			loadWorldButton.check(mouse);
 			loadWorldButton.draw(g);
+			assetMakerButton.check(mouse);
+			assetMakerButton.draw(g);
 			quitButton.check(mouse);
 			quitButton.draw(g);
 			break;
@@ -122,6 +130,14 @@ public class ScreenController {
 			y = height/8;
 			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
 			break;
+		case ASSET_MAKER:
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(0, 0, width, height);
+			g.setFont(new Font(ff,Font.BOLD,34));
+			g.setColor(Color.BLACK);
+			str = "Asset Maker!";
+			y = height/8;
+			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
 		default:
 			break;
 		}
