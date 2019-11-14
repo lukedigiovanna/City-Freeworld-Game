@@ -17,6 +17,8 @@ public class Player extends Entity {
 	public void draw(Camera camera) {
 		camera.setColor(new Color(255,0,255,125));
 		camera.fillRect(getX(), getY(), getWidth(), getHeight());
+		camera.setColor(new Color(0,255,0));
+		camera.fillOval(centerX()-0.04f,centerY()-0.04f,0.08f,0.08f);
 	}
 
 	private float speed = 2.0f;

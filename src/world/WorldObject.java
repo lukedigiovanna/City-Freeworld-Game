@@ -1,6 +1,7 @@
 package world;
 
 import entities.Entity;
+import misc.MathUtils;
 import misc.Vector2;
 
 /**
@@ -82,6 +83,10 @@ public abstract class WorldObject {
 		position.r += radians;
 	}
 	
+	public float angleTo(WorldObject other) {
+		return (float)MathUtils.getAngle(centerX(), centerY(), other.centerX(), other.centerY());
+	}
+	
 	public void drawHitbox(Camera c) {
 		hitbox.draw(c);
 	}
@@ -102,7 +107,6 @@ public abstract class WorldObject {
 	 */
 	public void setPosition(float x, float y) {
 		setPosition(new Vector2(x,y,position.r));
-		
 	}
 	
 	/**

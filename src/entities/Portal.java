@@ -15,19 +15,29 @@ public class Portal extends Entity {
 		this.destination = destination;
 	}
 
+	private float r = 0, rv = 120;
 	@Override
 	public void draw(Camera camera) {
-		camera.setColor(Color.MAGENTA);
+		camera.setColor(new Color((int)r,150,(int)r,(int)r));
 		camera.fillRect(getX(),getY(),getWidth(),getHeight());
 	}
 
 	@Override
 	public void update(float dt) {
-		this.rotate((float)Math.PI*2*dt*1.5f);
+		this.rotate((float)Math.PI*2*dt*0.5f);
 		List<Entity> checkers = this.region.getEntities().get("player");
 		for (Entity e : checkers)
 			if (this.colliding(e))
 				e.send(destination.region, destination.x, destination.y);
+		r+=rv*dt;
+		if (r > 255) {
+			r = 255;
+			rv*=-1;
+		}
+		if (r < 0) {
+			r = 0;
+			rv*=-1;
+		}
 	}
 	
 	public static class Destination {

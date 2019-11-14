@@ -24,7 +24,7 @@ public class World {
 	private static final BufferedImage 
 		GRASS = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")),
 		WATER = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")),
-		TILE  =	ImageTools.convertTo8Bit(ImageTools.getBufferedImage("cool_tile.png"));
+		TILE  =	ImageTools.convertTo8Bit(ImageTools.getBufferedImage("tile.jpg"));
 	
 	public World() {
 		regions = new ArrayList<Region>();
@@ -44,11 +44,11 @@ public class World {
 			}
 		}
 		
-		BufferedImage tree = ImageTools.getBufferedImage("tree.png");
+		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
 		for (int i = 0; i < 30; i++)
-			temp.add(new EntityObject(tree,(float)(Math.random()*30),(float)(Math.random()*20),1.0f,1.0f));
-//		temp.add(new SampleEntity(3.0f,3.0f));
-//		temp.add(new SampleEntity(3.3f,3.3f));
+			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
+		temp.add(new SampleEntity(3.0f,3.0f));
+		temp.add(new SampleEntity(3.3f,3.3f));
 		
 		temp.add(new Player(4.0f,4.0f));
 		

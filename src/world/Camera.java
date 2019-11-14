@@ -42,7 +42,7 @@ public class Camera {
 //		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 //		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 //		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
-//		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		rh = new RenderingHints(map);
 	}
 	
@@ -163,8 +163,8 @@ public class Camera {
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
-					g.drawImage(cell.getImage(), px, py, pw, ph,null);
-					//drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
+					//g.drawImage(cell.getImage(), px, py, pw, ph,null);
+					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
 					//cell.drawHitbox(this);
 				}
 				py+=ph;
@@ -175,11 +175,13 @@ public class Camera {
 		//draw the entities on top of the grid
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
-			rotate(e.getRotation(),e.centerX(),e.centerY());
+			float rotation = e.getRotation();
+			float x = e.centerX(), y = e.centerY();
+			rotate(rotation,x,y);
 			e.draw(this);
-			rotate(-e.getRotation(),e.centerX(),e.centerY());
+			rotate(-rotation,x,y);
 			
-			e.drawHitbox(this);
+			//e.drawHitbox(this);
 		}
 	}
 	
@@ -208,6 +210,14 @@ public class Camera {
 		g.drawRect(toPX(x), toPY(y), toPW(width), toPH(height));
 	}
 	
+	public void fillOval(float x, float y, float width, float height) {
+		g.fillOval(toPX(x),toPY(y),toPW(width),toPH(height));
+	}
+	
+	public void drawOval(float x, float y, float width, float height) {
+		g.drawOval(toPX(x), toPY(y), toPW(width), toPH(height));
+	}
+	
 	public void drawLine(float x1, float y1, float x2, float y2) {
 		float[] dash = {toPW(0.2f)};
 		g.setStroke(new BasicStroke(toPH(0.05f),BasicStroke.CAP_ROUND,BasicStroke.JOIN_BEVEL));
@@ -228,7 +238,7 @@ public class Camera {
 	
 	private int toPX(float x) {
 		float rel = x-this.position.x;
-		int sx = Math.round(rel/dimension.x * pixelWidth);
+		int sx = (int)(rel/dimension.x * pixelWidth);
 		return sx;
 	}
 	
@@ -238,7 +248,7 @@ public class Camera {
 	
 	private int toPY(float y) {
 		float rel = y-this.position.y;
-		int sy = Math.round(rel/dimension.y * pixelHeight);
+		int sy = (int)(rel/dimension.y * pixelHeight);
 		return sy;
 	}
 	
