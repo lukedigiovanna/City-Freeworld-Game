@@ -1,6 +1,7 @@
 package world;
 
 import entities.Entity;
+import entities.Player;
 import misc.MathUtils;
 import misc.Vector2;
 
@@ -130,6 +131,23 @@ public abstract class WorldObject {
 	 */
 	public boolean colliding(WorldObject other) {
 		return this.hitbox.intersecting(other.hitbox);
+	}
+	
+	/**
+	 * Gets the active player of the game
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return (Player) region.getWorld().getPlayer();
+	}
+	
+	/**
+	 * Gets the difference between the centers of the two objects
+	 * @param other
+	 * @return
+	 */
+	public float distanceTo(WorldObject other) {
+		return MathUtils.distance(centerX(),centerY(),other.centerX(),other.centerY());
 	}
 	
 	public void setRegion(Region region) {

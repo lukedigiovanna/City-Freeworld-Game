@@ -1,5 +1,6 @@
 package entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -16,16 +17,26 @@ public class SampleEntity extends Entity {
 	}
 
 	private BufferedImage arrow = ImageTools.getBufferedImage("arrow.png");
+	private int i = 0;
 	@Override
 	public void draw(Camera c) {
-		c.drawImage(arrow, getX(), getY(), getWidth(), getHeight());
+		Color col = new Color(i,255-i,0);
+		//BufferedImage img = ImageTools.colorscale(arrow, col);
+		//c.drawImage(img, getX(), getY(), getWidth(), getHeight());
+		c.setColor(col);
+		c.drawLine(getX(), getY()+getHeight()/2, getX()+getWidth(), getY()+getHeight()/2);
+		c.drawLine(getX()+getWidth(), getY()+getHeight()/2, getX()+getWidth()-getWidth()/4, getY()+getHeight()/4);
+		c.drawLine(getX()+getWidth(), getY()+getHeight()/2, getX()+getWidth()-getWidth()/4, getY()+getHeight()/2+getHeight()/4);
 	}
 	
 	@Override
 	public void update(float dt) {
 		//this.velocity = new Vector2((float)Math.cos(age),(float)Math.sin(age));
-		Entity look = this.getRegion().getWorld().getPlayer();
-		if (look != null)
-			this.position.r = (float)MathUtils.getAngle(centerX(), centerY(), look.centerX(), look.centerY());
+		Entity player = getPlayer();
+		if (player != null)
+			this.position.r = (float)MathUtils.getAngle(centerX(), centerY(), player.centerX(), player.centerY());
+		float dist = this.distanceTo(player);
+		float perc = dist/7.0f;
+		i = MathUtils.clip(0, 255, (int)(perc*255));
 	}
 }

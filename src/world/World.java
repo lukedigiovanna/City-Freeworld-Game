@@ -47,9 +47,9 @@ public class World {
 		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
 		for (int i = 0; i < 30; i++)
 			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
-		temp.add(new SampleEntity(3.0f,3.0f));
-		temp.add(new SampleEntity(3.3f,3.3f));
-		
+		for (int x = 0; x < 30; x++)
+			for (int y = 0; y < 20; y++)
+				temp.add(new SampleEntity(x,y));
 		temp.add(new Player(4.0f,4.0f));
 		
 		Region other = new Region(this,width,height);

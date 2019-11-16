@@ -10,7 +10,9 @@ import display.component.Component;
 
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
-		"Added settings menu"
+		"Added settings menu",
+		"Fixed problems with a glitchy camera display",
+		
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

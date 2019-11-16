@@ -197,4 +197,17 @@ public class MathUtils {
 	public static double getAngle(double x1, double y1, double x2, double y2) {
 		return getAngle(x2-x1,y2-y1);
 	}
+	
+	/**
+	 * Gets the difference between two points
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
+	public static float distance(float x1, float y1, float x2, float y2) {
+		float dx = x2-x1, dy = y2-y1;
+		return (float)Math.sqrt(dx*dx+dy*dy);
+	}
 }

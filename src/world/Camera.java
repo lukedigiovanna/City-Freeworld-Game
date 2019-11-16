@@ -17,6 +17,7 @@ public class Camera {
 	
 	private Vector2 position;
 	private Vector2 dimension; //cell grid width and height
+	
 	private int pixelWidth, pixelHeight;
 	
 	private BufferedImage image;
@@ -39,7 +40,7 @@ public class Camera {
 		this.region = region;
 		
 		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 //		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 //		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
 		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
@@ -103,7 +104,18 @@ public class Camera {
 		//if (focus == null)
 		//	return; //don't adjust camera pos if there is no focus
 		float cx = position.x + dimension.x/2, cy = position.y + dimension.y/2;
-		move(focus.centerX()-cx,focus.centerY()-cy);
+		float mx = dimension.x/5, my = dimension.y/5;
+		float fx = focus.centerX(), fy = focus.centerY();
+		float dx = 0,dy = 0;
+		if (fx < cx-mx)
+			dx = -.1f;
+		else if (fx > cx + mx)
+			dx = +0.1f;
+		if (fy < cy-my)
+			dy = -.1f;
+		else if (fy > cy+my)
+			dy = 0.1f;
+		move(dx,dy);
 	}
 	
 	/**
@@ -123,12 +135,15 @@ public class Camera {
 		return image;
 	}
 	
+	private Vector2 drawPos, drawDim;
 	/**
 	 * Redraws the camera view to a BufferedImage
 	 * Only draws what is in view of the camera. Ignores other cells.
 	 * @param world the world to draw. includes the grid and entities
 	 */
 	public void draw(){
+		updateVectors();
+		
 		refreshGraphics();
 		
 		//clear the screen
@@ -156,20 +171,14 @@ public class Camera {
 		int gridWidth = (int)dimension.x+2, gridHeight = (int)dimension.y+2;
 		
 		//draw the grid
-		int pw = toPW(1.0f), ph = toPH(1.0f);
-		int px = toPX(startIndexX), py = 0;
 		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) { 
-			py = toPY(startIndexY);
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
-					//g.drawImage(cell.getImage(), px, py, pw, ph,null);
 					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
 					//cell.drawHitbox(this);
 				}
-				py+=ph;
 			}
-			px+=pw;
 		}
 		
 		//draw the entities on top of the grid
@@ -196,6 +205,11 @@ public class Camera {
 		//image = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_ARGB);
 		g = image.createGraphics();
 		g.setRenderingHints(rh);
+	}
+	
+	private void updateVectors() {
+		this.drawPos = this.position.copy();
+		this.drawDim = this.dimension.copy();
 	}
 	 
 	public void setColor(Color color) {
@@ -237,23 +251,23 @@ public class Camera {
 	}
 	
 	private int toPX(float x) {
-		float rel = x-this.position.x;
-		int sx = (int)(rel/dimension.x * pixelWidth);
+		float rel = x-this.drawPos.x;
+		int sx = (int)(rel/drawDim.x * pixelWidth);
 		return sx;
 	}
 	
 	private int toPW(float width) {
-		return (int)(width/dimension.x * pixelWidth + 1);
+		return (int)(width/drawDim.x * pixelWidth + 1);
 	}
 	
 	private int toPY(float y) {
-		float rel = y-this.position.y;
-		int sy = (int)(rel/dimension.y * pixelHeight);
+		float rel = y-this.drawPos.y;
+		int sy = (int)(rel/drawDim.y * pixelHeight);
 		return sy;
 	}
 	
 	private int toPH(float height) {
-		return (int)(height/dimension.y * pixelHeight + 1);
+		return (int)(height/drawDim.y * pixelHeight + 1);
 	}
 
 	public void move(float dx, float dy) {

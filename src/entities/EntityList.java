@@ -10,6 +10,7 @@ public class EntityList {
 	private List<Entity> list;
 	private List<Entity> toRemove, toAdd;
 	private Region region;
+	private Player playerReference;
 	
 	public EntityList(Region region) {
 		list = new ArrayList<Entity>();
