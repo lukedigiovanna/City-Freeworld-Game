@@ -1,5 +1,6 @@
 package world;
 
+import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
 
@@ -164,6 +165,7 @@ public class Camera {
 		//Get the new grid and entities
 		CellGrid grid = region.getGrid();
 		EntityList entities = region.getEntities();
+		Walls walls = region.getWalls();
 		
 		//find the index on the grid where we need to start
 		int startIndexX = (int)this.position.getX(), startIndexY = (int)this.position.getY();
@@ -192,6 +194,9 @@ public class Camera {
 			
 			//e.drawHitbox(this);
 		}
+		
+		walls.draw(this);
+		
 	}
 	
 	/*
@@ -233,13 +238,22 @@ public class Camera {
 	}
 	
 	public void drawLine(float x1, float y1, float x2, float y2) {
-		float[] dash = {toPW(0.2f)};
-		g.setStroke(new BasicStroke(toPH(0.05f),BasicStroke.CAP_ROUND,BasicStroke.JOIN_BEVEL));
 		g.drawLine(toPX(x1), toPY(y1), toPX(x2), toPY(y2));
 	}
 	
 	public void drawLine(float width, float x1, float y1, float x2, float y2) {
 		g.setStroke(new BasicStroke(toPH(width)));
+		drawLine(x1,y1,x2,y2);
+	}
+	
+	public void drawLine(Line l) {
+		Vector2[] ep = l.getEndpoints();
+		drawLine(ep[0].x,ep[0].y,ep[1].x,ep[1].y);
+	}
+	
+	public void drawLine(float width, Line l) {
+		g.setStroke(new BasicStroke(toPH(width)));
+		drawLine(l);
 	}
 	
 	public void drawImage(Image image, float x, float y, float width, float height) {

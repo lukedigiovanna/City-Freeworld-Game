@@ -2,11 +2,13 @@ package world;
 
 import entities.Entity;
 import entities.EntityList;
+import misc.Line;
 
 public class Region {
 	private World world;
 	private CellGrid cellGrid;
 	private EntityList entities;
+	private Walls walls;
 	private int width, height;
 	
 	private String id = "reg-0.0"; //this should match the folder path
@@ -20,6 +22,7 @@ public class Region {
 		this.height = height;
 		cellGrid = new CellGrid(this,width,height);
 		entities = new EntityList(this);
+		walls = new Walls();
 		this.world = world;
 	}
 	
@@ -51,6 +54,14 @@ public class Region {
 	public void remove(Entity e) {
 		entities.remove(e);
 		e.setRegion(null);
+	}
+	
+	public void addWall(Line l) {
+		this.walls.add(l);
+	}
+	
+	public Walls getWalls() {
+		return walls;
 	}
 	
 	/**

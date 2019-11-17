@@ -91,8 +91,7 @@ public class Hitbox {
 		for (Line l : lines) {
 			if (l == null)
 				continue;
-			Vector2[] ep = l.getEndpoints();
-			c.drawLine(ep[0].x, ep[0].y, ep[1].x, ep[1].y);
+			c.drawLine(l);
 		}
 	}
 }

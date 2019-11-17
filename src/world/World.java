@@ -13,6 +13,8 @@ import entities.SampleEntity;
 import entities.Portal.Destination;
 import main.Program;
 import misc.ImageTools;
+import misc.Line;
+import misc.Vector2;
 
 public class World {
 	private Camera camera;
@@ -51,6 +53,8 @@ public class World {
 			for (int y = 0; y < 20; y++)
 				temp.add(new SampleEntity(x,y));
 		temp.add(new Player(4.0f,4.0f));
+		
+		temp.addWall(new Line(new Vector2(2,2),new Vector2(4,4)));
 		
 		Region other = new Region(this,width,height);
 		grid = other.getGrid();

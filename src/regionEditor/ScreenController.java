@@ -12,7 +12,8 @@ public class ScreenController {
 			MAIN,
 			NEW_WORLD,
 			LOAD_WORLD,
-			ASSET_MAKER;
+			ASSET_MAKER,
+			LEVEL_EDITOR;
 	}
 	
 	private static Screen current = Screen.MAIN;
@@ -66,7 +67,7 @@ public class ScreenController {
 	private static MainScreenButton 
 		newWorldButton = new MainScreenButton("New World",height/2) {
 		public void onMouseDown() {
-			ScreenController.current = ScreenController.Screen.NEW_WORLD;
+			ScreenController.current = ScreenController.Screen.LEVEL_EDITOR;
 		}
 	},
 		loadWorldButton = new MainScreenButton("Load World",height/2+40) {
@@ -129,6 +130,9 @@ public class ScreenController {
 			str = "Load World!";
 			y = height/8;
 			g.drawString(str, width/2-g.getFontMetrics().stringWidth(str)/2, y);
+			break;
+		case LEVEL_EDITOR:
+			Editor.draw(g,width,height);
 			break;
 		case ASSET_MAKER:
 			g.setColor(Color.LIGHT_GRAY);
