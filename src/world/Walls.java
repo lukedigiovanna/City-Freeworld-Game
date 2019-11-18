@@ -31,6 +31,5 @@ public class Walls {
 		c.setColor(Color.YELLOW);
 		for (Line l : walls) 			
 			c.drawLine(0.025f,l);
-		System.out.println("ok");
 	}
 }
