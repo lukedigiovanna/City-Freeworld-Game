@@ -21,9 +21,8 @@ public class SampleEntity extends Entity {
 	@Override
 	public void draw(Camera c) {
 		Color col = new Color(i,255-i,0);
-		//BufferedImage img = ImageTools.colorscale(arrow, col);
-		//c.drawImage(img, getX(), getY(), getWidth(), getHeight());
 		c.setColor(col);
+		c.setStrokeWidth(0.025f);
 		c.drawLine(getX(), getY()+getHeight()/2, getX()+getWidth(), getY()+getHeight()/2);
 		c.drawLine(getX()+getWidth(), getY()+getHeight()/2, getX()+getWidth()-getWidth()/4, getY()+getHeight()/4);
 		c.drawLine(getX()+getWidth(), getY()+getHeight()/2, getX()+getWidth()-getWidth()/4, getY()+getHeight()/2+getHeight()/4);

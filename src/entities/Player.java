@@ -33,6 +33,6 @@ public class Player extends Entity {
 		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
 			this.move(0, - speed * dt);
 		
-		this.rotate((float)Math.PI*2*0.2f*dt);
+		//this.rotate((float)Math.PI*2*0.2f*dt);
 	}
 }

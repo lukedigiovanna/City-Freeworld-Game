@@ -54,7 +54,8 @@ public class World {
 				temp.add(new SampleEntity(x,y));
 		temp.add(new Player(4.0f,4.0f));
 		
-		temp.addWall(new Line(new Vector2(2,2),new Vector2(4,4)));
+		temp.addWall(new Line(new Vector2(2,2),new Vector2(4,3)));
+		temp.addWall(new Line(new Vector2(6,2),new Vector2(6,6)));
 		
 		Region other = new Region(this,width,height);
 		grid = other.getGrid();

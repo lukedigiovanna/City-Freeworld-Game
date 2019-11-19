@@ -27,9 +27,14 @@ public class Walls {
 		walls.add(wallLine);
 	}
 	
+	public List<Line> getWalls() {
+		return walls;
+	}
+	
 	public void draw(Camera c) {
 		c.setColor(Color.YELLOW);
+		c.setStrokeWidth(0.025f);
 		for (Line l : walls) 			
-			c.drawLine(0.025f,l);
+			c.drawLine(l);
 	}
 }

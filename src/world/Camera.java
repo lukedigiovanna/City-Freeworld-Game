@@ -241,19 +241,13 @@ public class Camera {
 		g.drawLine(toPX(x1), toPY(y1), toPX(x2), toPY(y2));
 	}
 	
-	public void drawLine(float width, float x1, float y1, float x2, float y2) {
-		g.setStroke(new BasicStroke(toPH(width)));
-		drawLine(x1,y1,x2,y2);
-	}
-	
 	public void drawLine(Line l) {
 		Vector2[] ep = l.getEndpoints();
 		drawLine(ep[0].x,ep[0].y,ep[1].x,ep[1].y);
 	}
 	
-	public void drawLine(float width, Line l) {
+	public void setStrokeWidth(float width) {
 		g.setStroke(new BasicStroke(toPH(width)));
-		drawLine(l);
 	}
 	
 	public void drawImage(Image image, float x, float y, float width, float height) {

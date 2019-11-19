@@ -1,7 +1,5 @@
 package misc;
 
-import javax.print.attribute.standard.MediaSize.Other;
-
 public class Line {
 	
 	//endpoint info
@@ -64,21 +62,12 @@ public class Line {
 	
 	/**
 	 * Returns the point of intersection if the lines intersect
-	 * Returns null if there is no point of intersection
-	 * Returns a point with both values set to infinity if the lines are equivalent
+	 * Returns null if there is no point of intersection or if there are infinite solutions
 	 * @param other The line to check for intersection with
 	 * @return
 	 */
 	public Vector2 intersects(Line other) {
-		Vector2 intersection = MathUtils.intersects(this.slope, this.intercept, other.slope, other.intercept);
-		if (intersection == null)
-			return null;
-		else if (intersection.x == MathUtils.INFINITY && intersection.y == MathUtils.INFINITY && this.ld == other.ld) 
-			return intersection;
-		else if (intersection.x > ld && intersection.x < rd && intersection.x > other.ld && intersection.x < other.rd) 
-			return intersection;
-		else 
-			return null;
+		return MathUtils.intersects(endpoint1, endpoint2, other.endpoint1, other.endpoint2);
 	}
 	
 	/**
@@ -193,7 +182,7 @@ public class Line {
 	 * Shows the equation in slope - intercept form with the domain
 	 */
 	public String toString() {
-		return "y = "+slope+"x + "+intercept+" {"+ld+" <= x  <= "+rd+"} theta = ";
+		return "y = "+slope+"x + "+intercept+" {"+ld+" <= x  <= "+rd+"}";
 	}
 }
 	

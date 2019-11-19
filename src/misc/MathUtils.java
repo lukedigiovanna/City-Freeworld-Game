@@ -138,9 +138,9 @@ public class MathUtils {
 	 */
 	public static Vector2 intersects(double m1, double b1, double m2, double b2) {
 		if (m1 == m2) {//parallel so they will never intersect or will have infinite intersections
-			if (b1 != b2)
+			if (b1 != b2) //the lines are parallel, but not equivalent.. no intersection exists
 				return null;
-			else 
+			else //the lines are equivalent
 				return new Vector2(INFINITY, INFINITY);
 		}
 		//set the equations equal to each other to find x point of intersection
@@ -161,6 +161,19 @@ public class MathUtils {
 		double b1 = origin1.getY() - m1 * origin1.getX();
 		double b2 = origin2.getY() - m2 * origin2.getY();
 		return intersects(m1,b1,m2,b2);
+	}
+	
+	//given four endpoints
+	public static Vector2 intersects(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4) {
+		float denominator = (p4.x-p3.x)*(p1.y-p2.y)-(p1.x-p2.x)*(p4.y-p3.y);
+		if (denominator == 0)
+			return null; //either no/infinite intersections
+		float ta = ((p3.y-p4.y)*(p1.x-p3.x)+(p4.x-p3.x)*(p1.y-p3.y))/denominator;
+		float tb = ((p1.y-p2.y)*(p1.x-p3.x)+(p2.x-p1.x)*(p1.y-p3.y))/denominator;
+		if (ta >= 0 && ta <= 1 && tb >= 0 && tb <= 1) //intersection!
+			return new Vector2(p1.x+ta*(p2.x-p1.x),p1.y+ta*(p2.y-p1.y));
+		else
+			return null; //intersection is outside of the bounds
 	}
 	
 	/**

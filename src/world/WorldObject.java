@@ -1,7 +1,10 @@
 package world;
 
+import java.util.List;
+
 import entities.Entity;
 import entities.Player;
+import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
 
@@ -98,6 +101,26 @@ public abstract class WorldObject {
 	 * @param dy distance to change y
 	 */
 	public void move(float dx, float dy) {
+		if (dx == 0 && dy == 0)
+			return; //no point in doing anything if we dont want to move.
+		
+		//need to modify these dx, dy in correspondence with walls
+		List<Line> walls = this.getRegion().getWalls().getWalls();
+		Vector2[] eps = this.hitbox.getVertices();
+		
+		for (Vector2 ep1 : eps) {
+			Vector2 ep2 = new Vector2(ep1.x+dx,ep1.y+dy);
+			Line l = new Line(ep1,ep2);
+			for (Line wall : walls) {
+				Vector2 intersection = l.intersects(wall);
+				if (intersection == null)
+					continue;
+				dx = intersection.x-ep1.x; 
+				dy = intersection.y-ep1.y;
+				System.out.println(dx+","+dy);
+			}
+		}
+		
 		setPosition(getX()+dx,getY()+dy);
 	}
 	
@@ -147,6 +170,8 @@ public abstract class WorldObject {
 	 * @return
 	 */
 	public float distanceTo(WorldObject other) {
+		if (other == null)
+			return MathUtils.INFINITY;
 		return MathUtils.distance(centerX(),centerY(),other.centerX(),other.centerY());
 	}
 	

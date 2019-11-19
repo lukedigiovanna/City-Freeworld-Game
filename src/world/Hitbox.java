@@ -82,6 +82,13 @@ public class Hitbox {
 		return mp;
 	}
 	
+	public Vector2[] getVertices() {
+		Vector2[] verts = new Vector2[lines.length];
+		for (int i = 0; i < verts.length; i++) 
+			verts[i] = lines[i].getEndpoints()[0];
+		return verts;
+	}
+	
 	public void updatePosition() {
 		generateLines();
 	}
