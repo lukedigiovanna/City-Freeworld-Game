@@ -15,7 +15,7 @@ import misc.Vector2;
 public abstract class WorldObject {
 	protected PositionHistory positionHistory;
 	protected Region region;
-	protected Vector2 position;
+	protected Vector2 position, velocity;
 	protected Hitbox hitbox;
 	
 	protected float age;
@@ -25,6 +25,7 @@ public abstract class WorldObject {
 	
 	public WorldObject(float x, float y, float width, float height) {
 		this.position = new Vector2(x,y,0);
+		this.velocity = new Vector2(0,0,0);
 		float[] model = {0.0f,0.0f,width,0.0f,width,height,0.0f,height};
 		this.hitbox = new Hitbox(this, model);
 		//this staggers regeneration so not every object regenerates its hitbox at the same time
@@ -50,6 +51,8 @@ public abstract class WorldObject {
 		
 		//update the position history..
 		this.positionHistory.update(dt);
+		
+		this.move(velocity.x*dt, velocity.y*dt, velocity.r*dt);
 		
 		age += dt;
 	}
@@ -99,24 +102,36 @@ public abstract class WorldObject {
 	 * Moves the entities position based on the delta x and delta y inputes
 	 * @param dx distance to change x
 	 * @param dy distance to change y
+	 * @param dr amount of rotation about the midpoint of this object
 	 */
-	public void move(float dx, float dy) {
-		if (dx == 0 && dy == 0)
+	public void move(float dx, float dy, float dr) {
+		if (dx == 0 && dy == 0 && dr == 0)
 			return; //no point in doing anything if we dont want to move.
 		
 		//need to modify these dx, dy in correspondence with walls
 		List<Line> walls = this.getRegion().getWalls().getWalls();
-		Vector2[] eps = this.hitbox.getVertices();
+		Vector2[] hitboxVertices = this.hitbox.getVertices();
+		Vector2[] points = hitboxVertices;
 		
-		for (Vector2 ep1 : eps) {
+		float len = (float)Math.sqrt(dx*dx+dy*dy);
+		//dx += Math.cos(dr)*len;
+		//dy += Math.sin(dr)*len;
+		
+		for (Vector2 ep1 : points) {
 			Vector2 ep2 = new Vector2(ep1.x+dx,ep1.y+dy);
 			Line l = new Line(ep1,ep2);
 			for (Line wall : walls) {
 				Vector2 intersection = l.intersects(wall);
 				if (intersection == null)
 					continue;
-				dx = intersection.x-ep1.x; 
-				dy = intersection.y-ep1.y;
+				if (dx < 0)
+					dx = intersection.x-ep1.x+0.01f;
+				else if (dx > 0)
+					dx = intersection.x-ep1.x-0.01f;
+				if (dy < 0)
+					dy = intersection.y-ep1.y+0.01f;
+				else if (dy > 0)
+					dy = intersection.y-ep1.y-0.01f;
 				System.out.println(dx+","+dy);
 			}
 		}

@@ -11,7 +11,6 @@ import world.WorldObject;
 
 public abstract class Entity extends WorldObject {
 	protected Vector2 dimension;
-	protected Vector2 velocity;
 	
 	private List<String> tags;
 	
@@ -33,9 +32,6 @@ public abstract class Entity extends WorldObject {
 	public void generalUpdate(float dt) {
 		super.generalUpdate(dt);
 		//entity general update.... just overrides the world object general update but calls that method
-		//apply the velocity vector
-		this.move(velocity.x*dt, velocity.y*dt);
-		this.rotate(velocity.r*dt);
 	}
 	
 	public void send(Region region, float x, float y) {

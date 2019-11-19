@@ -24,15 +24,15 @@ public class Player extends Entity {
 	private float speed = 2.0f;
 	@Override
 	public void update(float dt) {
+		this.velocity.x = 0;
+		this.velocity.y = 0;
 		if (Program.keyboard.keyDown(Settings.getSetting("move_right").charAt(0)))
-			this.move(speed * dt, 0);
+			this.velocity.x += speed;
 		if (Program.keyboard.keyDown(Settings.getSetting("move_left").charAt(0)))
-			this.move(-speed * dt, 0);
+			this.velocity.x += -speed;
 		if (Program.keyboard.keyDown(Settings.getSetting("move_down").charAt(0)))
-			this.move(0, speed * dt);
+			this.velocity.y += speed;
 		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
-			this.move(0, - speed * dt);
-		
-		//this.rotate((float)Math.PI*2*0.2f*dt);
+			this.velocity.y += -speed;
 	}
 }
