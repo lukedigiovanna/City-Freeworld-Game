@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import main.Program;
 import main.Settings;
+import misc.Vector2;
 import world.Camera;
 
 public class Player extends Entity {
@@ -34,5 +35,12 @@ public class Player extends Entity {
 			this.velocity.y += speed;
 		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
 			this.velocity.y += -speed;
+		
+		this.velocity.r = (float)Math.PI*2*0.2f;
+		
+		Vector2[] eps = this.hitbox.getVertices();
+		for (Vector2 ep : eps) {
+			this.getRegion().add(new Particle(Particle.Type.BALL,ep.x,ep.y));
+		}
 	}
 }

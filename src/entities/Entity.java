@@ -94,7 +94,7 @@ public abstract class Entity extends WorldObject {
 	/**
 	 * Called by the draw method from a camera class
 	 * This method should be written in terms of the 
-	 * @param g
+	 * @param camera The camera to draw to
 	 */
 	public abstract void draw(Camera camera);
 	

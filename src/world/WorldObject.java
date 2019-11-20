@@ -3,6 +3,7 @@ package world;
 import java.util.List;
 
 import entities.Entity;
+import entities.Particle;
 import entities.Player;
 import misc.Line;
 import misc.MathUtils;
@@ -17,6 +18,7 @@ public abstract class WorldObject {
 	protected Region region;
 	protected Vector2 position, velocity;
 	protected Hitbox hitbox;
+	protected Properties properties;
 	
 	protected float age;
 	
@@ -132,10 +134,12 @@ public abstract class WorldObject {
 					dy = intersection.y-ep1.y+0.01f;
 				else if (dy > 0)
 					dy = intersection.y-ep1.y-0.01f;
+				this.getRegion().add(new Particle(Particle.Type.BALL,intersection.x,intersection.y));
 				System.out.println(dx+","+dy);
 			}
 		}
 		
+		rotate(dr);
 		setPosition(getX()+dx,getY()+dy);
 	}
 	
