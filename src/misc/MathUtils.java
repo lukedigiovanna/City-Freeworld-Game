@@ -223,4 +223,46 @@ public class MathUtils {
 		float dx = x2-x1, dy = y2-y1;
 		return (float)Math.sqrt(dx*dx+dy*dy);
 	}
+	
+	/**
+	 * Gets a random floating point number between two numbers from [min,max)
+	 * @param botRange
+	 * @param topRange
+	 * @return
+	 */
+	public static float random(float botRange, float topRange) {
+		if (botRange > topRange)
+			throw new RuntimeException("second input should be greater than first");
+		return (float)Math.random()*(topRange-botRange)+botRange;
+	}
+	
+	/**
+	 * Gets a random integer between two numbers from [min,max)
+	 * @param botRange
+	 * @param topRange
+	 * @return
+	 */
+	public static int random(int botRange, int topRange) {
+		if (botRange > topRange)
+			throw new RuntimeException("second input should be greater than the first");
+		return (int)(Math.random()*(topRange-botRange))+botRange;
+	}
+	
+	/**
+	 * Gets a random floating point between [0, top)
+	 * @param topRange
+	 * @return
+	 */
+	public static float random(float topRange) {
+		return random(0,topRange);
+	}
+	
+	/**
+	 * Gets a random integer between [0,top)
+	 * @param topRange
+	 * @return
+	 */
+	public static int random(int topRange) {
+		return random(0,topRange);
+	}
 }

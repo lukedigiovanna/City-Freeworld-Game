@@ -33,7 +33,12 @@ public abstract class WorldObject {
 		//this staggers regeneration so not every object regenerates its hitbox at the same time
 		// *reduces the chance of a lag spike
 		regenTimer = (float)Math.random()*regenPeriod; 
+		this.properties = new Properties();
 		this.positionHistory = new PositionHistory(this);
+	}
+	
+	public void setModel(float ... model) {
+		this.hitbox = new Hitbox(this, model);
 	}
 	
 	/**
@@ -42,6 +47,10 @@ public abstract class WorldObject {
 	 * @param dt amount of time in seconds since last call
 	 */
 	public void generalUpdate(float dt) {
+		//if the region is gone.. this entity effectively doesn't exist. dont update
+		if (this.getRegion() == null)
+			return;
+		
 		//logic for regenerating a hitbox
 		//this is needed because sometimes the hitbox and entity's rotation fall out of sync
 		regenTimer += dt;
@@ -110,14 +119,17 @@ public abstract class WorldObject {
 		if (dx == 0 && dy == 0 && dr == 0)
 			return; //no point in doing anything if we dont want to move.
 		
+		//if we dont have collision there is no need to test for it when we move.
+		if (this.properties.get(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
+			rotate(dr);
+			setPosition(getX()+dx,getY()+dy);
+			return;
+		}
+		
 		//need to modify these dx, dy in correspondence with walls
 		List<Line> walls = this.getRegion().getWalls().getWalls();
 		Vector2[] hitboxVertices = this.hitbox.getVertices();
 		Vector2[] points = hitboxVertices;
-		
-		float len = (float)Math.sqrt(dx*dx+dy*dy);
-		//dx += Math.cos(dr)*len;
-		//dy += Math.sin(dr)*len;
 		
 		for (Vector2 ep1 : points) {
 			Vector2 ep2 = new Vector2(ep1.x+dx,ep1.y+dy);
@@ -134,8 +146,8 @@ public abstract class WorldObject {
 					dy = intersection.y-ep1.y+0.01f;
 				else if (dy > 0)
 					dy = intersection.y-ep1.y-0.01f;
-				this.getRegion().add(new Particle(Particle.Type.BALL,intersection.x,intersection.y));
-				System.out.println(dx+","+dy);
+				//this.getRegion().add(new Particle(Particle.Type.BALL,intersection.x,intersection.y));
+				//System.out.println(dx+","+dy);
 			}
 		}
 		
@@ -179,8 +191,8 @@ public abstract class WorldObject {
 	 * Gets the active player of the game
 	 * @return the player
 	 */
-	public Player getPlayer() {
-		return (Player) region.getWorld().getPlayer();
+	public List<Entity> getPlayers() {
+		return region.getWorld().getPlayers();
 	}
 	
 	/**

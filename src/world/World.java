@@ -49,9 +49,9 @@ public class World {
 		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
 		for (int i = 0; i < 30; i++)
 			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
-		for (int x = 0; x < 30; x++)
-			for (int y = 0; y < 20; y++)
-				temp.add(new SampleEntity(x,y));
+//		for (int x = 0; x < 30; x++)
+//			for (int y = 0; y < 20; y++)
+//				temp.add(new SampleEntity(x,y));
 		temp.add(new Player(4.0f,4.0f));
 		
 		temp.addWall(new Line(new Vector2(2,2),new Vector2(4,3)));
@@ -91,7 +91,7 @@ public class World {
 				    cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
 		float worldViewWidth = 10.0f;
 		camera = new Camera(getCurrentRegion(), 0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight),cameraWidth,cameraHeight);
-		camera.setFocus(getPlayer());
+		camera.setFocus(getPlayers().get(0));
 	}
 	
 	public Region getCurrentRegion() {
@@ -122,12 +122,9 @@ public class World {
 		return this.camera;
 	}
 	
-	public Player getPlayer() {
+	public List<Entity> getPlayers() {
 		List<Entity> players = getCurrentRegion().getEntities().get("player");
-		if (players.size() > 0)
-			return (Player)players.get(0);
-		else
-			return null;
+		return players;
 	}
 	
 	public float getElapsedTime() {

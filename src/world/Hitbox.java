@@ -95,6 +95,7 @@ public class Hitbox {
 	
 	public void draw(Camera c) {
 		c.setColor(Color.RED);
+		c.setStrokeWidth(0.1f);
 		for (Line l : lines) {
 			if (l == null)
 				continue;

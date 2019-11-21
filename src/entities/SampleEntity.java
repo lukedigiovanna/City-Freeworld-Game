@@ -3,6 +3,7 @@ package entities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import misc.Color8;
 import misc.ImageTools;
@@ -31,11 +32,13 @@ public class SampleEntity extends Entity {
 	@Override
 	public void update(float dt) {
 		//this.velocity = new Vector2((float)Math.cos(age),(float)Math.sin(age));
-		Entity player = getPlayer();
-		if (player != null)
+		List<Entity> players = getPlayers();
+		for (Entity player : players) {
+			if (player != null)
 			this.position.r = (float)MathUtils.getAngle(centerX(), centerY(), player.centerX(), player.centerY());
-		float dist = this.distanceTo(player);
-		float perc = dist/7.0f;
-		i = MathUtils.clip(0, 255, (int)(perc*255));
+			float dist = this.distanceTo(player);
+			float perc = dist/7.0f;
+			i = MathUtils.clip(0, 255, (int)(perc*255));
+		}
 	}
 }
