@@ -126,33 +126,31 @@ public abstract class WorldObject {
 			return;
 		}
 		
-		//need to modify these dx, dy in correspondence with walls
 		List<Line> walls = this.getRegion().getWalls().getWalls();
-		Vector2[] hitboxVertices = this.hitbox.getVertices();
-		Vector2[] points = hitboxVertices;
+		Vector2[] eps = hitbox.getVertices();
+		for (int i = 0; i < eps.length; i++) { 
+			eps[i] = eps[i].copy();
+			eps[i].add(new Vector2(dx,dy));
+		}
+		Line[] lines = new Line[eps.length];
+		for (int i = 0; i < eps.length; i++) {
+			Vector2 ep1 = eps[i], ep2 = eps[(i+1)%eps.length];
+			lines[i] = new Line(ep1,ep2);
+		}
 		
-		for (Vector2 ep1 : points) {
-			Vector2 ep2 = new Vector2(ep1.x+dx,ep1.y+dy);
-			Line l = new Line(ep1,ep2);
-			for (Line wall : walls) {
-				Vector2 intersection = l.intersects(wall);
-				if (intersection == null)
-					continue;
-				if (dx < 0)
-					dx = intersection.x-ep1.x+0.01f;
-				else if (dx > 0)
-					dx = intersection.x-ep1.x-0.01f;
-				if (dy < 0)
-					dy = intersection.y-ep1.y+0.01f;
-				else if (dy > 0)
-					dy = intersection.y-ep1.y-0.01f;
-				//this.getRegion().add(new Particle(Particle.Type.BALL,intersection.x,intersection.y));
-				//System.out.println(dx+","+dy);
+		for (Line l : lines) {
+			for (Line w : walls) {
+				if (l.intersects(w) != null) {
+					dx = 0;
+					dy = 0;
+				}
 			}
 		}
 		
 		rotate(dr);
 		setPosition(getX()+dx,getY()+dy);
+		
+		
 	}
 	
 	/**

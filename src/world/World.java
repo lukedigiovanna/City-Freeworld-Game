@@ -14,6 +14,7 @@ import entities.Portal.Destination;
 import main.Program;
 import misc.ImageTools;
 import misc.Line;
+import misc.MathUtils;
 import misc.Vector2;
 
 public class World {
@@ -54,8 +55,13 @@ public class World {
 //				temp.add(new SampleEntity(x,y));
 		temp.add(new Player(4.0f,4.0f));
 		
-		temp.addWall(new Line(new Vector2(2,2),new Vector2(4,3)));
-		temp.addWall(new Line(new Vector2(6,2),new Vector2(6,6)));
+		for (int i = 0; i < 50; i++) {
+			float len = MathUtils.random(1.0f,4.0f);
+			Vector2 ep1 = new Vector2(MathUtils.random(width),MathUtils.random(height));
+			float angle = MathUtils.random((float)Math.PI*2);
+			Vector2 ep2 = new Vector2(ep1.x+len*(float)Math.cos(angle),ep1.y+len*(float)Math.sin(angle));
+			temp.addWall(new Line(ep1,ep2));
+		}
 		
 		Region other = new Region(this,width,height);
 		grid = other.getGrid();

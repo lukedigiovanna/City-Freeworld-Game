@@ -89,6 +89,14 @@ public class Hitbox {
 		return verts;
 	}
 	
+	/**
+	 * Gets the array of lines that make up the hitbox
+	 * @return
+	 */
+	public Line[] getLines() {
+		return lines;
+	}
+	
 	public void updatePosition() {
 		generateLines();
 	}

@@ -19,7 +19,7 @@ public class Player extends Entity {
 			model[i*2] = 0.4f+(float)Math.cos(theta)*0.4f;
 			model[i*2+1] = 0.4f+(float)Math.sin(theta)*0.4f;
 		}
-		this.setModel(model);
+		//this.setModel(model);
 		addTag("player");
 	}
 

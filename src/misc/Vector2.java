@@ -95,6 +95,15 @@ public class Vector2 {
 			this.divide(length);
 	}
 	
+	/**
+	 * Gets the dot product of this vector and another inputted vector
+	 * @param b
+	 * @return
+	 */
+	public float dotProduct(Vector2 b) {
+		return x*b.x+y*b.y;
+	}
+	
 	public void round(float decimalPoint) {
 		this.x = MathUtils.round(this.x, decimalPoint);
 		this.y = MathUtils.round(this.y, decimalPoint);

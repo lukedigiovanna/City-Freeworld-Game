@@ -62,6 +62,9 @@ public class Game {
 		paused = !paused;
 	}
 	
+	private float tps = 0.0f, elapsedSinceLastCapture = 0.0f;
+	private int captures = 0;
+	
 	public void gameLoop() {
 		//lets check for pausing
 		if (Program.keyboard.keyPressed(KeyEvent.VK_ESCAPE))
@@ -90,6 +93,14 @@ public class Game {
 		if (rotate)
 			world.getCurrentRegion().getGrid().get((int)(Math.random()*10), (int)(Math.random()*10)).rotate(dt*(float)Math.PI*2);
 	
+		captures++;
+		elapsedSinceLastCapture+=dt;
+		if (captures >= 5) {
+			tps = 5.0f/elapsedSinceLastCapture;
+			captures = 0;
+			elapsedSinceLastCapture = 0;
+		}
+		
 		elapsedTime+=dt;
 	}
 	
@@ -118,5 +129,9 @@ public class Game {
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
 			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
 		}
+		g.setColor(Color.WHITE);
+		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
+		String s = "TPS: "+(int)tps;
+		g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 40);
 	}
 }
