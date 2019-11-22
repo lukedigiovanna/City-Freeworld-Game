@@ -22,7 +22,7 @@ public abstract class WorldObject {
 	
 	protected float age;
 	
-	private static final float regenPeriod = 0.45f;
+	private static final float regenPeriod = 5.0f;
 	private float regenTimer = 0.0f;
 	
 	public WorldObject(float x, float y, float width, float height) {
@@ -33,6 +33,7 @@ public abstract class WorldObject {
 		//this staggers regeneration so not every object regenerates its hitbox at the same time
 		// *reduces the chance of a lag spike
 		regenTimer = (float)Math.random()*regenPeriod; 
+		regenTimer = 0;
 		this.properties = new Properties();
 		this.positionHistory = new PositionHistory(this);
 	}
@@ -56,8 +57,9 @@ public abstract class WorldObject {
 		regenTimer += dt;
 		
 		if (regenTimer >= regenPeriod) {
-			regenerateHitbox();
 			regenTimer = 0;
+			regenerateHitbox();
+			System.out.println(regenTimer+"/"+regenPeriod);
 		}
 		
 		//update the position history..
@@ -69,7 +71,8 @@ public abstract class WorldObject {
 	}
 	
 	public void regenerateHitbox() {
-		this.hitbox.generateLines();
+		if (this.properties.get(Properties.KEY_REGENERATE_HITBOX) == Properties.VALUE_REGENERATE_HITBOX_TRUE)
+			this.hitbox.generateLines();
 	}
 	
 	public float getX() {
@@ -126,24 +129,27 @@ public abstract class WorldObject {
 			return;
 		}
 		
+		//need to modify these dx, dy in correspondence with walls
 		List<Line> walls = this.getRegion().getWalls().getWalls();
-		Vector2[] eps = hitbox.getVertices();
-		for (int i = 0; i < eps.length; i++) { 
-			eps[i] = eps[i].copy();
-			eps[i].add(new Vector2(dx,dy));
-		}
-		Line[] lines = new Line[eps.length];
-		for (int i = 0; i < eps.length; i++) {
-			Vector2 ep1 = eps[i], ep2 = eps[(i+1)%eps.length];
-			lines[i] = new Line(ep1,ep2);
-		}
+		Vector2[] eps = this.hitbox.getVertices();
 		
-		for (Line l : lines) {
-			for (Line w : walls) {
-				if (l.intersects(w) != null) {
-					dx = 0;
-					dy = 0;
-				}
+		for (Vector2 ep1 : eps) {
+			Vector2 ep2 = new Vector2(ep1.x+dx,ep1.y+dy);
+			Line l = new Line(ep1,ep2);
+			for (Line wall : walls) {
+				Vector2 intersection = l.intersects(wall);
+				if (intersection == null)
+					continue;
+//				if (dx < 0)
+//					dx = intersection.x-ep1.x+0.01f;
+//				else if (dx > 0)
+//					dx = intersection.x-ep1.x-0.01f;
+//				if (dy < 0)
+//					dy = intersection.y-ep1.y+0.01f;
+//				else if (dy > 0)
+//					dy = intersection.y-ep1.y-0.01f;
+				dx = intersection.x-ep1.x-MathUtils.sign(dx)*0.01f; 
+				dy = intersection.y-ep1.y-MathUtils.sign(dy)*0.01f;
 			}
 		}
 		

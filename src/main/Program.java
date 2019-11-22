@@ -11,7 +11,7 @@ public class Program {
 	
 	public static final int VERSION_MAJOR = 1, VERSION_MINOR = 0, VERSION_TINY = 0;
 	
-	public static final String GAME_NAME = "Shoot Bitches Get Money",
+	public static final String GAME_NAME = "basically gta",
 							   VERSION_PREFIX = "Indev",
 							   DEVELOPMENT_PERIOD = "November 2019";
 	

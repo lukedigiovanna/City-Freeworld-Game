@@ -62,4 +62,11 @@ public class Checkbox extends Component {
 		mouseOver = false;
 	}
 
+	@Override
+	public void onMouseDragged(int dx, int dy) {	
+	}
+	
+	public void onMouseDownOut() {
+		
+	}
 }

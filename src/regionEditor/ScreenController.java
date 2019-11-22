@@ -49,11 +49,6 @@ public class ScreenController {
 		}
 
 		@Override
-		public void onMouseMoved(int dx, int dy) {
-			
-		}
-
-		@Override
 		public void onMouseOver() {
 			font = new Font(ff,Font.BOLD,30);
 		}

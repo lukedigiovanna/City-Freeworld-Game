@@ -46,7 +46,7 @@ public class MainScreenDisplay extends Display {
 			add(b);
 	}
 	
-	private BufferedImage background = ImageTools.getBufferedImage("lossantos.jpg");
+	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("lossantos.jpg"));
 
 	@Override
 	public void draw(Graphics2D g) {

@@ -37,22 +37,21 @@ public class World {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
-				if (Math.random() < 0.75)
-					c.setImage(GRASS);
-				else {
-					c.setImage(WATER);
-					c.addAttrib(Cell.Attribute.COLLIDABLE);
-				}
+//				if (Math.random() < 0.75)
+//					c.setImage(GRASS);
+//				else 
+//					c.setImage(WATER);
+				c.setImage(GRASS);
 				grid.set(x, y, c);
 			}
 		}
 		
 		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
-		for (int i = 0; i < 30; i++)
-			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
-//		for (int x = 0; x < 30; x++)
-//			for (int y = 0; y < 20; y++)
-//				temp.add(new SampleEntity(x,y));
+//		for (int i = 0; i < 30; i++)
+//			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
+		for (int x = 0; x < 30; x++)
+			for (int y = 0; y < 20; y++)
+				temp.add(new EntityObject(tree,x,y,1.0f,1.0f));
 		temp.add(new Player(4.0f,4.0f));
 		
 		for (int i = 0; i < 50; i++) {

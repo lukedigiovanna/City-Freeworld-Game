@@ -2,6 +2,7 @@ package entities;
 
 import java.awt.Color;
 
+import display.Animation;
 import main.Program;
 import main.Settings;
 import misc.MathUtils;
@@ -22,21 +23,19 @@ public class Player extends Entity {
 		//this.setModel(model);
 		addTag("player");
 	}
+	
+	private Animation ani = new Animation("rainbow","rainbow",1);
 
 	@Override
 	public void draw(Camera camera) {
-		camera.setColor(new Color(255,0,255,125));
-		camera.fillRect(getX(), getY(), getWidth(), getHeight());
-		camera.setColor(new Color(0,255,0));
-		camera.fillOval(centerX()-0.04f,centerY()-0.04f,0.08f,0.08f);
-		camera.setColor(Color.BLUE);
-		camera.fillRect(getX(), getY(), getWidth(), getHeight()*0.15f);
+		camera.drawImage(ani.getCurrentFrame(), getX(), getY(), getWidth(), getHeight());
 	}
 
 	private float speed = 0.0f;
 	private float maxSpeed = 4.0f;
 	@Override
 	public void update(float dt) {
+		ani.animate(dt);
 //		this.velocity.x = 0;
 //		this.velocity.y = 0;
 //		if (Program.keyboard.keyDown(Settings.getSetting("move_right").charAt(0)))
@@ -83,7 +82,7 @@ public class Player extends Entity {
 		
 		Vector2[] eps = this.hitbox.getVertices();
 		for (Vector2 ep : eps) {
-			//this.getRegion().add(new Particle(Particle.Type.BALL,ep.x,ep.y));
+			this.getRegion().add(new Particle(Particle.Type.BALL,ep.x,ep.y));
 		}
 	}
 }

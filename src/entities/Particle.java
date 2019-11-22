@@ -14,16 +14,17 @@ public class Particle extends Entity {
 		this.type = type;
 		i = (i+1)%colors.length;
 		this.color = colors[i];
-		properties.set(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
+		properties.set(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
+		properties.set(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
 	}
 	
 	public static enum Type {
-		BALL;
+		BALL(0.15f,0.15f);
 		
 		float width, height;
-		Type() {
-			width = 0.15f;
-			height = 0.15f;
+		Type(float width, float height) {
+			this.width = width;
+			this.height = height;
 		}
 	}
 	
@@ -46,7 +47,7 @@ public class Particle extends Entity {
 	public void update(float dt) {
 		switch (type) {
 		case BALL:
-			//velocity.y = -1;
+			velocity.y = -1;
 			break;
 		}
 		if (this.age >= lifeSpan)

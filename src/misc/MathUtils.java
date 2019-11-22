@@ -265,4 +265,21 @@ public class MathUtils {
 	public static int random(int topRange) {
 		return random(0,topRange);
 	}
+	
+	/**
+	 * Gets the sign of an integer by returning 1 for positive, -1 for negative, and 0 for 0
+	 * @param number
+	 * @return
+	 */
+	public static int sign(int number) {
+		if (number == 0)
+			return 0;
+		return Math.abs(number)/number;
+	}
+	
+	public static float sign(float number) {
+		if (number == 0)
+			return 0;
+		return Math.abs(number)/number;
+	}
 }

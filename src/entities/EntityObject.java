@@ -25,9 +25,6 @@ public class EntityObject extends Entity {
 
 	@Override
 	public void update(float dt) {
-		if (true)
-			return;
-		
 		List<Entity> killers = this.getRegion().getEntities().get("player");
 		
 		for (Entity e : killers)

@@ -34,13 +34,13 @@ public class MainScreenButton extends Button {
 	public void onMouseOut() {
 		fontSize = 0.05f;
 	}
-	
-	@Override
-	public void onMouseMoved(int dx, int dy) {
-		
-	}
 
 	@Override
 	public void onMouseUp() {
+	}
+
+	@Override
+	public void onMouseDragged(int dx, int dy) {
+		System.out.println(dx+","+dy);
 	}
 }

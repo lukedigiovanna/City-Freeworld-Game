@@ -27,6 +27,10 @@ public abstract class Component {
 		this.formation = formation;
 	}
 	
+	public Component(int x, int y, int w, int h) {
+		
+	}
+	
 	private boolean active = true;
 	
 	public void activate() {
@@ -42,8 +46,11 @@ public abstract class Component {
 	public abstract void onMouseDown();
 	public abstract void onMouseUp();
 	public abstract void onMouseMoved(int dx, int dy);
+	public abstract void onMouseDragged(int dx, int dy);
 	public abstract void onMouseOver();
 	public abstract void onMouseOut();
+	//called when the mouse is clicked down somewhere other than the component
+	public abstract void onMouseDownOut();
 	
 	private boolean mouseDown = false;
 	private boolean mouseOver = false;
@@ -81,6 +88,15 @@ public abstract class Component {
 			mouseOver = false;
 			mouseDown = false;
 		}
+		if (mouseOver) {
+			onMouseMoved(mx-lastX, my-lastY);
+			if (mouseDown)
+				onMouseDragged(mx-lastX,my-lastY);
+		}
+		if (!mouseOver && mouseDown)
+			onMouseDownOut();
+		lastX = mx;
+		lastY = my;
 	}	
 	
 	public void setX(int x) {

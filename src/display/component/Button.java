@@ -32,4 +32,18 @@ public abstract class Button extends Component {
 	public String getText() {
 		return title;
 	}
+	
+	//these methods likely wont be implemented in button subclasses, so define them here as nothing
+	
+	public void onMouseMoved(int dx, int dy) {
+		
+	}
+	
+	public void onMouseDragged(int dx, int dy) {
+		
+	}
+	
+	public void onMouseDownOut() {
+		
+	}
 }
