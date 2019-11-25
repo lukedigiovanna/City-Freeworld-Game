@@ -18,9 +18,9 @@ public class MainScreenButton extends Button {
 		String str = "< "+this.getText()+" >";
 		int width = g.getFontMetrics().stringWidth(str);
 		this.setDimension(width,g.getFontMetrics().getHeight());
-		g.setColor(new Color(0,0,200,125));
+		g.setColor(new Color(225,225,225,125));
 		g.drawString(str, x-1, y+this.getHeight()-1);
-		g.setColor(Color.BLACK);
+		g.setColor(new Color(0,10,100));
 		g.drawString(str, x, y+this.getHeight());
 	}
 	

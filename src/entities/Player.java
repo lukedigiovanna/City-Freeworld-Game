@@ -24,7 +24,7 @@ public class Player extends Entity {
 		addTag("player");
 	}
 	
-	private Animation ani = new Animation("rainbow","rainbow",1);
+	private Animation ani = new Animation("rainbow","rainbow",18);
 
 	@Override
 	public void draw(Camera camera) {

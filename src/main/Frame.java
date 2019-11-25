@@ -28,6 +28,9 @@ public class Frame extends JFrame {
 		this.setLocation(20,20);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setContentPane(panel);
+		
+		this.setIconImage(Program.PROGRAM_ICON);
+		
 		this.requestFocus();
 		this.setVisible(true);
 	}

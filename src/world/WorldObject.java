@@ -22,18 +22,16 @@ public abstract class WorldObject {
 	
 	protected float age;
 	
-	private static final float regenPeriod = 5.0f;
-	private float regenTimer = 0.0f;
+	private static final float regenPeriod = 30.0f;
+	private float regenTimer = MathUtils.random(regenPeriod);
 	
 	public WorldObject(float x, float y, float width, float height) {
 		this.position = new Vector2(x,y,0);
-		this.velocity = new Vector2(0,0,0);
+		this.velocity = new Vector2(0,0,0); //initial velocity is 0
 		float[] model = {0.0f,0.0f,width,0.0f,width,height,0.0f,height};
 		this.hitbox = new Hitbox(this, model);
 		//this staggers regeneration so not every object regenerates its hitbox at the same time
 		// *reduces the chance of a lag spike
-		regenTimer = (float)Math.random()*regenPeriod; 
-		regenTimer = 0;
 		this.properties = new Properties();
 		this.positionHistory = new PositionHistory(this);
 	}
@@ -59,7 +57,6 @@ public abstract class WorldObject {
 		if (regenTimer >= regenPeriod) {
 			regenTimer = 0;
 			regenerateHitbox();
-			System.out.println(regenTimer+"/"+regenPeriod);
 		}
 		
 		//update the position history..
@@ -71,7 +68,9 @@ public abstract class WorldObject {
 	}
 	
 	public void regenerateHitbox() {
-		if (this.properties.get(Properties.KEY_REGENERATE_HITBOX) == Properties.VALUE_REGENERATE_HITBOX_TRUE)
+		if (this.properties.get(Properties.KEY_REGENERATE_HITBOX) == Properties.VALUE_REGENERATE_HITBOX_FALSE)
+			return;
+		else
 			this.hitbox.generateLines();
 	}
 	

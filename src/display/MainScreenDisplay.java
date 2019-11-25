@@ -46,17 +46,20 @@ public class MainScreenDisplay extends Display {
 			add(b);
 	}
 	
-	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("lossantos.jpg"));
+	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("jungle.png"));
 
 	@Override
 	public void draw(Graphics2D g) {
 		fillBackground(g,background);
+		
+		float size = 0.4f;
+		g.drawImage(Program.PROGRAM_ICON, Program.DISPLAY_WIDTH/2-(int)(size/2*Program.DISPLAY_WIDTH), Program.DISPLAY_HEIGHT/2-(int)(size/2*Program.DISPLAY_HEIGHT), (int)(size*Program.DISPLAY_WIDTH), (int)(size*Program.DISPLAY_HEIGHT), null);
+		
 		//draw the game name
-		g.setColor(Color8.BLUE);
-		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
-		
+		g.setColor(Color8.WHITE);
+		drawText(g,Program.GAME_NAME,CustomFont.PIXEL,0.05f,0.498f,0.3f,Display.CENTER_ALIGN);
+		g.setColor(Color8.GRAY);
 		drawText(g,Program.GAME_NAME,CustomFont.PIXEL,0.05f,0.5f,0.3f,Display.CENTER_ALIGN);
-		
 		
 		for (Button b : buttons)
 			b.draw(g);

@@ -42,6 +42,7 @@ public class Animation {
 			}
 			
 		} while (cont);
+		this.frameRate = frameRate;
 	}
 	
 	/**

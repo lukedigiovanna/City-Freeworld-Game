@@ -2,7 +2,11 @@ package main;
 
 import java.awt.*;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 import display.DisplayController;
+import misc.ImageTools;
 
 //static class that holds some innate information about this application
 public class Program {
@@ -11,11 +15,13 @@ public class Program {
 	
 	public static final int VERSION_MAJOR = 1, VERSION_MINOR = 0, VERSION_TINY = 0;
 	
-	public static final String GAME_NAME = "basically gta",
+	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
 							   DEVELOPMENT_PERIOD = "November 2019";
 	
 	public static final String FONT_FAMILY = "Consolas";
+	
+	public static final Image PROGRAM_ICON = ImageTools.getImage("assets/icon.png");
 	
 	@SuppressWarnings("unused")
 	public static String getVersionString() {
