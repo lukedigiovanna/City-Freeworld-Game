@@ -68,9 +68,7 @@ public abstract class WorldObject {
 	}
 	
 	public void regenerateHitbox() {
-		if (this.properties.get(Properties.KEY_REGENERATE_HITBOX) == Properties.VALUE_REGENERATE_HITBOX_FALSE)
-			return;
-		else
+		if (this.properties.get(Properties.KEY_REGENERATE_HITBOX) == Properties.VALUE_REGENERATE_HITBOX_TRUE)
 			this.hitbox.generateLines();
 	}
 	
