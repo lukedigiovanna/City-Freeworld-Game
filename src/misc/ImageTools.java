@@ -3,6 +3,9 @@ package misc;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
@@ -163,6 +166,31 @@ public class ImageTools {
 			for (int y = 0; y < rgbs[x].length; y++) 
 				newImg.setRGB(x, y, rgbs[x][y]);
 		return newImg;
+	}
+	
+	public static List<BufferedImage> getImages(String folderPath, String prefix) {
+		List<BufferedImage> frames = new ArrayList<BufferedImage>();
+		int i = 0;
+		boolean cont = true;
+		do {
+			String path = "assets/images/"+folderPath+"/"+prefix+i+".png";
+			try {
+				File file = new File(path);
+				if (file.exists()) {
+					BufferedImage img = ImageTools.getBufferedImage(path);
+					if (img != null && !img.equals(ImageTools.IMAGE_NOT_FOUND)) {
+						frames.add(img);
+						i++;
+					}
+				} else {
+					cont = false;
+				}
+			} catch (Exception e) {
+				cont = false; //something occured so stop adding frames.
+			}
+			
+		} while (cont);
+		return frames;
 	}
 	
 	//for one time call to make static const of these

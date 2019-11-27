@@ -15,7 +15,7 @@ public class Portal extends Entity {
 		this.destination = destination;
 	}
 
-	private float r = 0, rv = 120;
+	private float r = 0, rv = 500;
 	@Override
 	public void draw(Camera camera) {
 		camera.setColor(new Color((int)r,150,(int)r,(int)r));
@@ -38,6 +38,7 @@ public class Portal extends Entity {
 			r = 0;
 			rv*=-1;
 		}
+		this.getRegion().addParticles(Particle.Type.GENERIC,Color.CYAN,3,0.2f,getX(),getY(),getWidth(),getHeight());
 	}
 	
 	public static class Destination {

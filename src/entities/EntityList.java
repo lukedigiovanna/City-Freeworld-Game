@@ -2,6 +2,8 @@ package entities;
 
 import java.util.*;
 
+import entities.player.*;
+
 import world.Region;
 
 public class EntityList {

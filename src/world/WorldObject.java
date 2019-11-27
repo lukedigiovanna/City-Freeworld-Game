@@ -3,8 +3,6 @@ package world;
 import java.util.List;
 
 import entities.Entity;
-import entities.Particle;
-import entities.Player;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;

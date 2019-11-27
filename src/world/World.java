@@ -7,10 +7,9 @@ import java.util.List;
 
 import entities.Entity;
 import entities.EntityObject;
-import entities.Player;
+import entities.player.Player;
+import game.Game;
 import entities.Portal;
-import entities.SampleEntity;
-import entities.Portal.Destination;
 import main.Program;
 import misc.ImageTools;
 import misc.Line;
@@ -47,11 +46,9 @@ public class World {
 		}
 		
 		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
-//		for (int i = 0; i < 30; i++)
-//			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
-		for (int x = 0; x < 30; x++)
-			for (int y = 0; y < 20; y++)
-				temp.add(new EntityObject(tree,x,y,1.0f,1.0f));
+		for (int i = 0; i < 30; i++)
+			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
+
 		temp.add(new Player(4.0f,4.0f));
 		
 		for (int i = 0; i < 50; i++) {
@@ -91,9 +88,8 @@ public class World {
 		
 		getCurrentRegion().update(0);
 		
-		float sidePadding = 0.25f;
-		int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), 
-				    cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
+		int cameraWidth = Game.CAMERA_PIXEL_WIDTH, 
+				    cameraHeight = Game.CAMERA_PIXEL_HEIGHT;
 		float worldViewWidth = 10.0f;
 		camera = new Camera(getCurrentRegion(), 0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight),cameraWidth,cameraHeight);
 		camera.setFocus(getPlayers().get(0));

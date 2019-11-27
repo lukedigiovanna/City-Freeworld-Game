@@ -1,34 +1,48 @@
-package entities;
+package entities.player;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+
+import entities.*;
 
 import display.Animation;
 import main.Program;
 import main.Settings;
+import misc.ImageTools;
 import misc.MathUtils;
 import misc.Vector2;
 import world.Camera;
 
 public class Player extends Entity {
 
+	private String name = "Ronald McFcksht";
+	private BankAccount bankAct;
+	private Inventory inventory;
+	private BufferedImage profilePicture;
+	
 	public Player(float x, float y) {
 		super(x, y, 0.8f, 0.8f);
-		int vertices = 5;
-		float[] model = new float[vertices*2];
-		for (int i = 0; i < vertices; i++) {
-			float theta = (float)i/vertices*(float)Math.PI*2;
-			model[i*2] = 0.4f+(float)Math.cos(theta)*0.4f;
-			model[i*2+1] = 0.4f+(float)Math.sin(theta)*0.4f;
-		}
-		//this.setModel(model);
+		this.bankAct = new BankAccount(this);
+		this.inventory = new Inventory();
+		this.profilePicture = ImageTools.getBufferedImage("character1.png");
 		addTag("player");
 	}
 	
-	private Animation ani = new Animation("rainbow","rainbow",18);
+	private Animation ani = new Animation("rainbow","rainbow_",18);
 
 	@Override
 	public void draw(Camera camera) {
 		camera.drawImage(ani.getCurrentFrame(), getX(), getY(), getWidth(), getHeight());
+	}
+	
+	public String getMoneyDisplay() {
+		double money = MathUtils.round(bankAct.getMoney(), 0.01);
+		String monStr = money+"";
+		if (money % 0.1 == 0)
+			monStr+="0";
+		if (money % 1.0 == 0)
+			monStr+="0";
+		return "$"+monStr;
 	}
 
 	private float speed = 0.0f;
@@ -36,16 +50,6 @@ public class Player extends Entity {
 	@Override
 	public void update(float dt) {
 		ani.animate(dt);
-//		this.velocity.x = 0;
-//		this.velocity.y = 0;
-//		if (Program.keyboard.keyDown(Settings.getSetting("move_right").charAt(0)))
-//			this.velocity.x += speed;
-//		if (Program.keyboard.keyDown(Settings.getSetting("move_left").charAt(0)))
-//			this.velocity.x += -speed;
-//		if (Program.keyboard.keyDown(Settings.getSetting("move_down").charAt(0)))
-//			this.velocity.y += speed;
-//		if (Program.keyboard.keyDown(Settings.getSetting("move_up").charAt(0)))
-//			this.velocity.y += -speed;
 		
 		char accelerate = Settings.getSetting("move_up").charAt(0);
 		char stop = Settings.getSetting("move_down").charAt(0);
@@ -82,7 +86,8 @@ public class Player extends Entity {
 		
 		Vector2[] eps = this.hitbox.getVertices();
 		for (Vector2 ep : eps) {
-			this.getRegion().add(new Particle(Particle.Type.BALL,ep.x,ep.y));
+			Color[] cols = {Color.RED,Color.GREEN,Color.BLUE};
+			this.getRegion().addParticles(Particle.Type.BALL, cols[MathUtils.random(cols.length)], 1, 0.0f, ep.x, ep.y, 0, 0);
 		}
 	}
 }

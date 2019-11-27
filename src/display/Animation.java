@@ -21,27 +21,7 @@ public class Animation {
 	 * Also takes in an integer for the frame rate
 	 */
 	public Animation(String folderPath, String prefix, int frameRate) {
-		frames = new ArrayList<BufferedImage>();
-		int i = 0;
-		boolean cont = true;
-		do {
-			String path = "assets/images/"+folderPath+"/"+prefix+"_"+i+".png";
-			try {
-				File file = new File(path);
-				if (file.exists()) {
-					BufferedImage img = ImageTools.getBufferedImage(path);
-					if (img != null && !img.equals(ImageTools.IMAGE_NOT_FOUND)) {
-						frames.add(img);
-						i++;
-					}
-				} else {
-					cont = false;
-				}
-			} catch (Exception e) {
-				
-			}
-			
-		} while (cont);
+		frames = ImageTools.getImages(folderPath, prefix);
 		this.frameRate = frameRate;
 	}
 	

@@ -12,7 +12,18 @@ public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
 		"Added settings menu",
 		"Fixed problems with a glitchy camera display",
-		
+		"Correct drawing of entity/cell locations",
+		"Particles introduced: ",
+		"     Balls",
+		"     \"Generic\"",
+		"Low-level rigid body collisions added",
+		"Animated sprites added",
+		"Demo of car movement presented",
+		"Increased FPS and performance",
+		"Added a TPS (Ticks per Second) counter to indicate logic performance",
+		"Added a logo to the window icon and main screen",
+		"    A crown with a rifle across it",
+		"Smoothed camera scrolling"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
@@ -71,7 +82,7 @@ public class UpdateNotesDisplay extends Display {
 		for (String s : notes) {
 			int i = 0;
 			String str = "";
-			while (s.charAt(i++) == ' ') {
+			while (s.charAt(0) == ' ') {
 				str+=" ";
 				s = s.substring(1);
 			}

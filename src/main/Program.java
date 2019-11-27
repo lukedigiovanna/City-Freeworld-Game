@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -40,7 +41,7 @@ public class Program {
 	private static final Dimension screen_size = toolkit.getScreenSize();
 	
 	public static final int SCREEN_WIDTH = screen_size.width, SCREEN_HEIGHT = screen_size.height;
-
+	
 	public static GamePanel panel;
 	public static Frame frame;
 	

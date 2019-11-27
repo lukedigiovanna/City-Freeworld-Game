@@ -1,8 +1,13 @@
 package world;
 
+import java.awt.Color;
+
 import entities.Entity;
 import entities.EntityList;
+import entities.Particle;
+import entities.Particle.Type;
 import misc.Line;
+import misc.MathUtils;
 
 public class Region {
 	private World world;
@@ -13,10 +18,6 @@ public class Region {
 	
 	private String id = "reg-0.0"; //this should match the folder path
 	
-	public Region(String folderPath) {
-		
-	}
-	
 	public Region(World world, int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -24,6 +25,10 @@ public class Region {
 		entities = new EntityList(this);
 		walls = new Walls();
 		this.world = world;
+	}
+	
+	public void addParticles(Type type, Color color, int count, float heat, float x, float y, float width, float height) {
+		Particle.add(this,type,color,count,heat,x,y,width,height);
 	}
 	
 	public World getWorld() {

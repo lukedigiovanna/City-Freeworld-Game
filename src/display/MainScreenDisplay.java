@@ -46,7 +46,7 @@ public class MainScreenDisplay extends Display {
 			add(b);
 	}
 	
-	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("jungle.png"));
+	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("gta.jpg"));
 
 	@Override
 	public void draw(Graphics2D g) {
@@ -56,8 +56,9 @@ public class MainScreenDisplay extends Display {
 		g.drawImage(Program.PROGRAM_ICON, Program.DISPLAY_WIDTH/2-(int)(size/2*Program.DISPLAY_WIDTH), Program.DISPLAY_HEIGHT/2-(int)(size/2*Program.DISPLAY_HEIGHT), (int)(size*Program.DISPLAY_WIDTH), (int)(size*Program.DISPLAY_HEIGHT), null);
 		
 		//draw the game name
-		g.setColor(Color8.WHITE);
+		g.setColor(Color8.LIGHT_GRAY);
 		drawText(g,Program.GAME_NAME,CustomFont.PIXEL,0.05f,0.498f,0.3f,Display.CENTER_ALIGN);
+		drawText(g,Program.GAME_NAME,CustomFont.PIXEL,0.05f,0.498f,0.295f,Display.CENTER_ALIGN);
 		g.setColor(Color8.GRAY);
 		drawText(g,Program.GAME_NAME,CustomFont.PIXEL,0.05f,0.5f,0.3f,Display.CENTER_ALIGN);
 		

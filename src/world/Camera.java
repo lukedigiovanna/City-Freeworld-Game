@@ -44,7 +44,7 @@ public class Camera {
 		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 //		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 //		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
-		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+//		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		rh = new RenderingHints(map);
 	}
 	
@@ -108,14 +108,15 @@ public class Camera {
 		float mx = dimension.x/5, my = dimension.y/5;
 		float fx = focus.centerX(), fy = focus.centerY();
 		float dx = 0,dy = 0;
-		if (fx < cx-mx)
-			dx = -.1f;
-		else if (fx > cx + mx)
-			dx = +0.1f;
-		if (fy < cy-my)
-			dy = -.1f;
-		else if (fy > cy+my)
-			dy = 0.1f;
+		float left = cx-mx, right = cx + mx, bottom = cy+my, top = cy-my;
+		if (fx < left)
+			dx = (fx-left)/10.0f;
+		else if (fx > right)
+			dx = (fx-right)/10.0f;
+		if (fy < top)
+			dy = (fy-top)/10.0f;
+		else if (fy > bottom)
+			dy = (fy-bottom)/10.0f;
 		move(dx,dy);
 	}
 	
@@ -282,16 +283,16 @@ public class Camera {
 		position.add(new Vector2(dx,dy));
 		//position.round(1.0f/CELL_SIZE);
 		//now correct off the position
-		if (region != null) {
-			if (position.getX() < 0)
-				position.setX(0);
-			if (position.getX() > region.getWidth()-this.dimension.x)
-				position.setX(region.getWidth()-this.dimension.x);
-			if (position.getY() < 0)
-				position.setY(0);
-			if (position.getY() > region.getHeight()-this.dimension.y)
-				position.setY(region.getHeight()-this.dimension.y);
-		}
+//		if (region != null) {
+//			if (position.getX() < 0)
+//				position.setX(0);
+//			if (position.getX() > region.getWidth()-this.dimension.x)
+//				position.setX(region.getWidth()-this.dimension.x);
+//			if (position.getY() < 0)
+//				position.setY(0);
+//			if (position.getY() > region.getHeight()-this.dimension.y)
+//				position.setY(region.getHeight()-this.dimension.y);
+//		}
 	}
 	
 	public void moveX(float dx) {

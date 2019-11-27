@@ -2,6 +2,7 @@ package game;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import display.Display;
 import display.DisplayController;
@@ -9,6 +10,7 @@ import entities.Entity;
 import main.Program;
 import main.Settings;
 import misc.Color8;
+import misc.ImageTools;
 import misc.Line;
 import misc.Vector2;
 import world.*;
@@ -21,10 +23,6 @@ public class Game {
 	private float elapsedTime = 0.0f;
 	private FrameTimer ft;
 	private World world;
-	
-	private float sidePadding = 0.25f;
-	private int cameraWidth = (int)(Program.DISPLAY_WIDTH*(1-sidePadding)), 
-			    cameraHeight = (int)(Program.DISPLAY_HEIGHT*(1-sidePadding));
 	
 	private boolean paused = true;
 	
@@ -111,24 +109,69 @@ public class Game {
 	 * rendering stuff
 	 */
 	
-	private int cameraBorderSize = 20;
+	private static int cameraBorderSize = 20;
 	
-	private Line test = new Line(new Vector2(3,3), new Vector2(4,3));
+	public static final float CAMERA_PERCENT_WIDTH = 1.0f, CAMERA_PERCENT_HEIGHT = 0.75f;
+	public static final int CAMERA_PIXEL_WIDTH = (int)(CAMERA_PERCENT_WIDTH*Program.DISPLAY_WIDTH)-cameraBorderSize*2, CAMERA_PIXEL_HEIGHT = (int)(CAMERA_PERCENT_HEIGHT*Program.DISPLAY_HEIGHT);
+	
+	private abstract class PauseButton extends display.component.Button {
+
+		public PauseButton(String s, int y) {
+			super(s, Program.DISPLAY_WIDTH/2, y, 0, 30, display.component.Component.FORM_CENTER);
+		}
+
+		private Color c = Color.blue;
+		
+		@Override
+		public void draw(Graphics2D g) {
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,getHeight()));
+			setWidth(g.getFontMetrics().stringWidth(this.getText()));
+			g.setColor(c);
+			g.drawString(getText(), getX(), getY()+getHeight()); 
+		}
+		
+		@Override
+		public void onMouseDown() { c = Color.gray; }
+		@Override
+		public void onMouseOver() { c = Color.white; }
+		@Override
+		public void onMouseOut() { c = Color.blue; }
+	}
+	
+	private PauseButton[] pButs = { new PauseButton("RESUME",Program.DISPLAY_HEIGHT/2) {
+		public void onMouseUp() {
+			paused = false;
+		}
+	}, new PauseButton("QUIT",Program.DISPLAY_HEIGHT/2+40) {
+		public void onMouseUp() {
+			display.DisplayController.setScreen(display.DisplayController.Screen.MAIN);
+		}
+	}};
 	
 	public void draw(Graphics2D g) {
 		world.draw();	
-		g.drawImage(world.getCamera().getView(), cameraBorderSize, cameraBorderSize, cameraWidth, cameraHeight, null);
+		BufferedImage cameraView = world.getCamera().getView();
 		//draw the border around the camera
 		g.setColor(Color8.GRAY);
-		g.fillRect(0, cameraBorderSize+cameraHeight, cameraWidth+cameraBorderSize*2, cameraBorderSize);
-		g.fillRect(cameraBorderSize+cameraWidth, 0, cameraBorderSize, cameraHeight+cameraBorderSize);
-		g.fillRect(0, 0, cameraBorderSize, cameraHeight+cameraBorderSize);
-		g.fillRect(cameraBorderSize, 0, cameraWidth, cameraBorderSize);
+		g.fillRect(0, cameraBorderSize+CAMERA_PIXEL_HEIGHT, CAMERA_PIXEL_WIDTH+cameraBorderSize*2, cameraBorderSize);
+		g.fillRect(cameraBorderSize+CAMERA_PIXEL_WIDTH, 0, cameraBorderSize, CAMERA_PIXEL_HEIGHT+cameraBorderSize);
+		g.fillRect(0, 0, cameraBorderSize, CAMERA_PIXEL_HEIGHT+cameraBorderSize);
+		g.fillRect(cameraBorderSize, 0, CAMERA_PIXEL_WIDTH, cameraBorderSize);
 		if (paused) {
+			//make the game gray scaled
+			g.drawImage(ImageTools.colorscale(cameraView,Color.WHITE), cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 			g.setColor(Color.RED);
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
 			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
+			for (PauseButton b : pButs) {
+				b.check();
+				b.draw(g);
+			}
+		} else {
+			g.drawImage(cameraView, cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 		}
+		//draw this other stuff about the player
+		
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
 		String s = "TPS: "+(int)tps;
