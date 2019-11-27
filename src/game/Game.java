@@ -148,8 +148,11 @@ public class Game {
 		}
 	}};
 	
+	private BufferedImage savedCamForPause = null;
+	
 	public void draw(Graphics2D g) {
-		world.draw();	
+		if (!paused)
+			world.draw();	
 		BufferedImage cameraView = world.getCamera().getView();
 		//draw the border around the camera
 		g.setColor(Color8.GRAY);
