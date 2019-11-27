@@ -17,7 +17,9 @@ import world.*;
 
 public class Game {
 	
-	public static final int REFRESH_RATE = 50; // milliseconds
+	private static final int TICKS_PER_SECOND = 20;
+	private static final int IDEAL_REFRESH_RATE = 1000/TICKS_PER_SECOND;
+	private long wait = IDEAL_REFRESH_RATE; //default
 	
 	private Thread updateLoop;
 	private float elapsedTime = 0.0f;
@@ -32,13 +34,17 @@ public class Game {
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
+				long last = System.currentTimeMillis();
 				while (true) {
 					try {
-						Thread.sleep(REFRESH_RATE);
+						long before = System.currentTimeMillis();
 						if (Program.initialized() && DisplayController.getCurrentScreen() == DisplayController.Screen.GAME)
 							gameLoop();
 						else 
 							ft.mark(); //keep the frame timer going so we dont add time that we weren't on the game screen
+						long elapsed = System.currentTimeMillis()-before;
+						wait = IDEAL_REFRESH_RATE-elapsed;
+						Thread.sleep(wait);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -78,6 +84,7 @@ public class Game {
 				DisplayController.setScreen(DisplayController.Screen.MAIN);
 			return; //dont run the game loop if we are paused
 		}
+		
 		world.update(dt);
 		
 		if (Program.keyboard.keyDown(' '))
