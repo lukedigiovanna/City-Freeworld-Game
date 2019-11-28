@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import display.Animation;
 import entities.Entity;
 import entities.EntityObject;
 import entities.player.Player;
@@ -46,8 +47,10 @@ public class World {
 		}
 		
 		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
-		for (int i = 0; i < 30; i++)
-			temp.add(new EntityObject(tree,(int)(Math.random()*30),(int)(Math.random()*20),1.0f,1.0f));
+		List<BufferedImage> redthing = ImageTools.getImages("redthing", "");
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				temp.add(new EntityObject(new Animation(redthing,14),x, y,1.0f,1.0f));
 
 		temp.add(new Player(4.0f,4.0f));
 		

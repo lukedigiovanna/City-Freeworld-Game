@@ -3,7 +3,7 @@ package display.component;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Checkbox extends Component {
+public abstract class Checkbox extends Component {
 
 	private boolean value = false;
 	
@@ -32,6 +32,9 @@ public class Checkbox extends Component {
 //		}
 	}
 	
+	public abstract void onEnable();
+	public abstract void onDisable();
+	
 	public boolean selected() {
 		return value;
 	}
@@ -39,6 +42,10 @@ public class Checkbox extends Component {
 	@Override
 	public void onMouseDown() {
 		value = !value;
+		if (value)
+			onEnable();
+		else
+			onDisable();
 	}
 
 	@Override

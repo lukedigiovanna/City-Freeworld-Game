@@ -23,7 +23,12 @@ public class UpdateNotesDisplay extends Display {
 		"Added a TPS (Ticks per Second) counter to indicate logic performance",
 		"Added a logo to the window icon and main screen",
 		"    A crown with a rifle across it",
-		"Smoothed camera scrolling"
+		"Smoothed camera scrolling",
+		"Implemented tick rate constancy",
+		"    TPS remains constant no matter how many entities or operations occur",
+		"    Fails when there is an absurd amount like 10000 entities in a region",
+		"    But this should never occur",
+		"Memory optimization"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

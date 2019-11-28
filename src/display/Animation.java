@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.List;
 
 import misc.ImageTools;
+import misc.MathUtils;
 
 import java.awt.image.*;
 import java.io.File;
@@ -21,9 +22,14 @@ public class Animation {
 	 * Also takes in an integer for the frame rate
 	 */
 	public Animation(String folderPath, String prefix, int frameRate) {
-		frames = ImageTools.getImages(folderPath, prefix);
+		this(ImageTools.getImages(folderPath, prefix),frameRate);
+	}
+	
+	public Animation(List<BufferedImage> frames, int frameRate) {
+		this.frames = frames;
 		this.frameRate = frameRate;
 	}
+	
 	
 	/**
 	 * Updates the current frame based on the elapsed time.
@@ -41,6 +47,12 @@ public class Animation {
 	}
 	
 	public BufferedImage getCurrentFrame() {
+		if (frames.size() == 0)
+			return ImageTools.IMAGE_NOT_FOUND;
 		return frames.get(curFrame);
+	}
+	
+	public void randomize() {
+		curFrame = MathUtils.random(frames.size());
 	}
 }

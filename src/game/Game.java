@@ -12,6 +12,7 @@ import main.Settings;
 import misc.Color8;
 import misc.ImageTools;
 import misc.Line;
+import misc.MathUtils;
 import misc.Vector2;
 import world.*;
 
@@ -44,7 +45,7 @@ public class Game {
 							ft.mark(); //keep the frame timer going so we dont add time that we weren't on the game screen
 						long elapsed = System.currentTimeMillis()-before;
 						wait = IDEAL_REFRESH_RATE-elapsed;
-						Thread.sleep(wait);
+						Thread.sleep((long)MathUtils.floor(0, wait-1));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -181,6 +182,8 @@ public class Game {
 			g.drawImage(cameraView, cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 		}
 		//draw this other stuff about the player
+		int botHeight = Program.DISPLAY_HEIGHT-CAMERA_PIXEL_HEIGHT-cameraBorderSize*2;
+		int botY = Program.DISPLAY_HEIGHT-botHeight;
 		
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));

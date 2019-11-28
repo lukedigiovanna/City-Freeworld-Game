@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import main.Program;
+import main.Settings;
 import display.component.*;
 import display.component.Button;
+import display.component.Checkbox;
 import display.component.Component;
 
 public class SettingsDisplay extends Display {
@@ -41,9 +43,23 @@ public class SettingsDisplay extends Display {
 		}
 	};
 	
+	private Checkbox vsync = new Checkbox(200,200,35,35) {
+
+		@Override
+		public void onEnable() {
+			Settings.setSetting("vsync_enabled", "true");
+		}
+
+		@Override
+		public void onDisable() {
+			Settings.setSetting("vsync_enabled", "false");
+		}
+	};
+	
 	public SettingsDisplay() {
 		super();
 		add(backButton);
+		add(vsync);
 	}
 	
 	@Override
@@ -57,6 +73,7 @@ public class SettingsDisplay extends Display {
 		drawText(g,"Settings",0.5f,0.15f,Display.CENTER_ALIGN);
 		
 		backButton.draw(g);
+		vsync.draw(g);
 	}
 
 	@Override

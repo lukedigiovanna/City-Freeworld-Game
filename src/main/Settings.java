@@ -7,6 +7,7 @@ public class Settings {
 	private static String[] defaultSettings = {
 		//these are the default settings regardless of what the file says	
 		"max_fps:60",
+		"vsync_enabled:false",
 		"music_volume:1.0",
 		"sound_volume:1.0",
 		"master_volume:1.0",

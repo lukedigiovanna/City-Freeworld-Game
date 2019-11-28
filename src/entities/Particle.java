@@ -100,6 +100,8 @@ public class Particle extends Entity {
 		case BALL:
 			velocity.y = -1;
 			break;
+		case GENERIC:
+			velocity.r = 3.14f;
 		}
 		if (this.age >= lifeSpan)
 			this.destroy();
