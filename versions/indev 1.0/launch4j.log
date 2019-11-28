@@ -1,0 +1,14 @@
+
+
+Version:	3.12
+CmdLine:	C:\Eclipse Workspaces\my projects\Drug Dealer Game\versions\indev 1.0\kingsofsananglos.exe --l4j-debug
+WOW64:		yes
+Working dir:	C:\Eclipse Workspaces\my projects\Drug Dealer Game\versions\indev 1.0\.
+Java min ver:	
+Java max ver:	
+Bundled JRE:	C:\Program Files\Java\jdk-13.0.1
+Check launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe (OK)
+Launcher:	C:\Program Files\Java\jdk-13.0.1\bin\javaw.exe
+Launcher args:	-jar "C:\Eclipse Workspaces\my projects\Drug Dealer Game\versions\indev 1.0\kingsofsananglos.exe"
+Args length:	97/32768 chars
+Exit code:	0

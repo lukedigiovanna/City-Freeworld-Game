@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Eclipse Workspaces\my projects\Drug Dealer Game\versions\indev 1.0\kingsoflosanglos.jar</jar>
+  <outfile>C:\Eclipse Workspaces\my projects\Drug Dealer Game\versions\indev 1.0\kingsofsananglos.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>true</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Eclipse Workspaces\my projects\Drug Dealer Game\versions\indev 1.0\assets\icon.ico</icon>
+  <jre>
+    <path>C:\Program Files\Java\jdk-13.0.1</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+</launch4jConfig>
