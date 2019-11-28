@@ -8,6 +8,7 @@ import javax.swing.*;
 import display.DisplayController;
 import misc.Color8;
 import misc.ImageTools;
+import misc.MathUtils;
 
 public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -21,9 +22,14 @@ public class GamePanel extends JPanel {
 		Thread repaintThread = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
+					
 					try {
-						Thread.sleep(1000/Integer.parseInt(Settings.getSetting("max_fps")));
+						long first = System.currentTimeMillis();
+						int targetFPS = Integer.parseInt(Settings.getSetting("max_fps"));
+						int targetRefresh = 1000/targetFPS;
 						repaint();
+						long elapsed = System.currentTimeMillis()-first;
+						Thread.sleep((long)MathUtils.floor(20, targetRefresh-elapsed-1));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

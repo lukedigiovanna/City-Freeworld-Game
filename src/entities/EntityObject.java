@@ -3,10 +3,12 @@
  */
 package entities;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 import display.Animation;
+import misc.MathUtils;
 import world.Camera;
 
 public class EntityObject extends Entity {

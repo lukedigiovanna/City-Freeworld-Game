@@ -14,11 +14,11 @@ public class Program {
 	private static final double ratio = 4.0f/3.0f; //WIDTH/HEIGHT
 	public static final int DISPLAY_WIDTH = 1000, DISPLAY_HEIGHT = (int)(DISPLAY_WIDTH/ratio);
 	
-	public static final int VERSION_MAJOR = 1, VERSION_MINOR = 0, VERSION_TINY = 0;
+	public static final int VERSION_MAJOR = 2, VERSION_MINOR = 0, VERSION_TINY = 0;
 	
 	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
-							   DEVELOPMENT_PERIOD = "November 2019";
+							   DEVELOPMENT_PERIOD = "December 2019";
 	
 	public static final String FONT_FAMILY = "Consolas";
 	

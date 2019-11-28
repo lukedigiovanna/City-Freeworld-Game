@@ -10,25 +10,7 @@ import display.component.Component;
 
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
-		"Added settings menu",
-		"Fixed problems with a glitchy camera display",
-		"Correct drawing of entity/cell locations",
-		"Particles introduced: ",
-		"     Balls",
-		"     \"Generic\"",
-		"Low-level rigid body collisions added",
-		"Animated sprites added",
-		"Demo of car movement presented",
-		"Increased FPS and performance",
-		"Added a TPS (Ticks per Second) counter to indicate logic performance",
-		"Added a logo to the window icon and main screen",
-		"    A crown with a rifle across it",
-		"Smoothed camera scrolling",
-		"Implemented tick rate constancy",
-		"    TPS remains constant no matter how many entities or operations occur",
-		"    Fails when there is an absurd amount like 10000 entities in a region",
-		"    But this should never occur",
-		"Memory optimization"
+		"new version :D"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
