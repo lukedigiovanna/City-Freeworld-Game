@@ -4,8 +4,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import misc.ImageTools;
+
 public class Cell extends WorldObject {
-	public static final int PIXEL_SIZE = 8;
+	public static final int PIXEL_SIZE = 16;
 	
 	public static enum Type {
 		WATER,
@@ -15,13 +17,18 @@ public class Cell extends WorldObject {
 		GRASS
 	}
 	
-	private BufferedImage image;
+	private BufferedImage image = ImageTools.IMAGE_NOT_FOUND;
+	private Type type;
 
 	public Cell(float x, float y) {
 		super(x,y,1.0f,1.0f);
 	}
 	
 	public void update(float dt) {
+		
+	}
+	
+	public void set(CellTemplate temp) {
 		
 	}
 	

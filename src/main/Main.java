@@ -12,10 +12,10 @@ public class Main {
 		//testing some io stuff
 		int nums = 256;
 		try {
-			DataOutputStream out = new DataOutputStream(new FileOutputStream("test.dat"));
-			for (int i = -128; i < 128; i++)
-				out.writeByte(167);
-			out.close();
+//			DataOutputStream out = new DataOutputStream(new FileOutputStream("test.dat"));
+//			for (int i = 0; i < 512; i++)
+//				out.writeByte(i);
+//			out.close();
 			DataInputStream in = new DataInputStream(new FileInputStream("test.dat"));
 			int inNum;
 			while ((inNum = in.read()) != -1)

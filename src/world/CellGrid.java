@@ -1,5 +1,7 @@
 package world;
 
+import java.io.*;
+
 public class CellGrid {
 	//stored such that the x value is the first element and the y value is the second element
 	private Cell[][] grid;
@@ -10,6 +12,38 @@ public class CellGrid {
 		grid = new Cell[width][height];
 		this.width = width;
 		this.height = height;
+		this.region = region;
+	}
+	
+	/**
+	 * Constructs a cellgrid by reading from a grid DAT file.
+	 * @param region
+	 * @param dataPath
+	 */
+	public CellGrid(Region region, String dataPath) {
+		this.region = region;
+		try {
+			DataInputStream in = new DataInputStream(new FileInputStream(dataPath));
+			this.width = in.read(); //width is the first byte
+			this.height = in.read(); //height is the second byte
+			grid = new Cell[width][height]; //make the 2D array with that
+			//now go row by row
+			for (int i = 0; i < width * height; i++) {
+				int x = i%width, y = i/width;
+				Cell cell = new Cell(x,y);
+				grid[x][y] = cell;
+				int value = in.read();
+				if (value == -1)
+					break; //we ran out of bytes.. 
+				else {
+					//set some cell stuff
+					cell.set(CellTemplate.get(value));
+				}
+			}
+			in.close();
+		} catch (IOException e) { 
+			e.printStackTrace();
+		}
 	}
 	
 	public Cell get(int x, int y) {
@@ -50,21 +84,5 @@ public class CellGrid {
 	
 	public int getHeight() {
 		return this.height;
-	}
-	
-	public void addColumnRight() {
-		
-	}
-	
-	public void addColumnLeft() {
-		
-	}
-	
-	public void addRowTop() {
-		
-	}
-	
-	public void addRowBottom() {
-		
 	}
 }

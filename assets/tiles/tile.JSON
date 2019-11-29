@@ -1,0 +1,18 @@
+[
+  {
+    "id": "0",
+    "string-id": "grass",
+    "images": [
+      "grass.png"
+    ],
+    "frame-rate": "1"
+  },
+  {
+    "id": "1",
+    "string-id": "water",
+    "images": [
+      "water.png"
+    ],
+    "frame-rate": "1"
+  }
+]
