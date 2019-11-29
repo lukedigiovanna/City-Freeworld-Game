@@ -110,6 +110,12 @@ public class Vector2 {
 		this.r = MathUtils.round(this.r, decimalPoint);
 	}
 	
+	public void zero() {
+		this.x = 0;
+		this.y = 0;
+		this.r = 0;
+	}
+	
 	/**
 	 * Returns a new vector with the same information
 	 * @return

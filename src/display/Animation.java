@@ -49,6 +49,7 @@ public class Animation {
 	public BufferedImage getCurrentFrame() {
 		if (frames.size() == 0)
 			return ImageTools.IMAGE_NOT_FOUND;
+		curFrame%=frames.size();
 		return frames.get(curFrame);
 	}
 	

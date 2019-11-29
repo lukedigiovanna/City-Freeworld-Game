@@ -48,5 +48,4 @@ public class EntityObject extends Entity {
 			if (e.colliding(this))
 				this.destroy();
 	}
-
 }

@@ -53,7 +53,7 @@ public class ImageTools {
 	
 	public static BufferedImage toBufferedImage(Image image) {
 		if (image == null || image.getWidth(null) < 0 || image.getHeight(null) < 0)
-			return null;
+			return IMAGE_NOT_FOUND;
 		
 		if (image instanceof BufferedImage)
 			return (BufferedImage)image;
@@ -124,6 +124,13 @@ public class ImageTools {
 		
 	}
 	
+	public static List<BufferedImage> flipHorizontal(List<BufferedImage> images) {
+		List<BufferedImage> newList = new ArrayList<BufferedImage>();
+		for (BufferedImage bi : images)
+			newList.add(flipHorizontal(bi));
+		return newList;
+	}
+	
 	public static BufferedImage flipVertical(BufferedImage image) {
 		int[][] rgbs = getRGB(image);
 		int[][] nrgb = new int[rgbs.length][rgbs[0].length];
@@ -131,6 +138,13 @@ public class ImageTools {
 			for (int y = 0; y < rgbs[x].length; y++)
 				nrgb[x][y] = rgbs[rgbs.length-x-1][y];
 		return get(nrgb);
+	}
+	
+	public static List<BufferedImage> flipVerticle(List<BufferedImage> images) {
+		List<BufferedImage> newList = new ArrayList<BufferedImage>();
+		for (BufferedImage bi : images)
+			newList.add(flipVertical(bi));
+		return newList;
 	}
 	
 	private static BufferedImage apply(BufferedImage image, Modifiable mod) {
