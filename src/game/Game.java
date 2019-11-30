@@ -3,17 +3,12 @@ package game;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
-import display.Display;
-import display.DisplayController;
-import entities.Entity;
-import main.Program;
-import main.Settings;
-import misc.Color8;
-import misc.ImageTools;
-import misc.Line;
-import misc.MathUtils;
-import misc.Vector2;
+import display.*;
+import entities.player.Player;
+import main.*;
+import misc.*;
 import world.*;
 
 public class Game {
@@ -31,7 +26,7 @@ public class Game {
 	
 	public Game() {
 		ft = new FrameTimer();
-		world = new World();
+		world = new World(this);
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
@@ -53,6 +48,27 @@ public class Game {
 			}
 		});
 		updateLoop.start();
+	}
+	
+	public Vector2 getMousePositionOnCamera() {
+		int mx = Program.mouse.getX()+cameraBorderSize; //where is the x on the drawn camera
+		float perc = mx/CAMERA_PIXEL_WIDTH;
+		if (perc > 1)
+			mx = cameraBorderSize+CAMERA_PIXEL_WIDTH;
+		else if (perc < 0)
+			mx = cameraBorderSize;
+		int my = Program.mouse.getY()+cameraBorderSize;
+		perc = my/CAMERA_PIXEL_HEIGHT;
+		if (perc > 1)
+			my = cameraBorderSize+CAMERA_PIXEL_HEIGHT;
+		else if (perc < 0)
+			my = cameraBorderSize;
+		return new Vector2(mx,my);
+	}
+	
+	public Vector2 getPercentMousePositionOnCamera() {
+		Vector2 onCam = getMousePositionOnCamera();
+		return new Vector2(onCam.x/CAMERA_PIXEL_WIDTH,onCam.y/CAMERA_PIXEL_HEIGHT);
 	}
 	
 	public void pause() {
@@ -156,8 +172,6 @@ public class Game {
 		}
 	}};
 	
-	private BufferedImage savedCamForPause = null;
-	
 	public void draw(Graphics2D g) {
 		if (!paused)
 			world.draw();	
@@ -168,6 +182,39 @@ public class Game {
 		g.fillRect(cameraBorderSize+CAMERA_PIXEL_WIDTH, 0, cameraBorderSize, CAMERA_PIXEL_HEIGHT+cameraBorderSize);
 		g.fillRect(0, 0, cameraBorderSize, CAMERA_PIXEL_HEIGHT+cameraBorderSize);
 		g.fillRect(cameraBorderSize, 0, CAMERA_PIXEL_WIDTH, cameraBorderSize);
+		
+		//draw the profile bar
+		List<Player> players = this.world.getPlayers();
+		if (players.size() > 0) {
+			Player player = (Player) this.world.getPlayers().get(0);
+			int cameraHeight = CAMERA_PIXEL_HEIGHT+cameraBorderSize*2;
+			int profileHeight = Program.DISPLAY_HEIGHT-cameraHeight;
+			float padding = 0.15f;
+			int pixelPadding = (int)(padding*profileHeight);
+			int ppX = pixelPadding, ppY = cameraHeight+pixelPadding,
+					ppS = (int)((1-padding*2)*profileHeight);
+			g.setColor(Color.GRAY);
+			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
+			g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);
+			String[] info = {
+				"Name: "+player.getName(),
+				"Money: "+player.getMoneyDisplay(),
+				"Reputation: "+player.getReputation()
+			};
+			Color[] colors = {
+				Color.LIGHT_GRAY,
+				Color.GREEN,
+				Color.BLUE
+			};
+			int y = ppY;
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,ppS/5));
+			int si = g.getFontMetrics().getHeight();
+			int add = 4;
+			for (int i = 0; i < info.length; i++) {
+				g.setColor(colors[i]);
+				g.drawString(info[i], ppX+ppS+10, y+i*(si+add)+si);
+			}
+		}
 		if (paused) {
 			//make the game gray scaled
 			g.drawImage(ImageTools.colorscale(cameraView,Color.WHITE), cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);

@@ -3,6 +3,7 @@ package world;
 import java.util.List;
 
 import entities.Entity;
+import entities.player.Player;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
@@ -70,6 +71,10 @@ public abstract class WorldObject {
 			this.hitbox.generateLines();
 	}
 	
+	public World getWorld() {
+		return this.region.getWorld();
+	}
+	
 	public float getX() {
 		return position.x;
 	}
@@ -99,8 +104,34 @@ public abstract class WorldObject {
 		position.r += radians;
 	}
 	
+	/**
+	 * Returns the angle between the center of the two objects
+	 * @param other
+	 * @return
+	 */
 	public float angleTo(WorldObject other) {
-		return (float)MathUtils.getAngle(centerX(), centerY(), other.centerX(), other.centerY());
+		return angleTo(other.centerX(),other.centerY());
+	}
+	
+	/**
+	 * Gets the angle between the center of this object
+	 * to the vector formatted point input
+	 * @param point
+	 * @return
+	 */
+	public float angleTo(Vector2 point) {
+		return angleTo(point.x,point.y);
+	}
+	
+	/**
+	 * Returns the angle from the center of this object to
+	 * the point inputed.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public float angleTo(float x, float y) {
+		return (float)MathUtils.getAngle(centerX(), centerY(), x, y);
 	}
 	
 	public void drawHitbox(Camera c) {
@@ -108,7 +139,7 @@ public abstract class WorldObject {
 	}
 	
 	/**
-	 * Moves the entities position based on the delta x and delta y inputes
+	 * Moves the entities position based on the delta x and delta y inputs
 	 * @param dx distance to change x
 	 * @param dy distance to change y
 	 * @param dr amount of rotation about the midpoint of this object
@@ -190,7 +221,7 @@ public abstract class WorldObject {
 	 * Gets the active player of the game
 	 * @return the player
 	 */
-	public List<Entity> getPlayers() {
+	public List<Player> getPlayers() {
 		return region.getWorld().getPlayers();
 	}
 	
@@ -211,5 +242,9 @@ public abstract class WorldObject {
 	
 	public Region getRegion() {
 		return region;
+	}
+	
+	public Properties.Value getProperty(Properties.Key key) {
+		return properties.get(key);
 	}
 }

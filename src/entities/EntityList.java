@@ -23,6 +23,10 @@ public class EntityList {
 	
 	public void update(float dt) {
 		for (Entity e : list) {
+			if (e.isDestroyed()) { //extra check in case something happened
+				toRemove.add(e);
+				continue;
+			}
 			e.update(dt);
 			e.generalUpdate(dt);
 		}
@@ -60,7 +64,10 @@ public class EntityList {
 	
 	public List<Entity> get(String ... tags) {
 		List<Entity> getList = new ArrayList<Entity>();
-		for (Entity e : list) {
+		for (int i = 0; i < this.list.size(); i++) {
+			if (i > list.size()-1)
+				break; //concurrency occurred
+			Entity e = list.get(i);
 			boolean cont = true;
 			for (String tag : e.getTags()) {
 				for (String tag2 : tags) {

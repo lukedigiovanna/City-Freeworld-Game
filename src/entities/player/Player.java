@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import entities.*;
-
+import entities.projectiles.Bullet;
 import display.Animation;
 import main.Program;
 import main.Settings;
@@ -26,11 +26,6 @@ public class Player extends Entity {
 		WALK_RIGHT_SIDE = ImageTools.getImages("character", "walk_side_"),
 		IDLE_LEFT_SIDE = ImageTools.flipVerticle(ImageTools.getImages("character", "idle_side_")),
 		WALK_LEFT_SIDE = ImageTools.flipVerticle(ImageTools.getImages("character", "walk_side_"));
-
-	public static enum MovementState {
-		IDLE,
-		WALKING
-	}
 	
 	public static enum Orientation {
 		UP,
@@ -44,14 +39,13 @@ public class Player extends Entity {
 	private Inventory inventory;
 	private BufferedImage profilePicture;
 	
-	private MovementState movementState = MovementState.IDLE;
 	private Orientation orientation = Orientation.DOWN;
 	
 	public Player(float x, float y) {
 		super(x, y, 0.75f, 1.375f);
 		this.bankAct = new BankAccount(this);
 		this.inventory = new Inventory();
-		this.profilePicture = ImageTools.getBufferedImage("character1.png");
+		this.profilePicture = ImageTools.getBufferedImage("profile_1.png");
 		addTag("player");
 	}
 	
@@ -81,6 +75,18 @@ public class Player extends Entity {
 		return "$"+monStr;
 	}
 
+	public BufferedImage getProfilePicture() {
+		return this.profilePicture;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+
+	public String getReputation() {
+		return "FckSht God";
+	}
+	
 	private float speed = 1.0f;
 	private float maxSpeed = 4.0f;
 	@Override
@@ -155,6 +161,15 @@ public class Player extends Entity {
 		
 		curAni.animate(dt*speed);
 			
+		//check for shooting
+		if (Program.mouse.isMouseDown()) {
+			float speed = 1.0f;
+			float angle = this.angleTo(this.getWorld().getMousePositionOnWorld());
+			Vector2 v = new Vector2((float)Math.cos(angle)*speed,(float)Math.sin(angle)*speed);
+			Bullet b = new Bullet(this,centerX(),centerY(),v);
+			this.region.add(b);
+		}
+		
 //		float acceleration = 1.0f;
 //		float frictionalAcceleration = -0.3f;
 //		

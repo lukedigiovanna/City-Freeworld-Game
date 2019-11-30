@@ -49,7 +49,6 @@ public class Hitbox {
 			for (Line o : other.lines) {
 				Vector2 intersection = l.intersects(o);
 				if (intersection != null) {
-					System.out.println(intersection);
 					return true;
 				}
 			}

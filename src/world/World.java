@@ -18,6 +18,7 @@ import misc.MathUtils;
 import misc.Vector2;
 
 public class World {
+	private Game game;
 	private Camera camera;
 	private List<Region> regions;
 	private int currentRegion;
@@ -29,7 +30,8 @@ public class World {
 		WATER = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")),
 		TILE  =	ImageTools.convertTo8Bit(ImageTools.getBufferedImage("tile.jpg"));
 	
-	public World() {
+	public World(Game game) {
+		this.game = game;
 		regions = new ArrayList<Region>();
 		int width = 30, height = 20;
 		Region temp = new Region(this,width,height);
@@ -98,6 +100,17 @@ public class World {
 		camera.setFocus(getPlayers().get(0));
 	}
 	
+	/**
+	 * Returns where the mouse is in on the world
+	 * @return
+	 */
+	public Vector2 getMousePositionOnWorld() {
+		Vector2 onCam = game.getPercentMousePositionOnCamera();
+		float x = onCam.x*camera.getWidth(), 
+			  y = onCam.y*camera.getHeight();
+		return new Vector2(x,y);
+	}
+	
 	public Region getCurrentRegion() {
 		return regions.get(currentRegion);
 	}
@@ -126,8 +139,11 @@ public class World {
 		return this.camera;
 	}
 	
-	public List<Entity> getPlayers() {
-		List<Entity> players = getCurrentRegion().getEntities().get("player");
+	public List<Player> getPlayers() {
+		List<Entity> entities = getCurrentRegion().getEntities().get("player");
+		List<Player> players = new ArrayList<Player>();
+		for (Entity e : entities)
+			players.add((Player)e);
 		return players;
 	}
 	

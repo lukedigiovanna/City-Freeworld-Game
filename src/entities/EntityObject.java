@@ -19,14 +19,14 @@ public class EntityObject extends Entity {
 	public EntityObject(BufferedImage image, float x, float y, float width, float height) {
 		super(x, y, width, height);
 		this.image = image;
-		this.addTag("object");
+		this.addTag("entity object");
 	}
 	
 	public EntityObject(Animation animation, float x, float y, float width, float height) {
 		super(x,y,width,height);
 		this.animation = animation;
 		this.animation.randomize();
-		this.addTag("object");
+		this.addTag("entity object");
 	}
 
 	@Override
@@ -35,6 +35,7 @@ public class EntityObject extends Entity {
 		if (img == null)
 			img = animation.getCurrentFrame();
 		camera.drawImage(img, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		this.drawHitbox(camera);
 	}
 
 	@Override

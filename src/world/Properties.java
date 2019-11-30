@@ -15,12 +15,19 @@ public class Properties {
 		 * This value should be false for objects that will not be in the world for long
 		 * such as particles.
 		 */
-		KEY_REGENERATE_HITBOX = new Key(1);
+		KEY_REGENERATE_HITBOX = new Key(1),
+		/**
+		 * Key for whether or not this object can be hurt by things like
+		 * bullets or fire.
+		 */
+		KEY_INVULNERABLE = new Key(2);
 	public static final Value
 		VALUE_HAS_COLLISION_TRUE = new Value(0),
 		VALUE_HAS_COLLISION_FALSE = new Value(1),
 		VALUE_REGENERATE_HITBOX_TRUE = new Value(2),
-		VALUE_REGENERATE_HITBOX_FALSE = new Value(3);
+		VALUE_REGENERATE_HITBOX_FALSE = new Value(3),
+		VALUE_INVULNERABLE_TRUE = new Value(4),
+		VALUE_INVULNERABLE_FALSE = new Value(5);
 	
 	private Map<Key,Value> map;
 	
@@ -29,6 +36,8 @@ public class Properties {
 		map = new HashMap<Key,Value>();
 		//default properties
 		set(KEY_HAS_COLLISION,VALUE_HAS_COLLISION_TRUE); //has collision by default
+		set(KEY_REGENERATE_HITBOX,VALUE_REGENERATE_HITBOX_TRUE);
+		set(KEY_INVULNERABLE,VALUE_INVULNERABLE_FALSE);
 	}
 	
 	public void set(Key key, Value value) {

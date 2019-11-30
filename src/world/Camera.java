@@ -97,6 +97,14 @@ public class Camera {
 		return position.y;
 	}
 	
+	public float getWidth() {
+		return dimension.x;
+	}
+	
+	public float getHeight() {
+		return dimension.y;
+	}
+	
 	/**
 	 * Moves the camera to adjust for centering on the focused entity
 	 */

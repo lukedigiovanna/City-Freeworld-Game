@@ -5,19 +5,18 @@ import java.util.List;
 import java.util.*;
 
 import misc.Vector2;
-import world.Camera;
-import world.Region;
-import world.WorldObject;
+import world.*;
+import world.Properties;
 
 public abstract class Entity extends WorldObject {
 	protected Vector2 dimension;
+	
+	protected Health health;
 	
 	private List<String> tags;
 	
 	public static enum Attribs {
 		INVULNERABLE,
-		NO_COLLISION,
-		
 	}
 	
 	public Entity(float x, float y, float width, float height) {
@@ -26,12 +25,16 @@ public abstract class Entity extends WorldObject {
 		this.velocity = new Vector2(0,0,0);
 		tags = new ArrayList<String>();
 		tags.add("entity");
+		this.health = new Health(1,1);
 	}
 	
 	@Override
 	public void generalUpdate(float dt) {
 		super.generalUpdate(dt);
 		//entity general update.... just overrides the world object general update but calls that method
+		if (this.health.isDead()) {
+			this.destroy();
+		}
 	}
 	
 	public void send(Region region, float x, float y) {
@@ -85,10 +88,27 @@ public abstract class Entity extends WorldObject {
 	}
 	
 	/**
+	 * Deals damage to the entity if it is not invulnerable
+	 * @param amount
+	 */
+	public void hurt(float amount) {
+		//only if we aren't invulnerable
+		if (this.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE)
+			this.health.hurt(amount);
+	}
+	
+	/**
 	 * Removes reference of this entity from the entity list
 	 */
 	public void destroy() {
 		this.getRegion().remove(this);
+		this.destroyed = true;
+	}
+	
+	private boolean destroyed = false;
+	
+	public boolean isDestroyed() {
+		return destroyed;
 	}
 	
 	/**

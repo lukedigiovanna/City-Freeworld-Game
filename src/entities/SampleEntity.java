@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import entities.player.Player;
 import misc.Color8;
 import misc.ImageTools;
 import misc.MathUtils;
@@ -32,7 +33,7 @@ public class SampleEntity extends Entity {
 	@Override
 	public void update(float dt) {
 		//this.velocity = new Vector2((float)Math.cos(age),(float)Math.sin(age));
-		List<Entity> players = getPlayers();
+		List<Player> players = getPlayers();
 		for (Entity player : players) {
 			if (player != null)
 			this.position.r = (float)MathUtils.getAngle(centerX(), centerY(), player.centerX(), player.centerY());
