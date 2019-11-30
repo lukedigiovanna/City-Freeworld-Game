@@ -14,7 +14,7 @@ public abstract class Projectile extends Entity {
 	private Entity owner; //the entity that is responsible for releasing the bullet
 	
 	protected boolean destroyOnHit = true;
-	private float damage = 0;
+	private float damage = 1;
 	private float lifeSpan = 5.0f; //5 seconds by default; can dictate like when a grenade goes off
 	
 	public Projectile(Entity owner, float x, float y, float width, float height) {
@@ -58,8 +58,6 @@ public abstract class Projectile extends Entity {
 			if (e.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE) {
 				if (this.colliding(e)) {
 					e.hurt(damage);
-					for (String s : e.getTags())
-						System.out.println(s);
 					this.destroy();
 					return; //already hit one.. were done now
 				}

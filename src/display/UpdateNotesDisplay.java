@@ -11,7 +11,10 @@ import display.component.Component;
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
 		"Implemented VSync",
-		"Added player sprite/animations"
+		"Added player sprite/animations",
+		"Fixed collision with walls",
+		"Added point and shoot with bullets",
+		"Implementing data files to store regions"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

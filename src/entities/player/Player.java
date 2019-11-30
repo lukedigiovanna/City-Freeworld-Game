@@ -163,21 +163,21 @@ public class Player extends Entity {
 			
 		//check for shooting
 		if (Program.mouse.isMouseDown()) {
-			float speed = 1.0f;
+			float speed = 4.0f;
 			float angle = this.angleTo(this.getWorld().getMousePositionOnWorld());
 			Vector2 v = new Vector2((float)Math.cos(angle)*speed,(float)Math.sin(angle)*speed);
-			Bullet b = new Bullet(this,centerX(),centerY(),v);
+			Bullet b = new Bullet(this,centerX()-0.05f,centerY()-0.025f,v);
 			this.region.add(b);
 		}
 		
 //		float acceleration = 1.0f;
 //		float frictionalAcceleration = -0.3f;
 //		
-//		if (Program.keyboard.keyDown(accelerate)) {
+//		if (Program.keyboard.keyDown(up)) {
 //			speed += acceleration*dt;
 //		}
 //		
-//		if (Program.keyboard.keyDown(stop)) {
+//		if (Program.keyboard.keyDown(down)) {
 //			speed -= 2*acceleration*dt;
 //		}
 //		
@@ -187,11 +187,11 @@ public class Player extends Entity {
 //		
 //		this.velocity.r = 0;
 //		
-//		if (Program.keyboard.keyDown(turnLeft)) {
+//		if (Program.keyboard.keyDown(left)) {
 //			this.velocity.r -= (float) (Math.PI/2.0f);
 //		}
 //		
-//		if (Program.keyboard.keyDown(turnRight)) {
+//		if (Program.keyboard.keyDown(right)) {
 //			this.velocity.r += (float) (Math.PI/2.0f);
 //		}
 //		

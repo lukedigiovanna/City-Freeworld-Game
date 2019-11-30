@@ -44,15 +44,22 @@ public class Hitbox {
 	 * @param other The other hitbox to check
 	 * @return true if they are intersecting, false if not
 	 */
-	public boolean intersecting(Hitbox other) {
-		for (Line l : lines) 
-			for (Line o : other.lines) {
-				Vector2 intersection = l.intersects(o);
-				if (intersection != null) {
-					return true;
-				}
-			}
-		return false;
+	public Vector2 intersecting(Hitbox other) {
+		for (Line o : other.lines) {
+			Vector2 intersection = intersecting(o);
+			if (intersection != null)
+				return intersection;
+		}
+		return null;
+	}
+	
+	public Vector2 intersecting(Line line) {
+		for (Line l : lines) {
+			Vector2 intersection = line.intersects(l);
+			if (intersection != null)
+				return intersection;
+		}
+		return null;
 	}
 	
 	public void rotate(float radians) {

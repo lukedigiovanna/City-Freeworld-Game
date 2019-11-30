@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import display.Animation;
 import misc.ImageTools;
 
 public class Cell extends WorldObject {
@@ -17,7 +18,7 @@ public class Cell extends WorldObject {
 		GRASS
 	}
 	
-	private BufferedImage image = ImageTools.IMAGE_NOT_FOUND;
+	private Animation animation;
 	private Type type;
 
 	public Cell(float x, float y) {
@@ -25,19 +26,31 @@ public class Cell extends WorldObject {
 	}
 	
 	public void update(float dt) {
-		
+		animation.animate(dt);
 	}
 	
 	public void set(CellTemplate temp) {
-		
+		this.animation = new Animation(temp.getImages(),temp.getFrameRate());
+	}
+	
+	public void setAnimation(List<BufferedImage> images, int frameRate) {
+		this.animation = new Animation(images,frameRate);
+	}
+	
+	public void setAnimation(Animation animation) {
+		this.animation = animation;
 	}
 	
 	public void setImage(BufferedImage image) {
-		this.image = image;
+		List<BufferedImage> images = new ArrayList<BufferedImage>();
+		images.add(image);
+		setAnimation(images,1);
 	}
 	
 	public BufferedImage getImage() {
-		return this.image;
+		if (animation == null)
+			return ImageTools.IMAGE_NOT_FOUND;
+		return animation.getCurrentFrame();
 	}
 		
 	public float centerX() {

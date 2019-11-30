@@ -34,19 +34,7 @@ public class World {
 		this.game = game;
 		regions = new ArrayList<Region>();
 		int width = 30, height = 20;
-		Region temp = new Region(this,width,height);
-		CellGrid grid = temp.getGrid();
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				Cell c = new Cell((float)x,(float)y);
-//				if (Math.random() < 0.75)
-//					c.setImage(GRASS);
-//				else 
-//					c.setImage(WATER);
-				c.setImage(GRASS);
-				grid.set(x, y, c);
-			}
-		}
+		Region temp = new Region(this,"sample_world/regions/reg-0");
 		
 		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
 		List<BufferedImage> redthing = ImageTools.getImages("redthing", "");
@@ -56,16 +44,9 @@ public class World {
 
 		temp.add(new Player(4.0f,4.0f));
 		
-		for (int i = 0; i < 50; i++) {
-			float len = MathUtils.random(1.0f,4.0f);
-			Vector2 ep1 = new Vector2(MathUtils.random(width),MathUtils.random(height));
-			float angle = MathUtils.random((float)Math.PI*2);
-			Vector2 ep2 = new Vector2(ep1.x+len*(float)Math.cos(angle),ep1.y+len*(float)Math.sin(angle));
-			temp.addWall(new Line(ep1,ep2));
-		}
 		
 		Region other = new Region(this,width,height);
-		grid = other.getGrid();
+		CellGrid grid = other.getGrid();
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
@@ -100,14 +81,22 @@ public class World {
 		camera.setFocus(getPlayers().get(0));
 	}
 	
+	public void loadFromFile() {
+		
+	}
+	
+	public void saveToFile() {
+		
+	}
+	
 	/**
 	 * Returns where the mouse is in on the world
 	 * @return
 	 */
 	public Vector2 getMousePositionOnWorld() {
 		Vector2 onCam = game.getPercentMousePositionOnCamera();
-		float x = onCam.x*camera.getWidth(), 
-			  y = onCam.y*camera.getHeight();
+		float x = camera.getX()+onCam.x*camera.getWidth(), 
+			  y = camera.getY()+onCam.y*camera.getHeight();
 		return new Vector2(x,y);
 	}
 	

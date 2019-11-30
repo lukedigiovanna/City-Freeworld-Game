@@ -27,6 +27,16 @@ public class Region {
 		this.world = world;
 	}
 	
+	public Region(World world, String folderPath) {
+		folderPath = "assets/saves/"+folderPath;
+		this.cellGrid = new CellGrid(this,folderPath+"/grid.dat");
+		this.width = cellGrid.getWidth();
+		this.height = cellGrid.getHeight();
+		this.entities = new EntityList(this);
+		this.walls = new Walls();
+		this.world = world;
+	}
+	
 	public void addParticles(Type type, Color color, int count, float heat, float x, float y, float width, float height) {
 		Particle.add(this,type,color,count,heat,x,y,width,height);
 	}

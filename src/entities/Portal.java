@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.List;
 
 import world.Camera;
+import world.Properties;
 import world.Region;
 
 public class Portal extends Entity {
@@ -13,6 +14,7 @@ public class Portal extends Entity {
 	public Portal(Destination destination, float x, float y, float width, float height) {
 		super(x, y, width, height);
 		this.destination = destination;
+		this.properties.set(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 	}
 
 	private float r = 0, rv = 500;

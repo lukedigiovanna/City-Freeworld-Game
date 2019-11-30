@@ -21,4 +21,16 @@ public class Car extends Vehicle {
 	public void update(float dt) {
 			
 	}
+
+	@Override
+	public void accelerate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void brake() {
+		// TODO Auto-generated method stub
+		
+	}
 }

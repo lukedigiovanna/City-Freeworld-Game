@@ -1,6 +1,0 @@
-0, 0, 0, 1, 2, 3, 1, 1, 1,
-3, 0, 0, 0, 0, 0, 0, 0, 0,
-
-
-
-//format: tile-id then comma, then \n represents the next row (next y)

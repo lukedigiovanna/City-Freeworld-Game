@@ -61,7 +61,7 @@ public abstract class WorldObject {
 		//update the position history..
 		this.positionHistory.update(dt);
 		
-		this.move(velocity.x*dt, velocity.y*dt, velocity.r*dt);
+		this.move(dt);
 		
 		age += dt;
 	}
@@ -139,50 +139,45 @@ public abstract class WorldObject {
 	}
 	
 	/**
+	 * Moves the object based on its instantaenous velocity
+	 * Will stop if it hits a wall
+	 * @param dt
+	 */
+	public void move(float dt) {
+		if (velocity.x == 0 && velocity.y == 0 && velocity.r == 0)
+			return; //no movement.. so quit
+		int intervals = 10;
+		float step = dt/intervals;
+		List<Line> walls = this.getRegion().getWalls().getWalls();
+		Vector2 intersection;
+		boolean cont = true;
+		for (int i = 0; i < intervals; i++) {
+			move(step*velocity.x,step*velocity.y,step*velocity.r);
+			//now check for collision
+			for (Line l : walls) {
+				intersection = this.hitbox.intersecting(l);
+				if (intersection != null) {
+					//we done
+					cont = false;
+					move(-step*velocity.x,-step*velocity.y,-step*velocity.r);
+					break; //out of the line for loop
+				}
+			}
+			if (cont == false)
+				break;
+		}
+		
+	}
+	
+	/**
 	 * Moves the entities position based on the delta x and delta y inputs
 	 * @param dx distance to change x
 	 * @param dy distance to change y
 	 * @param dr amount of rotation about the midpoint of this object
 	 */
-	public void move(float dx, float dy, float dr) {
-		if (dx == 0 && dy == 0 && dr == 0)
-			return; //no point in doing anything if we dont want to move.
-		
-		//if we dont have collision there is no need to test for it when we move.
-		if (this.properties.get(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
-			rotate(dr);
-			setPosition(getX()+dx,getY()+dy);
-			return;
-		}
-		
-		//need to modify these dx, dy in correspondence with walls
-		List<Line> walls = this.getRegion().getWalls().getWalls();
-		Vector2[] eps = this.hitbox.getVertices();
-		
-		for (Vector2 ep1 : eps) {
-			Vector2 ep2 = new Vector2(ep1.x+dx,ep1.y+dy);
-			Line l = new Line(ep1,ep2);
-			for (Line wall : walls) {
-				Vector2 intersection = l.intersects(wall);
-				if (intersection == null)
-					continue;
-//				if (dx < 0)
-//					dx = intersection.x-ep1.x+0.01f;
-//				else if (dx > 0)
-//					dx = intersection.x-ep1.x-0.01f;
-//				if (dy < 0)
-//					dy = intersection.y-ep1.y+0.01f;
-//				else if (dy > 0)
-//					dy = intersection.y-ep1.y-0.01f;
-				dx = intersection.x-ep1.x-MathUtils.sign(dx)*0.01f; 
-				dy = intersection.y-ep1.y-MathUtils.sign(dy)*0.01f;
-			}
-		}
-		
+	public void move(float dx, float dy, float dr) {	
 		rotate(dr);
 		setPosition(getX()+dx,getY()+dy);
-		
-		
 	}
 	
 	/**
@@ -213,8 +208,12 @@ public abstract class WorldObject {
 	 * @param other
 	 * @return
 	 */
-	public boolean colliding(WorldObject other) {
+	public Vector2 collisionPosition(WorldObject other) {
 		return this.hitbox.intersecting(other.hitbox);
+	}
+	
+	public boolean colliding(WorldObject other) {
+		return collisionPosition(other) != null;
 	}
 	
 	/**
