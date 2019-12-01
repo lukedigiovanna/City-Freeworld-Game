@@ -100,8 +100,12 @@ public class Vector2 {
 	 * @param b
 	 * @return
 	 */
-	public float dotProduct(Vector2 b) {
+	public float dot(Vector2 b) {
 		return x*b.x+y*b.y;
+	}
+	
+	public Vector2 getNormalVector() {
+		return new Vector2(-this.y,this.x);
 	}
 	
 	public void round(float decimalPoint) {
@@ -125,6 +129,6 @@ public class Vector2 {
 	}
 	
 	public String toString() {
-		return "<"+this.x+", "+this.y+">";
+		return "<"+MathUtils.round(this.x, 0.001f)+", "+MathUtils.round(this.y, 0.001f)+">";
 	}
 }

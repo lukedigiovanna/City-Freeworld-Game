@@ -8,10 +8,8 @@ import world.Camera;
 
 public class Bullet extends Projectile {
 
-	public Bullet(Entity owner, float x, float y, Vector2 velocity) {
-		super(owner, x, y, 0.2f, 0.1f);
-		this.velocity = velocity;
-		this.position.r = this.velocity.getAngle();
+	public Bullet(Entity owner, float x, float y, float angle) {
+		super(owner, x, y, 0.2f, 0.1f, angle, 8);
 	}
 	
 	public void draw(Camera c) {

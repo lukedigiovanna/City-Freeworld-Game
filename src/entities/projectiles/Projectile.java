@@ -3,6 +3,7 @@ package entities.projectiles;
 import java.util.List;
 
 import entities.Entity;
+import misc.Vector2;
 import world.Camera;
 import world.Properties;
 
@@ -17,9 +18,15 @@ public abstract class Projectile extends Entity {
 	private float damage = 1;
 	private float lifeSpan = 5.0f; //5 seconds by default; can dictate like when a grenade goes off
 	
-	public Projectile(Entity owner, float x, float y, float width, float height) {
+	public Projectile(Entity owner, float x, float y, float width, float height, Vector2 vi) {
 		super(x, y, width, height);
 		this.owner = owner;
+		this.velocity = vi;
+		this.position.r = this.velocity.getAngle();
+	}
+	
+	public Projectile(Entity owner, float x, float y, float width, float height, float angle, float speed) {
+		this(owner,x,y,width,height,new Vector2(speed*(float)Math.cos(angle),speed*(float)Math.sin(angle)));
 	}
 	
 	public void dontDestroyOnHit() {
@@ -55,7 +62,7 @@ public abstract class Projectile extends Entity {
 			if (e == owner)
 				return; //dont hurt the entity that shot the projectile
 			//check if the entity is kill able
-			if (e.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE) {
+			if (e.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE && !e.isDestroyed()) {
 				if (this.colliding(e)) {
 					e.hurt(damage);
 					this.destroy();

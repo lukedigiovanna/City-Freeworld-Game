@@ -62,6 +62,57 @@ public class Hitbox {
 		return null;
 	}
 	
+	/**
+	 * Conducts Separate Axis Theorem detection of collision
+	 * @param other The other hitbox
+	 * @return whether or not they are colliding
+	 */
+	public boolean satIntersecting(Hitbox other) {
+		//were testing two different shapes
+		Hitbox h1 = this;
+		Hitbox h2 = other;
+		for (int shape = 0; shape < 2; shape++) {
+			if (shape == 1) {
+				h1 = other;
+				h2 = this;
+			}
+			
+			Line[] lines = h1.getLines();
+			Vector2[] axes = new Vector2[lines.length];
+			for (int i = 0; i < axes.length; i++) 
+				axes[i] = lines[i].getVectorRepresentation().getNormalVector();
+			
+			//now go through each axis
+			for (Vector2 projAxis : axes) {
+				Vector2[] h1Eps = h1.getVertices();
+				Vector2[] h2Eps = h2.getVertices();
+				float[] h1Projs = new float[h1Eps.length];
+				float[] h2Projs = new float[h2Eps.length];
+				//get the projections using the dot product of the endpoints and the projection axis
+				for (int i = 0; i < h1Eps.length; i++) 
+					h1Projs[i] = h1Eps[i].dot(projAxis);
+				for (int i = 0; i < h2Eps.length; i++)
+					h2Projs[i] = h2Eps[i].dot(projAxis);
+				//now check for collision...
+				//they are not colliding if all of ones projections are greater or less than the other shapes projections
+				//first lets check the less than scenario
+				boolean yes = true;
+				for (float p1 : h1Projs)
+					for (float p2 : h2Projs)
+						yes = yes && p1 < p2;
+				if (yes)
+					return false;
+				yes = true;
+				for (float p1 : h1Projs)
+					for (float p2 : h2Projs)
+						yes = yes && p1 < p2;
+				if (yes)
+					return false;
+			}
+		}
+		return true;
+	}
+	
 	public void rotate(float radians) {
 		for (Line l : lines)
 			l.rotateAbout(owner.center(),radians);

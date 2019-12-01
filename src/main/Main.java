@@ -2,13 +2,14 @@ package main;
 
 import java.io.*;
 
-import misc.MathUtils;
+import entities.player.Player;
+import misc.*;
+import world.Hitbox;
 
 public class Main {
 	public static void main(String[] args) {
 		Program.init();
-	
-			
+		
 		try {
 			DataOutputStream out = new DataOutputStream(new FileOutputStream("assets/saves/sample_world/regions/reg-0/grid.dat"));
 			int width = 60, height = 40;

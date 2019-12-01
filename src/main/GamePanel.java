@@ -22,7 +22,6 @@ public class GamePanel extends JPanel {
 		Thread repaintThread = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
-					
 					try {
 						long first = System.currentTimeMillis();
 						int targetFPS = Integer.parseInt(Settings.getSetting("max_fps"));
@@ -31,7 +30,7 @@ public class GamePanel extends JPanel {
 						long elapsed = System.currentTimeMillis()-first;
 						long wait = targetRefresh;
 						if (Settings.getSetting("vsync_enabled").contentEquals("true"))
-							wait = (long)MathUtils.floor(20, targetRefresh-elapsed-1);
+							wait = (long)MathUtils.floor(30, targetRefresh-elapsed-1);
 						Thread.sleep(wait);
 					} catch (Exception e) {
 						e.printStackTrace();

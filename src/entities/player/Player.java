@@ -6,13 +6,11 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import entities.*;
-import entities.projectiles.Bullet;
+import entities.projectiles.*;
 import display.Animation;
 import main.Program;
 import main.Settings;
-import misc.ImageTools;
-import misc.MathUtils;
-import misc.Vector2;
+import misc.*;
 import world.Camera;
 
 public class Player extends Entity {
@@ -163,14 +161,11 @@ public class Player extends Entity {
 			
 		//point and click shooting
 		if (Program.mouse.isMouseDown()) {
-			float speed = 8.0f;
 			float angle = this.angleTo(this.getWorld().getMousePositionOnWorld());
-			Vector2 v = new Vector2((float)Math.cos(angle)*speed,(float)Math.sin(angle)*speed);
-			Bullet b = new Bullet(this,centerX()-0.05f,centerY()-0.025f,v);
+			Projectile b = new Bullet(this,centerX(),centerY(),angle);
 			this.region.add(b);
 		}
 		//arrow key shooting
-		
 		
 //		float acceleration = 1.0f;
 //		float frictionalAcceleration = -0.3f;

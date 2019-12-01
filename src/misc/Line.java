@@ -178,6 +178,16 @@ public class Line {
 	}
 	
 	/**
+	 * Gets a vector that represents the dx and dy of the line segment.
+	 * Origin of the vector is at 0, 0
+	 * Useful when determining normal lines (vectors) to this line.
+	 * @return
+	 */
+	public Vector2 getVectorRepresentation() {
+		return new Vector2(endpoint2.x-endpoint1.x,endpoint2.y-endpoint1.y);
+	}
+	
+	/**
 	 * Gets the string representation of the line
 	 * Shows the equation in slope - intercept form with the domain
 	 */

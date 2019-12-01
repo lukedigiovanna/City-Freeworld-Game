@@ -218,25 +218,14 @@ public abstract class WorldObject {
 	
 	/**
 	 * Uses Separate Axis Theorem for determining whether or
-	 * not the two hitboxes are colliding
+	 * not the two hitboxes are colliding. The actual method logic
+	 * is used as Hitbox.this.satIntersecting(Hitbox other)
 	 * @param other
 	 * @return
 	 */
 	public boolean colliding(WorldObject other) {
-		//Lets use the x-axis for all determinations.
-		//simply find the minX and the maxX for each object and then check for collision
-		Vector2[] thisBounds = this.hitbox.getDomainAndRange(),
-				  theirBounds = other.hitbox.getDomainAndRange();
-		float minX1 = thisBounds[0].x, maxX1 = thisBounds[1].x,
-			  minY1 = thisBounds[0].y, maxY1 = thisBounds[1].y,
-			  minX2 = theirBounds[0].x, maxX2 = theirBounds[1].x,
-		      minY2 = theirBounds[0].y, maxY2 = theirBounds[1].y;
-		//they are not colliding in these scenarios
-		if (((minX1 < minX2 && maxX1 < minX2) || (minX1 > maxX2 && maxX1 > maxX2))
-		 && ((minY1 < minY2 && maxY1 < minY2) || (minY1 > maxY2 && maxY1 > maxY2))) 
-			return false; 
-		else //if that above is not true, they must be colliding; return true
-			return true;
+		//makes use of sat from hitbox
+		return this.hitbox.satIntersecting(other.hitbox);
 	}
 	
 	/**
