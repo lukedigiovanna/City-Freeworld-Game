@@ -35,6 +35,10 @@ public abstract class Checkbox extends Component {
 	public abstract void onEnable();
 	public abstract void onDisable();
 	
+	public void setValue(boolean val) {
+		this.value = val;
+	}
+	
 	public boolean selected() {
 		return value;
 	}

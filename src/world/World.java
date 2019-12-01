@@ -40,7 +40,7 @@ public class World {
 		List<BufferedImage> redthing = ImageTools.getImages("redthing", "");
 		for (int x = 0; x < width; x++)
 			for (int y = 0; y < height; y++)
-				temp.add(new EntityObject(new Animation(redthing,14),x, y,1.0f,1.0f));
+				temp.add(new EntityObject(new Animation(redthing,14),x*2, y*2,2.0f,2.0f));
 
 		temp.add(new Player(4.0f,4.0f));
 		
@@ -76,7 +76,7 @@ public class World {
 		
 		int cameraWidth = Game.CAMERA_PIXEL_WIDTH, 
 				    cameraHeight = Game.CAMERA_PIXEL_HEIGHT;
-		float worldViewWidth = 10.0f;
+		float worldViewWidth = 20.0f;
 		camera = new Camera(getCurrentRegion(), 0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight),cameraWidth,cameraHeight);
 		camera.setFocus(getPlayers().get(0));
 	}

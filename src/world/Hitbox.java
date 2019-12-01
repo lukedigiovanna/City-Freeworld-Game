@@ -107,6 +107,29 @@ public class Hitbox {
 		generateLines();
 	}
 	
+	/**
+	 * Gets the minimum x and y values in the first vector
+	 * Gets the maximum x and y values in the second vector
+	 * @return Always an array of vectors with length 2
+	 */
+	public Vector2[] getDomainAndRange() {
+		Vector2[] eps = this.getVertices();
+		float minX = eps[0].x, minY = eps[0].y;
+		float maxX = eps[0].x, maxY = eps[0].y;
+		for (int i = 1; i < eps.length; i++) {
+			if (eps[i].x < minX)
+				minX = eps[i].x;
+			else if (eps[i].x > maxX)
+				maxX = eps[i].x;
+			if (eps[i].y < minY)
+				minY = eps[i].y;
+			else if (eps[i].y > maxY)
+				maxY = eps[i].y;
+		}
+		Vector2[] arr = { new Vector2(minX,minY), new Vector2(maxX,maxY) };
+		return arr;
+	}
+	
 	public void draw(Camera c) {
 		c.setColor(Color.RED);
 		c.setStrokeWidth(0.1f);

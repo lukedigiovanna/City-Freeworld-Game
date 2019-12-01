@@ -25,7 +25,7 @@ public class Particle extends Entity {
 		this(type,color,0.0f,x,y);
 	}
 	
-	private static float maxHeat = 2.0f;
+	private static float maxHeat = 4.0f;
 	
 	public Particle(Type type, Color color, float heat, float x, float y) {
 		super(x-type.width/2, y-type.height/2, type.width, type.height);
@@ -49,8 +49,8 @@ public class Particle extends Entity {
 	}
 	
 	public static enum Type {
-		BALL(0.15f,0.15f),
-		GENERIC(0.2f,0.2f,"generic");
+		BALL(0.3f,0.3f),
+		GENERIC(0.4f,0.4f,"generic");
 		
 		float width, height;
 		List<BufferedImage> images;

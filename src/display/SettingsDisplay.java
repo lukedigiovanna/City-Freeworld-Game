@@ -59,6 +59,9 @@ public class SettingsDisplay extends Display {
 	public SettingsDisplay() {
 		super();
 		add(backButton);
+		vsync.setValue(false);
+		if (Settings.getSetting("vsync_enabled").contentEquals("true"))
+			vsync.setValue(true);
 		add(vsync);
 	}
 	

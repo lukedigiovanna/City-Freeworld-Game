@@ -51,13 +51,13 @@ public class Game {
 	}
 	
 	public Vector2 getMousePositionOnCamera() {
-		int mx = Program.mouse.getX()+cameraBorderSize; //where is the x on the drawn camera
+		int mx = Program.mouse.getX()-cameraBorderSize; //where is the x on the drawn camera
 		float perc = mx/CAMERA_PIXEL_WIDTH;
 		if (perc > 1)
 			mx = cameraBorderSize+CAMERA_PIXEL_WIDTH;
 		else if (perc < 0)
 			mx = cameraBorderSize;
-		int my = Program.mouse.getY()+cameraBorderSize;
+		int my = Program.mouse.getY()-cameraBorderSize;
 		perc = my/CAMERA_PIXEL_HEIGHT;
 		if (perc > 1)
 			my = cameraBorderSize+CAMERA_PIXEL_HEIGHT;
@@ -68,7 +68,7 @@ public class Game {
 	
 	public Vector2 getPercentMousePositionOnCamera() {
 		Vector2 onCam = getMousePositionOnCamera();
-		return new Vector2(onCam.x/CAMERA_PIXEL_WIDTH,onCam.y/CAMERA_PIXEL_HEIGHT);
+		return new Vector2(onCam.x/(float)CAMERA_PIXEL_WIDTH,onCam.y/(float)CAMERA_PIXEL_HEIGHT);
 	}
 	
 	public void pause() {

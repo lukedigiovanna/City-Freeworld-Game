@@ -42,7 +42,7 @@ public class Player extends Entity {
 	private Orientation orientation = Orientation.DOWN;
 	
 	public Player(float x, float y) {
-		super(x, y, 0.75f, 1.375f);
+		super(x, y, 1.5f, 2.75f);
 		this.bankAct = new BankAccount(this);
 		this.inventory = new Inventory();
 		this.profilePicture = ImageTools.getBufferedImage("profile_1.png");
@@ -87,7 +87,7 @@ public class Player extends Entity {
 		return "FckSht God";
 	}
 	
-	private float speed = 1.0f;
+	private float speed = 2.0f;
 	private float maxSpeed = 4.0f;
 	@Override
 	public void update(float dt) {
@@ -98,9 +98,9 @@ public class Player extends Entity {
 		
 		this.velocity.zero();
 		
-		speed = 1.0f;
+		speed = 2.0f;
 		if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
-			speed = 2.0f;
+			speed *= 2;
 		
 		float x = 0, y = 0;
 		
@@ -159,16 +159,18 @@ public class Player extends Entity {
 				curAni = idle_left_side;
 			}
 		
-		curAni.animate(dt*speed);
+		curAni.animate(dt*(speed/2));
 			
-		//check for shooting
+		//point and click shooting
 		if (Program.mouse.isMouseDown()) {
-			float speed = 4.0f;
+			float speed = 8.0f;
 			float angle = this.angleTo(this.getWorld().getMousePositionOnWorld());
 			Vector2 v = new Vector2((float)Math.cos(angle)*speed,(float)Math.sin(angle)*speed);
 			Bullet b = new Bullet(this,centerX()-0.05f,centerY()-0.025f,v);
 			this.region.add(b);
 		}
+		//arrow key shooting
+		
 		
 //		float acceleration = 1.0f;
 //		float frictionalAcceleration = -0.3f;

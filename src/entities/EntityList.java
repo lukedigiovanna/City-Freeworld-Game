@@ -23,7 +23,7 @@ public class EntityList {
 	
 	public void update(float dt) {
 		for (Entity e : list) {
-			if (e.isDestroyed()) { //extra check in case something happened
+			if (e == null || e.isDestroyed()) { //extra check in case something happened
 				toRemove.add(e);
 				continue;
 			}
@@ -68,6 +68,8 @@ public class EntityList {
 			if (i > list.size()-1)
 				break; //concurrency occurred
 			Entity e = list.get(i);
+			if (e == null)
+				break; //somehow a null object got stuck in the list, will be removed later
 			boolean cont = true;
 			for (String tag : e.getTags()) {
 				for (String tag2 : tags) {

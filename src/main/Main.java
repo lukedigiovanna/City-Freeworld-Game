@@ -11,12 +11,12 @@ public class Main {
 			
 		try {
 			DataOutputStream out = new DataOutputStream(new FileOutputStream("assets/saves/sample_world/regions/reg-0/grid.dat"));
-			int width = 30, height = 20;
+			int width = 60, height = 40;
 			out.write(width);
 			out.write(height);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					if ((x-15.0) * (x-15.0) <= y)
+					if ((x*0.25-30*.25) * (x*0.25-30*0.25) <= y)
 						out.write(1);
 					else
 						out.write(0);
