@@ -18,7 +18,7 @@ public class SampleEntity extends Entity {
 		super(x, y, 1.0f, 1.0f);
 	}
 
-	private BufferedImage arrow = ImageTools.getBufferedImage("arrow.png");
+	private BufferedImage arrow = ImageTools.getImage("arrow.png");
 	private int i = 0;
 	@Override
 	public void draw(Camera c) {

@@ -1,37 +1,8 @@
 package main;
 
-import java.io.*;
-
-import entities.player.Player;
-import json.JSONArray;
-import json.JSONFile;
-import json.JSONObject;
-import json.JSONValue;
-import misc.*;
-import world.Hitbox;
-
 public class Main {
 	public static void main(String[] args) {
-		//Program.init();
-		
-		//testing JSON stuff
-		JSONFile json = new JSONFile("assets/something.json");
-		json.set("name","Luke DiGiovanna");
-		json.set("age", 16);
-		JSONArray arr = new JSONArray("3.0,true,null");
-		json.set("siblings", arr);
-		JSONObject mom = new JSONObject("");
-		mom.set("name", "Deanna DiGiovanna");
-		json.set("mother", mom);
-		json.save();
-		
-		JSONArray siblings = (JSONArray)json.get("siblings");
-		System.out.println(siblings.get(1));
-		
-		JSONObject mother = (JSONObject)json.get("mother");
-		System.out.println(mother.get("name"));
-		
-		System.out.println(json.get("name"));
+		Program.init();
 		
 //		try {
 //			DataOutputStream out = new DataOutputStream(new FileOutputStream("assets/saves/sample_world/regions/reg-0/grid.dat"));

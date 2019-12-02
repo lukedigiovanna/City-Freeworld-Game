@@ -45,7 +45,7 @@ public class CustomFont {
 	}
 	
 	public CustomFont(String ssLink, int width, int height, String order) {
-		this(ImageTools.getBufferedImage("assets/fonts/"+ssLink+".png"),width,height,order);
+		this(ImageTools.getImage("assets/fonts/"+ssLink+".png"),width,height,order);
 	}
 	
 	public CustomFont(String ssLink, int size, String order) {

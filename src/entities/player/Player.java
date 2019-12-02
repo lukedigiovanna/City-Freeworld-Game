@@ -43,7 +43,7 @@ public class Player extends Entity {
 		super(x, y, 1.5f, 2.75f);
 		this.bankAct = new BankAccount(this);
 		this.inventory = new Inventory();
-		this.profilePicture = ImageTools.getBufferedImage("profile_1.png");
+		this.profilePicture = ImageTools.getImage("profile_1.png");
 		addTag("player");
 	}
 	

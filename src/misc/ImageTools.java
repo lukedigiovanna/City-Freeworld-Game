@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import main.Program;
@@ -35,20 +37,18 @@ public class ImageTools {
 			return convertTo8Bit(toBufferedImage(image));
 	}
 	
-	public static Image getImage(String filePath) {
+	public static BufferedImage getImage(String filePath) {
 		//for now lets just follow the file path to our images folder : "assets/images/"
 		if (filePath.indexOf("/") < 0)
 			filePath = "assets/images/"+filePath;
-		Image image = (new ImageIcon(filePath)).getImage();
-		if (image == null) { //ie there is no image with that filePath
-			//create the image not found image
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(filePath));
+			return img;
+		} catch (IOException e) {
+			System.err.println("no image "+filePath);
 			return IMAGE_NOT_FOUND;
 		}
-		return image;
-	}
-	
-	public static BufferedImage getBufferedImage(String filePath) {
-		return toBufferedImage(getImage(filePath));
 	}
 	
 	public static BufferedImage toBufferedImage(Image image) {
@@ -191,7 +191,7 @@ public class ImageTools {
 			try {
 				File file = new File(path);
 				if (file.exists()) {
-					BufferedImage img = ImageTools.getBufferedImage(path);
+					BufferedImage img = ImageTools.getImage(path);
 					if (img != null && !img.equals(ImageTools.IMAGE_NOT_FOUND)) {
 						frames.add(img);
 						i++;

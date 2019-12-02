@@ -12,8 +12,8 @@ public class CellTemplate {
 	
 	public static void initialize(String jsonPath) {
 		cellTemps = new CellTemplate[256]; //256 possible ones
-		cellTemps[0] = new CellTemplate(ImageTools.getBufferedImage("grass.png"),1,"grass",0);
-		cellTemps[1] = new CellTemplate(ImageTools.getBufferedImage("water.png"),1,"water",1);
+		cellTemps[0] = new CellTemplate(ImageTools.getImage("grass.png"),1,"grass",0);
+		cellTemps[1] = new CellTemplate(ImageTools.getImage("water.png"),1,"water",1);
 	}
 	
 	public static CellTemplate get(int index) {

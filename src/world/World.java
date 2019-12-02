@@ -26,9 +26,9 @@ public class World {
 	private float elapsedTime = 0.0f;
 	
 	private static final BufferedImage 
-		GRASS = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("grass.png")),
-		WATER = ImageTools.convertTo8Bit(ImageTools.getBufferedImage("water.png")),
-		TILE  =	ImageTools.convertTo8Bit(ImageTools.getBufferedImage("tile.jpg"));
+		GRASS = ImageTools.convertTo8Bit(ImageTools.getImage("grass.png")),
+		WATER = ImageTools.convertTo8Bit(ImageTools.getImage("water.png")),
+		TILE  =	ImageTools.convertTo8Bit(ImageTools.getImage("tile.jpg"));
 	
 	public World(Game game) {
 		this.game = game;
@@ -36,7 +36,7 @@ public class World {
 		int width = 30, height = 20;
 		Region temp = new Region(this,"sample_world/regions/reg-0");
 		
-		BufferedImage tree = ImageTools.getBufferedImage("twee.png");
+		BufferedImage tree = ImageTools.getImage("twee.png");
 		List<BufferedImage> redthing = ImageTools.getImages("redthing", "");
 		for (int x = 0; x < width; x++)
 			for (int y = 0; y < height; y++)
