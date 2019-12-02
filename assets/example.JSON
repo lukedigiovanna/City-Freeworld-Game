@@ -1,0 +1,13 @@
+{
+"name": "Luke DiGiovanna",
+"age": 16,
+"birthday": "December 16, 2002",
+"siblings": [
+"Jessica","Matthew","Michael"
+],
+"mother": {
+	"name": "Deanna DiGiovanna",
+	"age": 51
+},
+"time until death": "15 seconds"
+}

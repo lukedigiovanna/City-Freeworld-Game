@@ -125,16 +125,23 @@ public class Camera {
 			dy = (fy-top)/10.0f;
 		else if (fy > bottom)
 			dy = (fy-bottom)/10.0f;
+		//ensure a minimum speed for the camera to move at
+		float minValue = 0.01f;
+		if (Math.abs(dx) < minValue)
+			dx = MathUtils.sign(dx)*minValue;
+		if (Math.abs(dy) < minValue)
+			dy = MathUtils.sign(dy)*minValue;
 		move(dx,dy);
 	}
 	
 	/**
 	 * Zooms the dimensions of the camera view by some factor
+	 * Positive factor zooms out, negative factor zooms in.
 	 * @param factor
 	 */
 	public void zoom(float factor) {
-		dimension.x = dimension.x + dimension.x * factor;
-		dimension.y = dimension.y + dimension.y * factor;
+		dimension.x += dimension.x * factor;
+		dimension.y += dimension.y * factor;
 	}
 	
 	/**
