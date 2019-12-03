@@ -9,11 +9,13 @@ import javax.swing.JPanel;
 public class Mouse {
 	private boolean mouseDown = false;
 	private MouseEvent lastMouse = null;
+	private int screenWidth, screenHeight;
 	private JPanel panel;
 	
-	public Mouse(JPanel p) {
+	public Mouse(JPanel p, int sw, int sh) {
 		this.panel = p;
-		
+		this.screenWidth = sw;
+		this.screenHeight = sh;
 		panel.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				mouseDown = true;
@@ -42,13 +44,13 @@ public class Mouse {
 	public int getX() {
 		if (lastMouse == null)
 			return 0;
-		return (int)((double)lastMouse.getX()/panel.getWidth()*Program.DISPLAY_WIDTH);
+		return (int)((double)lastMouse.getX()/panel.getWidth()*screenWidth);
 	}
 	
 	public int getY() {
 		if (lastMouse == null)
 			return 0;
-		return (int)((double)lastMouse.getY()/panel.getHeight()*Program.DISPLAY_HEIGHT);
+		return (int)((double)lastMouse.getY()/panel.getHeight()*screenHeight);
 	}
 	
 	public boolean isMouseDown() {

@@ -55,7 +55,7 @@ public class Program {
 		CellTemplate.initialize("no path yet");
 		Settings.initialize();
 		initFrame(); //opens up the window and creates a game panel object
-		mouse = new Mouse(panel);
+		mouse = new Mouse(panel,Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT);
 		keyboard = new Keyboard(panel);
 		DisplayController.initialize();
 		initialized = true;
