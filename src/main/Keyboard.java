@@ -73,6 +73,29 @@ public class Keyboard {
 		return false;
 	}
 	
+	public boolean keyPressed(int ... keycodes) {
+		boolean boo = true;
+		for (int kc : keycodes) {
+			boolean has = false;
+			//make sure the testing keycode in the key list
+			for (Key k : keys) {
+				has = has || (k.keycode == kc);
+				if (has)
+					break;
+			}
+			boo = boo && has;
+			if (!boo)
+				return false; //dont have it
+		}
+		for (int kc : keycodes)
+			for (int i = 0; i < keys.size(); i++)
+				if (keys.get(i).keycode == kc) {
+					keys.remove(keys.get(i));
+					i--;
+				}
+		return true;
+	}
+	
 	/**
 	 * returns true if the character is in the list and removes it so it is only called once
 	 * @param c

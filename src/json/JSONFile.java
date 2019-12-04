@@ -40,8 +40,9 @@ public class JSONFile {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else {
+			mainObject = new JSONObject("");
 		}
-		mainObject = new JSONObject("");
 	}
 	
 	public Object get(String fieldName) {
@@ -84,5 +85,16 @@ public class JSONFile {
 		} catch (IOException e) {
 			
 		}
+	}
+	
+	/**
+	 * Wipes the JSON file to nothing
+	 */
+	public void clear() {
+		mainObject = new JSONObject("");
+	}
+	
+	public String toString() {
+		return mainObject.toString();
 	}
 }
