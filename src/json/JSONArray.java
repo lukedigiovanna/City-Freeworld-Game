@@ -58,11 +58,11 @@ public class JSONArray {
 		add(new JSONValue(value+""));
 	}
 	
-	public JSONValue get(int index) {
+	public Object get(int index) {
 		if (index < 0 || index > this.values.size()-1)
 			throw new JSONException("index "+index+" out of bounds for JSON array");
 		else
-			return values.get(index);
+			return values.get(index).get();
 	}
 	
 	public int size() {

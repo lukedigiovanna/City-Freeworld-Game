@@ -46,7 +46,7 @@ public class JSONFile {
 	}
 	
 	public Object get(String fieldName) {
-		return mainObject.get(fieldName).get();
+		return mainObject.get(fieldName);
 	}
 	
 	public void set(String fieldName, JSONValue value) {

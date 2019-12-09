@@ -8,7 +8,6 @@ import javax.swing.ImageIcon;
 
 import display.DisplayController;
 import misc.ImageTools;
-import world.CellTemplate;
 
 //static class that holds some innate information about this application
 public class Program {
@@ -52,7 +51,6 @@ public class Program {
 	private static boolean initialized = false;
 	
 	public static void init() {
-		CellTemplate.initialize("no path yet");
 		Settings.initialize();
 		initFrame(); //opens up the window and creates a game panel object
 		mouse = new Mouse(panel,Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT);

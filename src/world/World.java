@@ -11,6 +11,7 @@ import entities.EntityObject;
 import entities.player.Player;
 import game.Game;
 import entities.Portal;
+import entities.SampleEntity;
 import main.Program;
 import misc.ImageTools;
 import misc.Line;
@@ -36,11 +37,11 @@ public class World {
 		int width = 30, height = 20;
 		Region temp = new Region(this,"sample_world/regions/reg-0");
 		
-		BufferedImage tree = ImageTools.getImage("twee.png");
-		List<BufferedImage> redthing = ImageTools.getImages("redthing", "");
-		for (int x = 0; x < width; x++)
-			for (int y = 0; y < height; y++)
-				temp.add(new EntityObject(new Animation(redthing,14),x*2, y*2,2.0f,2.0f));
+		for (int x = 0; x < temp.getWidth(); x+=2) {
+			for (int y = 0; y < temp.getHeight(); y+=2) {
+				temp.add(new SampleEntity(x,y));
+			}
+		}
 
 		temp.add(new Player(4.0f,4.0f));
 		

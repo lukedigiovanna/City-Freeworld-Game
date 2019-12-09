@@ -53,6 +53,14 @@ public class Animation {
 		return frames.get(curFrame);
 	}
 	
+	public List<BufferedImage> getFrames() {
+		return frames;
+	}
+	
+	public int getFrameRate() {
+		return this.frameRate;
+	}
+	
 	public void randomize() {
 		curFrame = MathUtils.random(frames.size());
 	}

@@ -29,10 +29,6 @@ public class Cell extends WorldObject {
 		animation.animate(dt);
 	}
 	
-	public void set(CellTemplate temp) {
-		this.animation = new Animation(temp.getImages(),temp.getFrameRate());
-	}
-	
 	public void setAnimation(List<BufferedImage> images, int frameRate) {
 		this.animation = new Animation(images,frameRate);
 	}

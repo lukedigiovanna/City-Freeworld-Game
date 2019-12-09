@@ -1,19 +1,23 @@
 package entities.vehicles;
 
-import entities.Entity;
+import entities.player.*;
+import entities.*;
 
 /**
  * Super class for vehicles such as cars, trucks, tractors, airplanes, bicycles, motorcycles
  */
 public abstract class Vehicle extends Entity {
 
-	private Entity driver;
+	/**
+	 * If driver is null then it should be operated by an AI, otherwise it uses input from that player
+	 */
+	private Player driver;
 	
 	public Vehicle(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}
-
-	public abstract void accelerate();
-	public abstract void brake();
 	
+	public Player getDriver() {
+		return driver;
+	}
 }

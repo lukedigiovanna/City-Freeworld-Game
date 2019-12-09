@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 
 import main.*;
+import misc.ImageTools;
 import misc.MathUtils;
 import misc.Rectangle;
 
@@ -44,7 +45,7 @@ public class TileEditor extends JPanel  {
 	//file stuff
 	private static final int TILE_N = 256;
 	private static final int TILE_SIZE = 8;
-	private static final String TILE_PATH = "assets/images/tiles/";
+	private static final String TILE_PATH = "assets/texture_packs/";
 	private String tilePack = "default";
 	private JSONFile tilesJson;
 	private BufferedImage spriteSheet;
@@ -60,38 +61,47 @@ public class TileEditor extends JPanel  {
 		tilesJson.clear();
 		//lets add in 256 tiles
 		JSONArray arr = new JSONArray("");
+		int i = 0;
 		for (int id = 0; id < 256; id++) {
-			JSONObject frame = new JSONObject("");
-			frame.set("id", id);
-			frame.set("stringId", "null");
-			JSONObject position = new JSONObject("");
-			position.set("x", 0);
-			position.set("y", 0);
-			position.set("w", 0);
-			position.set("h", 0);
-			frame.set("position", position);
-			arr.add(frame);
-		}
-		tilesJson.set("frames", arr);
-		tilesJson.set("sprite_path", TILE_PATH+tilePack+"/sheet.png");
-	
-		spriteSheet = new BufferedImage(TILE_SIZE*TILE_N,TILE_SIZE*TILE_N,BufferedImage.TYPE_INT_ARGB);
-		
-		for (int x = 0; x < TILE_N; x++) {
-			for (int y = 0; y < TILE_N; y++) {
-				int rgb = MathUtils.random(0xFFFFFF); 
-				Color c = new Color(rgb);
-				System.out.println(c);
-				for (int ix = 0; ix < TILE_SIZE; ix++) 
-					for (int iy = 0; iy < TILE_SIZE; iy++)
-						spriteSheet.setRGB(x*TILE_SIZE+ix, y*TILE_SIZE+iy, rgb);
+			JSONObject animation = new JSONObject("");
+			animation.set("id", id);
+			animation.set("string_id", "null");
+			JSONArray frames = new JSONArray("");
+			for (int k = 0; k < 2; k++) {
+				JSONObject position = new JSONObject("");
+				position.set("x", i/16*8);
+				position.set("y", i%16*8);
+				position.set("w", 8);
+				position.set("h", 8);
+				frames.add(position);
+				i++;
 			}
+			animation.set("frame_rate", MathUtils.random(1,5));
+			animation.set("frames",frames);
+			arr.add(animation);
 		}
+		tilesJson.set("tiles", arr);
+		tilesJson.set("sprite_path", TILE_PATH+tilePack+"/tileSheet.png");
+	
+		int size = (int)(Math.sqrt(TILE_N))*2;
+		spriteSheet = new BufferedImage(TILE_SIZE*size,TILE_SIZE*size,BufferedImage.TYPE_INT_ARGB);
+		
+		int range = Color.white.getRGB()-Color.black.getRGB();
+		int start = Color.black.getRGB();
+		int interval = range/(size*size);
+		int val = start;
+		for (int x = 0; x < size; x++) 
+			for (int y = 0; y < size; y++) {
+				for (int ix = 0; ix < TILE_SIZE; ix++) 
+					for (int iy = 0; iy < TILE_SIZE; iy++) {
+						int rgb = val;
+						spriteSheet.setRGB(x*TILE_SIZE+ix, y*TILE_SIZE+iy, rgb);
+					}
+				val+=interval;
+			}
+		
 		
 		System.out.println("sprite sheet size: "+spriteSheet.getWidth()+" x "+spriteSheet.getHeight());
-//		for (int x = 0; x < spriteSheet.getWidth(); x++)
-//			for (int y = 0; y < spriteSheet.getHeight(); y++)
-//				System.out.println("at pxl "+x+", "+y+": "+spriteSheet.getRGB(x, y));
 		
 		save();
 		
@@ -103,7 +113,6 @@ public class TileEditor extends JPanel  {
 					} catch (Exception e) {}
 					update();
 					repaint();
-					save();
 				}
 			}
 		});
@@ -129,14 +138,14 @@ public class TileEditor extends JPanel  {
 	
 	public void paintComponent(Graphics g) {
 		//draw the screen image
-		g.drawImage(screen, 0, 0, getWidth(), getHeight(), null);
+		g.drawImage(spriteSheet, 0, 0, getWidth(), getHeight(), null);
 	}
 	
 	public void save() {
 		tilesJson.save();
 		try {
-			File outFile = new File(TILE_PATH+tilePack+"/shee.jpg");
-			ImageIO.write(spriteSheet, "jpg", outFile);
+			File outFile = new File(TILE_PATH+tilePack+"/tileSheet.png");
+			ImageIO.write(spriteSheet, "png", outFile);
 		} catch (IOException e) { e.printStackTrace(); }
 	}
 	

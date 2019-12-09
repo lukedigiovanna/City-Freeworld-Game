@@ -35,7 +35,7 @@ public class EntityObject extends Entity {
 		if (img == null)
 			img = animation.getCurrentFrame();
 		camera.drawImage(img, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		this.drawHitbox(camera);
+		//this.drawHitbox(camera);
 	}
 
 	@Override

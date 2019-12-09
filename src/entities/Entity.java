@@ -101,7 +101,8 @@ public abstract class Entity extends WorldObject {
 	 * Removes reference of this entity from the entity list
 	 */
 	public void destroy() {
-		this.getRegion().remove(this);
+		if (this.getRegion() != null)
+			this.getRegion().remove(this);
 		this.destroyed = true;
 	}
 	

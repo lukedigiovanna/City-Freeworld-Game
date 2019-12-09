@@ -19,16 +19,4 @@ public class Bike extends Vehicle {
 		
 	}
 
-	@Override
-	public void accelerate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void brake() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

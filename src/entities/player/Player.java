@@ -41,6 +41,13 @@ public class Player extends Entity {
 	
 	public Player(float x, float y) {
 		super(x, y, 1.5f, 2.75f);
+		float[] model = {
+				0, 2.75f/2,
+				1.5f, 2.75f/2,
+				1.5f, 2.75f,
+				0, 2.75f
+		};
+		this.setModel(model);
 		this.bankAct = new BankAccount(this);
 		this.inventory = new Inventory();
 		this.profilePicture = ImageTools.getImage("profile_1.png");
@@ -61,6 +68,7 @@ public class Player extends Entity {
 	@Override
 	public void draw(Camera camera) {
 		camera.drawImage(curAni.getCurrentFrame(), getX(), getY(), getWidth(), getHeight());
+		this.hitbox.draw(camera);
 	}
 	
 	public String getMoneyDisplay() {

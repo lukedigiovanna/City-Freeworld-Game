@@ -2,6 +2,8 @@ package world;
 
 import java.io.*;
 
+import display.TexturePack;
+
 public class CellGrid {
 	//stored such that the x value is the first element and the y value is the second element
 	private Cell[][] grid;
@@ -37,7 +39,7 @@ public class CellGrid {
 					break; //we ran out of bytes.. 
 				else {
 					//set some cell stuff
-					cell.set(CellTemplate.get(value));
+					cell.setAnimation(TexturePack.current().getTileImages(value), TexturePack.current().getFrameRate(value));
 				}
 			}
 			in.close();

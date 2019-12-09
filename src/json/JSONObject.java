@@ -53,8 +53,8 @@ public class JSONObject {
 		}
 	}
 	
-	public JSONValue get(String fieldName) {
-		return fields.get(fieldName);
+	public Object get(String fieldName) {
+		return fields.get(fieldName).get();
 	}
 	
 	public void set(String fieldName, JSONValue value) {
