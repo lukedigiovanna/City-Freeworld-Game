@@ -43,7 +43,7 @@ public class World {
 			}
 		}
 
-		temp.add(new Player(4.0f,4.0f));
+		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		
 		
 		Region other = new Region(this,width,height);

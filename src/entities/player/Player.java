@@ -32,7 +32,7 @@ public class Player extends Entity {
 		RIGHT
 	}
 	
-	private String name = "Ronald McFcksht";
+	private String name = "Earl";
 	private BankAccount bankAct;
 	private Inventory inventory;
 	private BufferedImage profilePicture;
@@ -90,7 +90,7 @@ public class Player extends Entity {
 	}
 
 	public String getReputation() {
-		return "FckSht God";
+		return "None";
 	}
 	
 	private float speed = 2.0f;

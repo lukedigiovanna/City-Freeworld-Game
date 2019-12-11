@@ -7,7 +7,7 @@ public class BankAccount {
 	
 	public BankAccount(Player player) {
 		this.player = player;
-		this.money = 420.69; //default
+		this.money = 500.00; //default
 	}
 	
 	public double getMoney() {

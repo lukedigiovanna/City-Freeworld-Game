@@ -15,9 +15,9 @@ public class Main {
 			out.write(height);
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					int cx = (x-width/2), cy = (y-height/2);
+					double cx = (x-width/2), cy = (y-height/2);
 					double distSquared = cx*cx+cy*cy;
-					double maxSquared=(height/2)*(height/2)+(width/2)*(width/2);
+					double maxSquared=(height/2.0)*(height/2.0)+(width/2.0)*(width/2.0);
 					int val = (int)(distSquared/maxSquared*256);
 					out.write(val);
 				}

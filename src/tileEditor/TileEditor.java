@@ -138,7 +138,7 @@ public class TileEditor extends JPanel  {
 	
 	public void paintComponent(Graphics g) {
 		//draw the screen image
-		g.drawImage(spriteSheet, 0, 0, getWidth(), getHeight(), null);
+		g.drawImage(screen, 0, 0, getWidth(), getHeight(), null);
 	}
 	
 	public void save() {
