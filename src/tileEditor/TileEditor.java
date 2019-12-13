@@ -35,7 +35,7 @@ public class TileEditor extends JPanel  {
 	private BufferedImage screen;
 	
 	/*
-	 *	a+ssume the screen coordinate grid is structured as so:
+	 *	assume the screen coordinate grid is structured as so:
 	 *	0, 0 in the top left
 	 *  1, 1 in the bottom right. positions represent a percentage across the display width and height 
 	 */
