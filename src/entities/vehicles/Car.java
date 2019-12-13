@@ -4,10 +4,6 @@ import world.Camera;
 
 public class Car extends Vehicle {
 	
-	public static enum Type {
-		
-	}
-	
 	public Car(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}

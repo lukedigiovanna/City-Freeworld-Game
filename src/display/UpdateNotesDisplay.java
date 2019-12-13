@@ -15,8 +15,10 @@ public class UpdateNotesDisplay extends Display {
 		"Fixed collision with walls",
 		"Added point and shoot with bullets",
 		"Implementing data files to store regions",
-		"Newer, more detailed tile art",
-		"Developed a JSON parser for reading and generating JSON files"
+		"Newer, more detailed tile art (temporary)",
+		"Developed a JSON parser for reading and generating JSON files",
+		"Implemented Texture Packs which now take advantage of sprite sheets",
+		"Added position correction to camera zooming"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

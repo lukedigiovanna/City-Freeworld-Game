@@ -16,7 +16,8 @@ public abstract class WorldObject {
 	protected PositionHistory positionHistory;
 	protected Region region;
 	protected Vector2 position, velocity;
-	protected Hitbox hitbox;
+	protected Hitbox hitbox; //identifies the physical boundaries with walls
+	protected float mass; //in kilograms
 	protected Properties properties;
 	
 	protected float age;

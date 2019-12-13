@@ -40,7 +40,7 @@ public class Player extends Entity {
 	private Orientation orientation = Orientation.DOWN;
 	
 	public Player(float x, float y) {
-		super(x, y, 1.5f, 2.75f);
+		super(x, y, 0.75f, 1.375f);
 		float[] model = {
 				0, 2.75f/2,
 				1.5f, 2.75f/2,

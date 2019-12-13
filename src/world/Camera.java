@@ -140,8 +140,12 @@ public class Camera {
 	 * @param factor
 	 */
 	public void zoom(float factor) {
+		float xPercent = (focus.getX()-this.getX())/this.getWidth(),
+              yPercent = (focus.getY()-this.getY())/this.getHeight();
 		dimension.x += dimension.x * factor;
 		dimension.y += dimension.y * factor;
+		this.position.x = focus.getX()-xPercent*dimension.x;
+		this.position.y = focus.getY()-yPercent*dimension.y;
 	}
 	
 	/**

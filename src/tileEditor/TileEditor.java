@@ -57,54 +57,6 @@ public class TileEditor extends JPanel  {
 		mouse = new Mouse(this,DISPLAY_WIDTH,DISPLAY_HEIGHT);
 		keyboard = new Keyboard(this);
 		
-		tilesJson = new JSONFile(TILE_PATH+tilePack+"/tiles.json");
-		tilesJson.clear();
-		//lets add in 256 tiles
-		JSONArray arr = new JSONArray("");
-		int i = 0;
-		for (int id = 0; id < 256; id++) {
-			JSONObject animation = new JSONObject("");
-			animation.set("id", id);
-			animation.set("string_id", "null");
-			JSONArray frames = new JSONArray("");
-			for (int k = 0; k < 2; k++) {
-				JSONObject position = new JSONObject("");
-				position.set("x", i/16*8);
-				position.set("y", i%16*8);
-				position.set("w", 8);
-				position.set("h", 8);
-				frames.add(position);
-				i++;
-			}
-			animation.set("frame_rate", MathUtils.random(1,5));
-			animation.set("frames",frames);
-			arr.add(animation);
-		}
-		tilesJson.set("tiles", arr);
-		tilesJson.set("sprite_path", TILE_PATH+tilePack+"/tileSheet.png");
-	
-		int size = (int)(Math.sqrt(TILE_N))*2;
-		spriteSheet = new BufferedImage(TILE_SIZE*size,TILE_SIZE*size,BufferedImage.TYPE_INT_ARGB);
-		
-		int range = Color.white.getRGB()-Color.black.getRGB();
-		int start = Color.black.getRGB();
-		int interval = range/(size*size);
-		int val = start;
-		for (int x = 0; x < size; x++) 
-			for (int y = 0; y < size; y++) {
-				for (int ix = 0; ix < TILE_SIZE; ix++) 
-					for (int iy = 0; iy < TILE_SIZE; iy++) {
-						int rgb = val;
-						spriteSheet.setRGB(x*TILE_SIZE+ix, y*TILE_SIZE+iy, rgb);
-					}
-				val+=interval;
-			}
-		
-		
-		System.out.println("sprite sheet size: "+spriteSheet.getWidth()+" x "+spriteSheet.getHeight());
-		
-		save();
-		
 		Thread repaintThread = new Thread(new Runnable() {
 			public void run() {
 				while (true) { //while the program is running
@@ -124,7 +76,7 @@ public class TileEditor extends JPanel  {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT);
 		g.setColor(Color.WHITE);
-		//g.drawImage(spriteSheet, 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, null);
+		g.drawImage(spriteSheet, 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, null);
 		fillRect(g,tileView);
 	}
 	

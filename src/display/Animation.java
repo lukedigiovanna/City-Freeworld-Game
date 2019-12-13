@@ -30,6 +30,12 @@ public class Animation {
 		this.frameRate = frameRate;
 	}
 	
+	public Animation(BufferedImage frame) {
+		this.frames = new ArrayList<BufferedImage>();
+		this.frames.add(frame);
+		this.frameRate = 999;
+	}
+	
 	
 	/**
 	 * Updates the current frame based on the elapsed time.
@@ -59,6 +65,10 @@ public class Animation {
 	
 	public int getFrameRate() {
 		return this.frameRate;
+	}
+	
+	public int getNumberOfFrames() {
+		return frames.size();
 	}
 	
 	public void randomize() {
