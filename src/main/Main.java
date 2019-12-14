@@ -23,6 +23,10 @@ public class Main {
 					int val = (int)(distSquared/maxSquared*pack.getNumberOfTiles());
 					if (val >= pack.getNumberOfTiles())
 						val = pack.getNumberOfTiles()-1;
+					if (x == width/2-1 || x == width/2+1)
+						val = 8;
+					if (x == width/2)
+						val = 9;
 					out.write(val);
 				}
 			}

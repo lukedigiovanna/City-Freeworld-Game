@@ -18,7 +18,9 @@ public class UpdateNotesDisplay extends Display {
 		"Newer, more detailed tile art (temporary)",
 		"Developed a JSON parser for reading and generating JSON files",
 		"Implemented Texture Packs which now take advantage of sprite sheets",
-		"Added position correction to camera zooming"
+		"Added position correction to camera zooming",
+		"Added ridable vehicles",
+		"    Press 'F' near a car to enter it"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

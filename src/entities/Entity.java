@@ -2,6 +2,9 @@ package entities;
 
 import java.awt.*;
 import java.util.List;
+
+import entities.vehicles.Vehicle;
+
 import java.util.*;
 
 import misc.Vector2;
@@ -12,6 +15,8 @@ public abstract class Entity extends WorldObject {
 	protected Vector2 dimension;
 	
 	protected Health health;
+	
+	protected Vehicle riding; //null to start
 	
 	private List<String> tags;
 	
@@ -38,6 +43,8 @@ public abstract class Entity extends WorldObject {
 	}
 	
 	public void send(Region region, float x, float y) {
+		if (this.riding != null)
+			this.riding.send(region, x, y);
 		this.region.remove(this);
 		this.region = region;
 		this.region.add(this);

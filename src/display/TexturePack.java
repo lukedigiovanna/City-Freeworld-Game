@@ -51,6 +51,8 @@ public class TexturePack {
 		tilesMap.put(5, new Animation(ImageTools.getImage("dirt.png")));
 		tilesMap.put(6, new Animation(ImageTools.getImage("bricks.png")));
 		tilesMap.put(7, new Animation(ImageTools.getImage("cobblestone.png")));
+		tilesMap.put(8, new Animation(ImageTools.getImage("pavement.png")));
+		tilesMap.put(9, new Animation(ImageTools.getImage("pavement_yellow_line.png")));
 		save();
 		load();
 	}

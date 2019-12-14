@@ -9,6 +9,7 @@ import display.Animation;
 import entities.Entity;
 import entities.EntityObject;
 import entities.player.Player;
+import entities.vehicles.Car;
 import game.Game;
 import entities.Portal;
 import entities.SampleEntity;
@@ -42,9 +43,18 @@ public class World {
 				temp.add(new SampleEntity(x,y));
 			}
 		}
-
-		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		
+		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
+		temp.add(new Car(temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
+		
+		float r = 8.0f;
+		int vertices = 60;
+		double inc = (1.0/vertices*Math.PI*2);
+		for (double t = 0.4; t < Math.PI*2; t+=inc) {
+			float x1 = (float)Math.cos(t)*r+temp.getWidth()/2, y1 = (float)Math.sin(t)*r+temp.getHeight()/2;
+			float x2 = (float)Math.cos(t+inc)*r+temp.getWidth()/2, y2 = (float)Math.sin(t+inc)*r+temp.getHeight()/2;
+			temp.addWall(new Line(new Vector2(x1,y1), new Vector2(x2,y2)));
+		}
 		
 		Region other = new Region(this,width,height);
 		CellGrid grid = other.getGrid();
@@ -77,7 +87,7 @@ public class World {
 		
 		int cameraWidth = Game.CAMERA_PIXEL_WIDTH, 
 				    cameraHeight = Game.CAMERA_PIXEL_HEIGHT;
-		float worldViewWidth = 20.0f;
+		float worldViewWidth = 13.0f;
 		camera = new Camera(getCurrentRegion(), 0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight),cameraWidth,cameraHeight);
 		camera.setFocus(getPlayers().get(0));
 	}

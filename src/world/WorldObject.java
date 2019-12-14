@@ -40,6 +40,10 @@ public abstract class WorldObject {
 		this.hitbox = new Hitbox(this, model);
 	}
 	
+	public Vector2 getVelocity() {
+		return this.velocity;
+	}
+	
 	/**
 	 * An update method for logic that every single world object
 	 * should have

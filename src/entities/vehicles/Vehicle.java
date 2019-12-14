@@ -1,6 +1,7 @@
 package entities.vehicles;
 
 import entities.player.*;
+import misc.MathUtils;
 import entities.*;
 
 /**
@@ -15,9 +16,54 @@ public abstract class Vehicle extends Entity {
 	
 	public Vehicle(float x, float y, float width, float height) {
 		super(x, y, width, height);
+		this.addTag("vehicle");
 	}
 	
 	public Player getDriver() {
 		return driver;
+	}
+	
+	public void setDriver(Player player) {
+		this.driver = player;
+	}
+	
+	private float frictionalEffect = 0.2f;
+	
+	public void update(float dt) {
+		float speed = this.velocity.getLength();
+		speed -= frictionalEffect * dt;
+		speed = MathUtils.floor(0, speed);
+		this.velocity.setMagnitude(speed);
+	}
+	
+	private float acceleration = 1.0f;
+	private float maxSpeed = 5.0f;
+	
+	public void accelerate(float dt) {
+		float speed = this.velocity.getLength();
+		speed += acceleration * dt;
+		speed = MathUtils.ceil(maxSpeed, speed);
+		this.velocity.setMagnitude(speed);
+	}
+	
+	private float brakePower = 3.0f;
+	
+	public void brake(float dt) {
+		float speed = this.velocity.getLength();
+		speed -= brakePower * dt;
+		speed = MathUtils.floor(0, speed);
+		this.velocity.setMagnitude(speed);
+	}
+	
+	private float turnSpeed = (float)Math.PI/2.0f;
+	
+	public void turnRight(float dt) {
+		this.position.r += turnSpeed * dt;
+		this.velocity.setAngle(this.position.r);
+	}
+	
+	public void turnLeft(float dt) {
+		this.position.r -= turnSpeed * dt;
+		this.velocity.setAngle(this.position.r);
 	}
 }
