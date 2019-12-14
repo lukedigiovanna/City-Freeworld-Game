@@ -20,7 +20,7 @@ public class MainScreenButton extends Button {
 		this.setDimension(width,g.getFontMetrics().getHeight());
 		g.setColor(new Color(225,225,225,125));
 		g.drawString(str, x-1, y+this.getHeight()-1);
-		g.setColor(new Color(0,10,100));
+		g.setColor(new Color(0,150,160));
 		g.drawString(str, x, y+this.getHeight());
 	}
 	
@@ -41,6 +41,6 @@ public class MainScreenButton extends Button {
 
 	@Override
 	public void onMouseDragged(int dx, int dy) {
-		System.out.println(dx+","+dy);
+		
 	}
 }

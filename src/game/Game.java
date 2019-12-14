@@ -144,7 +144,7 @@ public class Game {
 			super(s, Program.DISPLAY_WIDTH/2, y, 0, 30, display.component.Component.FORM_CENTER);
 		}
 
-		private Color c = Color.blue;
+		private Color c = Color.cyan;
 		
 		@Override
 		public void draw(Graphics2D g) {
@@ -159,7 +159,7 @@ public class Game {
 		@Override
 		public void onMouseOver() { c = Color.white; }
 		@Override
-		public void onMouseOut() { c = Color.blue; }
+		public void onMouseOut() { c = Color.cyan; }
 	}
 	
 	private PauseButton[] pButs = { new PauseButton("RESUME",Program.DISPLAY_HEIGHT/2) {

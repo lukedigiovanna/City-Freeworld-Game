@@ -119,6 +119,8 @@ public class Player extends Entity {
 		if (Program.keyboard.keyDown(right))
 			x++;
 		
+		if (Program.keyboard.keyPressed(KeyEvent.VK_F))
+			this.positionHistory.print();
 		
 		
 		if (x != 0 || y != 0) {
