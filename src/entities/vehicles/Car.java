@@ -17,5 +17,6 @@ public class Car extends Vehicle {
 	@Override
 	public void draw(Camera camera) {
 		camera.drawImage(img, getX(), getY(), getWidth(), getHeight());
+		hitbox.draw(camera);
 	}
 }

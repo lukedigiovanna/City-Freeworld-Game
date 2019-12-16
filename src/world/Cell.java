@@ -23,6 +23,7 @@ public class Cell extends WorldObject {
 
 	public Cell(float x, float y) {
 		super(x,y,1.0f,1.0f);
+		this.setHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
 	}
 	
 	public void update(float dt) {

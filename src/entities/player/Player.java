@@ -1,6 +1,5 @@
 package entities.player;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -13,7 +12,6 @@ import main.Program;
 import main.Settings;
 import misc.*;
 import world.Camera;
-import world.WorldObject;
 
 public class Player extends Entity {
 	
@@ -71,7 +69,6 @@ public class Player extends Entity {
 	public void draw(Camera camera) {
 		if (riding == null) {
 			camera.drawImage(curAni.getCurrentFrame(), getX(), getY(), getWidth(), getHeight());
-			
 		}this.hitbox.draw(camera);
 	}
 	
@@ -191,6 +188,13 @@ public class Player extends Entity {
 			else
 				exitVehicle();
 		}
+		
+		if (Program.keyboard.keyPressed('r')) {
+			Path p = new Path();
+			p.add(getX()-1.0f,getY());
+			p.add(getX(),getY());
+			this.queuePath(p);
+		}
 			
 		//point and click shooting
 		if (Program.mouse.isMouseDown()) {
@@ -226,7 +230,7 @@ public class Player extends Entity {
 	}
 	
 	/**
-	 * Sets the player to be riding the vehicle, gives control
+	 * Sets the player to be riding the vehicle; gives control to the player
 	 * @param vehicle
 	 */
 	public void enterVehicle(Vehicle vehicle) {

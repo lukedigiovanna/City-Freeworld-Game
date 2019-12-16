@@ -7,7 +7,7 @@ public class Properties {
 	public static final Key
 		/**
 		 * Key for whether or not the object should have collision with rigid structures
-		 * like walls. 
+		 * like walls and rigid bodies. 
 		 */
 		KEY_HAS_COLLISION = new Key(0),
 		/**

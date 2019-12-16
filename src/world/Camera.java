@@ -5,6 +5,7 @@ import misc.MathUtils;
 import misc.Vector2;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,7 @@ public class Camera {
 	private static final int CELL_SIZE = 32;
 	
 	private Vector2 position;
+	private float verticalHeight;
 	private Vector2 dimension; //cell grid width and height
 	
 	private int pixelWidth, pixelHeight;
@@ -31,7 +33,7 @@ public class Camera {
 	private RenderingHints rh;
 	
 	public Camera(Region region, float x, float y, float width, float height, int pixelWidth, int pixelHeight) {
-		this.position = new Vector2(x,y);
+		this.position = new Vector2(x,y,0);
 		this.dimension = new Vector2(width,height);
 		this.pixelWidth = pixelWidth;
 		this.pixelHeight = pixelHeight;
@@ -42,9 +44,9 @@ public class Camera {
 		
 		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-//		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-//		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
-//		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+		map.put(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+		map.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+		map.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		rh = new RenderingHints(map);
 	}
 	

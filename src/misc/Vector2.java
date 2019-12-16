@@ -142,6 +142,6 @@ public class Vector2 {
 	}
 	
 	public String toString() {
-		return "<"+MathUtils.round(this.x, 0.001f)+", "+MathUtils.round(this.y, 0.001f)+">";
+		return "<"+MathUtils.round(this.x, 0.001f)+", "+MathUtils.round(this.y, 0.001f)+", "+MathUtils.round(this.r,0.001f)+">";
 	}
 }

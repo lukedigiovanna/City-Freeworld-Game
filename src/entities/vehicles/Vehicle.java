@@ -32,8 +32,11 @@ public abstract class Vehicle extends Entity {
 	public void update(float dt) {
 		float speed = this.velocity.getLength();
 		speed -= frictionalEffect * dt;
-		speed = MathUtils.floor(0, speed);
+		speed = MathUtils.clip(0, maxSpeed, speed);
+		this.velocity.setAngle(this.getRotation());
 		this.velocity.setMagnitude(speed);
+		this.regenerateHitbox();
+		System.out.println(velocity);
 	}
 	
 	private float acceleration = 1.0f;
@@ -42,7 +45,6 @@ public abstract class Vehicle extends Entity {
 	public void accelerate(float dt) {
 		float speed = this.velocity.getLength();
 		speed += acceleration * dt;
-		speed = MathUtils.ceil(maxSpeed, speed);
 		this.velocity.setMagnitude(speed);
 	}
 	
@@ -51,19 +53,18 @@ public abstract class Vehicle extends Entity {
 	public void brake(float dt) {
 		float speed = this.velocity.getLength();
 		speed -= brakePower * dt;
-		speed = MathUtils.floor(0, speed);
 		this.velocity.setMagnitude(speed);
 	}
 	
 	private float turnSpeed = (float)Math.PI/2.0f;
 	
 	public void turnRight(float dt) {
-		this.position.r += turnSpeed * dt;
-		this.velocity.setAngle(this.position.r);
+		//this.rotate(turnSpeed * dt);
+		this.velocity.r = turnSpeed;
 	}
 	
 	public void turnLeft(float dt) {
-		this.position.r -= turnSpeed * dt;
-		this.velocity.setAngle(this.position.r);
+		//this.rotate(-turnSpeed * dt);
+		this.velocity.r = -turnSpeed;
 	}
 }

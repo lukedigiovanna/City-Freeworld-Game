@@ -19,10 +19,7 @@ public abstract class Entity extends WorldObject {
 	protected Vehicle riding; //null to start
 	
 	private List<String> tags;
-	
-	public static enum Attribs {
-		INVULNERABLE,
-	}
+	private List<Path> paths;
 	
 	public Entity(float x, float y, float width, float height) {
 		super(x,y,width,height);
@@ -30,12 +27,18 @@ public abstract class Entity extends WorldObject {
 		this.velocity = new Vector2(0,0,0);
 		tags = new ArrayList<String>();
 		tags.add("entity");
+		paths = new ArrayList<Path>();
 		this.health = new Health(1,1);
 	}
 	
 	@Override
 	public void generalUpdate(float dt) {
 		super.generalUpdate(dt);
+		if (this.paths.size() > 0) {
+			paths.get(0).follow();
+			if (paths.get(0).completed())
+				paths.remove(0);
+		}
 		//entity general update.... just overrides the world object general update but calls that method
 		if (this.health.isDead()) {
 			this.destroy();
@@ -76,7 +79,7 @@ public abstract class Entity extends WorldObject {
 	
 	public float centerX() {
 		if (dimension == null)
-			return 0; //fuck you
+			return 0; 
 		return getX() + dimension.x/2;
 	}
 	
@@ -92,6 +95,11 @@ public abstract class Entity extends WorldObject {
 	
 	public float getHeight() {
 		return dimension.y;
+	}
+	
+	public void queuePath(Path path) {
+		path.setEntity(this);
+		this.paths.add(path);
 	}
 	
 	/**

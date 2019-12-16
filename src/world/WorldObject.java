@@ -13,9 +13,12 @@ import misc.Vector2;
  *
  */
 public abstract class WorldObject {
+	public static final float MIN_HEIGHT = 0, MAX_HEIGHT = 25;
+	
 	protected PositionHistory positionHistory;
 	protected Region region;
 	protected Vector2 position, velocity;
+	protected float height; //the z-axis of position.. follows same unit scale as the x and y axis
 	protected Hitbox hitbox; //identifies the physical boundaries with walls
 	protected float mass; //in kilograms
 	protected Properties properties;
@@ -27,6 +30,7 @@ public abstract class WorldObject {
 	
 	public WorldObject(float x, float y, float width, float height) {
 		this.position = new Vector2(x,y,0);
+		this.height = MIN_HEIGHT; //by default
 		this.velocity = new Vector2(0,0,0); //initial velocity is 0
 		float[] model = {0.0f,0.0f,width,0.0f,width,height,0.0f,height};
 		this.hitbox = new Hitbox(this, model);
@@ -40,6 +44,23 @@ public abstract class WorldObject {
 		this.hitbox = new Hitbox(this, model);
 	}
 	
+	public float getHeight() {
+		return this.height;
+	}
+	
+	/**
+	 * Sets the height of the object
+	 * Limits it between the minimum and maximum heights
+	 * @param height
+	 */
+	public void setHeight(float height) {
+		this.height = MathUtils.clip(MIN_HEIGHT, MAX_HEIGHT, height);
+	}
+	
+	/**
+	 * Gets the vector typed velocity
+	 * @return
+	 */
 	public Vector2 getVelocity() {
 		return this.velocity;
 	}
@@ -88,6 +109,10 @@ public abstract class WorldObject {
 		return position.y;
 	}
 	
+	public Vector2 getPosition() {
+		return this.position;
+	}
+	
 	public float getRotation() {
 		return position.r;
 	}
@@ -104,8 +129,17 @@ public abstract class WorldObject {
 		return new Vector2(centerX(),centerY());
 	}
 	
+	public void setVelocity(float vx, float vy) {
+		this.velocity.x = vx;
+		this.velocity.y = vy;
+	}
+	
+	public void setVelocity(Vector2 vel) {
+		this.velocity = vel;
+	}
+	
 	public void rotate(float radians) {
-		hitbox.rotate(radians);
+//		hitbox.rotate(radians);
 		position.r += radians;
 	}
 	
@@ -165,6 +199,7 @@ public abstract class WorldObject {
 					//we done
 					cont = false;
 					move(-step*velocity.x,-step*velocity.y,-step*velocity.r);
+					this.velocity.zero();
 					break; //out of the line for loop
 				}
 			}

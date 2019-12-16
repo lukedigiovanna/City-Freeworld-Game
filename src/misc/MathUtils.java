@@ -212,7 +212,17 @@ public class MathUtils {
 	}
 	
 	/**
-	 * Gets the difference between two points
+	 * Gets the angle between to points in Vector format
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	public static double getAngle(Vector2 p1, Vector2 p2) {
+		return getAngle(p1.x,p1.y,p2.x,p2.y);
+	}
+	
+	/**
+	 * Gets the distance between two points
 	 * @param x1
 	 * @param y1
 	 * @param x2
@@ -222,6 +232,16 @@ public class MathUtils {
 	public static float distance(float x1, float y1, float x2, float y2) {
 		float dx = x2-x1, dy = y2-y1;
 		return (float)Math.sqrt(dx*dx+dy*dy);
+	}
+	
+	/**
+	 * Gets the distance between two points
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	public static float distance(Vector2 p1, Vector2 p2) {
+		return distance(p1.x,p1.y,p2.x,p2.y);
 	}
 	
 	/**
