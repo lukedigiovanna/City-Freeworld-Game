@@ -35,8 +35,8 @@ public abstract class Vehicle extends Entity {
 		speed = MathUtils.clip(0, maxSpeed, speed);
 		this.velocity.setAngle(this.getRotation());
 		this.velocity.setMagnitude(speed);
-		this.regenerateHitbox();
-		System.out.println(velocity);
+		//this.regenerateHitbox();
+		//System.out.println(velocity);
 	}
 	
 	private float acceleration = 1.0f;
