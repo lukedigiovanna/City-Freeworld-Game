@@ -199,7 +199,9 @@ public class Camera {
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
+					this.rotate(cell.getRotation(), cell.getX(), cell.getY());
 					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
+					this.rotate(-cell.getRotation(), cell.getX(), cell.getY());
 					//cell.drawHitbox(this);
 				}
 			}

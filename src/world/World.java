@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import display.Animation;
+import display.TexturePack;
 import entities.Entity;
 import entities.EntityObject;
 import entities.player.Player;
@@ -26,11 +27,6 @@ public class World {
 	private int currentRegion;
 	
 	private float elapsedTime = 0.0f;
-	
-	private static final BufferedImage 
-		GRASS = ImageTools.convertTo8Bit(ImageTools.getImage("grass.png")),
-		WATER = ImageTools.convertTo8Bit(ImageTools.getImage("water.png")),
-		TILE  =	ImageTools.convertTo8Bit(ImageTools.getImage("tile.jpg"));
 	
 	public World(Game game) {
 		this.game = game;
@@ -61,7 +57,7 @@ public class World {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
-				c.setImage(WATER);
+				c.setAnimation(TexturePack.current().getTileImages(0), TexturePack.current().getFrameRate(0));
 				grid.set(x, y, c);
 			}
 		}
@@ -71,7 +67,7 @@ public class World {
 		for (int x = 0; x < width; x++) 
 			for (int y = 0; y < height; y++) {
 				Cell c = new Cell((float)x,(float)y);
-				c.setImage(TILE);
+				c.setAnimation(TexturePack.current().getTileImages(3), TexturePack.current().getFrameRate(3));
 				grid.set(x, y, c);
 			}
 		

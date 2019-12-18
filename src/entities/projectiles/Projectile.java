@@ -22,8 +22,8 @@ public abstract class Projectile extends Entity {
 		super(x, y, width, height);
 		this.owner = owner;
 		this.velocity = vi;
-		this.position.r = this.velocity.getAngle();
-	}
+		this.setRotation(this.velocity.getAngle());
+	}  
 	
 	public Projectile(Entity owner, float x, float y, float width, float height, float angle, float speed) {
 		this(owner,x,y,width,height,new Vector2(speed*(float)Math.cos(angle),speed*(float)Math.sin(angle)));

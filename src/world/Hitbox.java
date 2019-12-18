@@ -114,6 +114,8 @@ public class Hitbox {
 	}
 	
 	public void rotate(float radians) {
+		if (this.owner instanceof entities.vehicles.Vehicle)
+			System.out.println(radians);
 		for (Line l : lines)
 			l.rotateAbout(owner.center(),radians);
 	}
@@ -155,6 +157,7 @@ public class Hitbox {
 	}
 	
 	public void updatePosition() {
+		System.out.println("udpated pos");
 		generateLines();
 	}
 	

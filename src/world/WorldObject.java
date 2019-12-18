@@ -93,6 +93,8 @@ public abstract class WorldObject {
 	}
 	
 	public void regenerateHitbox() {
+		if (this instanceof entities.vehicles.Vehicle)
+			System.out.println("how you mother fucker");
 		if (this.properties.get(Properties.KEY_REGENERATE_HITBOX) == Properties.VALUE_REGENERATE_HITBOX_TRUE)
 			this.hitbox.generateLines();
 	}
@@ -151,8 +153,12 @@ public abstract class WorldObject {
 	}
 	
 	public void rotate(float radians) {
-		hitbox.rotate(radians);
-		position.r += radians;
+		move(0,0,radians);
+	}
+	
+	public void setRotation(float radians) {
+		this.hitbox.rotate(radians-getRotation());
+		this.position.r = radians;
 	}
 	
 	/**
@@ -195,30 +201,7 @@ public abstract class WorldObject {
 	 * @param dt
 	 */
 	public void move(float dt) {
-		if (velocity.x == 0 && velocity.y == 0 && velocity.r == 0)
-			return; //no movement.. so quit
-		int intervals = 10;
-		float step = dt/intervals;
-		List<Line> walls = this.getRegion().getWalls().getWalls();
-		Vector2 intersection;
-		boolean cont = true;
-		for (int i = 0; i < intervals; i++) {
-			move(step*velocity.x,step*velocity.y,step*velocity.r);
-			//now check for collision
-			for (Line l : walls) {
-				intersection = this.hitbox.intersecting(l);
-				if (intersection != null) {
-					//we done
-					cont = false;
-					move(-step*velocity.x,-step*velocity.y,-step*velocity.r);
-					this.velocity.zero();
-					break; //out of the line for loop
-				}
-			}
-			if (cont == false)
-				break;
-		}
-		
+		this.move(this.velocity.x*dt,this.velocity.y*dt,this.velocity.r*dt);
 	}
 	
 	/**
@@ -227,9 +210,104 @@ public abstract class WorldObject {
 	 * @param dy distance to change y
 	 * @param dr amount of rotation about the midpoint of this object
 	 */
-	public void move(float dx, float dy, float dr) {	
-		rotate(dr);
-		setPosition(getX()+dx,getY()+dy);
+	public void move(float dx, float dy, float dr) {
+		moveX(dx);
+		moveY(dy);
+		moveR(dr);
+	}
+	
+	/**
+	 * How many intervals to move the object when checking for collision
+	 * A higher number indicates more precise collision detection
+	 * A lower number indicates less precise collision detection.
+	 */
+	private static final int COLLISION_CHECKS = 10;
+	
+	/**
+	 * Moves the object along the x-axis using collision detection
+	 * @param dx
+	 */
+	public void moveX(float dx) {
+		if (dx == 0)
+			return; //no movement
+		float checkStep = dx/COLLISION_CHECKS;
+		List<Line> walls = this.getRegion().getWalls().getWalls();
+		Vector2 intersection;
+		boolean cont = true;
+		for (int i = 0; i < COLLISION_CHECKS; i++) {
+			this.setX(getX()+checkStep);
+			//now check for collision
+			for (Line l : walls) {
+				intersection = this.hitbox.intersecting(l);
+				if (intersection != null) {
+					//we done
+					cont = false;
+					this.setX(getX()-checkStep); //go back out of the collision zone
+					this.velocity.x = 0; //no more movement in X direction now
+					break; //out of the line for loop
+				}
+			}
+			if (cont == false) //this means we have found a collision already.. no need to keep moving
+				break;
+		}
+	}
+	
+	/**
+	 * Moves the object along the y-axis using collision detection
+	 * @param dy
+	 */
+	public void moveY(float dy) {
+		if (dy == 0)
+			return;
+		float checkStep = dy/COLLISION_CHECKS;
+		List<Line> walls = this.getRegion().getWalls().getWalls();
+		Vector2 intersection;
+		boolean cont = true;
+		for (int i = 0; i < COLLISION_CHECKS; i++) {
+			this.setY(getY()+checkStep);
+			//now check for collision
+			for (Line l : walls) {
+				intersection = this.hitbox.intersecting(l);
+				if (intersection != null) {
+					//we done
+					cont = false;
+					this.setY(getY()-checkStep); //go back out of the collision zone
+					this.velocity.y = 0; //no more movement in X direction now
+					break; //out of the line for loop
+				}
+			}
+			if (cont == false) //this means we have found a collision already.. no need to keep moving
+				break;
+		}
+	}
+	
+	/**
+	 * Rotates the object around its center using collision detection
+	 * @param dr
+	 */
+	public void moveR(float dr) {
+		if (dr == 0)
+			return;
+		float checkStep = dr/COLLISION_CHECKS;
+		List<Line> walls = this.getRegion().getWalls().getWalls();
+		Vector2 intersection;
+		boolean cont = true;
+		for (int i = 0; i < COLLISION_CHECKS; i++) {
+			this.setRotation(this.getRotation()+checkStep);
+			//now check for collision
+			for (Line l : walls) {
+				intersection = this.hitbox.intersecting(l);
+				if (intersection != null) {
+					//we done
+					cont = false;
+					this.setRotation(this.getRotation()-checkStep); //go back out of the collision zone
+					this.velocity.r = 0; //no more movement in X direction now
+					break; //out of the line for loop
+				}
+			}
+			if (cont == false) //this means we have found a collision already.. no need to keep moving
+				break;
+		}
 	}
 	
 	/**
@@ -253,6 +331,14 @@ public abstract class WorldObject {
 		//check for collision with the grid
 		//lets look at the cells that the entity is overlapping with..
 		//we will be using the hitbox of the entity to check for collision
+	}
+	
+	public void setX(float x) {
+		setPosition(x,getY());
+	}
+	
+	public void setY(float y) {
+		setPosition(getX(),y);
 	}
 	
 	/**

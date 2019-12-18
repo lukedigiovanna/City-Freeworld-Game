@@ -3,12 +3,29 @@ package main;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 
+import javax.sound.sampled.*;
+import java.io.*;
+
 import display.TexturePack;
 import misc.MathUtils;
 
 public class Main {
 	public static void main(String[] args) {
 		Program.init();
+		
+		try {
+		AudioInputStream audioInputStream = 
+				AudioSystem.getAudioInputStream(
+						new File("assets/sounds/music/song1.wav")
+						);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			FloatControl gainControl = 
+			    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-0.0f); // Reduce volume by 10 decibels.
+			clip.start();
+		} catch (Exception e) {}
+		
 		try {
 			DataOutputStream out = new DataOutputStream(new FileOutputStream("assets/saves/sample_world/regions/reg-0/grid.dat"));
 			TexturePack pack = TexturePack.DEFAULT;

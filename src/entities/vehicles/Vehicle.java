@@ -2,6 +2,7 @@ package entities.vehicles;
 
 import entities.player.*;
 import misc.MathUtils;
+import world.Properties;
 import entities.*;
 
 /**
@@ -17,6 +18,7 @@ public abstract class Vehicle extends Entity {
 	public Vehicle(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		this.addTag("vehicle");
+		this.properties.set(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 	}
 	
 	public Player getDriver() {

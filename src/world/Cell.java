@@ -6,9 +6,9 @@ import java.util.List;
 
 import display.Animation;
 import misc.ImageTools;
+import misc.MathUtils;
 
 public class Cell extends WorldObject {
-	public static final int PIXEL_SIZE = 16;
 	
 	public static enum Type {
 		WATER,
@@ -24,6 +24,7 @@ public class Cell extends WorldObject {
 	public Cell(float x, float y) {
 		super(x,y,1.0f,1.0f);
 		this.setHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
+		//this.setRotation(MathUtils.random((int)4)*(float)Math.PI/2);
 	}
 	
 	public void update(float dt) {

@@ -43,16 +43,16 @@ public class TexturePack {
 		tileJson = new JSONFile(path+"tiles.json");
 		//load();
 		tilesMap = new HashMap<Integer,Animation>();
-		tilesMap.put(0, new Animation(ImageTools.getImage("grass.png")));
-		tilesMap.put(1, new Animation(ImageTools.getImage("water.png")));
-		tilesMap.put(2, new Animation(ImageTools.getImages("rainbow", "rainbow_"),5));
-		tilesMap.put(3, new Animation(ImageTools.getImage("planks.png")));
-		tilesMap.put(4, new Animation(ImageTools.getImage("sand.png")));
-		tilesMap.put(5, new Animation(ImageTools.getImage("dirt.png")));
-		tilesMap.put(6, new Animation(ImageTools.getImage("bricks.png")));
-		tilesMap.put(7, new Animation(ImageTools.getImage("cobblestone.png")));
-		tilesMap.put(8, new Animation(ImageTools.getImage("pavement.png")));
-		tilesMap.put(9, new Animation(ImageTools.getImage("pavement_yellow_line.png")));
+		tilesMap.put(0, new Animation(ImageTools.getImage("assets/texture_packs/default/grass.png")));
+		tilesMap.put(1, new Animation(ImageTools.getImage("assets/texture_packs/default/water.png")));
+		tilesMap.put(2, new Animation(ImageTools.getImage("assets/texture_packs/default/dirt.png")));
+		tilesMap.put(3, new Animation(ImageTools.getImage("assets/texture_packs/default/planks.png")));
+		tilesMap.put(4, new Animation(ImageTools.getImage("assets/texture_packs/default/sand.png")));
+		tilesMap.put(5, new Animation(ImageTools.getImage("assets/texture_packs/default/street.png")));
+		tilesMap.put(6, new Animation(ImageTools.getImage("assets/texture_packs/default/street_same_way_crossing.png")));
+		tilesMap.put(7, new Animation(ImageTools.getImage("assets/texture_packs/default/street_same_way_no_crossing.png")));
+		tilesMap.put(8, new Animation(ImageTools.getImage("assets/texture_packs/default/street_two_way_crossing.png")));
+		tilesMap.put(9, new Animation(ImageTools.getImage("assets/texture_packs/default/street_two_way_no_crossing.png")));
 		save();
 		load();
 	}

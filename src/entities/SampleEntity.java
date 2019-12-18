@@ -36,7 +36,7 @@ public class SampleEntity extends Entity {
 		for (Entity player : players) {
 			if (player == null)
 				continue;
-			this.position.r = (float)MathUtils.getAngle(centerX(), centerY(), player.centerX(), player.centerY());
+			this.setRotation((float)MathUtils.getAngle(centerX(), centerY(), player.centerX(), player.centerY()));
 			float dist = this.distanceTo(player);
 			float perc = dist/7.0f;
 			i = MathUtils.clip(0, 255, (int)(perc*255));
