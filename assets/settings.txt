@@ -1,5 +1,5 @@
 max_fps:30
-vsync_enabled:true
+vsync_enabled:false
 music_volume:1.0
 sound_volume:1.0
 master_volume:1.0
