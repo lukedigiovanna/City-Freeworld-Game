@@ -41,7 +41,7 @@ public class Main {
 					if (val >= pack.getNumberOfTiles())
 						val = pack.getNumberOfTiles()-1;
 					if (x == width/2-1 || x == width/2+1)
-						val = 8;
+						val = 5;
 					if (x == width/2)
 						val = 9;
 					out.write(val);
