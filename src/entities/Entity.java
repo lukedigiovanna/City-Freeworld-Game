@@ -12,8 +12,6 @@ import world.*;
 import world.Properties;
 
 public abstract class Entity extends WorldObject {
-	protected Vector2 dimension;
-	
 	protected Health health;
 	
 	protected Vehicle riding; //null to start
@@ -75,26 +73,6 @@ public abstract class Entity extends WorldObject {
 	
 	public void addTag(String tag) {
 		tags.add(tag);
-	}
-	
-	public float centerX() {
-		if (dimension == null)
-			return 0; 
-		return getX() + dimension.x/2;
-	}
-	
-	public float centerY() {
-		if (dimension == null)
-			return 0;
-		return getY() + dimension.y/2;
-	}
-	
-	public float getWidth() {
-		return dimension.x;
-	}
-	
-	public float getHeight() {
-		return dimension.y;
 	}
 	
 	public void queuePath(Path path) {

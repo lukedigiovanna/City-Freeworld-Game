@@ -17,8 +17,8 @@ public abstract class WorldObject {
 	
 	protected PositionHistory positionHistory;
 	protected Region region;
-	protected Vector2 position, velocity;
-	protected float height; //the z-axis of position.. follows same unit scale as the x and y axis
+	protected Vector2 position, velocity, dimension;
+	protected float verticalHeight; //the z-axis of position.. follows same unit scale as the x and y axis
 	protected Hitbox hitbox; //identifies the physical boundaries with walls
 	protected float mass; //in kilograms
 	protected Properties properties;
@@ -30,7 +30,7 @@ public abstract class WorldObject {
 	
 	public WorldObject(float x, float y, float width, float height) {
 		this.position = new Vector2(x,y,0);
-		this.height = MIN_HEIGHT; //by default
+		this.verticalHeight = MIN_HEIGHT; //by default
 		this.velocity = new Vector2(0,0,0); //initial velocity is 0
 		float[] model = {0.0f,0.0f,width,0.0f,width,height,0.0f,height};
 		this.hitbox = new Hitbox(this, model);
@@ -44,8 +44,8 @@ public abstract class WorldObject {
 		this.hitbox = new Hitbox(this, model);
 	}
 	
-	public float getHeight() {
-		return this.height;
+	public float getVerticalHeight() {
+		return this.verticalHeight;
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public abstract class WorldObject {
 	 * @param height
 	 */
 	public void setHeight(float height) {
-		this.height = MathUtils.clip(MIN_HEIGHT, MAX_HEIGHT, height);
+		this.verticalHeight = MathUtils.clip(MIN_HEIGHT, MAX_HEIGHT, height);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public abstract class WorldObject {
 		
 		if (regenTimer >= regenPeriod) {
 			regenTimer = 0;
-			regenerateHitbox();
+			//regenerateHitbox();
 		}
 		
 		//update the position history..
@@ -118,15 +118,27 @@ public abstract class WorldObject {
 	}
 	
 	public float centerX() {
-		return getX() + 0.5f;
+		if (dimension == null)
+			return 0; 
+		return getX() + dimension.x/2;
 	}
 	
 	public float centerY() {
-		return getY() + 0.5f;
+		if (dimension == null)
+			return 0;
+		return getY() + dimension.y/2;
 	}
 	
 	public Vector2 center() {
 		return new Vector2(centerX(),centerY());
+	}
+	
+	public float getWidth() {
+		return dimension.x;
+	}
+	
+	public float getHeight() {
+		return dimension.y;
 	}
 	
 	public void setVelocity(float vx, float vy) {
@@ -139,7 +151,7 @@ public abstract class WorldObject {
 	}
 	
 	public void rotate(float radians) {
-//		hitbox.rotate(radians);
+		hitbox.rotate(radians);
 		position.r += radians;
 	}
 	

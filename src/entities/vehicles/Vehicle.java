@@ -59,12 +59,12 @@ public abstract class Vehicle extends Entity {
 	private float turnSpeed = (float)Math.PI/2.0f;
 	
 	public void turnRight(float dt) {
-		//this.rotate(turnSpeed * dt);
-		this.velocity.r = turnSpeed;
+		this.rotate(turnSpeed * dt);
+		//this.velocity.r = turnSpeed;
 	}
 	
 	public void turnLeft(float dt) {
-		//this.rotate(-turnSpeed * dt);
-		this.velocity.r = -turnSpeed;
+		this.rotate(-turnSpeed * dt);
+		//this.velocity.r = -turnSpeed;
 	}
 }

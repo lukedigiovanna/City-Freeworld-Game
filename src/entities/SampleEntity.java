@@ -15,10 +15,9 @@ import world.Camera;
 public class SampleEntity extends Entity {
 
 	public SampleEntity(float x, float y) {
-		super(x, y, 1.0f, 1.0f);
+		super(x, y, 1.0f, 2.0f);
 	}
 
-	private BufferedImage arrow = ImageTools.getImage("arrow.png");
 	private int i = 0;
 	@Override
 	public void draw(Camera c) {
@@ -35,7 +34,8 @@ public class SampleEntity extends Entity {
 		//this.velocity = new Vector2((float)Math.cos(age),(float)Math.sin(age));
 		List<Player> players = getPlayers();
 		for (Entity player : players) {
-			if (player != null)
+			if (player == null)
+				continue;
 			this.position.r = (float)MathUtils.getAngle(centerX(), centerY(), player.centerX(), player.centerY());
 			float dist = this.distanceTo(player);
 			float perc = dist/7.0f;

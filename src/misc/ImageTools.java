@@ -44,6 +44,8 @@ public class ImageTools {
 		BufferedImage img = null;
 		try {
 			img = ImageIO.read(new File(filePath));
+			if (img == null)
+				return IMAGE_NOT_FOUND;
 			return img;
 		} catch (IOException e) {
 			System.err.println("no image "+filePath);

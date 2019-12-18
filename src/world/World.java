@@ -45,7 +45,7 @@ public class World {
 		}
 		
 		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
-		temp.add(new Car(temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
+		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
 		
 		float r = 8.0f;
 		int vertices = 60;
