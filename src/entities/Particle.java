@@ -50,7 +50,8 @@ public class Particle extends Entity {
 	
 	public static enum Type {
 		BALL(0.3f,0.3f),
-		GENERIC(0.4f,0.4f,"generic");
+		GENERIC(0.4f,0.4f,"generic"),
+		TIRE_MARK(0.05f,0.05f,Color.BLACK);
 		
 		float width, height;
 		List<BufferedImage> images;
@@ -90,6 +91,9 @@ public class Particle extends Entity {
 			break;
 		case GENERIC:
 			c.drawImage(image, getX(), getY(), getWidth(), getHeight());
+			break;
+		case TIRE_MARK:
+			c.fillRect(getX(), getY(), getWidth(), getHeight());
 			break;
 		}
 	}

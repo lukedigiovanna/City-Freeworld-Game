@@ -11,11 +11,13 @@ import misc.ImageTools;
 import misc.MathUtils;
 import misc.Vector2;
 import world.Camera;
+import world.Properties;
 
 public class SampleEntity extends Entity {
 
 	public SampleEntity(float x, float y) {
-		super(x, y, 1.0f, 2.0f);
+		super(x, y, 1.0f, 1.0f);
+		this.properties.set(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 	}
 
 	private int i = 0;

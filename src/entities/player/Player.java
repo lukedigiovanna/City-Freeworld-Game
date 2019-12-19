@@ -11,6 +11,7 @@ import display.Animation;
 import main.Program;
 import main.Settings;
 import misc.*;
+import soundEngine.Sound;
 import world.Camera;
 
 public class Player extends Entity {
@@ -40,18 +41,21 @@ public class Player extends Entity {
 	private Orientation orientation = Orientation.DOWN;
 	
 	public Player(float x, float y) {
-		super(x, y, 0.75f, 1.375f);
+		//super(x, y, 0.75f, 1.375f);
+		super(x,y,1.0f,1.0f);
 		float[] model = {
 				0, getHeight()/2,
 				getWidth(), getHeight()/2,
 				getWidth(), getHeight(),
 				0, getHeight()
 		};
-		this.setModel(model);
+		//this.setModel(model);
 		this.bankAct = new BankAccount(this);
 		this.inventory = new Inventory();
 		this.profilePicture = ImageTools.getImage("profile_1.png");
 		addTag("player");
+		sound.play();
+		sound.loop();
 	}
 	
 	private Animation idle_front = new Animation(IDLE_FRONT,2),
@@ -65,11 +69,13 @@ public class Player extends Entity {
 
 	private Animation curAni = idle_front;
 	
+	private BufferedImage topDown = ImageTools.getImage("assets/images/character/topdown.png");
+	
 	@Override
 	public void draw(Camera camera) {
 		if (riding == null) {
-			camera.drawImage(curAni.getCurrentFrame(), getX(), getY(), getWidth(), getHeight());
-		}this.hitbox.draw(camera);
+			camera.drawImage(topDown, getX(), getY(), getWidth(), getHeight());
+		}//this.hitbox.draw(camera);
 	}
 	
 	public String getMoneyDisplay() {
@@ -94,6 +100,8 @@ public class Player extends Entity {
 		return "None";
 	}
 	
+	private int movementType = 2; //0 is moving in cardinal directions, 1 is moving toward the mouse cursor
+	
 	private float speed = 2.0f;
 	private float maxSpeed = 4.0f;
 	@Override
@@ -106,66 +114,109 @@ public class Player extends Entity {
 		this.velocity.zero();
 		
 		if (this.riding == null) {
-			speed = 2.0f;
-			if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
-				speed *= 2;
-			
-			float x = 0, y = 0;
-			
-			if (Program.keyboard.keyDown(down))
-				y++;
-			if (Program.keyboard.keyDown(up))
-				y--;
-			if (Program.keyboard.keyDown(left))
-				x--;
-			if (Program.keyboard.keyDown(right))
-				x++;
-			
-			if (x != 0 || y != 0) {
-				double dir = MathUtils.getAngle(x, y);
-				this.velocity.x = MathUtils.round((float)Math.cos(dir)*speed,0.01f);
-				this.velocity.y = MathUtils.round((float)Math.sin(dir)*speed,0.01f);
+			switch (movementType) {
+			case 0:
+				speed = 2.0f;
+				if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
+					speed *= 2;
+				
+				float x = 0, y = 0;
+				
+				if (Program.keyboard.keyDown(down))
+					y++;
+				if (Program.keyboard.keyDown(up))
+					y--;
+				if (Program.keyboard.keyDown(left))
+					x--;
+				if (Program.keyboard.keyDown(right))
+					x++;
+				
+				if (x != 0 || y != 0) {
+					double dir = MathUtils.getAngle(x, y);
+					this.velocity.x = MathUtils.round((float)Math.cos(dir)*speed,0.01f);
+					this.velocity.y = MathUtils.round((float)Math.sin(dir)*speed,0.01f);
+				}
+				//prioritizes horizontal orientation
+				if (this.velocity.x < 0)
+					this.orientation = Orientation.LEFT;
+				else if (this.velocity.x > 0)
+					this.orientation = Orientation.RIGHT;
+				else if (this.velocity.y > 0)
+					this.orientation = Orientation.DOWN;
+				else if (this.velocity.y < 0) 
+					this.orientation = Orientation.UP;
+				
+				if (this.velocity.getLength() != 0)
+					switch (this.orientation) {
+					case DOWN: 
+						curAni = walk_front;
+						break;
+					case UP:
+						curAni = walk_back;
+						break;
+					case RIGHT:
+						curAni = walk_right_side;
+						break;
+					case LEFT:
+						curAni = walk_left_side;
+					}
+				else
+					switch (this.orientation) {
+					case DOWN:
+						curAni = idle_front;
+						break;
+					case UP:
+						curAni = idle_back;
+						break;
+					case RIGHT: 
+						curAni = idle_right_side;
+						break;
+					case LEFT:
+						curAni = idle_left_side;
+					}
+				
+				curAni.animate(dt*(speed/2));
+				break;
+			case 1:
+				double angleToMouse = this.angleTo(this.getWorld().getMousePositionOnWorld());
+				float speed = 0.0f;
+				float strafe = 0.0f;
+				if (Program.keyboard.keyDown(up)) 
+					speed += 2.0f;
+				if (Program.keyboard.keyDown(down))
+					speed -= 1.0f;
+				if (Program.keyboard.keyDown(left))
+					strafe -= 1.0f;
+				if (Program.keyboard.keyDown(right))
+					strafe += 1.0f;
+				
+				double vx = Math.cos(angleToMouse) * speed + Math.cos(angleToMouse+Math.PI/2) * strafe;
+				double vy = Math.sin(angleToMouse) * speed + Math.sin(angleToMouse+Math.PI/2) * strafe;
+				
+				this.velocity.x = (float)vx;
+				this.velocity.y = (float)vy;
+				 
+				this.setRotation((float)angleToMouse);
+				break;
+			case 2:
+				float s = 0.0f;
+				float r = 0.0f;
+				if (Program.keyboard.keyDown(up)) 
+					s += 2.0f;
+				if (Program.keyboard.keyDown(down))
+					s -= 1.0f;
+				if (Program.keyboard.keyDown(left))
+					r -= Math.PI;
+				if (Program.keyboard.keyDown(right))
+					r += Math.PI;
+				
+				this.velocity.r = r;
+				System.out.println(s);
+				this.velocity.setMagnitude(s);
+				this.velocity.setAngle(this.getRotation());
+				
+				break;
 			}
-			//prioritizes horizontal orientation
-			if (this.velocity.x < 0)
-				this.orientation = Orientation.LEFT;
-			else if (this.velocity.x > 0)
-				this.orientation = Orientation.RIGHT;
-			else if (this.velocity.y > 0)
-				this.orientation = Orientation.DOWN;
-			else if (this.velocity.y < 0) 
-				this.orientation = Orientation.UP;
-			
-			if (this.velocity.getLength() != 0)
-				switch (this.orientation) {
-				case DOWN: 
-					curAni = walk_front;
-					break;
-				case UP:
-					curAni = walk_back;
-					break;
-				case RIGHT:
-					curAni = walk_right_side;
-					break;
-				case LEFT:
-					curAni = walk_left_side;
-				}
-			else
-				switch (this.orientation) {
-				case DOWN:
-					curAni = idle_front;
-					break;
-				case UP:
-					curAni = idle_back;
-					break;
-				case RIGHT: 
-					curAni = idle_right_side;
-					break;
-				case LEFT:
-					curAni = idle_left_side;
-				}
-			
-			curAni.animate(dt*(speed/2));
 		} else { //then we are in a car
 			if (Program.keyboard.keyDown(up))
 				this.riding.accelerate(dt);
@@ -202,7 +253,18 @@ public class Player extends Entity {
 			Projectile b = new Bullet(this,centerX(),centerY(),angle);
 			this.region.add(b);
 		}
+		
+		if (Program.keyboard.keyDown(KeyEvent.VK_UP))
+			volume += dt*5;
+		else if (Program.keyboard.keyDown(KeyEvent.VK_DOWN))
+			volume -= dt*5;
+		volume = MathUtils.clip(-30.0f, 0.0f, volume);
+		sound.setVolume(volume);
 	}
+	
+	private float volume = 0.0f;
+	
+	private Sound sound = new Sound("assets/sounds/music/song1.wav");
 	
 	/**
 	 * Looks around the player for an available car to enter
