@@ -32,7 +32,7 @@ public class Main {
 						val = 5;
 					if (x == width/2)
 						val = 9;
-					out.write(val);
+					out.write(val); 
 				}
 			}
 		} catch (Exception e) {
