@@ -7,6 +7,8 @@ public class Sound {
 	
 	private Clip clip;
 	
+	private boolean playing = false;
+	
 	/**
 	 * Creates a sound from a WAVE file
 	 * @param path File path to the .wav file
@@ -26,10 +28,19 @@ public class Sound {
 	
 	public void play() {
 		clip.start();
+		playing = true;
 	}
 	
 	public void pause() {
 		clip.stop();
+		playing = false;
+	}
+	
+	public void toggle() {
+		if (playing)
+			pause();
+		else
+			play();
 	}
 	
 	public void loop() {

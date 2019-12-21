@@ -54,8 +54,6 @@ public class Player extends Entity {
 		this.inventory = new Inventory();
 		this.profilePicture = ImageTools.getImage("profile_1.png");
 		addTag("player");
-		sound.play();
-		sound.loop();
 	}
 	
 	private Animation idle_front = new Animation(IDLE_FRONT,2),
@@ -74,8 +72,11 @@ public class Player extends Entity {
 	@Override
 	public void draw(Camera camera) {
 		if (riding == null) {
-			camera.drawImage(topDown, getX(), getY(), getWidth(), getHeight());
-		}//this.hitbox.draw(camera);
+			if (movementType > 0)
+				camera.drawImage(topDown, getX(), getY(), getWidth(), getHeight());
+			else
+				camera.drawImage(curAni.getCurrentFrame(),getX(),getY(),getWidth(),getHeight());
+		}
 	}
 	
 	public String getMoneyDisplay() {
@@ -248,23 +249,45 @@ public class Player extends Entity {
 		}
 			
 		//point and click shooting
-		if (Program.mouse.isMouseDown()) {
-			float angle = this.angleTo(this.getWorld().getMousePositionOnWorld());
-			Projectile b = new Bullet(this,centerX(),centerY(),angle);
-			this.region.add(b);
+		switch (movementType) {
+		case 0:
+			break;
+		case 1:
+			if (Program.mouse.isMouseDown()) {
+				float angle = this.angleTo(this.getWorld().getMousePositionOnWorld());
+				Projectile b = new Bullet(this,centerX(),centerY(),angle);
+				this.region.add(b);
+				Sound gun = new Sound("assets/sounds/gunfire.wav");
+				gun.setVolume(-15.0f);
+				gun.play();
+			}
+			break;
+		case 2:
+			if (Program.keyboard.keyDown(' ')) {
+				float angle = this.getRotation();
+				Projectile b = new Bullet(this,centerX(),centerY(),angle);
+				this.region.add(b);
+				Sound gun = new Sound("assets/sounds/gunfire.wav");
+				gun.setVolume(-15.0f);
+				gun.play();
+			}
+			break;
 		}
 		
-		if (Program.keyboard.keyDown(KeyEvent.VK_UP))
-			volume += dt*5;
-		else if (Program.keyboard.keyDown(KeyEvent.VK_DOWN))
-			volume -= dt*5;
-		volume = MathUtils.clip(-30.0f, 0.0f, volume);
-		sound.setVolume(volume);
+		if (Program.keyboard.keyPressed('1')) {
+			this.movementType = 0;
+			this.setDimension(12.0f/16.0f,22.0f/16.0f);
+			this.setRotation(0);
+		}
+		if (Program.keyboard.keyPressed('2')) {
+			this.movementType = 1;
+			this.setDimension(1.0f,1.0f);
+		}
+		if (Program.keyboard.keyPressed('3')) {
+			this.movementType = 2;
+			this.setDimension(1.0f,1.0f);
+		}
 	}
-	
-	private float volume = 0.0f;
-	
-	private Sound sound = new Sound("assets/sounds/music/song1.wav");
 	
 	/**
 	 * Looks around the player for an available car to enter

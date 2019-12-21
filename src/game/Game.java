@@ -9,6 +9,7 @@ import display.*;
 import entities.player.Player;
 import main.*;
 import misc.*;
+import soundEngine.Sound;
 import world.*;
 
 public class Game {
@@ -86,6 +87,8 @@ public class Game {
 	private float tps = 0.0f, elapsedSinceLastCapture = 0.0f;
 	private int captures = 0;
 	
+	private Sound sound = new Sound("assets/sounds/music/song1.wav");
+
 	public void gameLoop() {
 		//lets check for pausing
 		if (Program.keyboard.keyPressed(KeyEvent.VK_ESCAPE))
@@ -99,14 +102,18 @@ public class Game {
 			//check to return to the main menu
 			if (Program.keyboard.keyPressed('q'))
 				DisplayController.setScreen(DisplayController.Screen.MAIN);
+			sound.pause();
 			return; //dont run the game loop if we are paused
 		}
 		
+		sound.loop();
+		sound.play();
+		
 		world.update(dt);
 		
-		if (Program.keyboard.keyDown(' '))
-			world.getCamera().zoom(0.01f);
 		if (Program.keyboard.keyDown('c'))
+			world.getCamera().zoom(0.01f);
+		if (Program.keyboard.keyDown('x'))
 			world.getCamera().zoom(-0.01f);
 
 		if (Program.keyboard.keyPressed('r'))

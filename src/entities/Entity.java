@@ -21,7 +21,7 @@ public abstract class Entity extends WorldObject {
 	
 	public Entity(float x, float y, float width, float height) {
 		super(x,y,width,height);
-		this.dimension = new Vector2(width,height);
+		setDimension(new Vector2(width,height));
 		this.velocity = new Vector2(0,0,0);
 		tags = new ArrayList<String>();
 		tags.add("entity");

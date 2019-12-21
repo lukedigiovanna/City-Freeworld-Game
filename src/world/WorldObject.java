@@ -53,7 +53,7 @@ public abstract class WorldObject {
 	 * Limits it between the minimum and maximum heights
 	 * @param height
 	 */
-	public void setHeight(float height) {
+	public void setVerticalHeight(float height) {
 		this.verticalHeight = MathUtils.clip(MIN_HEIGHT, MAX_HEIGHT, height);
 	}
 	
@@ -344,6 +344,44 @@ public abstract class WorldObject {
 	
 	public void setY(float y) {
 		setPosition(getX(),y);
+	}
+	
+	/**
+	 * Sets the width and height of the world object
+	 * given a Vector object
+	 * @param dimension
+	 */
+	public void setDimension(Vector2 dimension) {
+		dimension.x = MathUtils.floor(0, dimension.x);
+		dimension.y = MathUtils.floor(0, dimension.y);
+		dimension.r = 0;
+		this.dimension = dimension;
+	}
+	
+	/**
+	 * Sets the width and height of the world object
+	 * given two floating point numbers.
+	 * @param width
+	 * @param height
+	 */
+	public void setDimension(float width, float height) {
+		setDimension(new Vector2(width,height));
+	}
+	
+	/**
+	 * Sets the dimensional height of the object
+	 * @param height
+	 */
+	public void setHeight(float height) {
+		setDimension(new Vector2(getWidth(),height));
+	}
+	
+	/**
+	 * Sets the dimensional width of the object
+	 * @param width
+	 */
+	public void setWidth(float width) {
+		setDimension(new Vector2(width,getHeight()));
 	}
 	
 	/**

@@ -77,6 +77,10 @@ public class SettingsDisplay extends Display {
 		
 		backButton.draw(g);
 		vsync.draw(g);
+		
+		g.setColor(Color.WHITE);
+		g.setFont(new Font(Program.FONT_FAMILY,Font.ITALIC,ptpY(0.03f)));
+		g.drawString("VSync Enabled", 245, 230);
 	}
 
 	@Override

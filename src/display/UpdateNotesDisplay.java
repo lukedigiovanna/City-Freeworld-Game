@@ -11,16 +11,19 @@ import display.component.Component;
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
 		"Implemented VSync",
-		"Added player sprite/animations",
 		"Fixed collision with walls",
-		"Added point and shoot with bullets",
 		"Implementing data files to store regions",
 		"Newer, more detailed tile art (temporary)",
 		"Developed a JSON parser for reading and generating JSON files",
 		"Implemented Texture Packs which now take advantage of sprite sheets",
 		"Added position correction to camera zooming",
 		"Added ridable vehicles",
-		"    Press 'F' near a car to enter it"
+		"    Press 'F' near a car to enter it",
+		"Music demo -- plays a song while game is active",
+		"Gun sound effect demo while shooting",
+		"Player movement demos",
+		"    Press numbers to try each type (up to 3)",
+		"    Shooting also different for each"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
