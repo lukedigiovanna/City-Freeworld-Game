@@ -431,6 +431,10 @@ public abstract class WorldObject {
 		return MathUtils.distance(centerX(),centerY(),other.centerX(),other.centerY());
 	}
 	
+	public void onCollision(WorldObject o) {
+		
+	}
+	
 	public void setRegion(Region region) {
 		this.region = region;
 	}

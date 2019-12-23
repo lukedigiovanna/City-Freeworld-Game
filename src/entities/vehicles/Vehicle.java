@@ -56,7 +56,7 @@ public abstract class Vehicle extends Entity {
 		if (speed < 0)
 			speed = 0;
 		this.velocity.setMagnitude(speed);
-		this.getRegion().addParticles(Particle.Type.TIRE_MARK, java.awt.Color.BLACK, 1, 0.0f, centerX(), centerY(), 0.1f, 0.1f);
+		//this.getRegion().addParticles(Particle.Type.TIRE_MARK, java.awt.Color.BLACK, 1, 0.0f, centerX(), centerY(), 0.1f, 0.1f);
 	}
 	
 	private float turnSpeed = (float)Math.PI/2.0f;

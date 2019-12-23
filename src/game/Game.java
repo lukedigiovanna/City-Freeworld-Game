@@ -106,8 +106,9 @@ public class Game {
 			return; //dont run the game loop if we are paused
 		}
 		
-		sound.loop();
-		sound.play();
+		
+		if (Settings.getSetting("master_volume").contentEquals("1.0"))
+			sound.loop();
 		
 		world.update(dt);
 		

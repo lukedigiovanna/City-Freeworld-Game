@@ -7,7 +7,7 @@ import main.Program;
 /**
  * Holds the main function for running the Level Editor
  */
-public class Editor {
+public class EditorMain {
 	
 	private static JFrame frame;
 	private static EditorPanel panel;

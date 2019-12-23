@@ -6,10 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import entities.player.Player;
-import misc.Color8;
-import misc.ImageTools;
-import misc.MathUtils;
-import misc.Vector2;
+import misc.*;
 import world.Camera;
 import world.Properties;
 

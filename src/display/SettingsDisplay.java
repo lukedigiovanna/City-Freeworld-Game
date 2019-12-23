@@ -54,6 +54,14 @@ public class SettingsDisplay extends Display {
 		public void onDisable() {
 			Settings.setSetting("vsync_enabled", "false");
 		}
+	}, mute = new Checkbox(200,245,35,35) {
+		public void onEnable() {
+			Settings.setSetting("master_volume", "0.0");
+		}
+		
+		public void onDisable() {
+			Settings.setSetting("master_volume", "1.0");
+		}
 	};
 	
 	public SettingsDisplay() {
@@ -63,6 +71,10 @@ public class SettingsDisplay extends Display {
 		if (Settings.getSetting("vsync_enabled").contentEquals("true"))
 			vsync.setValue(true);
 		add(vsync);
+		mute.setValue(false);
+		if (Settings.getSetting("master_volume").contentEquals("0.0"))
+			mute.setValue(true);
+		add(mute);
 	}
 	
 	@Override
@@ -77,10 +89,12 @@ public class SettingsDisplay extends Display {
 		
 		backButton.draw(g);
 		vsync.draw(g);
+		mute.draw(g);
 		
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.ITALIC,ptpY(0.03f)));
 		g.drawString("VSync Enabled", 245, 230);
+		g.drawString("Muted", 245, 275);
 	}
 
 	@Override

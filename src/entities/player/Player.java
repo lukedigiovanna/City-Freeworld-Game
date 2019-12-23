@@ -252,6 +252,23 @@ public class Player extends Entity {
 		//point and click shooting
 		switch (movementType) {
 		case 0:
+			float a = -1;
+			if (Program.keyboard.keyDown(KeyEvent.VK_UP)) 
+				a = -(float)Math.PI/2;
+			if (Program.keyboard.keyDown(KeyEvent.VK_RIGHT)) 
+				a = 0;
+			if (Program.keyboard.keyDown(KeyEvent.VK_DOWN)) 
+				a = (float)Math.PI/2;
+			if (Program.keyboard.keyDown(KeyEvent.VK_LEFT)) 
+				a = (float)Math.PI;
+			if (a == -1)
+				break;
+			Projectile b1 = new Bullet(this,centerX(),centerY(),a);
+			this.region.add(b1);
+			Sound gun1 = new Sound("assets/sounds/gunfire.wav");
+			gun1.setVolume(-15.0f);
+			if (Settings.getSetting("master_volume").contentEquals("1.0"))
+				gun1.play();
 			break;
 		case 1:
 			if (Program.mouse.isMouseDown()) {
@@ -260,7 +277,8 @@ public class Player extends Entity {
 				this.region.add(b);
 				Sound gun = new Sound("assets/sounds/gunfire.wav");
 				gun.setVolume(-15.0f);
-				gun.play();
+				if (Settings.getSetting("master_volume").contentEquals("1.0"))
+					gun.play();
 			}
 			break;
 		case 2:
@@ -270,7 +288,8 @@ public class Player extends Entity {
 				this.region.add(b);
 				Sound gun = new Sound("assets/sounds/gunfire.wav");
 				gun.setVolume(-15.0f);
-				gun.play();
+				if (Settings.getSetting("master_volume").contentEquals("1.0"))
+					gun.play();
 			}
 			break;
 		}

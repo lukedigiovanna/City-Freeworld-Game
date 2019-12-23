@@ -21,9 +21,11 @@ public class UpdateNotesDisplay extends Display {
 		"    Press 'F' near a car to enter it",
 		"Music demo -- plays a song while game is active",
 		"Gun sound effect demo while shooting",
-		"Player movement demos",
-		"    Press numbers to try each type (up to 3)",
-		"    Shooting also different for each"
+		"Player movement/shooting demos",
+		"    Press number keys to try each type",
+		"        1: Cardinal movement with WASD, and shoot with arrow keys",
+		"        2: Face to cursor, WASD for relative mvt, click and shoot",
+		"        3: Turn player with AD, WS to move back and forth, space to shoot",
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
@@ -87,7 +89,7 @@ public class UpdateNotesDisplay extends Display {
 				s = s.substring(1);
 			}
 			str+="* "+s;
-			drawText(g,str,0.1f,y,Display.LEFT_ALIGN);
+			drawText(g,str,0.05f,y,Display.LEFT_ALIGN);
 			y+=size;
 		}
 		
