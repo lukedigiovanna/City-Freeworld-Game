@@ -116,6 +116,27 @@ public class ImageTools {
 		});
 	}
 	
+	/**
+	 * Darkens the image according to a value
+	 * @param image
+	 * @param darkness a value from [0.0,1.0] where 0 is black and 1 is the same
+	 * @return
+	 */
+	public static BufferedImage darken(BufferedImage image, float darkness) {
+		if (darkness < 0 || darkness > 1) 
+			throw new RuntimeException("darkness should be between 0 and 1");	
+		darkness = MathUtils.clip(0, 1, darkness);
+		BufferedImage newImg = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		int[][] rgbs = getRGB(image);
+		for (int x = 0; x < rgbs.length; x++) {
+			for (int y = 0; y < rgbs[x].length; y++) {
+				Color c = getColor(rgbs[x][y]);
+				newImg.setRGB(x, y, (new Color((int)(c.getRed()*darkness),(int)(c.getGreen()*darkness),(int)(c.getBlue()*darkness),c.getAlpha())).getRGB());
+			}
+		}
+		return newImg;
+	}
+	
 	public static BufferedImage flipHorizontal(BufferedImage image) {
 		int[][] rgbs = getRGB(image);
 		int[][] nrgb = new int[rgbs.length][rgbs[0].length];
@@ -150,14 +171,15 @@ public class ImageTools {
 	}
 	
 	private static BufferedImage apply(BufferedImage image, Modifiable mod) {
+		BufferedImage newImg = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_INT_ARGB);
 		int[][] rgbs = getRGB(image);
 		for (int x = 0; x < rgbs.length; x++) {
 			for (int y = 0; y < rgbs[x].length; y++) {
 				Color c = getColor(rgbs[x][y]);
-				rgbs[x][y] = mod.modify(c).getRGB();
+				newImg.setRGB(x, y, mod.modify(c).getRGB());
 			}
 		}
-		return get(rgbs);
+		return newImg;
 	}
 	
 	private interface Modifiable {

@@ -14,7 +14,7 @@ public class Portal extends Entity {
 	public Portal(Destination destination, float x, float y, float width, float height) {
 		super(x, y, width, height);
 		this.destination = destination;
-		this.properties.set(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 	}
 
 	private float r = 0, rv = 500;
@@ -27,7 +27,7 @@ public class Portal extends Entity {
 	@Override
 	public void update(float dt) {
 		this.rotate((float)Math.PI*2*dt*0.5f);
-		List<Entity> checkers = this.region.getEntities().get("player");
+		List<Entity> checkers = this.getRegion().getEntities().get("player");
 		for (Entity e : checkers)
 			if (this.colliding(e)) 
 				e.send(destination.region, destination.x, destination.y);

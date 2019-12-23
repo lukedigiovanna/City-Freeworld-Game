@@ -42,10 +42,10 @@ public class Particle extends Entity {
 		heat = MathUtils.clip(0.0f, 1.0f, heat); //clips the heat to be within 0 and 1
 		float theta = MathUtils.random((float)Math.PI*2);
 		float speed = heat * maxHeat;
-		this.velocity = new Vector2((float)Math.cos(theta)*speed,(float)Math.sin(theta)*speed);
+		setVelocity(new Vector2((float)Math.cos(theta)*speed,(float)Math.sin(theta)*speed));
 		
-		properties.set(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
-		properties.set(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
+		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
+		setProperty(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
 	}
 	
 	public static enum Type {
@@ -102,12 +102,12 @@ public class Particle extends Entity {
 	public void update(float dt) {
 		switch (type) {
 		case BALL:
-			velocity.y = -1;
+			this.getVelocity().y = -1;
 			break;
 		case GENERIC:
-			velocity.r = 3.14f;
+			this.getVelocity().r = 3.14f;
 		}
-		if (this.age >= lifeSpan)
+		if (this.getAge() >= lifeSpan)
 			this.destroy();
 	}
 }

@@ -21,8 +21,8 @@ public abstract class Projectile extends Entity {
 	public Projectile(Entity owner, float x, float y, float width, float height, Vector2 vi) {
 		super(x, y, width, height);
 		this.owner = owner;
-		this.velocity = vi;
-		this.setRotation(this.velocity.getAngle());
+		this.setVelocity(vi);;
+		this.setRotation(vi.getAngle());
 	}  
 	
 	public Projectile(Entity owner, float x, float y, float width, float height, float angle, float speed) {
@@ -43,7 +43,7 @@ public abstract class Projectile extends Entity {
 
 	@Override
 	public void update(float dt) {
-		if (this.age >= this.lifeSpan) {
+		if (this.getAge() >= this.lifeSpan) {
 			this.destroy();
 			return; //were dead so no more checking.
 		}
@@ -54,7 +54,7 @@ public abstract class Projectile extends Entity {
 		
 		//look through the entities and see if its colliding with them
 		//if it destroys on hit then deal the damage and destroy.
-		List<Entity> others = this.region.getEntities().get();
+		List<Entity> others = this.getRegion().getEntities().get();
 		for (int i = 0; i < others.size(); i++) {
 			if (i > others.size()-1)
 				break; //avoid concurrent modification

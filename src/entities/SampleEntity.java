@@ -14,7 +14,7 @@ public class SampleEntity extends Entity {
 
 	public SampleEntity(float x, float y) {
 		super(x, y, 1.0f, 1.0f);
-		this.properties.set(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
+		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 	}
 
 	private int i = 0;

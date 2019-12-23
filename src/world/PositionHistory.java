@@ -21,7 +21,7 @@ public class PositionHistory {
 		if (history.size() > 0)
 			last = history.get(0);
 		
-		HistoryPoint hp = new HistoryPoint(object.position.copy(),last,object.age);
+		HistoryPoint hp = new HistoryPoint(object.getPosition().copy(),last,object.getAge());
 		
 		history.add(0,hp);
 		
@@ -37,7 +37,7 @@ public class PositionHistory {
 	 */
 	public HistoryPoint getHistory(float timeAgo) {
 		for (HistoryPoint p : history) {
-			float dt = object.age-p.time;
+			float dt = object.getAge()-p.time;
 			if (dt >= timeAgo)
 				return p;
 		}

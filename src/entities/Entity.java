@@ -22,7 +22,7 @@ public abstract class Entity extends WorldObject {
 	public Entity(float x, float y, float width, float height) {
 		super(x,y,width,height);
 		setDimension(new Vector2(width,height));
-		this.velocity = new Vector2(0,0,0);
+		this.setVelocity(0,0,0);
 		tags = new ArrayList<String>();
 		tags.add("entity");
 		paths = new ArrayList<Path>();
@@ -46,12 +46,12 @@ public abstract class Entity extends WorldObject {
 	public void send(Region region, float x, float y) {
 		if (this.riding != null)
 			this.riding.send(region, x, y);
-		this.region.remove(this);
-		this.region = region;
-		this.region.add(this);
+		this.getRegion().remove(this);
+		this.setRegion(region);
+		region.add(this);
 		this.setPosition(x, y);
 		if (this.hasTag("player")) {
-			this.region.getWorld().setCurrentRegion(this.region);
+			this.getRegion().getWorld().setCurrentRegion(this.getRegion());
 		}
 	}
 	

@@ -3,12 +3,7 @@ package main;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 
-import javax.sound.sampled.*;
-import java.io.*;
-
 import display.TexturePack;
-import misc.MathUtils;
-import soundEngine.Sound;
 
 public class Main {
 	public static void main(String[] args) {

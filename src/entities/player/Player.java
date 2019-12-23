@@ -112,7 +112,7 @@ public class Player extends Entity {
 		char left = Settings.getSetting("move_left").charAt(0);
 		char right = Settings.getSetting("move_right").charAt(0);
 		
-		this.velocity.zero();
+		this.getVelocity().zero();
 		
 		if (this.riding == null) {
 			switch (movementType) {
@@ -134,20 +134,20 @@ public class Player extends Entity {
 				
 				if (x != 0 || y != 0) {
 					double dir = MathUtils.getAngle(x, y);
-					this.velocity.x = MathUtils.round((float)Math.cos(dir)*speed,0.01f);
-					this.velocity.y = MathUtils.round((float)Math.sin(dir)*speed,0.01f);
+					this.getVelocity().x = MathUtils.round((float)Math.cos(dir)*speed,0.01f);
+					this.getVelocity().y = MathUtils.round((float)Math.sin(dir)*speed,0.01f);
 				}
 				//prioritizes horizontal orientation
-				if (this.velocity.x < 0)
+				if (this.getVelocity().x < 0)
 					this.orientation = Orientation.LEFT;
-				else if (this.velocity.x > 0)
+				else if (this.getVelocity().x > 0)
 					this.orientation = Orientation.RIGHT;
-				else if (this.velocity.y > 0)
+				else if (this.getVelocity().y > 0)
 					this.orientation = Orientation.DOWN;
-				else if (this.velocity.y < 0) 
+				else if (this.getVelocity().y < 0) 
 					this.orientation = Orientation.UP;
 				
-				if (this.velocity.getLength() != 0)
+				if (this.getVelocity().getLength() != 0)
 					switch (this.orientation) {
 					case DOWN: 
 						curAni = walk_front;
@@ -194,8 +194,8 @@ public class Player extends Entity {
 				double vx = Math.cos(angleToMouse) * speed + Math.cos(angleToMouse+Math.PI/2) * strafe;
 				double vy = Math.sin(angleToMouse) * speed + Math.sin(angleToMouse+Math.PI/2) * strafe;
 				
-				this.velocity.x = (float)vx;
-				this.velocity.y = (float)vy;
+				this.getVelocity().x = (float)vx;
+				this.getVelocity().y = (float)vy;
 				 
 				this.setRotation((float)angleToMouse);
 				break;
@@ -211,11 +211,11 @@ public class Player extends Entity {
 				if (Program.keyboard.keyDown(right))
 					r += Math.PI;
 				
-				this.velocity.r = r;
-				this.velocity.setMagnitude(s);
-				this.velocity.setAngle(this.getRotation());
+				this.getVelocity().r = r;
+				this.getVelocity().setMagnitude(s);
+				this.getVelocity().setAngle(this.getRotation());
 				if (s < 0)
-					this.velocity.setAngle(this.velocity.getAngle() + (float)Math.PI);
+					this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);
 				
 				break;
 			}
@@ -264,7 +264,7 @@ public class Player extends Entity {
 			if (a == -1)
 				break;
 			Projectile b1 = new Bullet(this,centerX(),centerY(),a);
-			this.region.add(b1);
+			this.getRegion().add(b1);
 			Sound gun1 = new Sound("assets/sounds/gunfire.wav");
 			gun1.setVolume(-15.0f);
 			if (Settings.getSetting("master_volume").contentEquals("1.0"))
@@ -274,7 +274,7 @@ public class Player extends Entity {
 			if (Program.mouse.isMouseDown()) {
 				float angle = this.angleTo(this.getWorld().getMousePositionOnWorld());
 				Projectile b = new Bullet(this,centerX(),centerY(),angle);
-				this.region.add(b);
+				this.getRegion().add(b);
 				Sound gun = new Sound("assets/sounds/gunfire.wav");
 				gun.setVolume(-15.0f);
 				if (Settings.getSetting("master_volume").contentEquals("1.0"))
@@ -285,7 +285,7 @@ public class Player extends Entity {
 			if (Program.keyboard.keyDown(' ')) {
 				float angle = this.getRotation();
 				Projectile b = new Bullet(this,centerX(),centerY(),angle);
-				this.region.add(b);
+				this.getRegion().add(b);
 				Sound gun = new Sound("assets/sounds/gunfire.wav");
 				gun.setVolume(-15.0f);
 				if (Settings.getSetting("master_volume").contentEquals("1.0"))

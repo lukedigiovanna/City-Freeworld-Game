@@ -18,7 +18,7 @@ public abstract class Vehicle extends Entity {
 	public Vehicle(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		this.addTag("vehicle");
-		this.properties.set(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 	}
 	
 	public Player getDriver() {
@@ -32,30 +32,30 @@ public abstract class Vehicle extends Entity {
 	private float frictionalEffect = 0.2f;
 	
 	public void update(float dt) {
-		float speed = this.velocity.getLength();
+		float speed = this.getVelocity().getLength();
 		speed -= frictionalEffect * dt;
 		speed = MathUtils.clip(0, maxSpeed, speed);
-		this.velocity.setAngle(this.getRotation());
-		this.velocity.setMagnitude(speed);
+		this.getVelocity().setAngle(this.getRotation());
+		this.getVelocity().setMagnitude(speed);
 	}
 	
 	private float acceleration = 1.0f;
 	private float maxSpeed = 5.0f;
 	
 	public void accelerate(float dt) {
-		float speed = this.velocity.getLength();
+		float speed = this.getVelocity().getLength();
 		speed += acceleration * dt;
-		this.velocity.setMagnitude(speed);
+		this.getVelocity().setMagnitude(speed);
 	}
 	
 	private float brakePower = 3.0f;
 	
 	public void brake(float dt) {
-		float speed = this.velocity.getLength();
+		float speed = this.getVelocity().getLength();
 		speed -= brakePower * dt;
 		if (speed < 0)
 			speed = 0;
-		this.velocity.setMagnitude(speed);
+		this.getVelocity().setMagnitude(speed);
 		//this.getRegion().addParticles(Particle.Type.TIRE_MARK, java.awt.Color.BLACK, 1, 0.0f, centerX(), centerY(), 0.1f, 0.1f);
 	}
 	

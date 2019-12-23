@@ -15,15 +15,15 @@ import misc.Vector2;
 public abstract class WorldObject {
 	public static final float MIN_HEIGHT = 0, MAX_HEIGHT = 25;
 	
-	protected PositionHistory positionHistory;
-	protected Region region;
-	protected Vector2 position, velocity, dimension;
-	protected float verticalHeight; //the z-axis of position.. follows same unit scale as the x and y axis
-	protected Hitbox hitbox; //identifies the physical boundaries with walls
-	protected float mass; //in kilograms
-	protected Properties properties;
+	private PositionHistory positionHistory;
+	private Region region;
+	private Vector2 position, velocity, dimension;
+	private float verticalHeight; //the z-axis of position.. follows same unit scale as the x and y axis
+	private Hitbox hitbox; //identifies the physical boundaries with walls
+	private float mass; //in kilograms
+	private Properties properties;
 	
-	protected float age;
+	private float age; //the number of real seconds the object has existed in the world
 	
 	private static final float regenPeriod = 30.0f;
 	private float regenTimer = MathUtils.random(regenPeriod);
@@ -42,6 +42,10 @@ public abstract class WorldObject {
 	
 	public void setModel(float ... model) {
 		this.hitbox = new Hitbox(this, model);
+	}
+	
+	public void setProperty(Properties.Key key, Properties.Value value) {
+		this.properties.set(key, value);
 	}
 	
 	public float getVerticalHeight() {
@@ -101,6 +105,10 @@ public abstract class WorldObject {
 		return this.region.getWorld();
 	}
 	
+	public float getAge() {
+		return this.age;
+	}
+	
 	public float getX() {
 		return position.x;
 	}
@@ -142,8 +150,13 @@ public abstract class WorldObject {
 	}
 	
 	public void setVelocity(float vx, float vy) {
+		setVelocity(vx,vy,this.velocity.r);
+	}
+	
+	public void setVelocity(float vx, float vy, float vr) {
 		this.velocity.x = vx;
 		this.velocity.y = vy;
+		this.velocity.r = vr;
 	}
 	
 	public void setVelocity(Vector2 vel) {
