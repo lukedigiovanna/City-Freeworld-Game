@@ -406,7 +406,10 @@ public abstract class WorldObject {
 	 */
 	public boolean colliding(WorldObject other) {
 		//makes use of sat from hitbox
-		return this.hitbox.satIntersecting(other.hitbox);
+		//return this.hitbox.satIntersecting(other.hitbox);
+		
+		//use line intersesction
+		return this.hitbox.intersecting(other.hitbox) != null;
 	}
 	
 	/**
