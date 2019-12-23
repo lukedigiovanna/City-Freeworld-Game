@@ -65,12 +65,9 @@ public class Vector2 {
 	public void setMagnitude(float value) {
 		//maintains the angle, changes the length
 		float angle = this.getAngle();
+		value = Math.abs(value);
 		this.x = (float)Math.cos(angle)*value;
 		this.y = (float)Math.sin(angle)*value;
-//		if (value < 0) {
-//			this.x *= -1;
-//			this.y *= -1;
-//		}
 	}
 	
 	public void setAngle(float angle) {

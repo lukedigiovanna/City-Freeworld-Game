@@ -212,9 +212,10 @@ public class Player extends Entity {
 					r += Math.PI;
 				
 				this.velocity.r = r;
-				System.out.println(s);
 				this.velocity.setMagnitude(s);
 				this.velocity.setAngle(this.getRotation());
+				if (s < 0)
+					this.velocity.setAngle(this.velocity.getAngle() + (float)Math.PI);
 				
 				break;
 			}

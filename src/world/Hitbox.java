@@ -41,6 +41,7 @@ public class Hitbox {
 	
 	/**
 	 * Checks if two hitboxes are currently intersecting each other (collision)
+	 * by checking the lines of the hitboxes.
 	 * @param other The other hitbox to check
 	 * @return true if they are intersecting, false if not
 	 */
