@@ -44,8 +44,20 @@ public class PositionHistory {
 		return null;
 	}
 	
+	public HistoryPoint getHistory(int ticksAgo) {
+		if (ticksAgo < 0 || ticksAgo > this.history.size()-1)
+			return null;
+		else
+			return history.get(ticksAgo);
+	}
+	
 	public Vector2 getPosition(float timeAgo) {
 		HistoryPoint h = getHistory(timeAgo);
+		return h == null ? null : h.position;
+	}
+	
+	public Vector2 getPosition(int ticksAgo) {
+		HistoryPoint h = getHistory(ticksAgo);
 		return h == null ? null : h.position;
 	}
 	

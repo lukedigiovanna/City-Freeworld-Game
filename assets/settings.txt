@@ -2,7 +2,7 @@ max_fps:30
 vsync_enabled:true
 music_volume:1.0
 sound_volume:1.0
-master_volume:1.0
+master_volume:0.0
 screen_brightness:0.5
 move_up:w
 move_left:a

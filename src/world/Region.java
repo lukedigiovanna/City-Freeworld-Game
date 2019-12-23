@@ -8,6 +8,7 @@ import entities.Particle;
 import entities.Particle.Type;
 import misc.Line;
 import misc.MathUtils;
+import misc.Vector2;
 
 public class Region {
 	private World world;
@@ -25,6 +26,7 @@ public class Region {
 		entities = new EntityList(this);
 		walls = new Walls();
 		this.world = world;
+		this.addBoundingWalls();
 	}
 	
 	public Region(World world, String folderPath) {
@@ -35,6 +37,17 @@ public class Region {
 		this.entities = new EntityList(this);
 		this.walls = new Walls();
 		this.world = world;
+		this.addBoundingWalls();
+	}
+	
+	/**
+	 * Adds walls that surround the border of the region so entities cant escape.
+	 */
+	private void addBoundingWalls() {
+		addWall(new Line(new Vector2(0,0),new Vector2(getWidth(),0)));
+		addWall(new Line(new Vector2(getWidth(),0), new Vector2(getWidth(),getHeight())));
+		addWall(new Line(new Vector2(getWidth(),getHeight()),new Vector2(0,getHeight())));
+		addWall(new Line(new Vector2(0,getHeight()),new Vector2(0,0)));
 	}
 	
 	public void addParticles(Type type, Color color, int count, float heat, float x, float y, float width, float height) {

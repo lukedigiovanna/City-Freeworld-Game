@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 import display.component.Button;
+import display.component.Component;
 import display.component.*;
 import main.Program;
 import misc.Color8;
@@ -15,6 +16,8 @@ public class MainScreenDisplay extends Display {
 
 	private Button[] buttons;
 
+	private Slider slider;
+	
 	public MainScreenDisplay() {
 		super();
 		String[] buttonNames = {"Play","Settings","Update Notes","Quit"};
@@ -44,6 +47,9 @@ public class MainScreenDisplay extends Display {
 		
 		for (Button b : buttons)
 			add(b);
+		
+		slider = new Slider(50,50,100,20, Component.FORM_LEFT);
+		add(slider);
 	}
 	
 	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
@@ -64,6 +70,8 @@ public class MainScreenDisplay extends Display {
 		
 		for (Button b : buttons)
 			b.draw(g);
+		
+		slider.draw(g);
 	}
 	
 	@Override

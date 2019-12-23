@@ -10,22 +10,7 @@ import display.component.Component;
 
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
-		"Implemented VSync",
-		"Fixed collision with walls",
-		"Implementing data files to store regions",
-		"Newer, more detailed tile art (temporary)",
-		"Developed a JSON parser for reading and generating JSON files",
-		"Implemented Texture Packs which now take advantage of sprite sheets",
-		"Added position correction to camera zooming",
-		"Added ridable vehicles",
-		"    Press 'F' near a car to enter it",
-		"Music demo -- plays a song while game is active",
-		"Gun sound effect demo while shooting",
-		"Player movement/shooting demos",
-		"    Press number keys to try each type",
-		"        1: Cardinal movement with WASD, and shoot with arrow keys",
-		"        2: Face to cursor, WASD for relative mvt, click and shoot",
-		"        3: Turn player with AD, WS to move back and forth, space to shoot",
+		"Fixed collision between moving objects"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

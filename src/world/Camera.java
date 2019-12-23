@@ -1,5 +1,6 @@
 package world;
 
+import misc.ImageTools;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
@@ -119,21 +120,22 @@ public class Camera {
 		float fx = focus.centerX(), fy = focus.centerY();
 		float dx = 0,dy = 0;
 		float left = cx-mx, right = cx + mx, bottom = cy+my, top = cy-my;
+		float shrinker = 0.5f;
 		if (fx < left)
-			dx = (fx-left)/10.0f;
+			dx = (fx-left)/shrinker;
 		else if (fx > right)
-			dx = (fx-right)/10.0f;
+			dx = (fx-right)/shrinker;
 		if (fy < top)
-			dy = (fy-top)/10.0f;
+			dy = (fy-top)/shrinker;
 		else if (fy > bottom)
-			dy = (fy-bottom)/10.0f;
+			dy = (fy-bottom)/shrinker;
 		//ensure a minimum speed for the camera to move at
-		float minValue = 0.01f;
+		float minValue = 0.5f;
 		if (Math.abs(dx) < minValue)
 			dx = MathUtils.sign(dx)*minValue;
 		if (Math.abs(dy) < minValue)
 			dy = MathUtils.sign(dy)*minValue;
-		move(dx,dy);
+		move(dx*dt,dy*dt);
 	}
 	
 	/**
@@ -200,7 +202,7 @@ public class Camera {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
 					this.rotate(cell.getRotation(), cell.getX(), cell.getY());
-					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
+					drawImage(ImageTools.darken(cell.getImage(), 1.0f-cell.getLightValue()), cell.getX(), cell.getY(), 1.0f, 1.0f);
 					this.rotate(-cell.getRotation(), cell.getX(), cell.getY());
 					//cell.drawHitbox(this);
 				}
@@ -304,18 +306,17 @@ public class Camera {
 
 	public void move(float dx, float dy) {
 		position.add(new Vector2(dx,dy));
-		//position.round(1.0f/CELL_SIZE);
 		//now correct off the position
-//		if (region != null) {
-//			if (position.getX() < 0)
-//				position.setX(0);
-//			if (position.getX() > region.getWidth()-this.dimension.x)
-//				position.setX(region.getWidth()-this.dimension.x);
-//			if (position.getY() < 0)
-//				position.setY(0);
-//			if (position.getY() > region.getHeight()-this.dimension.y)
-//				position.setY(region.getHeight()-this.dimension.y);
-//		}
+		if (region != null) {
+			if (position.getX() < 0)
+				position.setX(0);
+			if (position.getX() > region.getWidth()-this.dimension.x)
+				position.setX(region.getWidth()-this.dimension.x);
+			if (position.getY() < 0)
+				position.setY(0);
+			if (position.getY() > region.getHeight()-this.dimension.y)
+				position.setY(region.getHeight()-this.dimension.y);
+		}
 	}
 	
 	public void moveX(float dx) {

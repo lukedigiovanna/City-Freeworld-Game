@@ -22,6 +22,7 @@ public abstract class WorldObject {
 	private Hitbox hitbox; //identifies the physical boundaries with walls
 	private float mass; //in kilograms
 	private Properties properties;
+	private float lightValue = 0.5f; //value from 0 - 1 that indicates light, 0 is pitch black, 1 is bright
 	
 	private float age; //the number of real seconds the object has existed in the world
 	
@@ -107,6 +108,14 @@ public abstract class WorldObject {
 	
 	public float getAge() {
 		return this.age;
+	}
+	
+	public void setLightValue(float val) {
+		this.lightValue = MathUtils.clip(0, 1, val);
+	}
+	
+	public float getLightValue() {
+		return this.lightValue;
 	}
 	
 	public float getX() {
@@ -241,6 +250,10 @@ public abstract class WorldObject {
 	public void moveX(float dx) {
 		if (dx == 0)
 			return; //no movement
+		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
+			this.setX(this.getX() + dx);
+			return;
+		}
 		float checkStep = COLLISION_CHECK_STEP*MathUtils.sign(dx);
 		List<Line> walls = this.getRegion().getWalls().getWalls();
 		Vector2 intersection;
@@ -270,6 +283,10 @@ public abstract class WorldObject {
 	public void moveY(float dy) {
 		if (dy == 0)
 			return;
+		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
+			this.setY(this.getY() + dy);
+			return;
+		}
 		float checkStep = COLLISION_CHECK_STEP*MathUtils.sign(dy);
 		List<Line> walls = this.getRegion().getWalls().getWalls();
 		Vector2 intersection;
@@ -299,6 +316,10 @@ public abstract class WorldObject {
 	public void moveR(float dr) {
 		if (dr == 0)
 			return;
+		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
+			this.position.r += dr;
+			return;
+		}
 		float checkStep = COLLISION_ROTATION_CHECK_STEP*MathUtils.sign(dr);
 		if (this.getRegion() == null) {
 			this.position.r += dr;
@@ -346,9 +367,6 @@ public abstract class WorldObject {
 	public void setPosition(Vector2 pos) {
 		hitbox.translate(pos.x-position.x,pos.y-position.y);
 		this.position = pos;
-		//check for collision with the grid
-		//lets look at the cells that the entity is overlapping with..
-		//we will be using the hitbox of the entity to check for collision
 	}
 	
 	public void setX(float x) {
@@ -410,6 +428,7 @@ public abstract class WorldObject {
 		return this.hitbox.intersecting(other.hitbox);
 	}
 	
+	private static final float OBJECT_COLLISION_CHECK_STEP = 0.1f;
 	/**
 	 * Uses Separate Axis Theorem for determining whether or
 	 * not the two hitboxes are colliding. The actual method logic
@@ -418,11 +437,35 @@ public abstract class WorldObject {
 	 * @return
 	 */
 	public boolean colliding(WorldObject other) {
-		//makes use of sat from hitbox
-		//return this.hitbox.satIntersecting(other.hitbox);
+		//save the position
+		Vector2 constPos = this.position.copy();
 		
-		//use line intersesction
-		return this.hitbox.intersecting(other.hitbox) != null;
+		//get the last position the object was at
+		Vector2 lastPosition = this.positionHistory.getPosition(1);
+		if (lastPosition == null)
+			return hitbox.satIntersecting(other.hitbox);
+		
+		//loop between the two positions
+		float distance = MathUtils.distance(constPos, lastPosition);
+		int checks = (int)(distance/OBJECT_COLLISION_CHECK_STEP);
+		float dr = (constPos.r - lastPosition.r)/checks;
+		float dx = (constPos.x - lastPosition.x)/checks;
+		float dy = (constPos.y - lastPosition.y)/checks;
+		this.setPosition(lastPosition);
+		for (int i = 0; i < checks; i++) {
+			this.setX(this.getX() + dx);
+			this.setY(this.getY() + dy);
+			this.setRotation(this.getRotation() + dr);
+			if(hitbox.satIntersecting(other.hitbox)) {
+				this.position = constPos;
+				return true; //we found collision.. cut out now.
+			}
+		}
+		
+		//reset the position
+		this.position = constPos;
+	
+		return false;
 	}
 	
 	/**
@@ -442,10 +485,6 @@ public abstract class WorldObject {
 		if (other == null)
 			return MathUtils.INFINITY;
 		return MathUtils.distance(centerX(),centerY(),other.centerX(),other.centerY());
-	}
-	
-	public void onCollision(WorldObject o) {
-		
 	}
 	
 	public void setRegion(Region region) {

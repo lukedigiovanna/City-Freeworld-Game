@@ -1,6 +1,9 @@
 package display.component;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+
+import misc.MathUtils;
 
 public class Slider extends Component {
 
@@ -12,7 +15,13 @@ public class Slider extends Component {
 
 	@Override
 	public void draw(Graphics2D g) {
-		
+		g.setColor(Color.WHITE);
+		g.fillRect(x, y, width, height);
+		int barX = x+(int)(rawVal * width);
+		g.setColor(Color.BLACK);
+		g.fillRect(barX-10-2, y-2, 20+4, height+4);
+		g.setColor(Color.GRAY);
+		g.fillRect(barX-10, y, 20, height);
 	}
 
 	@Override
@@ -33,18 +42,17 @@ public class Slider extends Component {
 	}
 	
 	public void onMouseDragged(int dx, int dy) {
-		
+		rawVal += (float)dx / width;
+		rawVal = MathUtils.clip(0, 1, rawVal);
 	}
 
 	@Override
 	public void onMouseOver() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onMouseOut() {
-		// TODO Auto-generated method stub
 		
 	}
 	
