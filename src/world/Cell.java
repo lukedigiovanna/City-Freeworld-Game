@@ -24,7 +24,7 @@ public class Cell extends WorldObject {
 	public Cell(float x, float y) {
 		super(x,y,1.0f,1.0f);
 		this.setVerticalHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
-		//this.setRotation(MathUtils.random((int)4)*(float)Math.PI/2);
+		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 	}
 	
 	public void update(float dt) {

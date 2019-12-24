@@ -8,8 +8,8 @@ import misc.Vector2;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 import entities.Entity;
 import entities.EntityList;
@@ -201,9 +201,8 @@ public class Camera {
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
-					this.rotate(cell.getRotation(), cell.getX(), cell.getY());
-					drawImage(ImageTools.darken(cell.getImage(), 1.0f-cell.getLightValue()), cell.getX(), cell.getY(), 1.0f, 1.0f);
-					this.rotate(-cell.getRotation(), cell.getX(), cell.getY());
+					setLightValue(cell.getLightValue());
+					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
 					//cell.drawHitbox(this);
 				}
 			}
@@ -215,6 +214,7 @@ public class Camera {
 			float rotation = e.getRotation();
 			float x = e.centerX(), y = e.centerY();
 			rotate(rotation,x,y);
+			setLightValue(e.getLightValue());
 			e.draw(this);
 			rotate(-rotation,x,y);
 			
@@ -222,7 +222,6 @@ public class Camera {
 		}
 		
 		walls.draw(this);
-		
 	}
 	
 	/*
@@ -243,8 +242,28 @@ public class Camera {
 		this.drawDim = this.dimension.copy();
 	}
 	 
+	/*
+		GRAPHICS ENGINE COMPONENT OF CAMERA CLASS
+	*/
+	
+	private float lightValue = 1.0f; //only modify this with setter
+	private Color color = Color.WHITE; //default
+	
+	public void setLightValue(float value) {
+		if (value == this.lightValue)
+			return;
+		this.lightValue = value;
+		setLightnessColor();
+	}
+	
 	public void setColor(Color color) {
-		g.setColor(color);
+		this.color = color;
+		setLightnessColor();
+	}
+	
+	private void setLightnessColor() {
+		Color c = new Color((int)(lightValue * this.color.getRed()),(int)(lightValue * this.color.getGreen()),(int)(lightValue * this.color.getBlue()),this.color.getAlpha());
+		g.setColor(c);
 	}
 	
 	public void fillRect(float x, float y, float width, float height) {
@@ -276,8 +295,8 @@ public class Camera {
 		g.setStroke(new BasicStroke(toPH(width)));
 	}
 	
-	public void drawImage(Image image, float x, float y, float width, float height) {
-		g.drawImage(image, toPX(x), toPY(y), toPW(width), toPH(height), null);
+	public void drawImage(BufferedImage image, float x, float y, float width, float height) {
+		g.drawImage(ImageTools.darken(image,lightValue), toPX(x), toPY(y), toPW(width), toPH(height), null);
 	}
 	
 	public void rotate(float theta, float rx, float ry) {

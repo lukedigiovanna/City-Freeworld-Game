@@ -22,7 +22,9 @@ public abstract class WorldObject {
 	private Hitbox hitbox; //identifies the physical boundaries with walls
 	private float mass; //in kilograms
 	private Properties properties;
+	
 	private float lightValue = 0.5f; //value from 0 - 1 that indicates light, 0 is pitch black, 1 is bright
+	private float lightEmission = 0.0f; //value that indicates distance of light production
 	
 	private float age; //the number of real seconds the object has existed in the world
 	
@@ -92,6 +94,7 @@ public abstract class WorldObject {
 		//update the position history..
 		this.positionHistory.update(dt);
 		
+		//move with the current velocity
 		this.move(dt);
 		
 		age += dt;
@@ -300,7 +303,7 @@ public abstract class WorldObject {
 					//we done
 					cont = false;
 					this.setY(getY()-checkStep); //go back out of the collision zone
-					this.velocity.y = 0; //no more movement in X direction now
+					this.velocity.y = 0; //no more movement in y direction now
 					break; //out of the line for loop
 				}
 			}

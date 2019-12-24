@@ -282,7 +282,7 @@ public class Player extends Entity {
 			}
 			break;
 		case 2:
-			if (Program.keyboard.keyDown(' ')) {
+			if (Program.keyboard.keyPressed(' ')) {
 				float angle = this.getRotation();
 				Projectile b = new Bullet(this,centerX(),centerY(),angle);
 				this.getRegion().add(b);

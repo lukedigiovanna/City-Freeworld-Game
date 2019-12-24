@@ -5,7 +5,11 @@ import java.io.*;
 
 public class Sound {
 	
+	//any sound lower than MIN_VOLUME should completely mute the sound.
+	public static final float MIN_VOLUME = -50.0f, MAX_VOLUME = 0.0f;
+	
 	private Clip clip;
+	private float volume;
 	
 	private boolean playing = false;
 	
@@ -48,7 +52,10 @@ public class Sound {
 	}
 	
 	public void setVolume(float value) {
+		if (value < MIN_VOLUME)
+			value = -1000.0f;
 		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(value); // Reduce volume by 10 decibels.
+		gainControl.setValue(value); 
+		this.volume = value;
 	}
 }

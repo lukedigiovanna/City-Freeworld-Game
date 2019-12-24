@@ -40,8 +40,9 @@ public class Particle extends Entity {
 			image = ImageTools.colorscale(image, color);
 		
 		heat = MathUtils.clip(0.0f, 1.0f, heat); //clips the heat to be within 0 and 1
-		float theta = MathUtils.random((float)Math.PI*2);
 		float speed = heat * maxHeat;
+		float theta = MathUtils.random((float)Math.PI*2);
+		
 		setVelocity(new Vector2((float)Math.cos(theta)*speed,(float)Math.sin(theta)*speed));
 		
 		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
