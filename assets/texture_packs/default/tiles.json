@@ -99,6 +99,56 @@
 "id":9.0,
 "frame_rate":999.0,
 "string_id":null,
+}, {
+"frames":[{
+"w":16.0,
+"x":32.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":10.0,
+"frame_rate":999.0,
+"string_id":null,
+}, {
+"frames":[{
+"w":16.0,
+"x":48.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":11.0,
+"frame_rate":999.0,
+"string_id":null,
+}, {
+"frames":[{
+"w":16.0,
+"x":0.0,
+"h":16.0,
+"y":48.0,
+}],
+"id":12.0,
+"frame_rate":999.0,
+"string_id":null,
+}, {
+"frames":[{
+"w":16.0,
+"x":16.0,
+"h":16.0,
+"y":48.0,
+}],
+"id":13.0,
+"frame_rate":999.0,
+"string_id":null,
+}, {
+"frames":[{
+"w":16.0,
+"x":32.0,
+"h":16.0,
+"y":48.0,
+}],
+"id":14.0,
+"frame_rate":999.0,
+"string_id":null,
 }],
 "sprite_path":"assets/texture_packs/default/tiles.json",
 }
