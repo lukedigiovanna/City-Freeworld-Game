@@ -36,7 +36,7 @@ public class World {
 		this.game = game;
 		regions = new ArrayList<Region>();
 		int width = 30, height = 20;
-		Region temp = new Region(this,"sample_world/regions/reg-0");
+		Region temp = new Region(this,"sample_world",0);
 		
 		for (int x = 0; x < temp.getWidth(); x+=2) {
 			for (int y = 0; y < temp.getHeight(); y+=2) {

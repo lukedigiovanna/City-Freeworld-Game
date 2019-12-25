@@ -30,6 +30,7 @@ public class TexturePack {
 	}
 	
 	private String path;
+	private String name;
 	
 	private BufferedImage tileSheet;
 	private JSONFile tileJson;
@@ -39,22 +40,33 @@ public class TexturePack {
 	
 	public TexturePack(String folderPath) {
 		this.path = TEXTURE_PACK_PATH+folderPath+"/";
+		this.name = folderPath;
 		tileSheet = ImageTools.getImage(path+"tileSheet.png");
 		tileJson = new JSONFile(path+"tiles.json");
-		//load();
 		tilesMap = new HashMap<Integer,Animation>();
-		tilesMap.put(0, new Animation(ImageTools.getImage("assets/texture_packs/default/grass.png")));
-		tilesMap.put(1, new Animation(ImageTools.getImage("assets/texture_packs/default/water.png")));
-		tilesMap.put(2, new Animation(ImageTools.getImage("assets/texture_packs/default/dirt.png")));
-		tilesMap.put(3, new Animation(ImageTools.getImage("assets/texture_packs/default/planks.png")));
-		tilesMap.put(4, new Animation(ImageTools.getImage("assets/texture_packs/default/sand.png")));
-		tilesMap.put(5, new Animation(ImageTools.getImage("assets/texture_packs/default/street.png")));
-		tilesMap.put(6, new Animation(ImageTools.getImage("assets/texture_packs/default/street_same_way_crossing.png")));
-		tilesMap.put(7, new Animation(ImageTools.getImage("assets/texture_packs/default/street_same_way_no_crossing.png")));
-		tilesMap.put(8, new Animation(ImageTools.getImage("assets/texture_packs/default/street_two_way_crossing.png")));
-		tilesMap.put(9, new Animation(ImageTools.getImage("assets/texture_packs/default/street_two_way_no_crossing.png")));
+		addTexture("grass");
+		addTexture("dirt");
+		addTexture("sand");
+		addTexture("water");
+		addTexture("planks");
+		addTexture("planks1");
+		addTexture("black_and_white_tile");
+		addTexture("street");
+		addTexture("side_of_street");
+		addTexture("street_same_way_crossing");
+		addTexture("street_same_way_no_crossing");
+		addTexture("street_two_way_crossing");
+		addTexture("street_two_way_no_crossing");
+		addTexture("street_two_way_double_yellow");
+		addTexture("street_stop_line");
 		save();
 		load();
+	}
+	
+	private int index = 0;
+	private void addTexture(String name) {
+		tilesMap.put(index, new Animation(ImageTools.getImage("assets/texture_packs/"+this.name+"/"+name+".png")));
+		index++;
 	}
 	
 	/**

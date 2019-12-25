@@ -17,7 +17,7 @@ public class Region {
 	private Walls walls;
 	private int width, height;
 	
-	private String id = "reg-0.0"; //this should match the folder path
+	private String id = "reg-0"; //this should match the folder path
 	
 	public Region(World world, int width, int height) {
 		this.width = width;
@@ -29,9 +29,9 @@ public class Region {
 		this.addBoundingWalls();
 	}
 	
-	public Region(World world, String folderPath) {
-		folderPath = "assets/saves/"+folderPath;
-		this.cellGrid = new CellGrid(this,folderPath+"/grid.dat");
+	public Region(World world, String worldName, int regionNumber) {
+		String path = "assets/worlds/"+worldName+"/regions/reg-"+regionNumber+".DAT";
+		this.cellGrid = new CellGrid(this,path);
 		this.width = cellGrid.getWidth();
 		this.height = cellGrid.getHeight();
 		this.entities = new EntityList(this);

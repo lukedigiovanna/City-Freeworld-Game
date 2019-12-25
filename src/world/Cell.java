@@ -10,16 +10,8 @@ import misc.MathUtils;
 
 public class Cell extends WorldObject {
 	
-	public static enum Type {
-		WATER,
-		PATHWAY,
-		ROAD,
-		DIRT,
-		GRASS
-	}
-	
 	private Animation animation;
-	private Type type;
+	private int orientation = 0; //0 = 0deg, 1 = 90deg, 2 = 180deg, 3 = 270deg
 
 	public Cell(float x, float y) {
 		super(x,y,1.0f,1.0f);

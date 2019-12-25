@@ -23,7 +23,7 @@ public abstract class WorldObject {
 	private float mass; //in kilograms
 	private Properties properties;
 	
-	private float lightValue = 0.5f; //value from 0 - 1 that indicates light, 0 is pitch black, 1 is bright
+	private float lightValue = 1.0f; //value from 0 - 1 that indicates light, 0 is pitch black, 1 is bright
 	private float lightEmission = 0.0f; //value that indicates distance of light production
 	
 	private float age; //the number of real seconds the object has existed in the world
