@@ -36,36 +36,36 @@ public class TexturePack {
 	private JSONFile tileJson;
 	
 	//lets link an id to a stored animation
-	private HashMap<Integer, Animation> tilesMap;
+	private HashMap<Integer, TileTexture> tilesMap;
 	
 	public TexturePack(String folderPath) {
 		this.path = TEXTURE_PACK_PATH+folderPath+"/";
 		this.name = folderPath;
 		tileSheet = ImageTools.getImage(path+"tileSheet.png");
 		tileJson = new JSONFile(path+"tiles.json");
-		tilesMap = new HashMap<Integer,Animation>();
-		addTexture("grass");
-		addTexture("dirt");
-		addTexture("sand");
-		addTexture("water");
-		addTexture("planks");
-		addTexture("planks1");
-		addTexture("black_and_white_tile");
-		addTexture("street");
-		addTexture("side_of_street");
-		addTexture("street_same_way_crossing");
-		addTexture("street_same_way_no_crossing");
-		addTexture("street_two_way_crossing");
-		addTexture("street_two_way_no_crossing");
-		addTexture("street_two_way_double_yellow");
-		addTexture("street_stop_line");
+		tilesMap = new HashMap<Integer,TileTexture>();
+		addTexture("grass","Grass");
+		addTexture("dirt","Dirt");
+		addTexture("sand","Sand");
+		addTexture("water","Water");
+		addTexture("planks","Wooden Planks 1");
+		addTexture("planks1","Wooden Planks 2");
+		addTexture("black_and_white_tile", "Black and White Tile");
+		addTexture("street","Black Street");
+		addTexture("side_of_street","Black Street Edge");
+		addTexture("street_same_way_crossing","Black Street White Dashed Lines");
+		addTexture("street_same_way_no_crossing","Black Street White Solid Lines");
+		addTexture("street_two_way_crossing","Black Street Yellow Dashed Lines");
+		addTexture("street_two_way_no_crossing","Black Street Yellow Solid Lines");
+		addTexture("street_two_way_double_yellow","Black Street Yellow Double Solid Lines");
+		addTexture("street_stop_line","Black Street Stop Line");
 		save();
 		load();
 	}
 	
 	private int index = 0;
-	private void addTexture(String name) {
-		tilesMap.put(index, new Animation(ImageTools.getImage("assets/texture_packs/"+this.name+"/"+name+".png")));
+	private void addTexture(String imageName, String stringID) {
+		tilesMap.put(index, new TileTexture(ImageTools.getImage("assets/texture_packs/"+this.name+"/"+imageName+".png"),stringID));
 		index++;
 	}
 	
@@ -76,7 +76,7 @@ public class TexturePack {
 	 */
 	private void load() {
 		//make the hashmap
-		tilesMap = new HashMap<Integer, Animation>();
+		tilesMap = new HashMap<Integer, TileTexture>();
 		//First lets get some information from the JSON
 		JSONArray tiles = (JSONArray)tileJson.get("tiles");
 		for (int i = 0; i < tiles.size(); i++) {
@@ -85,6 +85,7 @@ public class TexturePack {
 			//use class type-casting because the method returns an object
 			double id = (Double)tile.get("id");
 			double frameRate = (Double)tile.get("frame_rate");
+			String stringID = (String) tile.get("string_id");
 			List<BufferedImage> images = new ArrayList<BufferedImage>();
 			//now lets go through each frame
 			for (int j = 0; j < frames.size(); j++) {
@@ -97,24 +98,25 @@ public class TexturePack {
 				images.add(frame);
 			}
 			Animation tileAni = new Animation(images,(int)frameRate);
-			tilesMap.put((int)id, tileAni);
+			TileTexture tileText = new TileTexture(tileAni,stringID);
+			tilesMap.put((int)id, tileText);
 		}
 	}
 	
-	public void addTile(Animation ani) {
-		tilesMap.put(this.getNumberOfTiles(), ani);
-	}
-	
 	public int getFrameRate(int id) {
-		return tilesMap.get(id).getFrameRate();
+		return tilesMap.get(id).getAnimation().getFrameRate();
 	}
 	
 	public List<BufferedImage> getTileImages(int id) {
-		return tilesMap.get(id).getFrames();
+		return tilesMap.get(id).getAnimation().getFrames();
 	}
 	
 	public int getNumberOfTiles() {
 		return tilesMap.size();
+	}
+	
+	public TileTexture getTileTexture(int id) {
+		return tilesMap.get(id);
 	}
 	
 	/**
@@ -125,7 +127,7 @@ public class TexturePack {
 		int images = 0;
 		Set<Integer> keys = tilesMap.keySet();
 		for (int k : keys) 
-			images+=tilesMap.get(k).getNumberOfFrames();
+			images+=tilesMap.get(k).getAnimation().getNumberOfFrames();
 		//lets make it a square
 		int size = (int)Math.sqrt(images)+1;
 		this.tileSheet = new BufferedImage(size*TILE_PIXEL_SIZE,size*TILE_PIXEL_SIZE,BufferedImage.TYPE_INT_ARGB);
@@ -135,10 +137,11 @@ public class TexturePack {
 		JSONArray arr = new JSONArray("");
 		int x = 0, y = 0;
 		for (int k : keys) {
-			Animation ani = tilesMap.get(k);
+			TileTexture text = tilesMap.get(k);
+			Animation ani = tilesMap.get(k).getAnimation();
 			JSONObject animation = new JSONObject("");
 			animation.set("id", k);
-			animation.set("string_id", "null");
+			animation.set("string_id", text.getStringID());
 			JSONArray frames = new JSONArray("");
 			for (BufferedImage i : ani.getFrames()) {
 				JSONObject position = new JSONObject("");

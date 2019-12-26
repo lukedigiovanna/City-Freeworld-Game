@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class EditorRegion {
 	private String filePath; //path to the .DAT file that stores information on the region
 	private File file; //the actual .DAT file
+	private String worldName;
+	private int regNum;
 	
 	/*
 	 * DAT FILE KEY:
@@ -27,6 +29,8 @@ public class EditorRegion {
 	
 	public EditorRegion(String worldName, int number, int width, int height) {
 		filePath = "assets/worlds/"+worldName+"/regions/reg-"+number+".DAT";
+		this.worldName = worldName;
+		this.regNum = number;
 		try {
 			file = new File(filePath);
 		} catch (Exception e) {
@@ -46,6 +50,8 @@ public class EditorRegion {
 	
 	public EditorRegion(String worldName, int regNum) {
 		filePath = "assets/worlds/"+worldName+"/regions/reg-"+regNum+".DAT";
+		this.worldName = worldName;
+		this.regNum = regNum;
 		try {
 			file = new File(filePath);
 			DataInputStream in = new DataInputStream(new FileInputStream(file));
@@ -90,23 +96,24 @@ public class EditorRegion {
 	}
 	
 	public void fillGrid(int x, int y, int value) {
-		int previousValue = this.getGridValue(x, y);
-		this.setGridValue(x, y, value);
-		fillGrid(x+1,y,value,previousValue);
+		int previousValue = getGridValue(x,y);
+		setGridValue(x,y,value);
 		fillGrid(x-1,y,value,previousValue);
+		fillGrid(x+1,y,value,previousValue);
 		fillGrid(x,y-1,value,previousValue);
 		fillGrid(x,y+1,value,previousValue);
 	}
 	
 	private void fillGrid(int x, int y, int value, int previousValue) {
-		if (getGridValue(x,y) < -1)
-			return;
-		if (getGridValue(x,y) == previousValue) {
-			this.setGridValue(x, y, value);
-			fillGrid(x+1,y,value,previousValue);
+		int val = getGridValue(x,y);
+		if (val < -1 || val != previousValue)
+			return; //are outside the map.
+		if (val == previousValue) {
+			setGridValue(x,y,value);
 			fillGrid(x-1,y,value,previousValue);
-			fillGrid(x,y-1,value,previousValue);
-			fillGrid(x,y+1,value,previousValue);
+			//fillGrid(x+1,y,value,previousValue);
+			//fillGrid(x,y-1,value,previousValue);
+			//fillGrid(x,y+1,value,previousValue);
 		}
 	}
 	
@@ -145,6 +152,14 @@ public class EditorRegion {
 		return this.filePath;
 	}
 	
+	public String getWorldName() {
+		return this.worldName;
+	}
+	
+	public int getRegionNumber() {
+		return this.regNum;
+	}
+	
 	public void addRowBottom() {
 		for (ArrayList<EditorCell> list : grid)
 			list.add(new EditorCell());
@@ -174,18 +189,24 @@ public class EditorRegion {
 	}
 	
 	public void removeRowBottom() {
-		
+		for (ArrayList<EditorCell> col : grid)
+			col.remove(col.size()-1);
+		this.height--;
 	}
 	
 	public void removeRowTop() {
-		
+		for (ArrayList<EditorCell> col : grid)
+			col.remove(0);
+		this.height--;
 	}
 	
 	public void removeColumnLeft() {
-		
+		grid.remove(0);
+		this.width--;
 	}
 	
 	public void removeColumnRight() {
-		
+		grid.remove(grid.size()-1);
+		this.width--;
 	}
 }

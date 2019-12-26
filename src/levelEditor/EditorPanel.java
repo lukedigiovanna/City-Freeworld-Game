@@ -4,12 +4,15 @@ import javax.swing.*;
 
 import display.Animation;
 import display.TexturePack;
+import display.TileTexture;
+import main.Keyboard;
 import main.Mouse;
 import main.Program;
 import misc.Color8;
 import world.Region;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
@@ -26,8 +29,9 @@ import java.util.List;
 public class EditorPanel extends JPanel {
 	
 	private BufferedImage screen;
-	private List<Animation> tiles;
+	private List<TileTexture> tiles;
 	private Mouse mouse;
+	private Keyboard keyboard;
 	
 	private List<MenuButton> menuButtons;
 	private List<ToolButton> toolButtons;
@@ -37,11 +41,14 @@ public class EditorPanel extends JPanel {
 	private Tool prevTool = Tool.DRAW;
 	
 	public EditorPanel() {
+		this.setFocusable(true);
+		
 		//screen bi
 		screen = new BufferedImage(Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB);
 		
 		//mouse init
 		mouse = new Mouse(this, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
+		keyboard = new Keyboard(this);
 		
 		//menu bar
 		menuButtons = new ArrayList<MenuButton>();
@@ -68,6 +75,7 @@ public class EditorPanel extends JPanel {
 				if (region == null)
 					return;
 				region.save();
+				region.printGrid();
 				JOptionPane.showMessageDialog(EditorPanel.this, "Succesfully saved region "
 						+ "\n"+region.getFilePath(), "Region Save", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -80,9 +88,9 @@ public class EditorPanel extends JPanel {
 		
 		//setup texture pack
 		TexturePack pack = TexturePack.DEFAULT;
-		tiles = new ArrayList<Animation>();
+		tiles = new ArrayList<TileTexture>();
 		for (int i = 0; i < pack.getNumberOfTiles(); i++)
-			tiles.add(new Animation(pack.getTileImages(i),pack.getFrameRate(i)));
+			tiles.add(pack.getTileTexture(i));
 		
 		//update thread
 		Thread redrawThread = new Thread(new Runnable() {
@@ -102,7 +110,7 @@ public class EditorPanel extends JPanel {
 		this.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				if (SwingUtilities.isMiddleMouseButton(e)) {
+				if (SwingUtilities.isMiddleMouseButton(e) || (keyboard.keyDown(KeyEvent.VK_CONTROL) && SwingUtilities.isLeftMouseButton(e))) {
 					Point p = e.getPoint();
 					offX += p.x - prev.x;
 					offY += p.y - prev.y;
@@ -120,7 +128,6 @@ public class EditorPanel extends JPanel {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				size -= e.getPreciseWheelRotation() * (size/10);
-				System.out.println(e.getPreciseWheelRotation());
 			}
 		});
 	}
@@ -166,6 +173,12 @@ public class EditorPanel extends JPanel {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
 		
+		g.setColor(Color.GRAY);
+		g.fillRect(0, Program.DISPLAY_HEIGHT-20, Program.DISPLAY_WIDTH, 20);
+		g.setColor(Color.DARK_GRAY);
+		g.setFont(new Font("Arial",Font.BOLD,12));
+		g.drawString("Tile ID: "+tiles.get(curTile).getStringID(), 230, Program.DISPLAY_HEIGHT-8);
+		
 		/*
 		 * Draw the region
 		 */
@@ -199,10 +212,10 @@ public class EditorPanel extends JPanel {
 						gw.setColor(Color.WHITE);
 						gw.fillRect(px, py, pw, ph);
 					} else {
-						gw.drawImage(tiles.get(region.getGridValue(x, y)).getCurrentFrame(), px, py, pw, ph, null);
+						gw.drawImage(tiles.get(region.getGridValue(x, y)).getAnimation().getCurrentFrame(), px, py, pw, ph, null);
 					}
 					//check for mouse clicks.. only if left button
-					if (mouse.isMouseDown(Mouse.LEFT_BUTTON)) {
+					if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL)) {
 						if (mouse.getX() > vx + px && mouse.getX() < vx + px + pw && mouse.getY() > vy + py && mouse.getY() < vy + py + ph) {
 							switch (curTool) {
 							case DRAW:
@@ -213,15 +226,40 @@ public class EditorPanel extends JPanel {
 								break;
 							case FILL:
 								region.fillGrid(x,y,curTile);
+								break;
+							default:  //if any other tool, do nothing
+								break;
 							}
 						}
 					}
 				}
 			}
 		}
-		if (curTool == Tool.TOGGLE_GRID) {
+		switch (curTool) {
+		case TOGGLE_GRID:
 			showGrid = !showGrid;
 			curTool = prevTool;
+			break;
+		case EXPAND:
+			if (keyboard.keyPressed(KeyEvent.VK_UP))
+				region.addRowTop();
+			if (keyboard.keyPressed(KeyEvent.VK_DOWN))
+				region.addRowBottom();
+			if (keyboard.keyPressed(KeyEvent.VK_LEFT))
+				region.addColumnLeft();
+			if (keyboard.keyPressed(KeyEvent.VK_RIGHT))
+				region.addColumnRight();
+			break;
+		case SHRINK:
+			if (keyboard.keyPressed(KeyEvent.VK_UP))
+				region.removeRowTop();
+			if (keyboard.keyPressed(KeyEvent.VK_DOWN))
+				region.removeRowBottom();
+			if (keyboard.keyPressed(KeyEvent.VK_LEFT))
+				region.removeColumnLeft();
+			if (keyboard.keyPressed(KeyEvent.VK_RIGHT))
+				region.removeColumnRight();
+			break;
 		}
 		
 		g.drawImage(worldImg, vx, vy, vw, vh, null);
@@ -243,7 +281,7 @@ public class EditorPanel extends JPanel {
 			if (i % 2 == 1)
 				x += 80;
 			int y = (i / 2) * (tileSize+10) + 70;
-			g.drawImage(tiles.get(i).getCurrentFrame(),x,y,tileSize,tileSize,null);
+			g.drawImage(tiles.get(i).getAnimation().getCurrentFrame(),x,y,tileSize,tileSize,null);
 			if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
 				g.setColor(Color.GRAY);
 				g.setStroke(new BasicStroke(4));
@@ -261,7 +299,6 @@ public class EditorPanel extends JPanel {
 				}
 			}
 		}
-		
 		for (MenuButton b : menuButtons) {
 			b.check(mouse);
 			b.draw(g);
@@ -269,10 +306,19 @@ public class EditorPanel extends JPanel {
 		
 		g.setColor(Color.DARK_GRAY);
 		g.setFont(new Font("Consolas",Font.ITALIC | Font.BOLD,14));
-		String s = "No Region";
-		if (region != null)
-			s = "Region: "+region.getFilePath();
-		g.drawString(s, 230, 75);
+		String[] info = {
+			"No Region",
+			"No World",
+			"No Number"
+		};
+		if (region != null ) {
+			info[0] = "Region: "+region.getFilePath();
+			info[1] = "World: "+region.getWorldName();
+			info[2] = "Number: "+region.getRegionNumber();
+		}
+		for (int i = 0; i < info.length; i++) {
+			g.drawString(info[i], 230, 60+i*16);
+		}
 		
 		for (ToolButton t : toolButtons) {
 			t.check(mouse);

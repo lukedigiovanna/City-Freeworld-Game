@@ -8,7 +8,7 @@
 }],
 "id":0.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Grass",
 }, {
 "frames":[{
 "w":16.0,
@@ -18,7 +18,7 @@
 }],
 "id":1.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Dirt",
 }, {
 "frames":[{
 "w":16.0,
@@ -28,7 +28,7 @@
 }],
 "id":2.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Sand",
 }, {
 "frames":[{
 "w":16.0,
@@ -38,7 +38,7 @@
 }],
 "id":3.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Water",
 }, {
 "frames":[{
 "w":16.0,
@@ -48,7 +48,7 @@
 }],
 "id":4.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Wooden Planks 1",
 }, {
 "frames":[{
 "w":16.0,
@@ -58,7 +58,7 @@
 }],
 "id":5.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Wooden Planks 2",
 }, {
 "frames":[{
 "w":16.0,
@@ -68,7 +68,7 @@
 }],
 "id":6.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black and White Tile",
 }, {
 "frames":[{
 "w":16.0,
@@ -78,7 +78,7 @@
 }],
 "id":7.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street",
 }, {
 "frames":[{
 "w":16.0,
@@ -88,7 +88,7 @@
 }],
 "id":8.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street Edge",
 }, {
 "frames":[{
 "w":16.0,
@@ -98,7 +98,7 @@
 }],
 "id":9.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street White Dashed Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -108,7 +108,7 @@
 }],
 "id":10.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street White Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -118,7 +118,7 @@
 }],
 "id":11.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street Yellow Dashed Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -128,7 +128,7 @@
 }],
 "id":12.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street Yellow Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -138,7 +138,7 @@
 }],
 "id":13.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street Yellow Double Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -148,7 +148,7 @@
 }],
 "id":14.0,
 "frame_rate":999.0,
-"string_id":null,
+"string_id":"Black Street Stop Line",
 }],
 "sprite_path":"assets/texture_packs/default/tiles.json",
 }

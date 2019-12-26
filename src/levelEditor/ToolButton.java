@@ -17,16 +17,27 @@ public class ToolButton extends Button {
 
 	private Color color = Color.DARK_GRAY;
 	
+	private int timer = 0;
+	
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(color);
 		if (panel.getTool() == tool) 
 			g.setColor(Color.CYAN);
 		g.fillRoundRect(x, y, width, height,5,5);
+		g.setColor(Color.GRAY);
+		g.fillRect(x+4,y+4,width-8,height-8);
 		g.drawImage(tool.img, x+4, y+4, width-8, height-8, null);
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Arial",Font.BOLD,12));
 		g.drawString(tool.name, x+width/2-g.getFontMetrics().stringWidth(tool.name)/2, y+height+20);
+		if (timer > 15) {
+			g.setColor(Color.DARK_GRAY);
+			g.drawString(tool.tip, x+width/2-g.getFontMetrics().stringWidth(tool.tip)/2, y-10);
+		}
+		if (this.isMouseOver()) {
+			timer++;	
+		}
 	}
 	
 	@Override
@@ -48,5 +59,6 @@ public class ToolButton extends Button {
 	@Override
 	public void onMouseOut() {
 		color = Color.DARK_GRAY;
+		timer = 0;
 	}
 }

@@ -99,6 +99,10 @@ public abstract class Component {
 		lastY = my;
 	}	
 	
+	public boolean isMouseOver() {
+		return mouseOver;
+	}
+	
 	public void setX(int x) {
 		this.x = x;
 	}
