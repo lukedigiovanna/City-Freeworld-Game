@@ -193,15 +193,16 @@ public class EditorPanel extends JPanel {
 		if (region != null) {
 			for (int x = 0; x < region.getWidth(); x++) {
 				for (int y = 0; y < region.getHeight(); y++) {
-					int px = offX + x * (int)size + 1, py = offY + y * (int)size + 1;
-					int pw = (int)size - 2, ph = (int)size - 2;
+					int gridSize = (int)(size * 0.05);
+					int px = offX + x * (int)size + gridSize/2, py = offY + y * (int)size + gridSize/2;
+					int pw = (int)size - gridSize, ph = (int)size - gridSize;
 					if (px + pw < 0 || px > vw || py + ph < 0 || py > vh)
 						continue;
 					if (!showGrid) {
-						px--;
-						py--;
-						pw+=2;
-						ph+=2;
+						px -= gridSize/2;
+						py -= gridSize/2;
+						pw += gridSize;
+						ph += gridSize;
 					}
 					int val = region.getGridValue(x, y);
 					if (val < 0) {

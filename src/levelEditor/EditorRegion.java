@@ -100,10 +100,10 @@ public class EditorRegion {
 		if (prev < -1)
 			return;
 		setGridValue(x,y,value);
-		if (getGridValue(x-1,y) == prev)
-			fillGrid(x-1,y,value);
-//		if (getGridValue(x,y-1) == prev)
-//			fillGrid(x,y-1,value);
+//		if (getGridValue(x-1,y) == prev)
+//			fillGrid(x-1,y,value);
+		if (getGridValue(x,y-1) == prev)
+			fillGrid(x,y-1,value);
 	}
 	
 	public ArrayList<ArrayList<EditorCell>> getGrid() {
