@@ -113,10 +113,10 @@ public class Camera {
 	 */
 	private float margin = 0.2f;
 	public void adjustPosition(float dt) {
-		//if (focus == null)
-		//	return; //don't adjust camera pos if there is no focus
+		if (focus == null)
+			return; //don't adjust camera pos if there is no focus
 		float cx = position.x + dimension.x/2, cy = position.y + dimension.y/2;
-		float mx = dimension.x/5, my = dimension.y/5;
+		float mx = dimension.x*margin, my = dimension.y*margin;
 		float fx = focus.centerX(), fy = focus.centerY();
 		float dx = 0,dy = 0;
 		float left = cx-mx, right = cx + mx, bottom = cy+my, top = cy-my;
@@ -192,9 +192,9 @@ public class Camera {
 		Walls walls = region.getWalls();
 		
 		//find the index on the grid where we need to start
-		int startIndexX = (int)this.position.getX(), startIndexY = (int)this.position.getY();
+		int startIndexX = (int)this.drawPos.getX(), startIndexY = (int)this.drawPos.getY();
 		//how many cells we need to get in the x, y directions
-		int gridWidth = (int)dimension.x+2, gridHeight = (int)dimension.y+2;
+		int gridWidth = (int)drawDim.x+2, gridHeight = (int)drawDim.y+2;
 		
 		//draw the grid
 		for (int ix = startIndexX; ix < startIndexX+gridWidth; ix++) { 
@@ -203,7 +203,6 @@ public class Camera {
 				if (cell != null) {
 					setLightValue(cell.getLightValue());
 					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
-					//cell.drawHitbox(this);
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import world.Camera;
 public class Car extends Vehicle {
 	
 	public static enum Model {
-		RED_CAR("car.png",19.0f/16.0f*2,14.0f/16.0f*2);
+		RED_CAR("car.png",19.0f/16.0f,14.0f/16.0f);
 		
 		float width, height;
 		String path;

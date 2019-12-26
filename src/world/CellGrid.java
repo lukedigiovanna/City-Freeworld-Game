@@ -34,13 +34,9 @@ public class CellGrid {
 				int x = i%width, y = i/width;
 				Cell cell = new Cell(x,y);
 				grid[x][y] = cell;
-				int value = in.read();
-				if (value == -1)
-					break; //we ran out of bytes.. 
-				else {
-					//set some cell stuff
-					cell.setAnimation(TexturePack.current().getTileImages(value), TexturePack.current().getFrameRate(value));
-				}
+				int value = in.read(); 
+				//set some cell stuff
+				cell.setAnimation(TexturePack.current().getTileImages(value), TexturePack.current().getFrameRate(value));
 			}
 			in.close();
 		} catch (IOException e) { 

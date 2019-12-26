@@ -94,8 +94,9 @@ public class ImageTools {
 				int avg = (c.getRed()+c.getGreen()+c.getBlue())/3;
 				int red = (int)(color.getRed()/255.0*avg),
 					green = (int)(color.getGreen()/255.0*avg),
-					blue = (int)(color.getBlue()/255.0*avg);
-				return new Color(red,green,blue,c.getAlpha());
+					blue = (int)(color.getBlue()/255.0*avg),
+					alpha = c.getAlpha();
+				return new Color(red,green,blue,alpha);
 			}
 		});
 	}

@@ -59,6 +59,7 @@ public class TexturePack {
 		addTexture("street_two_way_no_crossing","Black Street Yellow Solid Lines");
 		addTexture("street_two_way_double_yellow","Black Street Yellow Double Solid Lines");
 		addTexture("street_stop_line","Black Street Stop Line");
+		addTexture("rainbow","rainbow_",6,"Rainbow");
 		save();
 		load();
 	}
@@ -66,6 +67,11 @@ public class TexturePack {
 	private int index = 0;
 	private void addTexture(String imageName, String stringID) {
 		tilesMap.put(index, new TileTexture(ImageTools.getImage("assets/texture_packs/"+this.name+"/"+imageName+".png"),stringID));
+		index++;
+	}
+	
+	private void addTexture(String folderName, String prefix, int frameRate, String stringID) {
+		tilesMap.put(index, new TileTexture(ImageTools.getImages(folderName, prefix),frameRate,stringID));
 		index++;
 	}
 	

@@ -10,7 +10,10 @@ import display.component.Component;
 
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
-		"Fixed collision between moving objects"
+		"Fixed collision between moving objects",
+		"Created a level editor to design regions",
+		"    Some sample regions have been created",
+		"Fixed a movement bug that caused overmovement of objects before"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

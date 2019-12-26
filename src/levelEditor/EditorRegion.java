@@ -96,25 +96,14 @@ public class EditorRegion {
 	}
 	
 	public void fillGrid(int x, int y, int value) {
-		int previousValue = getGridValue(x,y);
+		int prev = getGridValue(x,y);
+		if (prev < -1)
+			return;
 		setGridValue(x,y,value);
-		fillGrid(x-1,y,value,previousValue);
-		fillGrid(x+1,y,value,previousValue);
-		fillGrid(x,y-1,value,previousValue);
-		fillGrid(x,y+1,value,previousValue);
-	}
-	
-	private void fillGrid(int x, int y, int value, int previousValue) {
-		int val = getGridValue(x,y);
-		if (val < -1 || val != previousValue)
-			return; //are outside the map.
-		if (val == previousValue) {
-			setGridValue(x,y,value);
-			fillGrid(x-1,y,value,previousValue);
-			//fillGrid(x+1,y,value,previousValue);
-			//fillGrid(x,y-1,value,previousValue);
-			//fillGrid(x,y+1,value,previousValue);
-		}
+		if (getGridValue(x-1,y) == prev)
+			fillGrid(x-1,y,value);
+//		if (getGridValue(x,y-1) == prev)
+//			fillGrid(x,y-1,value);
 	}
 	
 	public ArrayList<ArrayList<EditorCell>> getGrid() {

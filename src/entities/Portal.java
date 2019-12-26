@@ -29,8 +29,9 @@ public class Portal extends Entity {
 		this.rotate((float)Math.PI*2*dt*0.5f);
 		List<Entity> checkers = this.getRegion().getEntities().get("player");
 		for (Entity e : checkers)
-			if (this.colliding(e)) 
+			if (this.colliding(e)) {
 				e.send(destination.region, destination.x, destination.y);
+			}
 		r+=rv*dt;
 		if (r > 255) {
 			r = 255;

@@ -2,27 +2,12 @@ package levelEditor;
 
 import javax.swing.*;
 
-import display.Animation;
-import display.TexturePack;
-import display.TileTexture;
-import main.Keyboard;
-import main.Mouse;
-import main.Program;
-import misc.Color8;
-import world.Region;
+import display.*;
+import main.*;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +39,8 @@ public class EditorPanel extends JPanel {
 		menuButtons = new ArrayList<MenuButton>();
 		addMenuButton("Load Region", new Runnable() {
 			public void run() {
-				String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Create Region", JOptionPane.QUESTION_MESSAGE);
-				int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Create Region", JOptionPane.QUESTION_MESSAGE));
+				String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Load Region", JOptionPane.QUESTION_MESSAGE);
+				int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Load Region", JOptionPane.QUESTION_MESSAGE));
 				region = new EditorRegion(worldName, regNum);
 			}
 		});
@@ -95,6 +80,7 @@ public class EditorPanel extends JPanel {
 		//update thread
 		Thread redrawThread = new Thread(new Runnable() {
 			public void run() {
+				long last = System.currentTimeMillis();
 				while (true) {
 					try {
 						Thread.sleep(50);
@@ -102,6 +88,16 @@ public class EditorPanel extends JPanel {
 						
 					}
 					redraw();
+					
+					long now = System.currentTimeMillis();
+					
+					for (int i = 0; i < pack.getNumberOfTiles(); i++) {
+						TileTexture tt = pack.getTileTexture(i);
+						float dt = (float)(now-last)/1000.0f;
+						tt.getAnimation().animate(dt);
+					}
+					
+					last = now;
 				}
 			}
 		});

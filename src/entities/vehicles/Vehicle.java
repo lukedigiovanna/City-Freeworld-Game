@@ -35,8 +35,8 @@ public abstract class Vehicle extends Entity {
 		float speed = this.getVelocity().getLength();
 		speed -= frictionalEffect * dt;
 		speed = MathUtils.clip(0, maxSpeed, speed);
-		this.getVelocity().setAngle(this.getRotation());
 		this.getVelocity().setMagnitude(speed);
+		this.getVelocity().setAngle(this.getRotation());
 	}
 	
 	private float acceleration = 1.0f;
