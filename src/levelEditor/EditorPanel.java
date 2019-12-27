@@ -135,7 +135,18 @@ public class EditorPanel extends JPanel {
 		this.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				size -= e.getPreciseWheelRotation() * (size/10);
+				float mpxOnView = (float)(mouse.getX() - vx - offX),
+					  mpyOnView = (float)(mouse.getY() - vy - offY);
+				float mxOnRegion = (float)(mpxOnView / size),
+					  myOnRegion = (float)(mpyOnView / size);
+				float ds = (float)(e.getPreciseWheelRotation() * (size/10));
+				size -= ds;
+				float newMX = (float)(mpxOnView / size),
+					  newMY = (float)(mpyOnView / size);
+				float dx = (float)((newMX - mxOnRegion)*size),
+				      dy = (float)((newMY - mxOnRegion)*size);
+				offX += dx;
+				offY += dy;
 			}
 		});
 	}
@@ -173,6 +184,7 @@ public class EditorPanel extends JPanel {
 	
 	private double size = 30;
 	private int offX = 50, offY = 0;
+	int vx = 230, vy = 100;
 	
 	public void redraw() {
 		Graphics2D g = screen.createGraphics();
@@ -191,7 +203,6 @@ public class EditorPanel extends JPanel {
 		 * Draw the region
 		 */
 		
-		int vx = 230, vy = 100;
 		int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
 		
 		BufferedImage worldImg = new BufferedImage(vw,vh,BufferedImage.TYPE_INT_ARGB);
