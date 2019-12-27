@@ -30,7 +30,7 @@ public class Portal extends Entity {
 		List<Entity> checkers = this.getRegion().getEntities().get("player");
 		for (Entity e : checkers)
 			if (this.colliding(e)) {
-				e.send(destination.region, destination.x, destination.y);
+				e.send(destination.regionNumber, destination.x, destination.y);
 			}
 		r+=rv*dt;
 		if (r > 255) {
@@ -41,17 +41,17 @@ public class Portal extends Entity {
 			r = 0;
 			rv*=-1;
 		}
-		this.getRegion().addParticles(Particle.Type.GENERIC,Color.CYAN,3,0.2f,getX(),getY(),getWidth(),getHeight());
+		this.getRegion().addParticles(Particle.Type.SPARKLES,Color.CYAN,3,0.2f,getX(),getY(),getWidth(),getHeight());
 	}
 	
 	public static class Destination {
 		public float x, y;
-		public Region region;
+		public int regionNumber;
 		
-		public Destination(Region reg, float x, float y) {
+		public Destination(int reg, float x, float y) {
 			this.x = x;
 			this.y = y;
-			this.region = reg;
+			this.regionNumber = reg;
 		}
 	}
 }

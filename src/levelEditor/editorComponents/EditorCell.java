@@ -1,4 +1,4 @@
-package levelEditor;
+package levelEditor.editorComponents;
 
 public class EditorCell {
 	public int value;

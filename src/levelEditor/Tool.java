@@ -11,7 +11,8 @@ public enum Tool {
 	TOGGLE_GRID("grid_toggle","Tog. Grid","Toggle shown grid"),
 	WALL("wall","Lay Wall","Draw wall lines"),
 	EXPAND("expand","Expand","Use arrows to adjust the size"),
-	SHRINK("shrink","Shrink","Use arrows to adjust the size");
+	SHRINK("shrink","Shrink","Use arrows to adjust the size"),
+	PORTAL("portal","Add Portal","Add portals that link to regions");
 	
 	BufferedImage img;
 	String name;

@@ -13,6 +13,7 @@ public class Particle extends Entity {
 	private Type type;
 	
 	private float lifeSpan = 2.5f;
+	private float fadeTime = 0.5f;
 	
 	private BufferedImage image;
 	private Color color;
@@ -51,7 +52,7 @@ public class Particle extends Entity {
 	
 	public static enum Type {
 		BALL(0.3f,0.3f),
-		GENERIC(0.4f,0.4f,"generic"),
+		SPARKLES(0.4f,0.4f,"sparkles"),
 		TIRE_MARK(0.05f,0.05f,Color.BLACK);
 		
 		float width, height;
@@ -83,14 +84,17 @@ public class Particle extends Entity {
 			region.add(new Particle(type,color,heat,x+MathUtils.random(width),y+MathUtils.random(height)));
 	}
 	
+	private int alpha = 255;
+	
 	@Override
 	public void draw(Camera c) {
-		c.setColor(color);
+		c.setColor(new Color(color.getRed(),color.getGreen(),color.getBlue(),alpha));
 		switch (this.type) {
 		case BALL:
 			c.fillOval(getX(), getY(), getWidth(), getHeight());
 			break;
-		case GENERIC:
+		case SPARKLES:
+			image = ImageTools.setTransparency(image, alpha);
 			c.drawImage(image, getX(), getY(), getWidth(), getHeight());
 			break;
 		case TIRE_MARK:
@@ -101,14 +105,22 @@ public class Particle extends Entity {
 
 	@Override
 	public void update(float dt) {
+		float timeUntilDeath = this.lifeSpan - this.getAge();
+		
+		if (timeUntilDeath <= this.fadeTime) {
+			float percent = timeUntilDeath / this.fadeTime;
+			alpha = MathUtils.clip(0, 255, (int)(percent * 255));
+		}
+		
 		switch (type) {
 		case BALL:
 			this.getVelocity().y = -1;
 			break;
-		case GENERIC:
+		case SPARKLES:
 			this.getVelocity().r = 3.14f;
 		}
-		if (this.getAge() >= lifeSpan)
+		
+		if (timeUntilDeath <= 0)
 			this.destroy();
 	}
 }

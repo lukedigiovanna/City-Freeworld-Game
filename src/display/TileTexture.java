@@ -3,12 +3,14 @@ package display;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import misc.ImageTools;
+
 public class TileTexture {
 	private Animation animation;
 	private String stringID;
 	
 	public TileTexture(BufferedImage image, String stringID) {
-		this.animation = new Animation(image);
+		this.animation = new Animation(ImageTools.flipHorizontal(image));
 		this.stringID = stringID;
 	}
 	

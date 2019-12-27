@@ -98,7 +98,7 @@ public abstract class WorldObject {
 		
 		//move with the current velocity
 		this.move(dt);
-		
+			
 		age += dt;
 	}
 	

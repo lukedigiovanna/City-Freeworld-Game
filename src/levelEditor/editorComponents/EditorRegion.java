@@ -1,4 +1,4 @@
-package levelEditor;
+package levelEditor.editorComponents;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Stores the data for a region for creating one
@@ -22,11 +23,21 @@ public class EditorRegion {
 	 * byte 0: width
 	 * byte 1: height
 	 * bytes 2 to (2 + width * height): grid data
+	 * bytes (2 + width * height) to (2 + width * height + 1 + portalNum * 9): portal info
 	 */
 	
 	private int width, height;
 	private ArrayList<ArrayList<EditorCell>> grid; // a value of -1 indicates that no tile has been defined
 	
+	private List<EditorPortal> portals;
+	
+	/**
+	 * For intializing a new region
+	 * @param worldName
+	 * @param number
+	 * @param width
+	 * @param height
+	 */
 	public EditorRegion(String worldName, int number, int width, int height) {
 		filePath = "assets/worlds/"+worldName+"/regions/reg-"+number+".DAT";
 		this.worldName = worldName;
@@ -38,16 +49,26 @@ public class EditorRegion {
 		}
 		this.width = width;
 		this.height = height;
-		this.grid = new ArrayList<ArrayList<EditorCell>>();
+		
 		//initializes the grid with all values at -1
+		this.grid = new ArrayList<ArrayList<EditorCell>>();
 		for (int x = 0; x < width; x++) {
 			ArrayList<EditorCell> column = new ArrayList<EditorCell>();
 			for (int y = 0; y < height; y++)
 				column.add(new EditorCell());
 			grid.add(column);
 		}
+		
+		//initialize the portal list
+		portals = new ArrayList<EditorPortal>();
+		portals.add(new EditorPortal(regNum,5.25f,5.75f,0.5f,0.5f,5.25f,10.9f));
 	}
 	
+	/**
+	 * For initializing from an existing file
+	 * @param worldName
+	 * @param regNum
+	 */
 	public EditorRegion(String worldName, int regNum) {
 		filePath = "assets/worlds/"+worldName+"/regions/reg-"+regNum+".DAT";
 		this.worldName = worldName;
@@ -69,6 +90,21 @@ public class EditorRegion {
 				for (int x = 0; x < width; x++) {
 					this.setGridValue(x, y, in.read());
 				}
+			}
+			
+			//add in the portals next
+			this.portals = new ArrayList<EditorPortal>();
+			int numPortals = in.read();
+			for (int i = 0; i < numPortals; i++) {
+				EditorPortal p = new EditorPortal();
+				p.destinationNumber = in.read();
+				p.x = in.read() + in.read()/256.0f;
+				p.y = in.read() + in.read()/256.0f;
+				p.width = in.read() + in.read()/256.0f;
+				p.height = in.read() + in.read()/256.0f;
+				p.destX = in.read() + in.read()/256.0f;
+				p.destY = in.read() + in.read()/256.0f;
+				portals.add(p);
 			}
 			in.close();
 		} catch (Exception e) {
@@ -110,6 +146,10 @@ public class EditorRegion {
 		return grid;
 	}
 	
+	public List<EditorPortal> getPortals() {
+		return portals;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -125,13 +165,19 @@ public class EditorRegion {
 		DataOutputStream out;
 		try {
 			out = new DataOutputStream(new FileOutputStream(file));
+			//write the region dimensions
 			out.write(this.width);
 			out.write(this.height);
-			for (int y = 0; y < this.height; y++) {
-				for (int x = 0; x < this.width; x++) {
+			
+			//write the grid
+			for (int y = 0; y < this.height; y++) 
+				for (int x = 0; x < this.width; x++) 
 					out.write(this.getGridValue(x, y));
-				}
-			}
+			
+			//write the portals
+			out.write(this.portals.size());
+			for (EditorPortal p : portals)
+				p.write(out);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

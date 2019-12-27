@@ -1,11 +1,15 @@
 package world;
 
 import java.awt.Color;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 
+import display.TexturePack;
 import entities.Entity;
 import entities.EntityList;
 import entities.Particle;
 import entities.Particle.Type;
+import entities.Portal;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
@@ -31,11 +35,38 @@ public class Region {
 	
 	public Region(World world, String worldName, int regionNumber) {
 		String path = "assets/worlds/"+worldName+"/regions/reg-"+regionNumber+".DAT";
-		this.cellGrid = new CellGrid(this,path);
-		this.width = cellGrid.getWidth();
-		this.height = cellGrid.getHeight();
+		this.cellGrid = new CellGrid(this);
 		this.entities = new EntityList(this);
 		this.walls = new Walls();
+		try {
+			DataInputStream in = new DataInputStream(new FileInputStream(path));
+			this.width = in.read();
+			this.height = in.read();
+			cellGrid.setDimension(width, height);
+			for (int y = 0; y < height; y++) 
+				for (int x = 0; x < width; x++) {
+					Cell cell = new Cell(x, y);
+					int value = in.read();
+					cell.setAnimation(TexturePack.current().getTileImages(value), TexturePack.current().getFrameRate(value));
+					cellGrid.set(x, y, cell);
+				}
+			int numOfPortals = in.read();
+			for (int i = 0; i < numOfPortals; i++) {
+				int destRegion = in.read();
+				float x = in.read() + in.read()/256.0f;
+				float y = in.read() + in.read()/256.0f;
+				float width = in.read() + in.read()/256.0f;
+				float height = in.read() + in.read()/256.0f;
+				float destX = in.read() + in.read()/256.0f;
+				float destY = in.read() + in.read()/256.0f;
+				System.out.println("d: "+destRegion+" x: "+x+" y: "+y+" w: "+width+" h: "+height+" dx: "+destX+" dy: "+destY);
+				
+				Portal p = new Portal(new Portal.Destination(destRegion, destX, destY), x, y, width, height);
+				this.add(p);
+			}//System.exit(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.world = world;
 		this.addBoundingWalls();
 	}

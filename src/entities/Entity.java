@@ -55,6 +55,11 @@ public abstract class Entity extends WorldObject {
 		}
 	}
 	
+	public void send(int regionNumber, float x, float y) {
+		Region destination = this.getWorld().getRegion(regionNumber);
+		send(destination,x,y);
+	}
+	
 	public List<String> getTags() {
 		return tags;
 	}

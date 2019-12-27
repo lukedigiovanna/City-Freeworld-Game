@@ -104,6 +104,8 @@ public class ImageTools {
 	public static BufferedImage setTransparency(BufferedImage image, int alpha) {
 		return apply(image,new Modifiable() {
 			public Color modify(Color c) {
+				if (c.getAlpha() == 0)
+					return c;
 				return new Color(c.getRed(),c.getGreen(),c.getBlue(),alpha);
 			}
 		});

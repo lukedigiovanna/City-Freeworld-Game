@@ -27,7 +27,7 @@ public class World {
 	
 	private float elapsedTime = 0.0f;
 	
-	private String worldName = "sample_world";
+	private String worldName = "krzworld";
 	
 	public World(Game game) {
 		this.game = game;
@@ -37,18 +37,8 @@ public class World {
 		
 		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
-		
-		Region other = new Region(this,worldName,1);
-		
-		Region another = new Region(this,worldName,2);
-		
-		other.add(new Portal(new Portal.Destination(another,5.0f,2.0f),5.0f,2.0f,0.5f,0.5f));
-		temp.add(new Portal(new Portal.Destination(other, 3.0f, 3.0f),5.0f,7.0f,0.5f,0.5f));
-		another.add(new Portal(new Portal.Destination(temp,1.0f,7.0f),1.0f,7.0f,0.2f,0.2f));
-		
+
 		regions.add(temp);
-		regions.add(other);
-		regions.add(another);
 		
 		//initialize starting region
 		getCurrentRegion().update(0);
@@ -81,6 +71,10 @@ public class World {
 	
 	public Region getCurrentRegion() {
 		return regions.get(currentRegion);
+	}
+	
+	public Region getRegion(int number) {
+		return regions.get(number);
 	}
 	
 	private int newRegion = -1;

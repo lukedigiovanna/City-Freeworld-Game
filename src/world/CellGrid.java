@@ -22,26 +22,8 @@ public class CellGrid {
 	 * @param region
 	 * @param dataPath
 	 */
-	public CellGrid(Region region, String dataPath) {
+	public CellGrid(Region region) {
 		this.region = region;
-		try {
-			DataInputStream in = new DataInputStream(new FileInputStream(dataPath));
-			this.width = in.read(); //width is the first byte
-			this.height = in.read(); //height is the second byte
-			grid = new Cell[width][height]; //make the 2D array with that
-			//now go row by row
-			for (int i = 0; i < width * height; i++) {
-				int x = i%width, y = i/width;
-				Cell cell = new Cell(x,y);
-				grid[x][y] = cell;
-				int value = in.read(); 
-				//set some cell stuff
-				cell.setAnimation(TexturePack.current().getTileImages(value), TexturePack.current().getFrameRate(value));
-			}
-			in.close();
-		} catch (IOException e) { 
-			e.printStackTrace();
-		}
 	}
 	
 	public Cell get(int x, int y) {
@@ -49,6 +31,12 @@ public class CellGrid {
 			return grid[x][y];
 		else
 			return null;
+	}
+	
+	public void setDimension(int width, int height) {
+		this.width = width;
+		this.height = height;
+		this.grid = new Cell[width][height];
 	}
 	
 	public void set(int x, int y, Cell cell) {

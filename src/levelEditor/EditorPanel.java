@@ -3,6 +3,8 @@ package levelEditor;
 import javax.swing.*;
 
 import display.*;
+import levelEditor.editorComponents.EditorPortal;
+import levelEditor.editorComponents.EditorRegion;
 import main.*;
 
 import java.awt.*;
@@ -39,26 +41,36 @@ public class EditorPanel extends JPanel {
 		menuButtons = new ArrayList<MenuButton>();
 		addMenuButton("Load Region", new Runnable() {
 			public void run() {
-				String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Load Region", JOptionPane.QUESTION_MESSAGE);
-				int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Load Region", JOptionPane.QUESTION_MESSAGE));
-				region = new EditorRegion(worldName, regNum);
+				try {
+					String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Load Region", JOptionPane.QUESTION_MESSAGE);
+					int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Load Region", JOptionPane.QUESTION_MESSAGE));
+					region = new EditorRegion(worldName, regNum);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(EditorPanel.this, "Invalid format occurred!\nTry again", "Invalid Format", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		addMenuButton("New Region",new Runnable() {
 			public void run() {
-				String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Create Region", JOptionPane.QUESTION_MESSAGE);
-				int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Create Region", JOptionPane.QUESTION_MESSAGE));
-				String dim = JOptionPane.showInputDialog(EditorPanel.this, "What dimensions?", "Create Region", JOptionPane.QUESTION_MESSAGE);
-				String[] vals = dim.split(" ");
-				int w = Integer.parseInt(vals[0]);
-				int h = Integer.parseInt(vals[1]);
-				region = new EditorRegion(worldName, regNum, w, h);
+				try {
+					String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Create Region", JOptionPane.QUESTION_MESSAGE);
+					int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Create Region", JOptionPane.QUESTION_MESSAGE));
+					String dim = JOptionPane.showInputDialog(EditorPanel.this, "What dimensions?", "Create Region", JOptionPane.QUESTION_MESSAGE);
+					String[] vals = dim.split(" ");
+					int w = Integer.parseInt(vals[0]);
+					int h = Integer.parseInt(vals[1]);
+					region = new EditorRegion(worldName, regNum, w, h);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(EditorPanel.this, "Invalid format occured!\nTry again", "Invalid Format", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		addMenuButton("Save", new Runnable() {
 			public void run() {
-				if (region == null)
+				if (region == null) {
+					JOptionPane.showMessageDialog(EditorPanel.this, "Nothing to Save!", "Message", JOptionPane.WARNING_MESSAGE);
 					return;
+				}
 				region.save();
 				region.printGrid();
 				JOptionPane.showMessageDialog(EditorPanel.this, "Succesfully saved region "
@@ -193,7 +205,7 @@ public class EditorPanel extends JPanel {
 		if (region != null) {
 			for (int x = 0; x < region.getWidth(); x++) {
 				for (int y = 0; y < region.getHeight(); y++) {
-					int gridSize = (int)(size * 0.05);
+					int gridSize = (int)(size * 0.1);
 					int px = offX + x * (int)size + gridSize/2, py = offY + y * (int)size + gridSize/2;
 					int pw = (int)size - gridSize, ph = (int)size - gridSize;
 					if (px + pw < 0 || px > vw || py + ph < 0 || py > vh)
@@ -230,6 +242,12 @@ public class EditorPanel extends JPanel {
 						}
 					}
 				}
+			}
+			for (EditorPortal p : region.getPortals()) {
+				int px = offX + (int)(p.x * size), py = offY + (int)(p.y * size);
+				int pw = (int)(p.width * size), ph = (int)(p.height * size);
+				gw.setColor(Color.MAGENTA);
+				gw.fillRoundRect(px, py, pw, ph, (int)size/10, (int)size/10);
 			}
 		}
 		switch (curTool) {
@@ -296,6 +314,7 @@ public class EditorPanel extends JPanel {
 				}
 			}
 		}
+		
 		for (MenuButton b : menuButtons) {
 			b.check(mouse);
 			b.draw(g);
