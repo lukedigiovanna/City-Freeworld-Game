@@ -70,6 +70,24 @@ public class Mouse {
 		return this.mouseDown;
 	}
 	
+	public void setIsMouseDown(boolean boo) {
+		this.mouseDown = boo;
+	}
+	
+	public void setIsMouseDown(int button, boolean boo) {
+		switch (button) {
+		case LEFT_BUTTON:
+			leftDown = boo;
+			break;
+		case MIDDLE_BUTTON:
+			middleDown = boo;
+			break;
+		case RIGHT_BUTTON:
+			rightDown = boo;
+			break;
+		}
+	}
+	
 	public static final int LEFT_BUTTON = 0, MIDDLE_BUTTON = 1, RIGHT_BUTTON = 2;
 	
 	public boolean isMouseDown(int button) {

@@ -236,6 +236,19 @@ public class EditorPanel extends JPanel {
 							case FILL:
 								region.fillGrid(x,y,curTile);
 								break;
+							case PORTAL:
+								EditorPortal p = new EditorPortal();
+								p.x = x;
+								p.y = y;
+								p.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
+								p.width = 0.5f;
+								p.height = 0.5f;
+								String[] vals = JOptionPane.showInputDialog(this,"Enter portal destination coords","Add Portal",JOptionPane.QUESTION_MESSAGE).split(" ");
+								p.destX = Float.parseFloat(vals[0]);
+								p.destY = Float.parseFloat(vals[1]);
+								this.region.getPortals().add(p);
+								mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+								break;
 							default:  //if any other tool, do nothing
 								break;
 							}
