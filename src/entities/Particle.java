@@ -95,7 +95,7 @@ public class Particle extends Entity {
 			break;
 		case SPARKLES:
 			image = ImageTools.setTransparency(image, alpha);
-			c.drawImage(image, getX(), getY(), getWidth(), getHeight());
+			c.drawImage(image, getX(), getY(), getWidth(), getHeight());		
 			break;
 		case TIRE_MARK:
 			c.fillRect(getX(), getY(), getWidth(), getHeight());

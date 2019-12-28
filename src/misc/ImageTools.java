@@ -37,22 +37,6 @@ public class ImageTools {
 			return convertTo8Bit(toBufferedImage(image));
 	}
 	
-	public static BufferedImage getImage(String filePath) {
-		//for now lets just follow the file path to our images folder : "assets/images/"
-		if (filePath.indexOf("/") < 0)
-			filePath = "assets/images/"+filePath;
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(new File(filePath));
-			if (img == null)
-				return IMAGE_NOT_FOUND;
-			return img;
-		} catch (IOException e) {
-			System.err.println("no image "+filePath);
-			return IMAGE_NOT_FOUND;
-		}
-	}
-	
 	public static BufferedImage toBufferedImage(Image image) {
 		if (image == null || image.getWidth(null) < 0 || image.getHeight(null) < 0)
 			return IMAGE_NOT_FOUND;
@@ -209,12 +193,36 @@ public class ImageTools {
 		return newImg;
 	}
 	
-	public static List<BufferedImage> getImages(String folderPath, String prefix) {
+	public static BufferedImage getImage(String filePath) {
+		//for now lets just follow the file path to our images folder : "assets/images/"
+		if (filePath.indexOf("assets/") < 0)
+			filePath = "assets/images/"+filePath;
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(filePath));
+			if (img == null)
+				return IMAGE_NOT_FOUND;
+			return img;
+		} catch (IOException e) {
+			System.err.println("no image "+filePath);
+			return IMAGE_NOT_FOUND;
+		}
+	}
+	
+	/**
+	 * Path is path to the folder
+	 * @param folderPath
+	 * @param prefix
+	 * @return
+	 */
+	public static List<BufferedImage> getImages(String folderPath, String prefix) {	
+		if (folderPath.indexOf("assets/") < 0)
+			folderPath = "assets/images/"+folderPath;
 		List<BufferedImage> frames = new ArrayList<BufferedImage>();
 		int i = 0;
 		boolean cont = true;
 		do {
-			String path = "assets/images/"+folderPath+"/"+prefix+i+".png";
+			String path = folderPath+"/"+prefix+i+".png";
 			try {
 				File file = new File(path);
 				if (file.exists()) {

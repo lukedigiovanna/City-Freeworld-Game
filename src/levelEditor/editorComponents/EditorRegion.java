@@ -31,6 +31,8 @@ public class EditorRegion {
 	
 	private List<EditorPortal> portals;
 	
+	private List<EditorWall> walls;
+	
 	/**
 	 * For intializing a new region
 	 * @param worldName
@@ -61,7 +63,9 @@ public class EditorRegion {
 		
 		//initialize the portal list
 		portals = new ArrayList<EditorPortal>();
-		portals.add(new EditorPortal(regNum,5.25f,5.75f,0.5f,0.5f,5.25f,10.9f));
+		
+		//initialize the wall list
+		walls = new ArrayList<EditorWall>();
 	}
 	
 	/**
@@ -106,6 +110,18 @@ public class EditorRegion {
 				p.destY = in.read() + in.read()/256.0f;
 				portals.add(p);
 			}
+			
+			//add in the walls next
+			this.walls = new ArrayList<EditorWall>();
+			int numWalls = in.read();
+			for (int i = 0; i < numWalls; i++) {
+				EditorWall w = new EditorWall();
+				w.x1 = in.read() + in.read()/256.0f;
+				w.y1 = in.read() + in.read()/256.0f;
+				w.x2 = in.read() + in.read()/256.0f;
+				w.y2 = in.read() + in.read()/256.0f;
+				walls.add(w);
+			}
 			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,15 +147,21 @@ public class EditorRegion {
 		this.grid.get(x).get(y).value = value;
 	}
 	
-	public void fillGrid(int x, int y, int value) {
-		int prev = getGridValue(x,y);
-		if (prev < -1)
-			return;
-		setGridValue(x,y,value);
-//		if (getGridValue(x-1,y) == prev)
-//			fillGrid(x-1,y,value);
-		if (getGridValue(x,y-1) == prev)
-			fillGrid(x,y-1,value);
+	public void fillGrid(int x, int y, int fillValue) {
+		fillGrid(x,y,fillValue,getGridValue(x,y));
+	}
+	
+	public void fillGrid(int x, int y, int fillValue, int previousValue) {
+		if (getGridValue(x,y) != previousValue) {
+			return; //end condition
+		}
+		else {
+			setGridValue(x,y,fillValue);
+			fillGrid(x-1,y,fillValue,previousValue);
+			fillGrid(x+1,y,fillValue,previousValue);
+			fillGrid(x,y-1,fillValue,previousValue);
+			fillGrid(x,y+1,fillValue,previousValue);
+		}
 	}
 	
 	public ArrayList<ArrayList<EditorCell>> getGrid() {
@@ -148,6 +170,10 @@ public class EditorRegion {
 	
 	public List<EditorPortal> getPortals() {
 		return portals;
+	}
+	
+	public List<EditorWall> getWalls() {
+		return walls;
 	}
 	
 	public int getWidth() {
@@ -178,6 +204,9 @@ public class EditorRegion {
 			out.write(this.portals.size());
 			for (EditorPortal p : portals)
 				p.write(out);
+			out.write(this.walls.size());
+			for (EditorWall w : walls) 
+				w.write(out);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

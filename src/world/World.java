@@ -35,10 +35,18 @@ public class World {
 
 		Region temp = new Region(this,worldName,0);
 		
+		for (int x = 0; x < temp.getWidth(); x+=2)
+			for (int y = 0; y < temp.getHeight(); y+=2)
+				temp.add(new EntityObject(0,x,y));
+		
 		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
 
 		regions.add(temp);
+		
+		regions.add(new Region(this,worldName,1));
+		
+		regions.add(new Region(this,worldName,2));
 		
 		//initialize starting region
 		getCurrentRegion().update(0);

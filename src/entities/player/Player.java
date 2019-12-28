@@ -42,14 +42,14 @@ public class Player extends Entity {
 	
 	public Player(float x, float y) {
 		//super(x, y, 0.75f, 1.375f);
-		super(x,y,1.0f,1.0f);
-		float[] model = {
-				0, getHeight()/2,
-				getWidth(), getHeight()/2,
-				getWidth(), getHeight(),
-				0, getHeight()
-		};
-		//this.setModel(model);
+		super(x,y,0.8f,0.8f);
+//		float[] model = {
+//				0, getHeight()/2,
+//				getWidth(), getHeight()/2,
+//				getWidth(), getHeight(),
+//				0, getHeight()
+//		};
+//		this.setModel(model);
 		this.bankAct = new BankAccount(this);
 		this.inventory = new Inventory();
 		this.profilePicture = ImageTools.getImage("profile_1.png");
@@ -101,7 +101,7 @@ public class Player extends Entity {
 		return "None";
 	}
 	
-	private int movementType = 2; //0 is moving in cardinal directions, 1 is moving toward the mouse cursor
+	private int movementType = 0; //0 is moving in cardinal directions, 1 is moving toward the mouse cursor
 	
 	private float speed = 2.0f;
 	private float maxSpeed = 4.0f;

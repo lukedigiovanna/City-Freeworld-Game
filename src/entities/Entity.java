@@ -19,6 +19,10 @@ public abstract class Entity extends WorldObject {
 	private List<String> tags;
 	private List<Path> paths;
 	
+	public Entity(float x, float y) {
+		this(x,y,1.0f,1.0f);
+	}
+	
 	public Entity(float x, float y, float width, float height) {
 		super(x,y,width,height);
 		setDimension(new Vector2(width,height));

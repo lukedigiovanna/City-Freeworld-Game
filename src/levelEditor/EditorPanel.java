@@ -3,9 +3,13 @@ package levelEditor;
 import javax.swing.*;
 
 import display.*;
+import display.textures.TexturePack;
+import display.textures.Texture;
 import levelEditor.editorComponents.EditorPortal;
 import levelEditor.editorComponents.EditorRegion;
+import levelEditor.editorComponents.EditorWall;
 import main.*;
+import misc.Vector2;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,7 +20,7 @@ import java.util.List;
 public class EditorPanel extends JPanel {
 	
 	private BufferedImage screen;
-	private List<TileTexture> tiles;
+	private List<Texture> tiles;
 	private Mouse mouse;
 	private Keyboard keyboard;
 	
@@ -85,7 +89,7 @@ public class EditorPanel extends JPanel {
 		
 		//setup texture pack
 		TexturePack pack = TexturePack.DEFAULT;
-		tiles = new ArrayList<TileTexture>();
+		tiles = new ArrayList<Texture>();
 		for (int i = 0; i < pack.getNumberOfTiles(); i++)
 			tiles.add(pack.getTileTexture(i));
 		
@@ -104,7 +108,7 @@ public class EditorPanel extends JPanel {
 					long now = System.currentTimeMillis();
 					
 					for (int i = 0; i < pack.getNumberOfTiles(); i++) {
-						TileTexture tt = pack.getTileTexture(i);
+						Texture tt = pack.getTileTexture(i);
 						float dt = (float)(now-last)/1000.0f;
 						tt.getAnimation().animate(dt);
 					}
@@ -144,11 +148,19 @@ public class EditorPanel extends JPanel {
 				float newMX = (float)(mpxOnView / size),
 					  newMY = (float)(mpyOnView / size);
 				float dx = (float)((newMX - mxOnRegion)*size),
-				      dy = (float)((newMY - mxOnRegion)*size);
+				      dy = (float)((newMY - myOnRegion)*size);
 				offX += dx;
 				offY += dy;
 			}
 		});
+	}
+	
+	private Vector2 mouseOnRegion() {
+		float mpxOnView = (float)(mouse.getX() - vx - offX),
+			  mpyOnView = (float)(mouse.getY() - vy - offY);
+		float mxOnRegion = (float)(mpxOnView / size),
+			  myOnRegion = (float)(mpyOnView / size);
+		return new Vector2(mxOnRegion,myOnRegion);
 	}
 	
 	public void setTool(Tool tool) {
@@ -185,6 +197,9 @@ public class EditorPanel extends JPanel {
 	private double size = 30;
 	private int offX = 50, offY = 0;
 	int vx = 230, vy = 100;
+	int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
+	
+	private Vector2 wallP1 = null;
 	
 	public void redraw() {
 		Graphics2D g = screen.createGraphics();
@@ -197,13 +212,13 @@ public class EditorPanel extends JPanel {
 		g.fillRect(0, Program.DISPLAY_HEIGHT-20, Program.DISPLAY_WIDTH, 20);
 		g.setColor(Color.DARK_GRAY);
 		g.setFont(new Font("Arial",Font.BOLD,12));
-		g.drawString("Tile ID: "+tiles.get(curTile).getStringID(), 230, Program.DISPLAY_HEIGHT-8);
+		Vector2 mp = this.mouseOnRegion();
+		mp.round(0.01f);
+		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+"     X: "+mp.x+" Y: "+mp.y, 230, Program.DISPLAY_HEIGHT-8);
 		
 		/*
 		 * Draw the region
 		 */
-		
-		int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
 		
 		BufferedImage worldImg = new BufferedImage(vw,vh,BufferedImage.TYPE_INT_ARGB);
 		
@@ -217,7 +232,7 @@ public class EditorPanel extends JPanel {
 			for (int x = 0; x < region.getWidth(); x++) {
 				for (int y = 0; y < region.getHeight(); y++) {
 					int gridSize = (int)(size * 0.1);
-					int px = offX + x * (int)size + gridSize/2, py = offY + y * (int)size + gridSize/2;
+					int px = offX + (int)(x * size + gridSize/2), py = offY + (int)(y * size + gridSize/2);
 					int pw = (int)size - gridSize, ph = (int)size - gridSize;
 					if (px + pw < 0 || px > vw || py + ph < 0 || py > vh)
 						continue;
@@ -247,24 +262,39 @@ public class EditorPanel extends JPanel {
 							case FILL:
 								region.fillGrid(x,y,curTile);
 								break;
-							case PORTAL:
-								EditorPortal p = new EditorPortal();
-								p.x = x;
-								p.y = y;
-								p.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
-								p.width = 0.5f;
-								p.height = 0.5f;
-								String[] vals = JOptionPane.showInputDialog(this,"Enter portal destination coords","Add Portal",JOptionPane.QUESTION_MESSAGE).split(" ");
-								p.destX = Float.parseFloat(vals[0]);
-								p.destY = Float.parseFloat(vals[1]);
-								this.region.getPortals().add(p);
-								mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
-								break;
 							default:  //if any other tool, do nothing
 								break;
 							}
 						}
 					}
+				}
+			}
+			if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && mouse.getX() > vx && mouse.getX() < vx + vw && mouse.getY() > vy && mouse.getY() < vy + vh) {
+				switch (curTool) {
+				case PORTAL:
+					EditorPortal p = new EditorPortal();
+					p.x = this.mouseOnRegion().x;
+					p.y = this.mouseOnRegion().y;
+					p.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
+					p.width = 0.5f;
+					p.height = 0.5f;
+					String[] vals = JOptionPane.showInputDialog(this,"Enter portal destination coords","Add Portal",JOptionPane.QUESTION_MESSAGE).split(" ");
+					p.destX = Float.parseFloat(vals[0]);
+					p.destY = Float.parseFloat(vals[1]);
+					this.region.getPortals().add(p);
+					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+					break;
+				case WALL:
+					if (wallP1 == null) {
+						wallP1 = this.mouseOnRegion().copy();
+					} else {
+						Vector2 wallP2 = this.mouseOnRegion().copy();
+						EditorWall e = new EditorWall(wallP1.x,wallP1.y,wallP2.x,wallP2.y);
+						region.getWalls().add(e);
+						wallP1 = null;
+					}
+					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+					break;
 				}
 			}
 			for (EditorPortal p : region.getPortals()) {
@@ -273,7 +303,24 @@ public class EditorPanel extends JPanel {
 				gw.setColor(Color.MAGENTA);
 				gw.fillRoundRect(px, py, pw, ph, (int)size/10, (int)size/10);
 			}
+			for (EditorWall w : region.getWalls()) {
+				int px1 = offX + (int)(w.x1 * size), py1 = offY + (int)(w.y1 * size);
+				int px2 = offX + (int)(w.x2 * size), py2 = offY + (int)(w.y2 * size);
+				gw.setColor(Color.YELLOW);
+				gw.drawLine(px1, py1, px2, py2);
+			}
 		}
+		if (wallP1 != null) {
+			gw.setColor(Color.CYAN);
+			int px1 = (int)(wallP1.x * size + offX),
+				py1 = (int)(wallP1.y * size + offY);
+			Vector2 p2 = this.mouseOnRegion();
+			int px2 = (int)(p2.x * size + offX),
+				py2 = (int)(p2.y * size + offY);
+			gw.drawLine(px1,py1,px2,py2);
+		}
+		if (curTool != Tool.WALL)
+			wallP1 = null;
 		switch (curTool) {
 		case TOGGLE_GRID:
 			showGrid = !showGrid;

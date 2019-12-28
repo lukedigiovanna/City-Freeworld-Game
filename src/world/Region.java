@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 
-import display.TexturePack;
+import display.textures.TexturePack;
 import entities.Entity;
 import entities.EntityList;
 import entities.Particle;
@@ -47,7 +47,7 @@ public class Region {
 				for (int x = 0; x < width; x++) {
 					Cell cell = new Cell(x, y);
 					int value = in.read();
-					cell.setAnimation(TexturePack.current().getTileImages(value), TexturePack.current().getFrameRate(value));
+					cell.setAnimation(TexturePack.current().getTileTexture(value).getAnimation());
 					cellGrid.set(x, y, cell);
 				}
 			int numOfPortals = in.read();
@@ -63,7 +63,17 @@ public class Region {
 				
 				Portal p = new Portal(new Portal.Destination(destRegion, destX, destY), x, y, width, height);
 				this.add(p);
-			}//System.exit(0);
+			}
+			int numOfWalls = in.read();
+			for (int i = 0; i < numOfWalls; i++) {
+				float x1 = in.read() + in.read()/256.0f;
+				float y1 = in.read() + in.read()/256.0f;
+				float x2 = in.read() + in.read()/256.0f;
+				float y2 = in.read() + in.read()/256.0f;
+				Line w = new Line(new Vector2(x1,y1), new Vector2(x2,y2));
+				this.addWall(w);
+			}
+			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

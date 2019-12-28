@@ -36,6 +36,17 @@ public class Animation {
 		this.frameRate = 999;
 	}
 	
+	/**
+	 * Generates a new animation that uses the same memory references
+	 * for the frames.
+	 * This saves a lot of memory as opposed to using different images
+	 * for each animation.
+	 * @return
+	 */
+	public Animation copy() {
+		Animation ani = new Animation(this.frames,this.frameRate);
+		return ani;
+	}
 	
 	/**
 	 * Updates the current frame based on the elapsed time.

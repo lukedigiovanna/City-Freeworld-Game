@@ -3,50 +3,32 @@
  */
 package entities;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 import display.Animation;
-import misc.MathUtils;
+import display.textures.*;
 import world.Camera;
 
 public class EntityObject extends Entity {
 	
-	private BufferedImage image;
+	private Texture texture;
 	private Animation animation;
 	
-	public EntityObject(BufferedImage image, float x, float y, float width, float height) {
-		super(x, y, width, height);
-		this.image = image;
-		this.addTag("entity object");
-	}
-	
-	public EntityObject(Animation animation, float x, float y, float width, float height) {
-		super(x,y,width,height);
-		this.animation = animation;
-		this.animation.randomize();
-		this.addTag("entity object");
+	public EntityObject(int id, float x, float y) {
+		super(x,y);
+		this.texture = TexturePack.current().getObjectTexture(id);
+		this.animation = this.texture.getAnimation().copy(); 
+		this.setDimension(this.texture.getDimension().copy());
+		this.addTag("entity_object");
 	}
 
 	@Override
 	public void draw(Camera camera) {
-		BufferedImage img = image;
-		if (img == null)
-			img = animation.getCurrentFrame();
-		camera.drawImage(img, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-		//this.drawHitbox(camera);
+		camera.drawImage(animation.getCurrentFrame(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
 
 	@Override
 	public void update(float dt) {
-		if (animation != null)
-			animation.animate(dt);
-		
-		List<Entity> killers = this.getRegion().getEntities().get("player");
-		
-		for (Entity e : killers)
-			if (e.colliding(this))
-				this.destroy();
+		animation.animate(dt);
 	}
 }
