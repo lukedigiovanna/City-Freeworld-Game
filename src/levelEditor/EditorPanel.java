@@ -356,7 +356,8 @@ public class EditorPanel extends JPanel {
 					}
 					break;
 				}
-				mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+				if (curTool == Tool.PORTAL || curTool == Tool.OBJECT || curTool == Tool.WALL || curTool == Tool.DELETE)
+					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 			}
 			for (EditorPortal p : region.getPortals()) {
 				int px = offX + (int)(p.x * size), py = offY + (int)(p.y * size);
@@ -385,6 +386,12 @@ public class EditorPanel extends JPanel {
 				if (curTool == Tool.DELETE && mp.x > o.x && mp.x < o.x + texture.getWidth() && mp.y > o.y && mp.y < o.y + texture.getHeight())
 					img = ImageTools.colorscale(img, Color.RED);
 				gw.drawImage(img, px, py, pw, ph, null);
+			}
+			if (curTool == Tool.OBJECT) {
+				int px = offX + (int)(mp.x * size), py = offY + (int)(mp.y * size);
+				Texture texture = objects.get(curObject);
+				int pw = (int)(texture.getWidth() * size), ph = (int)(texture.getHeight() * size);
+				gw.drawImage(ImageTools.setTransparency(texture.getAnimation().getCurrentFrame(), 160), px, py, pw, ph, null);
 			}
 		}
 		if (wallP1 != null) {

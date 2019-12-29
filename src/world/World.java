@@ -32,8 +32,8 @@ public class World {
 		regions.add(temp);
 		
 		regions.add(new Region(this,worldName,1));
-		
 		regions.add(new Region(this,worldName,2));
+		regions.add(new Region(this,worldName,3));
 		
 		//initialize starting region
 		getCurrentRegion().update(0);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import display.Animation;
+import display.textures.TexturePack;
 import misc.ImageTools;
 import misc.MathUtils;
 
@@ -13,34 +14,19 @@ public class Cell extends WorldObject {
 	private Animation animation;
 	private int orientation = 0; //0 = 0deg, 1 = 90deg, 2 = 180deg, 3 = 270deg
 
-	public Cell(float x, float y) {
+	public Cell(int id, float x, float y) {
 		super(x,y,1.0f,1.0f);
 		this.setVerticalHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
 		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
+		this.animation = TexturePack.current().getTileTexture(id).getAnimation().copy();
 	}
 	
 	public void update(float dt) {
 		animation.animate(dt);
 	}
 	
-	public void setAnimation(List<BufferedImage> images, int frameRate) {
-		this.animation = new Animation(images,frameRate);
-	}
-	
-	public void setAnimation(Animation animation) {
-		this.animation = animation;
-	}
-	
-	public void setImage(BufferedImage image) {
-		List<BufferedImage> images = new ArrayList<BufferedImage>();
-		images.add(image);
-		setAnimation(images,1);
-	}
-	
 	public BufferedImage getImage() {
-		if (animation == null)
-			return ImageTools.IMAGE_NOT_FOUND;
-		return animation.getCurrentFrame();
+		return this.animation.getCurrentFrame();
 	}
 		
 	public float centerX() {
