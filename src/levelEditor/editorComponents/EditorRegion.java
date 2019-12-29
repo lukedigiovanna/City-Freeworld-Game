@@ -33,6 +33,8 @@ public class EditorRegion {
 	
 	private List<EditorWall> walls;
 	
+	private List<EditorObject> objects;
+	
 	/**
 	 * For intializing a new region
 	 * @param worldName
@@ -66,6 +68,9 @@ public class EditorRegion {
 		
 		//initialize the wall list
 		walls = new ArrayList<EditorWall>();
+		
+		//initialize the object list
+		objects = new ArrayList<EditorObject>();
 	}
 	
 	/**
@@ -122,6 +127,17 @@ public class EditorRegion {
 				w.y2 = in.read() + in.read()/256.0f;
 				walls.add(w);
 			}
+			
+			//add in the objects next
+			this.objects = new ArrayList<EditorObject>();
+			int numObjects = in.read();
+			for (int i = 0; i < numObjects; i++) {
+				EditorObject o = new EditorObject();
+				o.id = in.read();
+				o.x = in.read() + in.read()/256.0f;
+				o.y = in.read() + in.read()/256.0f;
+				objects.add(o);
+			}
 			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,6 +192,10 @@ public class EditorRegion {
 		return walls;
 	}
 	
+	public List<EditorObject> getObjects() {
+		return objects;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -207,6 +227,9 @@ public class EditorRegion {
 			out.write(this.walls.size());
 			for (EditorWall w : walls) 
 				w.write(out);
+			out.write(this.objects.size());
+			for (EditorObject o : objects)
+				o.write(out);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

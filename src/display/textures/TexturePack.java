@@ -69,6 +69,10 @@ public class TexturePack {
 		//add objects
 		addObjectTexture("fire","fire_",8,1.0f,1.0f,"Fire");
 		addObjectTexture("wooden_bench",2.0f,1.0f,"Wooden Bench");
+		addObjectTexture("pine_tree",1.0f,1.0f,"Pine Tree");
+		addObjectTexture("palm_tree",1.0f,1.0f,"Palm Tree");
+		addObjectTexture("maple_tree",1.0f,1.0f,"Maple Tree");
+		addObjectTexture("apple_tree",1.0f,1.0f,"Apple Tree");
 		save();
 		load();
 	}
@@ -82,7 +86,7 @@ public class TexturePack {
 	}
 	
 	private void addObjectTexture(String imageName, float width, float height, String stringID) {
-		objectsMap.put(objectsMap.size(), new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName),width,height,stringID));
+		objectsMap.put(objectsMap.size(), new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName+".png"),width,height,stringID));
 	}
 	
 	private void addObjectTexture(String folderName, String prefix, int frameRate, float width, float height, String stringID) {
@@ -126,6 +130,10 @@ public class TexturePack {
 	
 	public int getNumberOfTiles() {
 		return tilesMap.size();
+	}
+	
+	public int getNumberOfObjects() {
+		return objectsMap.size();
 	}
 	
 	public Texture getTileTexture(int id) {

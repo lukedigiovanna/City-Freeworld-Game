@@ -5,10 +5,13 @@ import javax.swing.*;
 import display.*;
 import display.textures.TexturePack;
 import display.textures.Texture;
+import levelEditor.editorComponents.EditorObject;
 import levelEditor.editorComponents.EditorPortal;
 import levelEditor.editorComponents.EditorRegion;
 import levelEditor.editorComponents.EditorWall;
 import main.*;
+import misc.ImageTools;
+import misc.Line;
 import misc.Vector2;
 
 import java.awt.*;
@@ -21,6 +24,7 @@ public class EditorPanel extends JPanel {
 	
 	private BufferedImage screen;
 	private List<Texture> tiles;
+	private List<Texture> objects;
 	private Mouse mouse;
 	private Keyboard keyboard;
 	
@@ -92,6 +96,9 @@ public class EditorPanel extends JPanel {
 		tiles = new ArrayList<Texture>();
 		for (int i = 0; i < pack.getNumberOfTiles(); i++)
 			tiles.add(pack.getTileTexture(i));
+		objects = new ArrayList<Texture>();
+		for (int i = 0; i < pack.getNumberOfObjects(); i++)
+			objects.add(pack.getObjectTexture(i));
 		
 		//update thread
 		Thread redrawThread = new Thread(new Runnable() {
@@ -107,9 +114,15 @@ public class EditorPanel extends JPanel {
 					
 					long now = System.currentTimeMillis();
 					
+					float dt = (float)(now-last)/1000.0f;
+					
 					for (int i = 0; i < pack.getNumberOfTiles(); i++) {
 						Texture tt = pack.getTileTexture(i);
-						float dt = (float)(now-last)/1000.0f;
+						tt.getAnimation().animate(dt);
+					}
+					
+					for (int i = 0; i < pack.getNumberOfObjects(); i++) {
+						Texture tt = pack.getObjectTexture(i);
 						tt.getAnimation().animate(dt);
 					}
 					
@@ -191,6 +204,10 @@ public class EditorPanel extends JPanel {
 	}
 	
 	private int curTile = 0;
+	private int curObject = 0;
+	
+	private static final int SIDE_VIEW_TILE = 0, SIDE_VIEW_OBJECT = 1;
+	private int sideView = SIDE_VIEW_TILE;
 	
 	private boolean showGrid = true;
 	
@@ -269,12 +286,23 @@ public class EditorPanel extends JPanel {
 					}
 				}
 			}
-			if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && mouse.getX() > vx && mouse.getX() < vx + vw && mouse.getY() > vy && mouse.getY() < vy + vh) {
+			EditorWall closest = null;
+			float dist = 0.25f;
+			if (curTool == Tool.DELETE)
+				for (EditorWall w : region.getWalls()) {
+					Line l = new Line(new Vector2(w.x1,w.y1),new Vector2(w.x2,w.y2));
+					float indDist = l.distance(mp);
+					if (indDist < dist) {
+						dist = indDist;
+						closest = w;
+					}
+				}
+			if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL) && mouse.getX() > vx && mouse.getX() < vx + vw && mouse.getY() > vy && mouse.getY() < vy + vh) {
 				switch (curTool) {
 				case PORTAL:
 					EditorPortal p = new EditorPortal();
-					p.x = this.mouseOnRegion().x;
-					p.y = this.mouseOnRegion().y;
+					p.x = mp.x;
+					p.y = mp.y;
 					p.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
 					p.width = 0.5f;
 					p.height = 0.5f;
@@ -282,41 +310,95 @@ public class EditorPanel extends JPanel {
 					p.destX = Float.parseFloat(vals[0]);
 					p.destY = Float.parseFloat(vals[1]);
 					this.region.getPortals().add(p);
-					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 					break;
 				case WALL:
 					if (wallP1 == null) {
-						wallP1 = this.mouseOnRegion().copy();
+						wallP1 = mp.copy();
 					} else {
-						Vector2 wallP2 = this.mouseOnRegion().copy();
+						Vector2 wallP2 = mp.copy();
+						//for straight line correction
+						if (Math.abs(wallP2.x-wallP1.x)< 0.15)
+							wallP2.x = wallP1.x;
+						if (Math.abs(wallP2.y-wallP1.y)<0.15)
+							wallP2.y = wallP1.y;
 						EditorWall e = new EditorWall(wallP1.x,wallP1.y,wallP2.x,wallP2.y);
 						region.getWalls().add(e);
 						wallP1 = null;
 					}
-					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+					break;
+				case OBJECT:
+					EditorObject o = new EditorObject();
+					o.id = curObject;
+					o.x = mp.x;
+					o.y = mp.y;
+					region.getObjects().add(o);
+					break;
+				case DELETE:
+					//if the closest wall is not null then we delete it
+					if (closest != null) {
+						region.getWalls().remove(closest);
+						break;
+					}
+					//check to see if the mouse is over a portal
+					for (EditorPortal portal : region.getPortals()) {
+						if (mp.x > portal.x && mp.x < portal.x + portal.width && mp.y > portal.y && mp.y < portal.y + portal.height) {
+							region.getPortals().remove(portal);
+							break;
+						}
+					}
+					for (int i = 0; i < region.getObjects().size(); i++) {
+						EditorObject ob = region.getObjects().get(i);
+						Texture t = objects.get(ob.id);
+						if (mp.x > ob.x && mp.x < ob.x + t.getWidth() && mp.y > ob.y && mp.y < ob.y + t.getHeight()) {
+							region.getObjects().remove(ob);
+							break;
+						}
+					}
 					break;
 				}
+				mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 			}
 			for (EditorPortal p : region.getPortals()) {
 				int px = offX + (int)(p.x * size), py = offY + (int)(p.y * size);
 				int pw = (int)(p.width * size), ph = (int)(p.height * size);
-				gw.setColor(Color.MAGENTA);
+				if (curTool == Tool.DELETE && mp.x > p.x && mp.x < p.x + p.width && mp.y > p.y && mp.y < p.y + p.height)
+					gw.setColor(Color.RED);
+				else
+					gw.setColor(Color.MAGENTA);
 				gw.fillRoundRect(px, py, pw, ph, (int)size/10, (int)size/10);
 			}
 			for (EditorWall w : region.getWalls()) {
 				int px1 = offX + (int)(w.x1 * size), py1 = offY + (int)(w.y1 * size);
 				int px2 = offX + (int)(w.x2 * size), py2 = offY + (int)(w.y2 * size);
-				gw.setColor(Color.YELLOW);
+				if (w == closest)
+					gw.setColor(Color.RED);
+				else
+					gw.setColor(Color.YELLOW);
+				gw.setStroke(new BasicStroke((int)(size * 0.1)));
 				gw.drawLine(px1, py1, px2, py2);
+			}
+			for (EditorObject o : region.getObjects()) {
+				int px = offX + (int)(o.x * size), py = offY + (int)(o.y * size);
+				Texture texture = objects.get(o.id);
+				int pw = (int)(texture.getWidth() * size), ph = (int)(texture.getHeight() * size);
+				BufferedImage img = texture.getAnimation().getCurrentFrame();
+				if (curTool == Tool.DELETE && mp.x > o.x && mp.x < o.x + texture.getWidth() && mp.y > o.y && mp.y < o.y + texture.getHeight())
+					img = ImageTools.colorscale(img, Color.RED);
+				gw.drawImage(img, px, py, pw, ph, null);
 			}
 		}
 		if (wallP1 != null) {
 			gw.setColor(Color.CYAN);
 			int px1 = (int)(wallP1.x * size + offX),
 				py1 = (int)(wallP1.y * size + offY);
-			Vector2 p2 = this.mouseOnRegion();
+			Vector2 p2 = mp;
+			if (Math.abs(p2.x - wallP1.x) < 0.15)
+				p2.x = wallP1.x;
+			if (Math.abs(p2.y - wallP1.y) < 0.15)
+				p2.y = wallP1.y;
 			int px2 = (int)(p2.x * size + offX),
 				py2 = (int)(p2.y * size + offY);
+			gw.setStroke(new BasicStroke((int)(size * 0.1)));
 			gw.drawLine(px1,py1,px2,py2);
 		}
 		if (curTool != Tool.WALL)
@@ -348,49 +430,32 @@ public class EditorPanel extends JPanel {
 			break;
 		}
 		
+		if (curTool == Tool.OBJECT)
+			sideView = SIDE_VIEW_OBJECT;
+		else if (curTool == Tool.DRAW || curTool == Tool.FILL)
+			sideView = SIDE_VIEW_TILE;
+		
 		g.drawImage(worldImg, vx, vy, vw, vh, null);
 		
-		//left bar lists out each tile
-		g.setColor(Color.RED.darker());
-		g.fillRect(0, 0, 200, Program.DISPLAY_HEIGHT);
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(10));
-		g.drawRect(0, 0, 200, Program.DISPLAY_HEIGHT);
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRoundRect(30,20,140,36,12,12);
-		g.setColor(Color.DARK_GRAY );
-		g.setFont(new Font("Arial",Font.BOLD,30));
-		g.drawString("TILES", 100-g.getFontMetrics().stringWidth("TILES")/2, 50);
-		int tileSize = 60;
-		for (int i = 0; i < tiles.size(); i++) {
-			int x = 60 - tileSize/2;
-			if (i % 2 == 1)
-				x += 80;
-			int y = (i / 2) * (tileSize+10) + 70;
-			g.drawImage(tiles.get(i).getAnimation().getCurrentFrame(),x,y,tileSize,tileSize,null);
-			if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
-				g.setColor(Color.GRAY);
-				g.setStroke(new BasicStroke(4));
-				g.drawRoundRect(x-5, y-5, tileSize+10, tileSize+10, 4, 4);
-			}
-			if (curTile == i) {
-				g.setColor(Color.CYAN);
-				g.setStroke(new BasicStroke(4));
-				g.drawRoundRect(x-5, y-5, tileSize+10, tileSize+10, 4, 4);
-			}
-			//check if mouse is clicked over it
-			if (mouse.isMouseDown()) {
-				if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
-					curTile = i;
-				}
-			}
-		}
+		drawSideBar(g);
+		drawRegionInfo(g);
+		drawButtons(g);
 		
+		repaint();
+	}
+	
+	private void drawButtons(Graphics2D g) {
+		for (ToolButton t : toolButtons) {
+			t.check(mouse);
+			t.draw(g);
+		}
 		for (MenuButton b : menuButtons) {
 			b.check(mouse);
 			b.draw(g);
 		}
-		
+	}
+	
+	private void drawRegionInfo(Graphics2D g) {
 		g.setColor(Color.DARK_GRAY);
 		g.setFont(new Font("Consolas",Font.ITALIC | Font.BOLD,14));
 		String[] info = {
@@ -406,12 +471,77 @@ public class EditorPanel extends JPanel {
 		for (int i = 0; i < info.length; i++) {
 			g.drawString(info[i], 230, 60+i*16);
 		}
-		
-		for (ToolButton t : toolButtons) {
-			t.check(mouse);
-			t.draw(g);
+	}
+	
+	private void drawSideBar(Graphics2D g) {
+		//left bar lists out each tile
+		g.setColor(Color.RED.darker());
+		g.fillRect(0, 0, 200, Program.DISPLAY_HEIGHT);
+		g.setColor(Color.BLACK);
+		g.setStroke(new BasicStroke(10));
+		g.drawRect(0, 0, 200, Program.DISPLAY_HEIGHT);
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRoundRect(30,20,140,36,12,12);
+		g.setColor(Color.DARK_GRAY );
+		g.setFont(new Font("Arial",Font.BOLD,30));
+		String s = "";
+		switch (sideView) {
+		case SIDE_VIEW_TILE:
+			s = "TILES";
+			break;
+		case SIDE_VIEW_OBJECT:
+			s = "OBJECTS";
 		}
-		repaint();
+		g.drawString(s, 100-g.getFontMetrics().stringWidth(s)/2, 50);
+		if (sideView == SIDE_VIEW_TILE) {
+			int tileSize = 60;
+			for (int i = 0; i < tiles.size(); i++) {
+				int x = 60 - tileSize/2;
+				if (i % 2 == 1)
+					x += 80;
+				int y = (i / 2) * (tileSize+10) + 70;
+				g.drawImage(tiles.get(i).getAnimation().getCurrentFrame(),x,y,tileSize,tileSize,null);
+				if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
+					g.setColor(Color.GRAY);
+					g.setStroke(new BasicStroke(4));
+					g.drawRoundRect(x-5, y-5, tileSize+10, tileSize+10, 4, 4);
+				}
+				if (curTile == i) {
+					g.setColor(Color.CYAN);
+					g.setStroke(new BasicStroke(4));
+					g.drawRoundRect(x-5, y-5, tileSize+10, tileSize+10, 4, 4);
+				}
+				//check if mouse is clicked over it
+				if (mouse.isMouseDown()) {
+					if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
+						curTile = i;
+					}
+				}
+			}
+		} else if (sideView == SIDE_VIEW_OBJECT) {
+			int objSize = 60;
+			int y = 70;
+			for (int i = 0; i < objects.size(); i++) {
+				Texture t = objects.get(i);
+				int width = (int)(t.getWidth() * objSize),
+					height = (int)(t.getHeight() * objSize);
+				int x = (int)(100 - width/2);
+				g.drawImage(t.getAnimation().getCurrentFrame(), x, y, width, height, null);
+				if (i == curObject) {
+					//draw a dashed blue line around it
+					float[] dash = {10.0f};
+					g.setStroke(new BasicStroke(5,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,5,dash,0));
+					g.setColor(Color.CYAN);
+					g.drawRect(x-4, y-4, width+8, height+8);
+				}
+				if (mouse.isMouseDown()) {
+					if (mouse.getX() > x && mouse.getX() < x + width && mouse.getY() > y && mouse.getY() < y + height) {
+						curObject = i;
+					}
+				}
+				y+=(height+10);
+			}
+		}
 	}
 	
 	public void paintComponent(Graphics g) {

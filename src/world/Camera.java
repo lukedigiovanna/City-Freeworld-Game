@@ -217,7 +217,7 @@ public class Camera {
 			e.draw(this);
 			rotate(-rotation,x,y);
 			
-			e.drawHitbox(this);
+			//e.drawHitbox(this);
 		}
 		
 		//walls.draw(this);

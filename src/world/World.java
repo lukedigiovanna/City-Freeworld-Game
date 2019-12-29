@@ -1,23 +1,14 @@
 package world;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import display.Animation;
 import entities.Entity;
 import entities.EntityObject;
 import entities.player.Player;
 import entities.vehicles.Car;
 import game.Game;
-import entities.Portal;
-import entities.SampleEntity;
-import main.Program;
-import misc.ImageTools;
-import misc.Line;
-import misc.MathUtils;
-import misc.Vector2;
+import misc.*;
 
 public class World {
 	private Game game;
@@ -34,11 +25,7 @@ public class World {
 		regions = new ArrayList<Region>();
 
 		Region temp = new Region(this,worldName,0);
-		
-		for (int x = 0; x < temp.getWidth(); x+=2)
-			for (int y = 0; y < temp.getHeight(); y+=2)
-				temp.add(new EntityObject(0,x,y));
-		
+
 		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
 

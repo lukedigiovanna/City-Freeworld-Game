@@ -162,20 +162,20 @@ public class Line {
 	}
 	
 	/**
-	 * Calculates the perpendicular distance from a point to the line segment
+	 * Calculates the shortest distance from a point to the line segment
 	 * this line is defined by two endpoints: (x1, y1), (x2, y2)
 	 * the endpoint is defined by one point: (x0,y0)
-	 * distance is defined by the equation:
-	 * d = (|(y2-y1)x0-(x2-x1)y0+x2y1-y2x1|)/sqrt((y2-y1)^2+(x2-x1)^2)
 	 * @param point the other point
 	 * @return
 	 */
 	public float distance(Vector2 point) {
-		float x0 = point.x, y0 = point.y;
-		float x1 = this.endpoint1.x, y1 = this.endpoint1.y,
-			  x2 = this.endpoint2.x, y2 = this.endpoint2.y;
-		float distance = (float)(Math.abs((y2-y1)*x0-(x2-x1)*y0+x2*y1-y2*x1)/Math.sqrt((y2-y1)*(y2-y1)+(x2-x1)*(x2-x1)));
-		return distance;
+		float l2 = this.endpoint1.getDistanceSquared(this.endpoint2);
+		if (l2 == 0.0f) 
+			return endpoint1.getDistanceSquared(point);
+		float t = ((point.x - endpoint1.x) * (endpoint2.x - endpoint1.x) + (point.y - endpoint1.y) * (endpoint2.y - endpoint1.y))/l2;
+		t = MathUtils.max(0.0f, MathUtils.min(1.0f, t));
+		Vector2 p = new Vector2((endpoint1.x + t * (endpoint2.x - endpoint1.x)),(endpoint1.y + t * (endpoint2.y - endpoint1.y)));
+		return point.getDistanceSquared(p);
 	}
 	
 	/**

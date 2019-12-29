@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import display.textures.TexturePack;
 import entities.Entity;
 import entities.EntityList;
+import entities.EntityObject;
 import entities.Particle;
 import entities.Particle.Type;
 import entities.Portal;
@@ -72,6 +73,15 @@ public class Region {
 				float y2 = in.read() + in.read()/256.0f;
 				Line w = new Line(new Vector2(x1,y1), new Vector2(x2,y2));
 				this.addWall(w);
+			}
+			int numOfObjects = in.read();
+			for (int i = 0; i < numOfObjects; i++) {
+				int id = in.read();
+				float x = in.read() + in.read()/256.0f;
+				float y = in.read() + in.read()/256.0f;
+				
+				EntityObject o = new EntityObject(id,x,y);
+				this.add(o);
 			}
 			in.close();
 		} catch (Exception e) {

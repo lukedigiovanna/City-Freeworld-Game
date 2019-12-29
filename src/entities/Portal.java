@@ -3,6 +3,7 @@ package entities;
 import java.awt.Color;
 import java.util.List;
 
+import misc.MathUtils;
 import world.Camera;
 import world.Properties;
 import world.Region;
@@ -41,7 +42,8 @@ public class Portal extends Entity {
 			r = 0;
 			rv*=-1;
 		}
-		this.getRegion().addParticles(Particle.Type.SPARKLES,Color.CYAN,3,0.2f,getX(),getY(),getWidth(),getHeight());
+		Color[] rainbow = {Color.RED,Color.ORANGE,Color.YELLOW,Color.GREEN,Color.BLUE,Color.MAGENTA};
+		this.getRegion().addParticles(Particle.Type.SPARKLES,rainbow[MathUtils.random(rainbow.length)],1,0.1f,getX(),getY(),getWidth(),getHeight());
 	}
 	
 	public static class Destination {

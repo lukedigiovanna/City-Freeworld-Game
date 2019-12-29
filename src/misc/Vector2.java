@@ -76,6 +76,11 @@ public class Vector2 {
 		this.y = magnitude*(float)Math.sin(angle); 
 	}
 	
+	public float getDistanceSquared(Vector2 other) {
+		float dx = other.x - this.x, dy = other.y - this.y;
+		return dx * dx + dy * dy;
+	}
+	
 	public void setX(float x) {
 		this.x = x;
 	}

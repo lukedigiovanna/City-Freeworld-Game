@@ -10,9 +10,11 @@ public enum Tool {
 	ERASE("eraser", "Erase","Erase a specific tile"),
 	TOGGLE_GRID("grid_toggle","Tog. Grid","Toggle shown grid"),
 	WALL("wall","Lay Wall","Draw wall lines"),
+	PORTAL("portal","Portal","Add portals that link to regions"),
+	OBJECT("object","Object","Add objects to the world such as trees/benches"),
 	EXPAND("expand","Expand","Use arrows to adjust the size"),
 	SHRINK("shrink","Shrink","Use arrows to adjust the size"),
-	PORTAL("portal","Add Portal","Add portals that link to regions");
+	DELETE("delete","Delete","Delete objects/walls/portals");
 	
 	BufferedImage img;
 	String name;

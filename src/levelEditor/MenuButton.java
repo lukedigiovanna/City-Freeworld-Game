@@ -26,6 +26,7 @@ public class MenuButton extends Button {
 	
 	@Override
 	public void draw(Graphics2D g) {
+		g.setStroke(new BasicStroke(5));
 		g.setColor(color);
 		g.fillRoundRect(x, y, width, height, 6, 6);
 		g.setColor(Color.BLACK);
