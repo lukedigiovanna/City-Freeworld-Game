@@ -17,4 +17,8 @@ public class Weapon extends Item {
 	private boolean automatic;
 	private float damagePerHit;
 	private float reloadTime;
+	
+	public Weapon() {
+		
+	}
 }

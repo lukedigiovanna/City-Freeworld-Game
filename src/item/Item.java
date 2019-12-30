@@ -5,7 +5,7 @@ package item;
  */
 public class Item {
 	
-	
+	private String displayName;
 	
 	public Item() {
 		

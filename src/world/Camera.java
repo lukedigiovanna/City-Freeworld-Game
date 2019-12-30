@@ -29,6 +29,8 @@ public class Camera {
 	private Entity focus;	
 	private Region region;
 	
+	private boolean drawHitboxes = false, drawWalls = false;
+	
 	//rendering hints for more high quality graphics
 	private Map<RenderingHints.Key,Object> map = new HashMap<RenderingHints.Key,Object>();
 	private RenderingHints rh;
@@ -82,6 +84,14 @@ public class Camera {
 	
 	public void setFocus(Entity e) {
 		this.focus = e;
+	}
+	
+	public void toggleHitboxes() {
+		this.drawHitboxes = !this.drawHitboxes;
+	}
+	
+	public void toggleWalls() {
+		this.drawWalls = !this.drawWalls;
 	}
 	
 	/**
@@ -217,10 +227,12 @@ public class Camera {
 			e.draw(this);
 			rotate(-rotation,x,y);
 			
-			//e.drawHitbox(this);
+			if (this.drawHitboxes)
+				e.drawHitbox(this);
 		}
 		
-		//walls.draw(this);
+		if (this.drawWalls)
+			walls.draw(this);
 	}
 	
 	/*

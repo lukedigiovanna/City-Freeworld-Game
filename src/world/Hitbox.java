@@ -115,8 +115,9 @@ public class Hitbox {
 	}
 	
 	public void rotate(float radians) {
-		for (Line l : lines)
-			l.rotateAbout(owner.center(),radians);
+		if (this.owner.getProperty(Properties.KEY_HITBOX_HAS_ROTATION) == Properties.VALUE_HITBOX_HAS_ROTATION_TRUE)
+			for (Line l : lines)
+				l.rotateAbout(owner.center(),radians);
 	}
 	
 	public void translate(float dx, float dy) {

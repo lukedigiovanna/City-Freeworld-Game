@@ -12,7 +12,6 @@ public class Keyboard {
 	
 	private List<Key> keys;
 	
-	
 	public Keyboard(JPanel panel) {
 		this.panel = panel;
 		
@@ -110,6 +109,16 @@ public class Keyboard {
 		return false;
 	}
 	
+	public Key getNextKey() {
+		if (keys.size() == 0)
+			return null;
+		else {
+			Key next = keys.get(0);
+			keys.remove(0);
+			return next;
+		}
+	}
+	
 	public Keyboard.Key[] getAllKeysDown() {
 		Keyboard.Key[] arr = new Keyboard.Key[keys.size()];
 		for (int i = 0; i < arr.length; i++) 
@@ -120,9 +129,12 @@ public class Keyboard {
 	public class Key {
 		private int keycode;
 		private char c;
+		private KeyEvent keyEvent;
+		
 		public Key(KeyEvent e) {
 			keycode = e.getKeyCode();
 			c = Character.toLowerCase(e.getKeyChar());
+			this.keyEvent = e;
 		}
 		
 		public int keycode() {

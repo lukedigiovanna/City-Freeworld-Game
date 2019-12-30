@@ -13,7 +13,13 @@ public class UpdateNotesDisplay extends Display {
 		"Fixed collision between moving objects",
 		"Created a level editor to design regions",
 		"    Some sample regions have been created",
-		"Fixed a movement bug that caused overmovement of objects before"
+		"    Support for painting tiles, laying walls, settings portals, and placing objects",
+		"Fixed a movement bug that caused overmovement of objects before",
+		"Developer tools added",
+		"    Press CTRL + H to toggle hitbox display",
+		"    Press CTRL + W to toggle wall display",
+		"    Use the BACK QUOTE (`) to open developer console",
+		"        use commands here to manipulate the game"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

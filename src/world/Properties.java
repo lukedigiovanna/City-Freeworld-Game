@@ -20,14 +20,21 @@ public class Properties {
 		 * Key for whether or not this object can be hurt by things like
 		 * bullets or fire.
 		 */
-		KEY_INVULNERABLE = new Key(2);
+		KEY_INVULNERABLE = new Key(2),
+		/**
+		 * Key for whether or not the hitbox should be rotated as it moves
+		 * or remain static.
+		 */
+		KEY_HITBOX_HAS_ROTATION = new Key(3);
 	public static final Value
 		VALUE_HAS_COLLISION_TRUE = new Value(0),
 		VALUE_HAS_COLLISION_FALSE = new Value(1),
 		VALUE_REGENERATE_HITBOX_TRUE = new Value(2),
 		VALUE_REGENERATE_HITBOX_FALSE = new Value(3),
 		VALUE_INVULNERABLE_TRUE = new Value(4),
-		VALUE_INVULNERABLE_FALSE = new Value(5);
+		VALUE_INVULNERABLE_FALSE = new Value(5),
+		VALUE_HITBOX_HAS_ROTATION_TRUE = new Value(6),
+		VALUE_HITBOX_HAS_ROTATION_FALSE = new Value(7);
 	
 	private Map<Key,Value> map;
 	
@@ -38,6 +45,7 @@ public class Properties {
 		set(KEY_HAS_COLLISION,VALUE_HAS_COLLISION_TRUE); //has collision by default
 		set(KEY_REGENERATE_HITBOX,VALUE_REGENERATE_HITBOX_TRUE);
 		set(KEY_INVULNERABLE,VALUE_INVULNERABLE_FALSE);
+		set(KEY_HITBOX_HAS_ROTATION,VALUE_HITBOX_HAS_ROTATION_TRUE);
 	}
 	
 	public void set(Key key, Value value) {

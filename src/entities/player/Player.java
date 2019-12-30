@@ -7,12 +7,15 @@ import java.util.List;
 import entities.*;
 import entities.projectiles.*;
 import entities.vehicles.Vehicle;
+import item.weapon.Weapon;
+import item.weapon.WeaponManager;
 import display.Animation;
 import main.Program;
 import main.Settings;
 import misc.*;
 import soundEngine.Sound;
 import world.Camera;
+import world.Properties;
 
 public class Player extends Entity {
 	
@@ -35,7 +38,7 @@ public class Player extends Entity {
 	
 	private String name = "Earl";
 	private BankAccount bankAct;
-	private Inventory inventory;
+	private WeaponManager weaponManager;
 	private BufferedImage profilePicture;
 	
 	private Orientation orientation = Orientation.DOWN;
@@ -51,7 +54,8 @@ public class Player extends Entity {
 //		};
 //		this.setModel(model);
 		this.bankAct = new BankAccount(this);
-		this.inventory = new Inventory();
+		this.weaponManager = new WeaponManager(this);
+		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
 		addTag("player");
 	}
@@ -307,6 +311,16 @@ public class Player extends Entity {
 			this.movementType = 2;
 			this.setDimension(1.0f,1.0f);
 		}
+		
+		this.weaponManager.listen();
+	}
+	
+	public WeaponManager getWeaponManager() {
+		return this.weaponManager;
+	}
+	
+	public Weapon getSelectedWeapon() {
+		return this.weaponManager.getSelectedWeapon();
 	}
 	
 	/**

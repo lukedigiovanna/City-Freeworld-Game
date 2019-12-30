@@ -2,6 +2,8 @@ package display;
 
 import java.awt.*;
 
+import display.console.Console;
+import display.console.ConsoleMessage;
 import game.FrameTimer;
 import main.Program;
 import misc.Color8;
@@ -26,6 +28,8 @@ public class DisplayController {
 		}
 	}
 	
+	private static Console console;
+	
 	private static Screen currentScreen = Screen.MAIN;
 	
 	private static int captures = 0;
@@ -38,6 +42,9 @@ public class DisplayController {
 		g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
 		
 		currentScreen.display.draw(g);
+		
+		console.listen();
+		console.draw(g);
 		
 		//get the time it took to draw this frame
 		dt += frameTimer.mark();
@@ -96,6 +103,8 @@ public class DisplayController {
 			}
 		});
 		compCheckThread.start();
+		console = new Console();
+		console.log("Initialized Program",ConsoleMessage.PROGRAM_MESSAGE);
 		frameTimer = new FrameTimer();
 		initialized = true;
 		currentScreen.display.set();

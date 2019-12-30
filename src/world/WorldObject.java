@@ -35,8 +35,8 @@ public abstract class WorldObject {
 		this.position = new Vector2(x,y,0);
 		this.verticalHeight = MIN_HEIGHT; //by default
 		this.velocity = new Vector2(0,0,0); //initial velocity is 0
-		float[] model = {0.0f,0.0f,width,0.0f,width,height,0.0f,height};
-		this.hitbox = new Hitbox(this, model);
+		this.setDimension(width, height);
+		this.setHitboxToDimension();
 		//this staggers regeneration so not every object regenerates its hitbox at the same time
 		// *reduces the chance of a lag spike
 		this.properties = new Properties();
@@ -100,6 +100,15 @@ public abstract class WorldObject {
 		this.move(dt);
 			
 		age += dt;
+	}
+	
+	/**
+	 * Uses the dimensional width and height to create a hitbox
+	 * that follows those dimensions for the object.
+	 */
+	public void setHitboxToDimension() {
+		float[] model = {0.0f,0.0f,getWidth(),0.0f,getWidth(),getHeight(),0.0f,getHeight()};
+		this.hitbox = new Hitbox(this, model);
 	}
 	
 	public void regenerateHitbox() {
@@ -351,6 +360,20 @@ public abstract class WorldObject {
 		this.hitbox.rotate(-extraMovement);
 	}
 	
+	public void correctOutOfWalls() {
+		//check if we are intersecting a wall
+		for (Line l : this.getRegion().getWalls().getWalls()) {
+			Vector2 intersection = this.hitbox.intersecting(l);
+			if (intersection != null) {
+				//correct
+				do {
+					this.setX(this.getX() - 0.01f);
+				} while (intersection != null);
+				return; //go out.
+			}
+		}
+	}
+	
 	/**
 	 * Sets the position given two floats
 	 * @param x x-coord
@@ -502,6 +525,6 @@ public abstract class WorldObject {
 	}
 	
 	public Properties.Value getProperty(Properties.Key key) {
-		return properties.get(key);
+		return properties == null ? null : properties.get(key);
 	}
 }

@@ -106,6 +106,13 @@ public class Game {
 			return; //dont run the game loop if we are paused
 		}
 		
+		if (Program.keyboard.keyDown(KeyEvent.VK_CONTROL)) {
+			if (Program.keyboard.keyPressed(KeyEvent.VK_H))
+				this.world.getCamera().toggleHitboxes();
+			if (Program.keyboard.keyPressed(KeyEvent.VK_W))
+				this.world.getCamera().toggleWalls();
+		}
+		
 		
 		if (Settings.getSetting("master_volume").contentEquals("1.0"))
 			sound.loop();
@@ -191,6 +198,20 @@ public class Game {
 		g.fillRect(0, 0, cameraBorderSize, CAMERA_PIXEL_HEIGHT+cameraBorderSize);
 		g.fillRect(cameraBorderSize, 0, CAMERA_PIXEL_WIDTH, cameraBorderSize);
 		
+		if (paused) {
+			//make the game gray scaled
+			g.drawImage(ImageTools.colorscale(cameraView,Color.WHITE), cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
+			g.setColor(Color.RED);
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
+			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
+			for (PauseButton b : pButs) {
+				b.check();
+				b.draw(g);
+			}
+		} else {
+			g.drawImage(cameraView, cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
+		}
+		
 		//draw the profile bar
 		List<Player> players = this.world.getPlayers();
 		if (players.size() > 0) {
@@ -222,19 +243,8 @@ public class Game {
 				g.setColor(colors[i]);
 				g.drawString(info[i], ppX+ppS+10, y+i*(si+add)+si);
 			}
-		}
-		if (paused) {
-			//make the game gray scaled
-			g.drawImage(ImageTools.colorscale(cameraView,Color.WHITE), cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
-			g.setColor(Color.RED);
-			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
-			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
-			for (PauseButton b : pButs) {
-				b.check();
-				b.draw(g);
-			}
-		} else {
-			g.drawImage(cameraView, cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
+			
+			player.getWeaponManager().draw(g);
 		}
 		//draw this other stuff about the player
 		int botHeight = Program.DISPLAY_HEIGHT-CAMERA_PIXEL_HEIGHT-cameraBorderSize*2;
