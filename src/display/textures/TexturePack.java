@@ -79,6 +79,7 @@ public class TexturePack {
 		addObjectTexture("palm_tree",1.0f,1.0f,"Palm Tree");
 		addObjectTexture("maple_tree",1.0f,1.0f,"Maple Tree");
 		addObjectTexture("apple_tree",1.0f,1.0f,"Apple Tree");
+		addObjectTexture("soda_can",0.25f,0.5f,"Soda Can");
 		save();
 		load();
 	}

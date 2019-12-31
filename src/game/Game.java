@@ -7,7 +7,7 @@ import java.util.List;
 
 import display.*;
 import entities.player.Player;
-import item.weapon.Weapon;
+import weapons.Weapon;
 import main.*;
 import misc.*;
 import soundEngine.Sound;
@@ -273,6 +273,9 @@ public class Game {
 				g.drawString(ammo, ax+aSize, ay+aSize);
 				g.setColor(Color.LIGHT_GRAY);
 				g.drawString(ammo, ax, ay);
+				int reloadBarWidth = g.getFontMetrics().stringWidth(ammo), reloadBarHeight = 5;
+				g.setColor(Color.WHITE);
+				g.fillRect(ax,ay+6,(int)(reloadBarWidth*selected.getReloadPercent()),reloadBarHeight);
 			}
 			if (!paused)
 				player.getWeaponManager().draw(g);

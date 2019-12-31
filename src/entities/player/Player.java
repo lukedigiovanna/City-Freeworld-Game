@@ -5,18 +5,13 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import entities.*;
-import entities.projectiles.*;
 import entities.vehicles.Vehicle;
-import item.weapon.Weapon;
-import item.weapon.WeaponManager;
+import weapons.Weapon;
+import weapons.WeaponManager;
 import display.Animation;
-import display.DisplayController;
-import display.console.ConsoleMessage;
 import main.Program;
 import main.Settings;
 import misc.*;
-import soundEngine.Sound;
-import soundEngine.SoundManager;
 import world.Camera;
 import world.Properties;
 
@@ -34,8 +29,7 @@ public class Player extends Entity {
 	private BufferedImage profilePicture;
 	
 	public Player(float x, float y) {
-		//super(x, y, 0.75f, 1.375f);
-		super(x,y,0.8f,0.8f);
+		super(x,y,11.0f/16,12.0f/16);
 		this.bankAct = new BankAccount(this);
 		this.weaponManager = new WeaponManager(this);
 		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
@@ -86,73 +80,83 @@ public class Player extends Entity {
 		char left = Settings.getSetting("move_left").charAt(0);
 		char right = Settings.getSetting("move_right").charAt(0);
 		
-		this.getVelocity().zero();
-		
-		if (this.riding == null) {
-			float mag = 0.0f;
-			float r = 0.0f;
-			speed = 2;
-			if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
-				speed = 4;
-			if (Program.keyboard.keyDown(up))
-				mag += speed;
-			if (Program.keyboard.keyDown(down))
-				mag -= speed/2;
-			if (Program.keyboard.keyDown(left))
-				r -= rotationalSpeed;
-			if (Program.keyboard.keyDown(right))
-				r += rotationalSpeed;
-			
-			this.getVelocity().r = r;
-			this.getVelocity().setMagnitude(mag);
-			this.getVelocity().setAngle(this.getRotation());
-			if (mag < 0)
-				this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);
-			
-			if (mag == 0)
-				curAni = idle;
-			else
-				curAni = walk;
-		} else { //then we are in a car
-			if (Program.keyboard.keyDown(up))
-				this.riding.accelerate(dt);
-			
-			if (Program.keyboard.keyDown(down))
-				this.riding.brake(dt);
-			
-			if (Program.keyboard.keyDown(left))
-				this.riding.turnLeft(dt);
-			
-			if (Program.keyboard.keyDown(right))
-				this.riding.turnRight(dt);
-			
-			this.setPosition(riding.centerX()-this.getWidth()/2, riding.centerY()-this.getHeight()/2);
+		if (Program.keyboard.keyPressed('p')) {
+			Path p = new Path();
+			p.add(getX(),getY());
+			p.add(getX()-3.0f,getY());
+			p.add(getX()-3.0f,getY()-3.0f);
+			this.queuePath(p);
 		}
 		
-		if (this.getVelocity().r == 0) {
-			int positions = 16;
-			double size = Math.PI*2/positions;
-			float angle = this.getRotation();
-			while (angle < 0)
-				angle += Math.PI * 2;
-			for (int i = 0; i < positions; i++) {
-				double theta = i/(double)positions*Math.PI*2;
-				if (angle > theta-size/2 && angle <= theta + size/2) {
-					this.setRotation((float)theta);
-				}
-				if (theta == 0) {
-					if (angle < size/2 || angle > Math.PI*2-size/2)
+		if (!this.isFollowingPath()) {
+			this.getVelocity().zero();
+			
+			if (this.riding == null) {
+				float mag = 0.0f;
+				float r = 0.0f;
+				speed = 2;
+				if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
+					speed = 4;
+				if (Program.keyboard.keyDown(up))
+					mag += speed;
+				if (Program.keyboard.keyDown(down))
+					mag -= speed/2;
+				if (Program.keyboard.keyDown(left))
+					r -= rotationalSpeed;
+				if (Program.keyboard.keyDown(right))
+					r += rotationalSpeed;
+				
+				this.getVelocity().r = r;
+				this.getVelocity().setMagnitude(mag);
+				this.getVelocity().setAngle(this.getRotation());
+				if (mag < 0)
+					this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);
+				
+				if (mag == 0)
+					curAni = idle;
+				else
+					curAni = walk;
+			} else { //then we are in a car
+				if (Program.keyboard.keyDown(up))
+					this.riding.accelerate(dt);
+				
+				if (Program.keyboard.keyDown(down))
+					this.riding.brake(dt);
+				
+				if (Program.keyboard.keyDown(left))
+					this.riding.turnLeft(dt);
+				
+				if (Program.keyboard.keyDown(right))
+					this.riding.turnRight(dt);
+				
+				this.setPosition(riding.centerX()-this.getWidth()/2, riding.centerY()-this.getHeight()/2);
+			}
+			
+			if (this.getVelocity().r == 0) {
+				int positions = 16;
+				double size = Math.PI*2/positions;
+				float angle = this.getRotation();
+				while (angle < 0)
+					angle += Math.PI * 2;
+				for (int i = 0; i < positions; i++) {
+					double theta = i/(double)positions*Math.PI*2;
+					if (angle > theta-size/2 && angle <= theta + size/2) {
 						this.setRotation((float)theta);
+					}
+					if (theta == 0) {
+						if (angle < size/2 || angle > Math.PI*2-size/2)
+							this.setRotation((float)theta);
+					}
 				}
 			}
+			
+			if (Program.keyboard.keyPressed(KeyEvent.VK_F)) {
+				if (riding == null)
+					findVehicle();
+				else
+					exitVehicle();
+			}	
 		}
-		
-		if (Program.keyboard.keyPressed(KeyEvent.VK_F)) {
-			if (riding == null)
-				findVehicle();
-			else
-				exitVehicle();
-		}	
 	
 		Weapon selected = this.getSelectedWeapon();
 		if (selected != null) {

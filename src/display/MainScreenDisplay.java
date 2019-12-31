@@ -52,7 +52,7 @@ public class MainScreenDisplay extends Display {
 //		add(slider);
 	}
 	
-	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
+	private BufferedImage background = (ImageTools.getImage("gta.jpg"));
 
 	@Override
 	public void draw(Graphics2D g) {

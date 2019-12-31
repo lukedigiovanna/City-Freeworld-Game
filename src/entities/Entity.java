@@ -28,7 +28,7 @@ public abstract class Entity extends WorldObject {
 		setDimension(new Vector2(width,height));
 		this.setVelocity(0,0,0);
 		tags = new ArrayList<String>();
-		tags.add("entity");
+		addTag("entity");
 		paths = new ArrayList<Path>();
 		this.health = new Health(1,1);
 	}
@@ -66,6 +66,10 @@ public abstract class Entity extends WorldObject {
 	
 	public List<String> getTags() {
 		return tags;
+	}
+	
+	public boolean isFollowingPath() {
+		return paths.size() > 0;
 	}
 	
 	/**
