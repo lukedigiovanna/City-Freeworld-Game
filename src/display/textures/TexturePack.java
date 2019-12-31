@@ -57,6 +57,12 @@ public class TexturePack {
 		addTileTexture("planks","Wooden Planks 1");
 		addTileTexture("planks1","Wooden Planks 2");
 		addTileTexture("black_and_white_tile", "Black and White Tile");
+		addTileTexture("mossy_stone","Mossy Stone");
+		addTileTexture("stone","Stone");
+		addTileTexture("path","Path");
+		addTileTexture("bricks","Bricks");
+		addTileTexture("sand_sidewalk","Sand Sidewalk");
+		addTileTexture("concrete_sidewalk","Concrete Sidewalk");
 		addTileTexture("street","Black Street");
 		addTileTexture("side_of_street","Black Street Edge");
 		addTileTexture("street_same_way_crossing","Black Street White Dashed Lines");

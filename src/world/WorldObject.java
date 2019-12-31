@@ -98,6 +98,10 @@ public abstract class WorldObject {
 		
 		//move with the current velocity
 		this.move(dt);
+		
+		//collision correction
+		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_TRUE)
+			this.correctOutOfWalls();
 			
 		age += dt;
 	}
@@ -364,12 +368,16 @@ public abstract class WorldObject {
 		//check if we are intersecting a wall
 		for (Line l : this.getRegion().getWalls().getWalls()) {
 			Vector2 intersection = this.hitbox.intersecting(l);
-			if (intersection != null) {
+			while (intersection != null) {
 				//correct
-				do {
-					this.setX(this.getX() - 0.01f);
-				} while (intersection != null);
-				return; //go out.
+				//get the angle to go out with
+				float angle = l.angleTo(this.center());
+				float dx = (float)Math.cos(angle) * 0.01f,
+					  dy = (float)Math.sin(angle) * 0.01f; 
+				this.setX(this.getX() + dx);
+				this.setY(this.getY() + dy);
+				this.hitbox.translate(dx, dy);
+				intersection = this.hitbox.intersecting(l);
 			}
 		}
 	}

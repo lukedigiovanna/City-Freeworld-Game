@@ -28,7 +28,7 @@ public class DisplayController {
 		}
 	}
 	
-	private static Console console;
+	public static Console console;
 	
 	private static Screen currentScreen = Screen.MAIN;
 	

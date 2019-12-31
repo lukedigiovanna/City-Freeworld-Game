@@ -164,11 +164,11 @@ public class EditorRegion {
 	}
 	
 	public void fillGrid(int x, int y, int fillValue) {
-		fillGrid(x,y,fillValue,getGridValue(x,y));
+		fillGrid(x,y,fillValue,getGridValue(x,y));		
 	}
 	
 	public void fillGrid(int x, int y, int fillValue, int previousValue) {
-		if (getGridValue(x,y) != previousValue) {
+		if (getGridValue(x,y) != previousValue || fillValue == previousValue) {
 			return; //end condition
 		}
 		else {

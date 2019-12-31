@@ -31,7 +31,6 @@ public class Game {
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
-				long last = System.currentTimeMillis();
 				while (true) {
 					try {
 						long before = System.currentTimeMillis();
@@ -99,9 +98,6 @@ public class Game {
 		float dt = ft.mark();
 		
 		if (this.paused) {
-			//check to return to the main menu
-			if (Program.keyboard.keyPressed('q'))
-				DisplayController.setScreen(DisplayController.Screen.MAIN);
 			sound.pause();
 			return; //dont run the game loop if we are paused
 		}
@@ -150,8 +146,8 @@ public class Game {
 	
 	private static int cameraBorderSize = 20;
 	
-	public static final float CAMERA_PERCENT_WIDTH = 1.0f, CAMERA_PERCENT_HEIGHT = 0.75f;
-	public static final int CAMERA_PIXEL_WIDTH = (int)(CAMERA_PERCENT_WIDTH*Program.DISPLAY_WIDTH)-cameraBorderSize*2, CAMERA_PIXEL_HEIGHT = (int)(CAMERA_PERCENT_HEIGHT*Program.DISPLAY_HEIGHT);
+	public static final float CAMERA_PERCENT_WIDTH = 1.0f, CAMERA_PERCENT_HEIGHT = 1.0f;
+	public static final int CAMERA_PIXEL_WIDTH = (int)(CAMERA_PERCENT_WIDTH*Program.DISPLAY_WIDTH), CAMERA_PIXEL_HEIGHT = (int)(CAMERA_PERCENT_HEIGHT*Program.DISPLAY_HEIGHT);
 	
 	private abstract class PauseButton extends display.component.Button {
 
@@ -191,16 +187,10 @@ public class Game {
 		if (!paused)
 			world.draw();	
 		BufferedImage cameraView = world.getCamera().getView();
-		//draw the border around the camera
-		g.setColor(Color8.GRAY);
-		g.fillRect(0, cameraBorderSize+CAMERA_PIXEL_HEIGHT, CAMERA_PIXEL_WIDTH+cameraBorderSize*2, cameraBorderSize);
-		g.fillRect(cameraBorderSize+CAMERA_PIXEL_WIDTH, 0, cameraBorderSize, CAMERA_PIXEL_HEIGHT+cameraBorderSize);
-		g.fillRect(0, 0, cameraBorderSize, CAMERA_PIXEL_HEIGHT+cameraBorderSize);
-		g.fillRect(cameraBorderSize, 0, CAMERA_PIXEL_WIDTH, cameraBorderSize);
-		
+
 		if (paused) {
 			//make the game gray scaled
-			g.drawImage(ImageTools.colorscale(cameraView,Color.WHITE), cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
+			g.drawImage(ImageTools.colorscale(cameraView,Color.WHITE), 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 			g.setColor(Color.RED);
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
 			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
@@ -209,19 +199,30 @@ public class Game {
 				b.draw(g);
 			}
 		} else {
-			g.drawImage(cameraView, cameraBorderSize, cameraBorderSize, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
+			g.drawImage(cameraView, 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 		}
+		
+		g.setColor(Color8.GRAY);
+		g.setStroke(new BasicStroke(cameraBorderSize*2));
+		g.drawRect(0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT);
 		
 		//draw the profile bar
 		List<Player> players = this.world.getPlayers();
 		if (players.size() > 0) {
 			Player player = (Player) this.world.getPlayers().get(0);
-			int cameraHeight = CAMERA_PIXEL_HEIGHT+cameraBorderSize*2;
+			int cameraHeight = CAMERA_PIXEL_HEIGHT-150-cameraBorderSize;
 			int profileHeight = Program.DISPLAY_HEIGHT-cameraHeight;
+			int barHeight = 150, barWidth = 340;
 			float padding = 0.15f;
 			int pixelPadding = (int)(padding*profileHeight);
-			int ppX = pixelPadding, ppY = cameraHeight+pixelPadding,
+			int ppX = cameraBorderSize+pixelPadding, ppY = cameraHeight+pixelPadding,
 					ppS = (int)((1-padding*2)*profileHeight);
+			g.setColor(new Color(0,0,0,175));
+			g.fillRect(cameraBorderSize, cameraHeight, barWidth, barHeight);
+			int[] xPoints = {barWidth+cameraBorderSize, barWidth+cameraBorderSize, barWidth+cameraBorderSize+150};
+			int[] yPoints = {Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize};
+			g.fillPolygon(xPoints,yPoints,3);
+			
 			g.setColor(Color.GRAY);
 			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
 			g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);

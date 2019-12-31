@@ -42,7 +42,9 @@ public class WeaponScroll {
 		g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(5));
 		for (int i = 0; i < weapons.length; i++) {
-			
+			double theta = (double)i/weapons.length*Math.PI*2;
+			int radius = size/2-5;
+			g.drawLine(Program.DISPLAY_WIDTH/2, Program.DISPLAY_HEIGHT/2, Program.DISPLAY_WIDTH/2+(int)(Math.cos(theta)*radius), Program.DISPLAY_HEIGHT/2+(int)(Math.sin(theta)*radius));
 		}
 	}
 }

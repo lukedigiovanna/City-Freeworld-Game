@@ -152,21 +152,30 @@ public class EditorPanel extends JPanel {
 		this.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				float mpxOnView = (float)(mouse.getX() - vx - offX),
-					  mpyOnView = (float)(mouse.getY() - vy - offY);
-				float mxOnRegion = (float)(mpxOnView / size),
-					  myOnRegion = (float)(mpyOnView / size);
-				float ds = (float)(e.getPreciseWheelRotation() * (size/10));
-				size -= ds;
-				float newMX = (float)(mpxOnView / size),
-					  newMY = (float)(mpyOnView / size);
-				float dx = (float)((newMX - mxOnRegion)*size),
-				      dy = (float)((newMY - myOnRegion)*size);
-				offX += dx;
-				offY += dy;
+				if (mouse.getX() > 200) {
+					float mpxOnView = (float)(mouse.getX() - vx - offX),
+						  mpyOnView = (float)(mouse.getY() - vy - offY);
+					float mxOnRegion = (float)(mpxOnView / size),
+						  myOnRegion = (float)(mpyOnView / size);
+					float ds = (float)(e.getPreciseWheelRotation() * (size/10));
+					size -= ds;
+					float newMX = (float)(mpxOnView / size),
+						  newMY = (float)(mpyOnView / size);
+					float dx = (float)((newMX - mxOnRegion)*size),
+					      dy = (float)((newMY - myOnRegion)*size);
+					offX += dx;
+					offY += dy;
+				} else {
+					if (EditorPanel.this.sideView == EditorPanel.SIDE_VIEW_TILE)
+						tileScrollPos -= e.getPreciseWheelRotation() * 15;
+					else
+						objectScrollPos -= e.getPreciseWheelRotation() * 15;
+				}
 			}
 		});
 	}
+	
+	private int tileScrollPos = 0, objectScrollPos = 0;
 	
 	private Vector2 mouseOnRegion() {
 		float mpxOnView = (float)(mouse.getX() - vx - offX),
@@ -484,29 +493,13 @@ public class EditorPanel extends JPanel {
 		//left bar lists out each tile
 		g.setColor(Color.RED.darker());
 		g.fillRect(0, 0, 200, Program.DISPLAY_HEIGHT);
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(10));
-		g.drawRect(0, 0, 200, Program.DISPLAY_HEIGHT);
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRoundRect(30,20,140,36,12,12);
-		g.setColor(Color.DARK_GRAY );
-		g.setFont(new Font("Arial",Font.BOLD,30));
-		String s = "";
-		switch (sideView) {
-		case SIDE_VIEW_TILE:
-			s = "TILES";
-			break;
-		case SIDE_VIEW_OBJECT:
-			s = "OBJECTS";
-		}
-		g.drawString(s, 100-g.getFontMetrics().stringWidth(s)/2, 50);
 		if (sideView == SIDE_VIEW_TILE) {
 			int tileSize = 60;
 			for (int i = 0; i < tiles.size(); i++) {
 				int x = 60 - tileSize/2;
 				if (i % 2 == 1)
 					x += 80;
-				int y = (i / 2) * (tileSize+10) + 70;
+				int y = (i / 2) * (tileSize+10) + 70 + tileScrollPos;
 				g.drawImage(tiles.get(i).getAnimation().getCurrentFrame(),x,y,tileSize,tileSize,null);
 				if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
 					g.setColor(Color.GRAY);
@@ -527,7 +520,7 @@ public class EditorPanel extends JPanel {
 			}
 		} else if (sideView == SIDE_VIEW_OBJECT) {
 			int objSize = 60;
-			int y = 70;
+			int y = 70+objectScrollPos;
 			for (int i = 0; i < objects.size(); i++) {
 				Texture t = objects.get(i);
 				int width = (int)(t.getWidth() * objSize),
@@ -549,6 +542,22 @@ public class EditorPanel extends JPanel {
 				y+=(height+10);
 			}
 		}
+		g.setColor(Color.BLACK);
+		g.setStroke(new BasicStroke(10));
+		g.drawRect(0, 0, 200, Program.DISPLAY_HEIGHT);
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRoundRect(30,20,140,36,12,12);
+		g.setColor(Color.DARK_GRAY );
+		g.setFont(new Font("Arial",Font.BOLD,30));
+		String s = "";
+		switch (sideView) {
+		case SIDE_VIEW_TILE:
+			s = "TILES";
+			break;
+		case SIDE_VIEW_OBJECT:
+			s = "OBJECTS";
+		}
+		g.drawString(s, 100-g.getFontMetrics().stringWidth(s)/2, 50);
 	}
 	
 	public void paintComponent(Graphics g) {

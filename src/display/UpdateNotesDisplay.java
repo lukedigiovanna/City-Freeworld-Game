@@ -10,16 +10,29 @@ import display.component.Component;
 
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
-		"Fixed collision between moving objects",
 		"Created a level editor to design regions",
 		"    Some sample regions have been created",
-		"    Support for painting tiles, laying walls, settings portals, and placing objects",
-		"Fixed a movement bug that caused overmovement of objects before",
+		"    Supports painting tiles, laying walls, adding portals, and placing objects",
 		"Developer tools added",
 		"    Press CTRL + H to toggle hitbox display",
 		"    Press CTRL + W to toggle wall display",
 		"    Use the BACK QUOTE (`) to open developer console",
-		"        use commands here to manipulate the game"
+		"        use commands here to manipulate the game",
+		"Several new tile textures",
+		"    Bricks, sidewalks, stone, paths, checker tile",
+		"Added objects to the games",
+		"    Trees, fire, benches",
+		"New player animation/walking style",
+		"    Top down view",
+		"    16 degrees of rotation for movement",
+		"    Shoot with UP arrow key",
+		"Several bug fixes/optimizations",
+		"    Fixed collision between moving objects",
+		"    Fixed a movement bug that caused overmovement of objects before",
+		"    Fixed a bug where entities would get stuck in walls",
+		"    Changed rotation of players to ease movement",
+		"    Redrew the camera view/bottom profile bar",
+		"    Fixed tiles being animated incorrectly"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
@@ -72,7 +85,7 @@ public class UpdateNotesDisplay extends Display {
 		g.setFont(new Font(Program.FONT_FAMILY,Font.ITALIC,ptpY(0.05f)));
 		drawText(g,"Version "+Program.getVersionString(),0.5f,0.20f,Display.CENTER_ALIGN);
 		float size = 0.03f;
-		float y = 0.3f;
+		float y = 0.27f;
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.PLAIN,ptpY(size)));
 		for (String s : notes) {
@@ -83,7 +96,7 @@ public class UpdateNotesDisplay extends Display {
 				s = s.substring(1);
 			}
 			str+="* "+s;
-			drawText(g,str,0.05f,y,Display.LEFT_ALIGN);
+			drawText(g,str,0.04f,y,Display.LEFT_ALIGN);
 			y+=size;
 		}
 		

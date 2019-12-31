@@ -175,7 +175,28 @@ public class Line {
 		float t = ((point.x - endpoint1.x) * (endpoint2.x - endpoint1.x) + (point.y - endpoint1.y) * (endpoint2.y - endpoint1.y))/l2;
 		t = MathUtils.max(0.0f, MathUtils.min(1.0f, t));
 		Vector2 p = new Vector2((endpoint1.x + t * (endpoint2.x - endpoint1.x)),(endpoint1.y + t * (endpoint2.y - endpoint1.y)));
-		return point.getDistanceSquared(p);
+		return (float)Math.sqrt(point.getDistanceSquared(p));
+	}
+	
+	/**
+	 * Draws a perpendicular line from this line to the point
+	 * and returns the angle between a horizontal line extending
+	 * from the origin of the perpendicular line on this line and
+	 * the perpendicular line itself.
+	 * Useful for determining where a point is in relation to the line.
+	 * @param point
+	 * @return
+	 */
+	public float angleTo(Vector2 point) {
+		float l2 = this.endpoint1.getDistanceSquared(this.endpoint2);
+		if (l2 == 0.0f) 
+			return endpoint1.getDistanceSquared(point);
+		float t = ((point.x - endpoint1.x) * (endpoint2.x - endpoint1.x) + (point.y - endpoint1.y) * (endpoint2.y - endpoint1.y))/l2;
+		t = MathUtils.max(0.0f, MathUtils.min(1.0f, t));
+		Vector2 p = new Vector2((endpoint1.x + t * (endpoint2.x - endpoint1.x)),(endpoint1.y + t * (endpoint2.y - endpoint1.y)));
+		//point P is the point on the line closest to the point of interest
+		float angle = (float)MathUtils.getAngle(p, point);
+		return angle;
 	}
 	
 	/**

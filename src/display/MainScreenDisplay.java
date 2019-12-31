@@ -16,7 +16,7 @@ public class MainScreenDisplay extends Display {
 
 	private Button[] buttons;
 
-	private Slider slider;
+	//private Slider slider;
 	
 	public MainScreenDisplay() {
 		super();
@@ -48,8 +48,8 @@ public class MainScreenDisplay extends Display {
 		for (Button b : buttons)
 			add(b);
 		
-		slider = new Slider(50,50,100,20, Component.FORM_LEFT);
-		add(slider);
+//		slider = new Slider(50,50,100,20, Component.FORM_LEFT);
+//		add(slider);
 	}
 	
 	private BufferedImage background = ImageTools.convertTo8Bit(ImageTools.getImage("gta.jpg"));
@@ -71,7 +71,7 @@ public class MainScreenDisplay extends Display {
 		for (Button b : buttons)
 			b.draw(g);
 		
-		slider.draw(g);
+		//slider.draw(g);
 	}
 	
 	@Override
