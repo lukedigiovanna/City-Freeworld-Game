@@ -5,9 +5,13 @@ import java.io.*;
 
 public class Sound {
 	
+	public static final Sound 
+			GUN_SHOT = new Sound("assets/sounds/gunfire.wav");
+	
 	//any sound lower than MIN_VOLUME should completely mute the sound.
 	public static final float MIN_VOLUME = -50.0f, MAX_VOLUME = 0.0f;
 	
+	private File audioFile;
 	private Clip clip;
 	private float volume;
 	
@@ -18,16 +22,25 @@ public class Sound {
 	 * @param path File path to the .wav file
 	 */
 	public Sound(String path) {
+		this(new File(path));
+	}
+	
+	public Sound(File audioFile) {
+		this.audioFile = audioFile;
 		try {
 			AudioInputStream audioInputStream = 
 					AudioSystem.getAudioInputStream(
-							new File(path)
+							audioFile
 							);
 			clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 		} catch (Exception e) {
 			
 		}
+	}
+	
+	public Sound copy() {
+		return new Sound(this.audioFile);
 	}
 	
 	public void play() {
@@ -57,5 +70,9 @@ public class Sound {
 		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 		gainControl.setValue(value); 
 		this.volume = value;
+	}
+	
+	public boolean dead() {
+		return clip.getMicrosecondPosition() >= clip.getMicrosecondLength();
 	}
 }

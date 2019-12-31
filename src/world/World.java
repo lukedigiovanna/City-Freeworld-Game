@@ -45,6 +45,10 @@ public class World {
 		camera.setFocus(getPlayers().get(0));
 	}
 	
+	public Game getGame() {
+		return this.game;
+	}
+	
 	public void loadFromFile() {
 		
 	}

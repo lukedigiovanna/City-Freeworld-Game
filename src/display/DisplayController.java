@@ -9,6 +9,7 @@ import main.Program;
 import misc.Color8;
 import misc.ImageTools;
 import misc.MathUtils;
+import soundEngine.SoundManager;
 
 /*
  * static class to handle drawing to the screen
@@ -45,6 +46,8 @@ public class DisplayController {
 		
 		console.listen();
 		console.draw(g);
+		
+		SoundManager.update();
 		
 		//get the time it took to draw this frame
 		dt += frameTimer.mark();

@@ -16,6 +16,7 @@ import main.Program;
 import main.Settings;
 import misc.*;
 import soundEngine.Sound;
+import soundEngine.SoundManager;
 import world.Camera;
 import world.Properties;
 
@@ -90,6 +91,9 @@ public class Player extends Entity {
 		if (this.riding == null) {
 			float mag = 0.0f;
 			float r = 0.0f;
+			speed = 2;
+			if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
+				speed = 4;
 			if (Program.keyboard.keyDown(up))
 				mag += speed;
 			if (Program.keyboard.keyDown(down))
@@ -148,36 +152,24 @@ public class Player extends Entity {
 				findVehicle();
 			else
 				exitVehicle();
-		}
-		
-		if (Program.keyboard.keyPressed('r')) {
-			Path p = new Path();
-			p.add(getX()-1.0f,getY());
-			p.add(getX(),getY());
-			this.queuePath(p);
 		}	
 	
-		float a = -1;
-		if (Program.keyboard.keyDown(KeyEvent.VK_UP)) 
-			a = -(float)Math.PI/2;
-		if (Program.keyboard.keyDown(KeyEvent.VK_RIGHT)) 
-			a = 0;
-		if (Program.keyboard.keyDown(KeyEvent.VK_DOWN)) 
-			a = (float)Math.PI/2;
-		if (Program.keyboard.keyDown(KeyEvent.VK_LEFT)) 
-			a = (float)Math.PI;
-		if (a != -1) {
-		Projectile b1 = new Bullet(this,centerX(),centerY(),a);
-		this.getRegion().add(b1);
-		Sound gun1 = new Sound("assets/sounds/gunfire.wav");
-		gun1.setVolume(-15.0f);
-		if (Settings.getSetting("master_volume").contentEquals("1.0"))
-			gun1.play();
+		Weapon selected = this.getSelectedWeapon();
+		if (selected != null) {
+			if (Program.keyboard.keyDown(KeyEvent.VK_UP)) 
+				selected.pullTrigger();
+			else
+				selected.releaseTrigger();
+			
+			if (Program.keyboard.keyPressed(KeyEvent.VK_R)) {
+				selected.reload();
+			}
 		}
-		
-		curAni.animate(dt);
+	
+		curAni.animate(dt*this.getVelocity().getLength()/2);
 		
 		this.weaponManager.listen();
+		this.weaponManager.update(dt);
 	}
 	
 	public WeaponManager getWeaponManager() {

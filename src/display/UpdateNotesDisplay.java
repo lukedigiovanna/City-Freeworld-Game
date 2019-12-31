@@ -10,29 +10,7 @@ import display.component.Component;
 
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
-		"Created a level editor to design regions",
-		"    Some sample regions have been created",
-		"    Supports painting tiles, laying walls, adding portals, and placing objects",
-		"Developer tools added",
-		"    Press CTRL + H to toggle hitbox display",
-		"    Press CTRL + W to toggle wall display",
-		"    Use the BACK QUOTE (`) to open developer console",
-		"        use commands here to manipulate the game",
-		"Several new tile textures",
-		"    Bricks, sidewalks, stone, paths, checker tile",
-		"Added objects to the games",
-		"    Trees, fire, benches",
-		"New player animation/walking style",
-		"    Top down view",
-		"    16 degrees of rotation for movement",
-		"    Shoot with UP arrow key",
-		"Several bug fixes/optimizations",
-		"    Fixed collision between moving objects",
-		"    Fixed a movement bug that caused overmovement of objects before",
-		"    Fixed a bug where entities would get stuck in walls",
-		"    Changed rotation of players to ease movement",
-		"    Redrew the camera view/bottom profile bar",
-		"    Fixed tiles being animated incorrectly"
+		"weeeeeeeeeeeeeeeeeee :D"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

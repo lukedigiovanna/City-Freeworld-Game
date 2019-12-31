@@ -8,17 +8,18 @@ import javax.swing.ImageIcon;
 
 import display.DisplayController;
 import misc.ImageTools;
+import soundEngine.SoundManager;
 
 //static class that holds some innate information about this application
 public class Program {
 	private static final double ratio = 4.0f/3.0f; //WIDTH/HEIGHT
 	public static final int DISPLAY_WIDTH = 1000, DISPLAY_HEIGHT = (int)(DISPLAY_WIDTH/ratio);
 	
-	public static final int VERSION_MAJOR = 3, VERSION_MINOR = 0, VERSION_TINY = 0;
+	public static final int VERSION_MAJOR = 4, VERSION_MINOR = 0, VERSION_TINY = 0;
 	
 	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
-							   DEVELOPMENT_PERIOD = "December 2019";
+							   DEVELOPMENT_PERIOD = "January 2020";
 	
 	public static final String FONT_FAMILY = "Consolas";
 	
@@ -56,6 +57,7 @@ public class Program {
 		mouse = new Mouse(panel,Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT);
 		keyboard = new Keyboard(panel);
 		DisplayController.initialize();
+		SoundManager.initialize();
 		initialized = true;
 	}
 	

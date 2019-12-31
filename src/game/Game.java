@@ -7,6 +7,7 @@ import java.util.List;
 
 import display.*;
 import entities.player.Player;
+import item.weapon.Weapon;
 import main.*;
 import misc.*;
 import soundEngine.Sound;
@@ -81,6 +82,10 @@ public class Game {
 	
 	public void togglePause() {
 		paused = !paused;
+	}
+	
+	public boolean isPaused() {
+		return this.paused;
 	}
 	
 	private float tps = 0.0f, elapsedSinceLastCapture = 0.0f;
@@ -222,6 +227,11 @@ public class Game {
 			int[] xPoints = {barWidth+cameraBorderSize, barWidth+cameraBorderSize, barWidth+cameraBorderSize+150};
 			int[] yPoints = {Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize};
 			g.fillPolygon(xPoints,yPoints,3);
+			g.setStroke(new BasicStroke(cameraBorderSize/2));
+			int topY = Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize;
+			g.setColor(Color.GRAY);
+			g.drawLine(cameraBorderSize, topY, cameraBorderSize+barWidth, topY);
+			g.drawLine(cameraBorderSize+barWidth, topY, xPoints[2], yPoints[2]);
 			
 			g.setColor(Color.GRAY);
 			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
@@ -245,11 +255,28 @@ public class Game {
 				g.drawString(info[i], ppX+ppS+10, y+i*(si+add)+si);
 			}
 			
-			player.getWeaponManager().draw(g);
+			int weaponSpace = 180;
+			Weapon selected = player.getSelectedWeapon();
+			if (selected != null) {
+				int iconWidth = 90,
+					iconHeight = iconWidth * Weapon.ICON_HEIGHT / Weapon.ICON_WIDTH;
+				g.drawImage(selected.getType().icon, Program.DISPLAY_WIDTH - weaponSpace, Program.DISPLAY_HEIGHT-cameraBorderSize-10-iconHeight,iconWidth,iconHeight,null);
+				String ammo = selected.getLoadedAmmo()+"/"+selected.getAmmoStock();
+				g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD | Font.ITALIC,20));
+				g.setColor(Color.BLACK);
+				int ax = Program.DISPLAY_WIDTH-cameraBorderSize-10-g.getFontMetrics().stringWidth(ammo),
+					ay = Program.DISPLAY_HEIGHT-cameraBorderSize-10-iconHeight/2+10;
+				int aSize = 1;
+				g.drawString(ammo, ax-aSize, ay-aSize);
+				g.drawString(ammo, ax-aSize, ay+aSize);
+				g.drawString(ammo, ax+aSize, ay-aSize);
+				g.drawString(ammo, ax+aSize, ay+aSize);
+				g.setColor(Color.LIGHT_GRAY);
+				g.drawString(ammo, ax, ay);
+			}
+			if (!paused)
+				player.getWeaponManager().draw(g);
 		}
-		//draw this other stuff about the player
-		int botHeight = Program.DISPLAY_HEIGHT-CAMERA_PIXEL_HEIGHT-cameraBorderSize*2;
-		int botY = Program.DISPLAY_HEIGHT-botHeight;
 		
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
