@@ -18,16 +18,16 @@ public class ImageTools {
 									  BLANK = getBlank();
 	
 	public static BufferedImage convertTo8Bit(BufferedImage image) {
-		if (image == null)
-			return null;
-		
-		for (int x = 0; x < image.getWidth(); x++) {
-			for (int y = 0; y < image.getHeight(); y++) {
-				Color c8 = Color8.to8Bit(new Color(image.getRGB(x, y)));
-				image.setRGB(x, y, c8.getRGB());
+		return apply(image,new Modifiable() {
+			public Color modify(Color c) {
+				Color c8 = Color8.to8Bit(c);
+				int red = c8.getRed(),
+					green = c8.getGreen(),
+					blue = c8.getBlue(),
+					alpha = c.getAlpha();
+				return new Color(red,green,blue,alpha);
 			}
-		}
-		return image;
+		});
 	}
 	
 	public static BufferedImage convertTo8Bit(Image image) {
@@ -158,6 +158,8 @@ public class ImageTools {
 	}
 	
 	private static BufferedImage apply(BufferedImage image, Modifiable mod) {
+		if (image == null)
+			return null;
 		BufferedImage newImg = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_INT_ARGB);
 		int[][] rgbs = getRGB(image);
 		for (int x = 0; x < rgbs.length; x++) {
@@ -202,6 +204,7 @@ public class ImageTools {
 			img = ImageIO.read(new File(filePath));
 			if (img == null)
 				return IMAGE_NOT_FOUND;
+			//img = convertTo8Bit(img);
 			return img;
 		} catch (IOException e) {
 			System.err.println("no image "+filePath);
@@ -228,6 +231,7 @@ public class ImageTools {
 				if (file.exists()) {
 					BufferedImage img = ImageTools.getImage(path);
 					if (img != null && !img.equals(ImageTools.IMAGE_NOT_FOUND)) {
+						//img = convertTo8Bit(img);
 						frames.add(img);
 						i++;
 					}

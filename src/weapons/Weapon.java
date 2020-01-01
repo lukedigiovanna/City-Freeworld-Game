@@ -3,7 +3,7 @@ package weapons;
 import java.awt.image.BufferedImage;
 
 import entities.Entity;
-import entities.Particle;
+import entities.misc.Particle;
 import entities.projectiles.Bullet;
 import entities.projectiles.Projectile;
 import misc.ImageTools;
@@ -31,7 +31,7 @@ public class Weapon {
 		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,15.0f),
 		REVOLOVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f),
 		
-		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,12.0f,4.0f,30,5.0f);
+		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,12.0f,4.0f,30,3.0f);
 		
 		public float fireRate,
 			  reloadTime,
@@ -118,6 +118,12 @@ public class Weapon {
 					reload = false;
 				}
 			}
+		}
+		
+		//for making the click sound when the player tries to shoot with no ammo
+		if (this.triggerPulled && this.getLoadedAmmo() == 0 && shotsFiredStreak == 0) {
+			SoundManager.play(Sound.GUN_CLICK);
+			shotsFiredStreak++;
 		}
 		
 		if (this.triggerPulled && this.getLoadedAmmo() > 0 && fireTime >= 1/type.fireRate) {

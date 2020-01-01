@@ -19,7 +19,9 @@ public class UpdateNotesDisplay extends Display {
 		"    Draws the gun into the player's arms",
 		"    Use the <TAB> key to open the UI",
 		"    Use the L+R arrow keys to traverse the scroll",
-		"Added a Day-Night cycle",
+		"Added a light-engine",
+		"    Added a Day-Night cycle",
+		"    Lamps/Fire emit light",
 		"Bug Fixes:",
 		"    Player rotation resetting to 0 when the player rotates >= 360deg",
 		

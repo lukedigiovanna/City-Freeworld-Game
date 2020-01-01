@@ -7,10 +7,10 @@ import java.io.FileInputStream;
 import display.textures.TexturePack;
 import entities.Entity;
 import entities.EntityList;
-import entities.EntityObject;
-import entities.Particle;
-import entities.Particle.Type;
-import entities.Portal;
+import entities.misc.EntityObject;
+import entities.misc.Particle;
+import entities.misc.Portal;
+import entities.misc.Particle.Type;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
@@ -77,7 +77,6 @@ public class Region {
 				int id = in.read();
 				float x = in.read() + in.read()/256.0f;
 				float y = in.read() + in.read()/256.0f;
-				
 				EntityObject o = new EntityObject(id,x,y);
 				this.add(o);
 			}

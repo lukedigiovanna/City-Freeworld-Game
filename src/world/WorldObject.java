@@ -113,8 +113,8 @@ public abstract class WorldObject {
 		for (Entity e : this.getRegion().getEntities().get()) {
 			if (e.getLightEmissionValue() > 0) {
 				float d = this.squaredDistanceTo(e);
-				float light = 1/d * e.getLightEmissionValue();
-				thisVal += light;
+				float light = (float) (-2/(1+Math.pow(2, -0.2 * d))+2);
+				thisVal += light * e.getLightEmissionValue();
 			}
 		}
 		thisVal = MathUtils.clip(0, 1, thisVal);

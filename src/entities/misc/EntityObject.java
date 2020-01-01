@@ -1,12 +1,13 @@
 /**
  * 
  */
-package entities;
+package entities.misc;
 
 import java.util.List;
 
 import display.Animation;
 import display.textures.*;
+import entities.Entity;
 import world.Camera;
 import world.Properties;
 
@@ -20,6 +21,7 @@ public class EntityObject extends Entity {
 		this.texture = TexturePack.current().getObjectTexture(id);
 		this.animation = this.texture.getAnimation().copy(); 
 		this.setDimension(this.texture.getDimension().copy());
+		this.setLightEmissionValue(texture.getLightEmissionValue());
 		this.setHitboxToDimension();
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.addTag("entity_object");

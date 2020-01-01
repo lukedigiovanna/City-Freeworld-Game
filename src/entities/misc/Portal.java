@@ -1,8 +1,10 @@
-package entities;
+package entities.misc;
 
 import java.awt.Color;
 import java.util.List;
 
+import entities.Entity;
+import entities.misc.Particle.Type;
 import misc.MathUtils;
 import world.Camera;
 import world.Properties;

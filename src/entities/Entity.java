@@ -3,6 +3,7 @@ package entities;
 import java.awt.*;
 import java.util.List;
 
+import entities.misc.TextParticle;
 import entities.vehicles.Vehicle;
 
 import java.util.*;
@@ -99,8 +100,10 @@ public abstract class Entity extends WorldObject {
 	 */
 	public void hurt(float amount) {
 		//only if we aren't invulnerable
-		if (this.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE)
+		if (this.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE) {
 			this.health.hurt(amount);
+			this.getRegion().add(new TextParticle("-"+amount,Color.RED,getX(),getY(),0.25f));
+		}
 	}
 	
 	/**

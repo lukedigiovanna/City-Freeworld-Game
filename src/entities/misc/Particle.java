@@ -1,9 +1,10 @@
-package entities;
+package entities.misc;
 
 import java.awt.*;
 import java.awt.image.*;
 import java.util.List;
 
+import entities.Entity;
 import misc.ImageTools;
 import misc.MathUtils;
 import misc.Vector2;
@@ -54,7 +55,8 @@ public class Particle extends Entity {
 		BALL(0.3f,0.3f),
 		SPARKLES(0.4f,0.4f,2.5f,"sparkles"),
 		TIRE_MARK(0.05f,0.05f,Color.BLACK),
-		GUNFIRE(0.15f,0.15f,0.05f,"gunfire");
+		GUNFIRE(0.15f,0.15f,0.05f,"gunfire"),
+		TEXT(0.0f,0.0f,1.5f); //this is a place holder for the TextParticles
 		
 		float width, height;
 		List<BufferedImage> images;
@@ -135,9 +137,16 @@ public class Particle extends Entity {
 			break;
 		case SPARKLES:
 			this.getVelocity().r = 3.14f;
+			break;
+		case TEXT:
+			this.getVelocity().y += dt * 4;
 		}
 		
 		if (timeUntilDeath <= 0)
 			this.destroy();
+	}
+	
+	public Color getColor() {
+		return this.color;
 	}
 }

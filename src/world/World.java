@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
-import entities.EntityObject;
+import entities.misc.EntityObject;
 import entities.npcs.NPC;
 import entities.player.Player;
 import entities.vehicles.Car;
@@ -102,9 +102,9 @@ public class World {
 		elapsedTime += dt;
 		
 		//where 1 second = 1/60 of an hour.
-		timeOfDay += (dt/60.0f);
+		//timeOfDay += (dt/60.0f);
 
-		//timeOfDay+=dt;
+		timeOfDay+=dt;
 		
 		if (timeOfDay >= 24.0f) {
 			elapsedDays++;

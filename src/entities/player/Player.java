@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import entities.*;
+import entities.misc.TextParticle;
 import entities.vehicles.Vehicle;
 import weapons.Weapon;
 import weapons.WeaponManager;
@@ -39,7 +40,6 @@ public class Player extends Entity {
 		this.weaponManager = new WeaponManager(this);
 		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
-		this.setLightEmissionValue(0.2f);
 		addTag("player");
 	}
 	
@@ -55,7 +55,7 @@ public class Player extends Entity {
 		if (riding == null) {
 			camera.drawImage(curAni.getCurrentFrame(),getX(),getY(),getWidth(),getHeight());
 			Weapon selected = this.getSelectedWeapon();
-			if (selected != null && curAni == holdingLongGun || curAni == holdingShortGun) {
+			if (selected != null && (curAni == holdingLongGun || curAni == holdingShortGun)) {
 				float height = 0.125f;
 				camera.drawImage(selected.getType().display, getX()+getWidth()-0.25f, centerY()-height/2, 0.5f, height);
 			}
@@ -92,8 +92,6 @@ public class Player extends Entity {
 		char down = Settings.getSetting("move_down").charAt(0);
 		char left = Settings.getSetting("move_left").charAt(0);
 		char right = Settings.getSetting("move_right").charAt(0);
-		
-		//this.getRegion().addParticles(Particle.Type.SPARKLES, Color.RED, (int)(20 * dt), 0.1f, getX(),getY(),getWidth(),getHeight());
 		
 		if (Program.keyboard.keyPressed('p')) {
 			Path p = new Path();

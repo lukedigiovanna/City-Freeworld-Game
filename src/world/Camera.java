@@ -310,6 +310,14 @@ public class Camera {
 		g.drawImage(ImageTools.darken(image,lightValue), toPX(x), toPY(y), toPW(width), toPH(height), null);
 	}
 	
+	public void setFont(String fontFamily, int style, float size) {
+		g.setFont(new Font(fontFamily,style,toPH(size)));
+	}
+	
+	public void drawString(String s, float x, float y) {
+		g.drawString(s, toPX(x), toPY(y));
+	}
+	
 	public void rotate(float theta, float rx, float ry) {
 		g.rotate(theta,toPX(rx),toPY(ry));
 	}

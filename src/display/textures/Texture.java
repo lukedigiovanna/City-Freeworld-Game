@@ -5,6 +5,7 @@ import java.util.List;
 
 import display.Animation;
 import misc.ImageTools;
+import misc.MathUtils;
 import misc.Vector2;
 
 public class Texture {
@@ -15,6 +16,7 @@ public class Texture {
 	private Vector2 dimension;
 	private Animation animation;
 	private String stringID;
+	private float lightEmission = 0.0f;
 	
 	public Texture(BufferedImage image, String stringID) {
 		this(image, 1.0f, 1.0f, stringID);
@@ -36,10 +38,15 @@ public class Texture {
 		this(animation,1.0f,1.0f,stringID);	
 	}
 	
-	public Texture(Animation animation, float width, float height,String stringID) {
+	public Texture(Animation animation, float width, float height, String stringID) {
 		this.animation = animation;
 		this.stringID = stringID;
 		this.dimension = new Vector2(width,height);
+	}
+	
+	public Texture setLightEmission(float value) {
+		this.lightEmission  = MathUtils.clip(0, 1, value);
+		return this;
 	}
 	
 	public Animation getAnimation() {
@@ -48,6 +55,10 @@ public class Texture {
 	
 	public String getStringID() {
 		return stringID;
+	}
+	
+	public float getLightEmissionValue() {
+		return this.lightEmission;
 	}
 	
 	public Vector2 getDimension() {
