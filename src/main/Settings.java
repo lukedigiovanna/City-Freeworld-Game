@@ -57,6 +57,8 @@ public class Settings {
 				runtimeSettings[index] = s;
 				index++;
 			}
+			
+			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -86,6 +88,7 @@ public class Settings {
 				}
 				index++;
 			}
+			in.close();
 			//if we can't find the setting name then return false 
 		} catch (Exception e) {
 			e.printStackTrace();

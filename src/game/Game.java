@@ -277,6 +277,11 @@ public class Game {
 				g.setColor(Color.WHITE);
 				g.fillRect(ax,ay+6,(int)(reloadBarWidth*selected.getReloadPercent()),reloadBarHeight);
 			}
+			
+			String time = this.world.getStringTime();
+			g.setColor(Color.WHITE);
+			g.drawString(time, Program.DISPLAY_WIDTH-weaponSpace-g.getFontMetrics().stringWidth(time)-160, Program.DISPLAY_HEIGHT-cameraBorderSize-15);
+			
 			if (!paused)
 				player.getWeaponManager().draw(g);
 		}

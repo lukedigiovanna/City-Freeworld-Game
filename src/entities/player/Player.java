@@ -1,5 +1,6 @@
 package entities.player;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -20,8 +21,12 @@ public class Player extends Entity {
 	private static final List<BufferedImage> 
 		WALK_0 = ImageTools.getImages("assets/images/characters/character_0", "walk_"),
 		IDLE_0 = ImageTools.getImages("assets/images/characters/character_0", "idle_"),
+		HOLDING_SHORT_GUN_0 = ImageTools.getImages("assets/images/characters/character_0", "holding_short_gun_"),
+		HOLDING_LONG_GUN_0 = ImageTools.getImages("assets/images/characters/character_0", "holding_long_gun_"),
 		WALK_1 = ImageTools.getImages("assets/images/characters/character_1", "walk_"),
-		IDLE_1 = ImageTools.getImages("assets/images/characters/character_1", "idle_");
+		IDLE_1 = ImageTools.getImages("assets/images/characters/character_1", "idle_"),
+		HOLDING_SHORT_GUN_1 = ImageTools.getImages("assets/images/characters/character_1", "holding_short_gun_"),
+		HOLDING_LONG_GUN_1 = ImageTools.getImages("assets/images/characters/character_1", "holding_long_gun_");
 	
 	private String name = "Earl";
 	private BankAccount bankAct;
@@ -34,11 +39,14 @@ public class Player extends Entity {
 		this.weaponManager = new WeaponManager(this);
 		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
+		this.setLightEmissionValue(0.2f);
 		addTag("player");
 	}
 	
-	private Animation walk = new Animation(WALK_0,8),
-					  idle = new Animation(IDLE_0,1);
+	private Animation walk =                         new Animation(WALK_0,8),
+					  idle =                         new Animation(IDLE_0,1),
+					  holdingLongGun =   new Animation(HOLDING_LONG_GUN_0,1),
+					  holdingShortGun = new Animation(HOLDING_SHORT_GUN_0,1);
 
 	private Animation curAni = walk;
 	
@@ -46,6 +54,11 @@ public class Player extends Entity {
 	public void draw(Camera camera) {
 		if (riding == null) {
 			camera.drawImage(curAni.getCurrentFrame(),getX(),getY(),getWidth(),getHeight());
+			Weapon selected = this.getSelectedWeapon();
+			if (selected != null && curAni == holdingLongGun || curAni == holdingShortGun) {
+				float height = 0.125f;
+				camera.drawImage(selected.getType().display, getX()+getWidth()-0.25f, centerY()-height/2, 0.5f, height);
+			}
 		}
 	}
 	
@@ -79,6 +92,8 @@ public class Player extends Entity {
 		char down = Settings.getSetting("move_down").charAt(0);
 		char left = Settings.getSetting("move_left").charAt(0);
 		char right = Settings.getSetting("move_right").charAt(0);
+		
+		//this.getRegion().addParticles(Particle.Type.SPARKLES, Color.RED, (int)(20 * dt), 0.1f, getX(),getY(),getWidth(),getHeight());
 		
 		if (Program.keyboard.keyPressed('p')) {
 			Path p = new Path();
@@ -138,6 +153,8 @@ public class Player extends Entity {
 				float angle = this.getRotation();
 				while (angle < 0)
 					angle += Math.PI * 2;
+				while (angle >= Math.PI * 2)
+					angle -= Math.PI * 2;
 				for (int i = 0; i < positions; i++) {
 					double theta = i/(double)positions*Math.PI*2;
 					if (angle > theta-size/2 && angle <= theta + size/2) {
@@ -160,13 +177,20 @@ public class Player extends Entity {
 	
 		Weapon selected = this.getSelectedWeapon();
 		if (selected != null) {
-			if (Program.keyboard.keyDown(KeyEvent.VK_UP)) 
+			if (Program.keyboard.keyDown(KeyEvent.VK_UP) && riding == null) 
 				selected.pullTrigger();
 			else
 				selected.releaseTrigger();
 			
 			if (Program.keyboard.keyPressed(KeyEvent.VK_R)) {
 				selected.reload();
+			}
+			
+			if (curAni == idle) {
+				if (selected.isLong()) 
+					curAni = holdingLongGun;
+				else
+					curAni = holdingShortGun;
 			}
 		}
 	

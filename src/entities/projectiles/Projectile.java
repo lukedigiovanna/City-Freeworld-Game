@@ -23,6 +23,7 @@ public abstract class Projectile extends Entity {
 		this.owner = owner;
 		this.setVelocity(vi);;
 		this.setRotation(vi.getAngle());
+		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 	}  
 	
 	public Projectile(Entity owner, float x, float y, float width, float height, float angle, float speed) {
@@ -57,14 +58,17 @@ public abstract class Projectile extends Entity {
 		List<Entity> others = this.getRegion().getEntities().get();
 		for (int i = 0; i < others.size(); i++) {
 			if (i > others.size()-1)
-				break; //avoid concurrent modification
+				break; //avoid out of bounds (concurrency)
 			Entity e = others.get(i);
-			if (e == owner)
-				return; //dont hurt the entity that shot the projectile
+			if (e == owner || e == this)
+				continue; //dont hurt the entity that shot the projectile
 			//check if the entity is kill able
 			if (e.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE && !e.isDestroyed()) {
 				if (this.colliding(e)) {
 					e.hurt(damage);
+					for (String tag : e.getTags())
+						System.out.print(tag+", ");
+					System.out.println();
 					this.destroy();
 					return; //already hit one.. were done now
 				}

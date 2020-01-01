@@ -5,6 +5,7 @@ import java.util.List;
 
 import entities.Entity;
 import entities.EntityObject;
+import entities.npcs.NPC;
 import entities.player.Player;
 import entities.vehicles.Car;
 import game.Game;
@@ -20,6 +21,9 @@ public class World {
 	
 	private String worldName = "krzworld";
 	
+	private float timeOfDay = 0.0f; //up to hour 23, at 24 it resets to 0.
+	private int elapsedDays = 0;
+	
 	public World(Game game) {
 		this.game = game;
 		regions = new ArrayList<Region>();
@@ -28,7 +32,8 @@ public class World {
 
 		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
-
+		temp.add(new NPC(10,10));
+		
 		regions.add(temp);
 		
 		regions.add(new Region(this,worldName,1));
@@ -81,8 +86,31 @@ public class World {
 		newRegion = regions.indexOf(region);
 	}
 	
+	/**
+	 * Returns the a value between [0,1] that reflects
+	 * the time of day.
+	 * Uses a sinusoidal function that mimics the day-night light cycle
+	 * Brightest at around 1:30 PM and Darkest at 1:30 AM
+	 * @return
+	 */
+	public float getGlobalLightValue() {
+		//12 = 1.0f
+		return (float) (Math.sin(this.timeOfDay * Math.PI / 12 - 2) * 0.4 + 0.6);
+	}
+	
 	public void update(float dt) {
 		elapsedTime += dt;
+		
+		//where 1 second = 1/60 of an hour.
+		timeOfDay += (dt/60.0f);
+
+		//timeOfDay+=dt;
+		
+		if (timeOfDay >= 24.0f) {
+			elapsedDays++;
+			timeOfDay%=24.0f;
+		}
+		
 		getCurrentRegion().update(dt);
 		if (newRegion > -1) {
 			currentRegion = newRegion;
@@ -110,5 +138,25 @@ public class World {
 	
 	public float getElapsedTime() {
 		return elapsedTime;
+	}
+	
+	public String getStringTime() {
+		int hour = (int)this.timeOfDay;
+		int minute = (int)(this.timeOfDay%1.0f*60);
+		int hour12 = hour%12;
+		if (hour12 == 0)
+			hour12 = 12;
+		String h = hour12+"";
+		if (hour12 < 10)
+			h = "0"+h;
+		String m = minute+"";
+		if (minute < 10)
+			m = "0"+m;
+		String time = h+":"+m;
+		if (hour >= 12)
+			time+=" PM";
+		else
+			time+=" AM";
+		return time;
 	}
 }

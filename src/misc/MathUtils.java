@@ -229,9 +229,13 @@ public class MathUtils {
 	 * @param y2
 	 * @return
 	 */
-	public static float distance(float x1, float y1, float x2, float y2) {
+	public static float squaredDistance(float x1, float y1, float x2, float y2) {
 		float dx = x2-x1, dy = y2-y1;
-		return (float)Math.sqrt(dx*dx+dy*dy);
+		return dx*dx+dy*dy;
+	}
+	
+	public static float distance(float x1, float y1, float x2, float y2) {
+		return (float)Math.sqrt(squaredDistance(x1,y1,x2,y2));
 	}
 	
 	/**

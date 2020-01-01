@@ -3,6 +3,7 @@ package weapons;
 import java.awt.image.BufferedImage;
 
 import entities.Entity;
+import entities.Particle;
 import entities.projectiles.Bullet;
 import entities.projectiles.Projectile;
 import misc.ImageTools;
@@ -39,6 +40,7 @@ public class Weapon {
 		public int category, fireStyle;
 		public String name;
 		public BufferedImage icon;
+		public BufferedImage display;
 		
 		Type(String name, String iconName, int category, int fireStyle, float fireRate, float reloadTime, int magSize, float firePower) {
 			this.name = name;
@@ -48,7 +50,8 @@ public class Weapon {
 			this.magSize = magSize;
 			this.firePower = firePower;
 			this.fireStyle = fireStyle;
-			this.icon = ImageTools.getImage("assets/images/weapons/"+iconName+".png");
+			this.icon = ImageTools.getImage("assets/images/weapons/icons/"+iconName+".png");
+			this.display = ImageTools.getImage("assets/images/weapons/displays/"+iconName+".png");
 		}
 	}
 	
@@ -105,7 +108,6 @@ public class Weapon {
 				reload = false;
 			} else {
 				reloadTimer += dt;
-				System.out.println("reloading "+reloadTimer+"/"+this.type.reloadTime+" s");
 				if (reloadTimer >= type.reloadTime) {
 					//put as many bullets into the mag as we can
 					int needed = type.magSize - this.loadedInMag;
@@ -136,12 +138,17 @@ public class Weapon {
 				shoot();
 				shotsFiredStreak++;
 			}
-			System.out.println(type.name);
 		}
 	}
 	
 	private void shoot() {
-		Projectile p = new Bullet(owner, owner.centerX(),owner.centerY(),owner.getRotation());
+		float angle = owner.getRotation();
+		float dx = (float) ((owner.getWidth()/2+0.2f)*Math.cos(angle)),
+			  dy = (float) ((owner.getHeight()/2+0.2f)*Math.sin(angle));
+		float x = owner.centerX() + dx, y = owner.centerY() + dy;
+		Projectile p = new Bullet(owner, x,y,angle);
+		p.setDamage(type.firePower);
+		owner.getRegion().addParticles(Particle.Type.GUNFIRE, null, 1, 0, x, y, 0, 0);
 		owner.getRegion().add(p);
 		this.loadedInMag--;
 		this.fireTime = 0;
@@ -179,5 +186,15 @@ public class Weapon {
 	
 	public int getAmmoStock() {
 		return this.stock;
+	}
+	
+	/**
+	 * Returns whether the size of the gun is long or not
+	 * Used for determining which gun holding position
+	 * the player should be in.
+	 * @return
+	 */
+	public boolean isLong() {
+		return !(type.category == CATEGORY_HAND_GUN || type.category == CATEGORY_LIGHT_SPECIAL);
 	}
 }

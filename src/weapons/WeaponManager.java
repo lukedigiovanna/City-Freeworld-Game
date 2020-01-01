@@ -45,7 +45,7 @@ public class WeaponManager {
 	 * Listens for keyboard input to determine whether or not to open the UI
 	 */
 	public void listen() {
-		uiActive = Program.keyboard.keyDown('q');
+		uiActive = Program.keyboard.keyDown(KeyEvent.VK_TAB);
 		
 		if (uiActive) {
 			if (Program.keyboard.keyPressed(KeyEvent.VK_RIGHT))

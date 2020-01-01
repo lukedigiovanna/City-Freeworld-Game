@@ -12,7 +12,6 @@ import world.*;
 public class Particle extends Entity {
 	private Type type;
 	
-	private float lifeSpan = 2.5f;
 	private float fadeTime = 0.5f;
 	
 	private BufferedImage image;
@@ -37,7 +36,7 @@ public class Particle extends Entity {
 		if (type.images != null && type.images.size() > 0)
 			image = type.images.get(MathUtils.random(type.images.size()));
 		
-		if (image != null)
+		if (image != null && color != null)
 			image = ImageTools.colorscale(image, color);
 		
 		heat = MathUtils.clip(0.0f, 1.0f, heat); //clips the heat to be within 0 and 1
@@ -48,16 +47,20 @@ public class Particle extends Entity {
 		
 		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
 		setProperty(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
+		setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 	}
 	
 	public static enum Type {
 		BALL(0.3f,0.3f),
-		SPARKLES(0.4f,0.4f,"sparkles"),
-		TIRE_MARK(0.05f,0.05f,Color.BLACK);
+		SPARKLES(0.4f,0.4f,2.5f,"sparkles"),
+		TIRE_MARK(0.05f,0.05f,Color.BLACK),
+		GUNFIRE(0.15f,0.15f,0.05f,"gunfire");
 		
 		float width, height;
 		List<BufferedImage> images;
 		Color defaultColor = Color.WHITE;
+		float lifeSpan = 5.0f;
+		
 		Type(float width, float height) {
 			this.width = width;
 			this.height = height;
@@ -77,6 +80,16 @@ public class Particle extends Entity {
 			this(width,height,fp);
 			defaultColor = dc;
 		}
+		
+		Type(float width, float height, float lifeSpan) {
+			this(width,height);
+			this.lifeSpan = lifeSpan;
+		}
+		
+		Type(float width, float height, float lifeSpan, String fp) {
+			this(width,height,fp);
+			this.lifeSpan = lifeSpan;
+		}
 	}
 	
 	public static void add(Region region, Type type, Color color, int count, float heat, float x, float y, float width, float height) {
@@ -88,7 +101,8 @@ public class Particle extends Entity {
 	
 	@Override
 	public void draw(Camera c) {
-		c.setColor(new Color(color.getRed(),color.getGreen(),color.getBlue(),alpha));
+		if (color != null)
+			c.setColor(new Color(color.getRed(),color.getGreen(),color.getBlue(),alpha));
 		switch (this.type) {
 		case BALL:
 			c.fillOval(getX(), getY(), getWidth(), getHeight());
@@ -100,12 +114,15 @@ public class Particle extends Entity {
 		case TIRE_MARK:
 			c.fillRect(getX(), getY(), getWidth(), getHeight());
 			break;
+		case GUNFIRE:
+			c.drawImage(image, getX(), getY(), getWidth(), getHeight());
+			break;
 		}
 	}
 
 	@Override
 	public void update(float dt) {
-		float timeUntilDeath = this.lifeSpan - this.getAge();
+		float timeUntilDeath = this.type.lifeSpan - this.getAge();
 		
 		if (timeUntilDeath <= this.fadeTime) {
 			float percent = timeUntilDeath / this.fadeTime;

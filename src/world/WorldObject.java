@@ -102,8 +102,31 @@ public abstract class WorldObject {
 		//collision correction
 		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_TRUE)
 			this.correctOutOfWalls();
-			
+		
+		updateLightValue();
+		
 		age += dt;
+	}
+	
+	public void updateLightValue() {
+		float thisVal = this.getRegion().getWorld().getGlobalLightValue();
+		for (Entity e : this.getRegion().getEntities().get()) {
+			if (e.getLightEmissionValue() > 0) {
+				float d = this.squaredDistanceTo(e);
+				float light = 1/d * e.getLightEmissionValue();
+				thisVal += light;
+			}
+		}
+		thisVal = MathUtils.clip(0, 1, thisVal);
+		this.setLightValue(thisVal);
+	}
+	
+	public float getLightEmissionValue() {
+		return this.lightEmission;
+	}
+	
+	public void setLightEmissionValue(float val) {
+		this.lightEmission = MathUtils.clip(0,1,val);
 	}
 	
 	/**
@@ -522,6 +545,12 @@ public abstract class WorldObject {
 		if (other == null)
 			return MathUtils.INFINITY;
 		return MathUtils.distance(centerX(),centerY(),other.centerX(),other.centerY());
+	}
+	
+	public float squaredDistanceTo(WorldObject other) {
+		if (other == null)
+			return MathUtils.INFINITY;
+		return MathUtils.squaredDistance(centerX(),centerY(),other.centerX(),other.centerY());
 	}
 	
 	public void setRegion(Region region) {

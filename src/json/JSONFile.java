@@ -37,6 +37,7 @@ public class JSONFile {
 				while ((str = in.readLine()) != null)
 					jsonText+=str;
 				mainObject = new JSONObject(jsonText.substring(1,jsonText.length()-1));
+				in.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -2,6 +2,7 @@ package main;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 
 import javax.swing.*;
 
@@ -17,6 +18,8 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel() {
 		this.setFocusable(true);
+		this.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
+		
 		screen = new BufferedImage(Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB_PRE);
 	
 		Thread repaintThread = new Thread(new Runnable() {

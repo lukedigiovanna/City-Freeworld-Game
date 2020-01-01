@@ -7,12 +7,14 @@ import entities.Health;
 import entities.Path;
 import misc.ImageTools;
 import world.Camera;
+import world.Properties;
 
 public class NPC extends Entity {
 	
 	public NPC(float x, float y) {
 		super(x,y,11.0f/16,12.0f/16);
 		this.health = new Health(20,20);
+		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_FALSE);
 		addTag("NPC");
 	}
 	
