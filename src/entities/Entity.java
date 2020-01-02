@@ -8,6 +8,7 @@ import entities.vehicles.Vehicle;
 
 import java.util.*;
 
+import misc.MathUtils;
 import misc.Vector2;
 import world.*;
 import world.Properties;
@@ -38,9 +39,10 @@ public abstract class Entity extends WorldObject {
 	public void generalUpdate(float dt) {
 		super.generalUpdate(dt);
 		if (this.paths.size() > 0) {
-			paths.get(0).follow();
+			paths.get(0).follow(dt);
 			if (paths.get(0).completed() || paths.get(0).stalled()) {
 				paths.remove(0);
+				this.getVelocity().zero();
 			}
 		}
 		//entity general update.... just overrides the world object general update but calls that method
@@ -128,6 +130,12 @@ public abstract class Entity extends WorldObject {
 	 * @param camera The camera to draw to
 	 */
 	public abstract void draw(Camera camera);
+	
+	private Color col = new Color(MathUtils.random(256),MathUtils.random(256),MathUtils.random(256));
+	public void realDraw(Camera c) {
+		c.setColor(col);
+		c.fillRect(getX(),getY(),getWidth(),getHeight());
+	}
 	
 	/**
 	 * Called by the game loop to run entity type specific logic

@@ -3,6 +3,7 @@ package entities;
 import java.util.List;
 
 import display.Animation;
+import entities.misc.CorpseParticle;
 import entities.vehicles.Vehicle;
 import misc.Vector2;
 import weapons.Weapon;
@@ -125,6 +126,14 @@ public abstract class Human extends Entity {
 	public void exitVehicle() {
 		this.riding.setDriver(null);
 		this.riding = null;
+	}
+	
+	@Override
+	public void destroy() {
+		//add a corpse particle
+		this.getRegion().add(new CorpseParticle(this.corpseAni,getX(),getY()));
+		
+		super.destroy();
 	}
 
 	private static final float NORMAL_WALKING_SPEED = 2.0f;

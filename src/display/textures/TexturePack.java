@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -73,17 +74,17 @@ public class TexturePack {
 		addTileTexture("street_stop_line","Black Street Stop Line");
 		addTileTexture("rainbow","rainbow_",6,"Rainbow");
 		//add objects
-		addObjectTexture("fire","fire_",8,1.0f,1.0f,0.8f,"Fire");
-		addObjectTexture("wooden_bench",2.0f,1.0f,"Wooden Bench");
-		addObjectTexture("pine_tree",1.0f,1.0f,"Pine Tree");
-		addObjectTexture("palm_tree",1.0f,1.0f,"Palm Tree");
-		addObjectTexture("maple_tree",1.0f,1.0f,"Maple Tree");
-		addObjectTexture("apple_tree",1.0f,1.0f,"Apple Tree");
-		addObjectTexture("soda_can",0.25f,0.5f,"Soda Can");
-		addObjectTexture("red_flower",5f/16f,10f/16f,"Red Flower");
-		addObjectTexture("yellow_flower",5f/16f,10f/16f,"Yellow Flower");
-		addObjectTexture("blue_flower",5f/16f,10f/16f,"Blue Flower");
-		addObjectTexture("street_lamp_0",11f/16f,11f/16f,0.8f,"Street Lamp 0");
+		addObjectTexture("fire","fire_",8,1.0f,1.0f,0.8f,1.0f,"Fire");
+		addObjectTexture("wooden_bench",2.0f,1.0f,0.0f,4.0f,"Wooden Bench");
+		addObjectTexture("pine_tree",1.0f,1.0f,0.0f,8.0f,"Pine Tree");
+		addObjectTexture("palm_tree",1.0f,1.0f,0.0f,8.0f,"Palm Tree");
+		addObjectTexture("maple_tree",1.0f,1.0f,0.0f,8.0f,"Maple Tree");
+		addObjectTexture("apple_tree",1.0f,1.0f,0.0f,8.0f,"Apple Tree");
+		addObjectTexture("soda_can",0.25f,0.5f,0.0f,2.0f,"Soda Can");
+		addObjectTexture("red_flower",5f/16f,10f/16f,0.0f,1.0f,"Red Flower");
+		addObjectTexture("yellow_flower",5f/16f,10f/16f,0.0f,1.0f,"Yellow Flower");
+		addObjectTexture("blue_flower",5f/16f,10f/16f,0.0f,1.0f,"Blue Flower");
+		addObjectTexture("street_lamp_0",11f/16f,11f/16f,0.8f,8.0f,"Street Lamp 0");
 		save();
 		load();
 	}
@@ -104,12 +105,16 @@ public class TexturePack {
 		objectsMap.put(objectsMap.size(), new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/objects/"+folderName, prefix), frameRate,width,height,stringID));
 	}
 	
-	private void addObjectTexture(String imageName, float width, float height, float light, String stringID) {
-		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName+".png"),width,height,stringID)).setLightEmission(light));
+	private void addObjectTexture(String imageName, float width, float height, float light, float vHeight, String stringID) {
+		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName+".png"),width,height,stringID)).setLightEmission(light).setVerticalHeight(vHeight));
 	}
 	
-	private void addObjectTexture(String folderName, String prefix, int frameRate, float width, float height, float light, String stringID) {
-		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/objects/"+folderName, prefix), frameRate,width,height,stringID)).setLightEmission(light));
+	private void addObjectTexture(String folderName, String prefix, int frameRate, float width, float height, float light, float vHeight, String stringID) {
+		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/objects/"+folderName, prefix), frameRate,width,height,stringID)).setLightEmission(light).setVerticalHeight(vHeight));
+	}
+	
+	private void addObjectTexture(Texture texture) {
+		objectsMap.put(objectsMap.size(), texture);
 	}
 	
 	/**

@@ -58,7 +58,8 @@ public class Particle extends Entity {
 		SPARKLES(0.4f,0.4f,2.5f,"sparkles"),
 		TIRE_MARK(0.05f,0.05f,Color.BLACK),
 		GUNFIRE(0.15f,0.15f,0.05f,"gunfire"),
-		TEXT(0.0f,0.0f,1.5f); //this is a place holder for the TextParticles
+		TEXT(0.0f,0.0f,1.5f),
+		CORPSE(0.0f,0.0f,60.0f); //this is a place holder for the TextParticles
 		
 		float width, height;
 		List<BufferedImage> images;

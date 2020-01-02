@@ -39,7 +39,7 @@ public class Path {
 		this.add(new Vector2(x,y));
 	}
 	
-	public void follow() {
+	public void follow(float dt) {
 		if (completed()) 
 			return;
 		Vector2 goal = this.points.get(position);
@@ -50,16 +50,21 @@ public class Path {
 		if (MathUtils.distance(entity.getPosition(),goal) < 0.1)
 			position++;
 		
-		Vector2 pastPos = entity.getPositionHistory().getPosition(1.0f);
+		Vector2 pastPos = entity.getPositionHistory().getPosition(1);
+		System.out.println(pastPos+", "+entity.getPosition());
 		if (pastPos != null) { 
 			stalled = pastPos.equals(entity.getPosition());
 		}
+		if (stalled)
+			stallTime+=dt;
+		else
+			stallTime = 0;
 	}
 	
 	private boolean stalled = false;
-	
+	private float stallTime = 0;
 	public boolean stalled() {
-		return stalled;
+		return stallTime >= 2.0f ;
 	}
 	
 	public boolean completed() {

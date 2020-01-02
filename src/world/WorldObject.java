@@ -399,7 +399,6 @@ public abstract class WorldObject {
 					  dy = (float)Math.sin(angle) * 0.01f; 
 				this.setX(this.getX() + dx);
 				this.setY(this.getY() + dy);
-				this.hitbox.translate(dx, dy);
 				intersection = this.hitbox.intersecting(l);
 			}
 		}

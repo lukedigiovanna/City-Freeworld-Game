@@ -148,7 +148,7 @@ public class Vector2 {
 	}
 	
 	public boolean equals(Vector2 other) {
-		return Math.abs(this.x - other.x) < 0.01 && Math.abs(this.y - other.y) < 0.01 && Math.abs(this.r - other.r) < 0.01;   
+		return Math.abs(this.x - other.x) < 0.01 && Math.abs(this.y - other.y) < 0.01;   
 	}
 	
 	public String toString() {

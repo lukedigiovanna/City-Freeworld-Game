@@ -45,9 +45,11 @@ public class EntityList {
 				continue;
 			} 
 			
-			if (h > list.get(list.size()-1).getVerticalHeight())
-				index = list.size()-1;
-			else while (h > list.get(index).getVerticalHeight() && index < list.size()-1) 
+			/*
+			 * if (h > list.get(list.size()-1).getVerticalHeight()) index = list.size()-1;
+			 * else
+			 */	
+			while (h > list.get(index).getVerticalHeight() && index < list.size()-1) 
 				index++;
 			list.add(index,e);
 		}

@@ -21,13 +21,6 @@ public class NPC extends Human {
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_FALSE);
 		addTag("NPC");
 	}
-	
-	private BufferedImage image = ImageTools.getImage("assets/images/characters/character_1/idle_0.png");
-
-	@Override
-	public void draw(Camera camera) {
-		camera.drawImage(image, getX(), getY(), getWidth(), getHeight());
-	}
 
 	private float timer = MathUtils.random(5.0f,15.0f);
 	private float timerCount = 0.0f;

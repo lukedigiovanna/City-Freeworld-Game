@@ -32,6 +32,7 @@ public class World {
 
 		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
+		for (int i = 0; i < 15; i++)
 		temp.add(new NPC(10,10));
 		
 		regions.add(temp);

@@ -19,6 +19,7 @@ public abstract class Vehicle extends Entity {
 		super(x, y, width, height);
 		this.addTag("vehicle");
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		this.setVerticalHeight(7.5f);
 	}
 	
 	public Human getDriver() {
