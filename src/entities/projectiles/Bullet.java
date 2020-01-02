@@ -12,7 +12,6 @@ public class Bullet extends Projectile {
 
 	public Bullet(Entity owner, float x, float y, float angle) {
 		super(owner, x, y, 0.1f, 0.05f, angle, 20);
-		this.setLightEmissionValue(0.2f);
 	}
 	
 	private BufferedImage bullet = ImageTools.getImage("assets/images/weapons/bullet.png");

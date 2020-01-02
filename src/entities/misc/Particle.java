@@ -49,6 +49,8 @@ public class Particle extends Entity {
 		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
 		setProperty(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
 		setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		
+		this.setVerticalHeight(10.0f);
 	}
 	
 	public static enum Type {

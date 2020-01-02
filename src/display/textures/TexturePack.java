@@ -73,7 +73,7 @@ public class TexturePack {
 		addTileTexture("street_stop_line","Black Street Stop Line");
 		addTileTexture("rainbow","rainbow_",6,"Rainbow");
 		//add objects
-		addObjectTexture("fire","fire_",8,1.0f,1.0f,0.5f,"Fire");
+		addObjectTexture("fire","fire_",8,1.0f,1.0f,0.8f,"Fire");
 		addObjectTexture("wooden_bench",2.0f,1.0f,"Wooden Bench");
 		addObjectTexture("pine_tree",1.0f,1.0f,"Pine Tree");
 		addObjectTexture("palm_tree",1.0f,1.0f,"Palm Tree");

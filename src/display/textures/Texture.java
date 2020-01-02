@@ -17,6 +17,7 @@ public class Texture {
 	private Animation animation;
 	private String stringID;
 	private float lightEmission = 0.0f;
+	private float verticalHeight = 0.0f;
 	
 	public Texture(BufferedImage image, String stringID) {
 		this(image, 1.0f, 1.0f, stringID);
@@ -49,6 +50,11 @@ public class Texture {
 		return this;
 	}
 	
+	public Texture setVerticalHeight(float value) {
+		this.verticalHeight = value;
+		return this;
+	}
+	
 	public Animation getAnimation() {
 		return this.animation;
 	}
@@ -59,6 +65,10 @@ public class Texture {
 	
 	public float getLightEmissionValue() {
 		return this.lightEmission;
+	}
+	
+	public float getVerticalHeight() {
+		return this.verticalHeight;
 	}
 	
 	public Vector2 getDimension() {

@@ -30,6 +30,8 @@ public abstract class Human extends Entity {
 		holdingShortGun = animations.holdingShortGun.copy();
 		curAni = idleAni;
 		
+		this.setVerticalHeight(7.0f); //high up
+		
 		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 	}
 	

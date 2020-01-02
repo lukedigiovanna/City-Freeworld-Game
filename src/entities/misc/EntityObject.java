@@ -22,6 +22,7 @@ public class EntityObject extends Entity {
 		this.animation = this.texture.getAnimation().copy(); 
 		this.setDimension(this.texture.getDimension().copy());
 		this.setLightEmissionValue(texture.getLightEmissionValue());
+		this.setVerticalHeight(texture.getVerticalHeight());
 		this.setHitboxToDimension();
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.addTag("entity_object");

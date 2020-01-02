@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import display.*;
+import entities.Entity;
 import entities.player.Player;
 import weapons.Weapon;
 import main.*;
@@ -112,6 +113,11 @@ public class Game {
 				this.world.getCamera().toggleHitboxes();
 			if (Program.keyboard.keyPressed(KeyEvent.VK_W))
 				this.world.getCamera().toggleWalls();
+		}
+		
+		if (Program.keyboard.keyPressed('h')) {
+			for (Entity e : world.getCurrentRegion().getEntities().get())
+				System.out.println(e.getVerticalHeight());
 		}
 		
 		

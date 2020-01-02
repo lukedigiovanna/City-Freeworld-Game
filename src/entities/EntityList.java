@@ -36,12 +36,29 @@ public class EntityList {
 			list.remove(e);
 		toRemove.clear();
 		
-		//add entities that we want to add
-		for (Entity e : toAdd) 
-			list.add(e);
+		//add entities that we want to add in order of their vertical height
+		for (Entity e : toAdd)  {
+			float h = e.getVerticalHeight();
+			int index = 0;
+			if (list.size() == 0) {
+				list.add(e);
+				continue;
+			} 
+			
+			if (h > list.get(list.size()-1).getVerticalHeight())
+				index = list.size()-1;
+			else while (h > list.get(index).getVerticalHeight() && index < list.size()-1) 
+				index++;
+			list.add(index,e);
+		}
 		toAdd.clear();
 	}
 	
+	/**
+	 * Adds the entity to the list such that it is sorted
+	 * by its vertical height from least to greatest.
+	 * @param e
+	 */
 	public void add(Entity e) {
 		toAdd.add(e);
 	}
