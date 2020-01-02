@@ -147,6 +147,10 @@ public class Vector2 {
 		return new Vector2(this.x,this.y,this.r);
 	}
 	
+	public boolean equals(Vector2 other) {
+		return Math.abs(this.x - other.x) < 0.01 && Math.abs(this.y - other.y) < 0.01 && Math.abs(this.r - other.r) < 0.01;   
+	}
+	
 	public String toString() {
 		return "<"+MathUtils.round(this.x, 0.001f)+", "+MathUtils.round(this.y, 0.001f)+", "+MathUtils.round(this.r,0.001f)+">";
 	}

@@ -39,8 +39,9 @@ public abstract class Entity extends WorldObject {
 		super.generalUpdate(dt);
 		if (this.paths.size() > 0) {
 			paths.get(0).follow();
-			if (paths.get(0).completed())
+			if (paths.get(0).completed() || paths.get(0).stalled()) {
 				paths.remove(0);
+			}
 		}
 		//entity general update.... just overrides the world object general update but calls that method
 		if (this.health.isDead()) {

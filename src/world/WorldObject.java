@@ -564,4 +564,8 @@ public abstract class WorldObject {
 	public Properties.Value getProperty(Properties.Key key) {
 		return properties == null ? null : properties.get(key);
 	}
+	
+	public PositionHistory getPositionHistory() {
+		return this.positionHistory;
+	}
 }

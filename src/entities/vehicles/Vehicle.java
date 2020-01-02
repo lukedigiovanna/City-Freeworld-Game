@@ -1,6 +1,6 @@
 package entities.vehicles;
 
-import entities.player.*;
+import entities.Human.*;
 import misc.MathUtils;
 import world.Properties;
 import entities.*;
@@ -11,9 +11,9 @@ import entities.*;
 public abstract class Vehicle extends Entity {
 
 	/**
-	 * If driver is null then it should be operated by an AI, otherwise it uses input from that player
+	 * If driver is null then it should be operated by an AI, otherwise it uses input from that Human
 	 */
-	private Player driver;
+	private Human driver;
 	
 	public Vehicle(float x, float y, float width, float height) {
 		super(x, y, width, height);
@@ -21,12 +21,12 @@ public abstract class Vehicle extends Entity {
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 	}
 	
-	public Player getDriver() {
+	public Human getDriver() {
 		return driver;
 	}
 	
-	public void setDriver(Player player) {
-		this.driver = player;
+	public void setDriver(Human Human) {
+		this.driver = Human;
 	}
 	
 	private float frictionalEffect = 0.2f;

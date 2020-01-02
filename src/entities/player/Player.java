@@ -17,7 +17,7 @@ import misc.*;
 import world.Camera;
 import world.Properties;
 
-public class Player extends Entity {
+public class Player extends Human {
 	
 	private static final List<BufferedImage> 
 		WALK_0 = ImageTools.getImages("assets/images/characters/character_0", "walk_"),
@@ -31,35 +31,16 @@ public class Player extends Entity {
 	
 	private String name = "Earl";
 	private BankAccount bankAct;
-	private WeaponManager weaponManager;
 	private BufferedImage profilePicture;
 	
+	private WeaponManager weaponManager;
+	
 	public Player(float x, float y) {
-		super(x,y,11.0f/16,12.0f/16);
+		super(x,y,HumanAnimationPack.CHARACTER_0);
 		this.bankAct = new BankAccount(this);
-		this.weaponManager = new WeaponManager(this);
-		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
+		this.weaponManager = new WeaponManager(this);
 		addTag("player");
-	}
-	
-	private Animation walk =                         new Animation(WALK_0,8),
-					  idle =                         new Animation(IDLE_0,1),
-					  holdingLongGun =   new Animation(HOLDING_LONG_GUN_0,1),
-					  holdingShortGun = new Animation(HOLDING_SHORT_GUN_0,1);
-
-	private Animation curAni = walk;
-	
-	@Override
-	public void draw(Camera camera) {
-		if (riding == null) {
-			camera.drawImage(curAni.getCurrentFrame(),getX(),getY(),getWidth(),getHeight());
-			Weapon selected = this.getSelectedWeapon();
-			if (selected != null && (curAni == holdingLongGun || curAni == holdingShortGun)) {
-				float height = 0.125f;
-				camera.drawImage(selected.getType().display, getX()+getWidth()-0.25f, centerY()-height/2, 0.5f, height);
-			}
-		}
 	}
 	
 	public String getMoneyDisplay() {
@@ -88,6 +69,8 @@ public class Player extends Entity {
 	private float rotationalSpeed = (float)Math.PI*1.2f;
 	@Override
 	public void update(float dt) {
+		super.update(dt);
+		
 		char up = Settings.getSetting("move_up").charAt(0);
 		char down = Settings.getSetting("move_down").charAt(0);
 		char left = Settings.getSetting("move_left").charAt(0);
@@ -97,14 +80,15 @@ public class Player extends Entity {
 			Path p = new Path();
 			p.add(getX(),getY());
 			p.add(getX()-3.0f,getY());
-			p.add(getX()-3.0f,getY()-3.0f);
+			p.add(getX(),getY()-3.0f);
+			p.add(getX(),getY());
 			this.queuePath(p);
 		}
 		
 		if (!this.isFollowingPath()) {
 			this.getVelocity().zero();
 			
-			if (this.riding == null) {
+			if (this.getRiding() == null) {
 				float mag = 0.0f;
 				float r = 0.0f;
 				speed = 2;
@@ -124,25 +108,20 @@ public class Player extends Entity {
 				this.getVelocity().setAngle(this.getRotation());
 				if (mag < 0)
 					this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);
-				
-				if (mag == 0)
-					curAni = idle;
-				else
-					curAni = walk;
 			} else { //then we are in a car
 				if (Program.keyboard.keyDown(up))
-					this.riding.accelerate(dt);
+					this.getRiding().accelerate(dt);
 				
 				if (Program.keyboard.keyDown(down))
-					this.riding.brake(dt);
+					this.getRiding().brake(dt);
 				
 				if (Program.keyboard.keyDown(left))
-					this.riding.turnLeft(dt);
+					this.getRiding().turnLeft(dt);
 				
 				if (Program.keyboard.keyDown(right))
-					this.riding.turnRight(dt);
+					this.getRiding().turnRight(dt);
 				
-				this.setPosition(riding.centerX()-this.getWidth()/2, riding.centerY()-this.getHeight()/2);
+				this.setPosition(getRiding().centerX()-this.getWidth()/2, getRiding().centerY()-this.getHeight()/2);
 			}
 			
 			if (this.getVelocity().r == 0) {
@@ -166,16 +145,16 @@ public class Player extends Entity {
 			}
 			
 			if (Program.keyboard.keyPressed(KeyEvent.VK_F)) {
-				if (riding == null)
+				if (getRiding() == null)
 					findVehicle();
 				else
 					exitVehicle();
 			}	
 		}
-	
+		
 		Weapon selected = this.getSelectedWeapon();
 		if (selected != null) {
-			if (Program.keyboard.keyDown(KeyEvent.VK_UP) && riding == null) 
+			if (Program.keyboard.keyDown(KeyEvent.VK_UP) && getRiding() == null) 
 				selected.pullTrigger();
 			else
 				selected.releaseTrigger();
@@ -183,69 +162,17 @@ public class Player extends Entity {
 			if (Program.keyboard.keyPressed(KeyEvent.VK_R)) {
 				selected.reload();
 			}
-			
-			if (curAni == idle) {
-				if (selected.isLong()) 
-					curAni = holdingLongGun;
-				else
-					curAni = holdingShortGun;
-			}
 		}
 	
-		curAni.animate(dt*this.getVelocity().getLength()/2);
-		
 		this.weaponManager.listen();
 		this.weaponManager.update(dt);
-	}
-	
-	public WeaponManager getWeaponManager() {
-		return this.weaponManager;
 	}
 	
 	public Weapon getSelectedWeapon() {
 		return this.weaponManager.getSelectedWeapon();
 	}
 	
-	/**
-	 * Looks around the player for an available car to enter
-	 * If there is a car close enough then it will get in
-	 */
-	private void findVehicle() {
-		List<Entity> vehicles = this.getRegion().getEntities().get("vehicle");
-		Entity closest = null;
-		float maxDistance = 3.0f; //maximum distance the car can be away
-		float distanceToVehicle = 99999.0f; //start the distance high
-		for (Entity vehicle : vehicles) {
-			//can't enter a vehicle that is moving -- that makes no sense
-			if (vehicle.getVelocity().getLength() != 0)
-				continue;
-			//get the distance
-			float distance = this.distanceTo(vehicle);
-			if (distance < maxDistance && distance < distanceToVehicle) {
-				distanceToVehicle = distance;
-				closest = vehicle;
-			}
-		}
-		//if the vehicle is found then enter the vehicle
-		if (closest != null) 
-			enterVehicle((Vehicle)closest);
-	}
-	
-	/**
-	 * Sets the player to be riding the vehicle; gives control to the player
-	 * @param vehicle
-	 */
-	public void enterVehicle(Vehicle vehicle) {
-		vehicle.setDriver(this);
-		this.riding = vehicle;
-	}
-	
-	/**
-	 * Leaves the vehicle currently being ridden
-	 * if the player is riding one
-	 */
-	public void exitVehicle() {
-		this.riding.setDriver(null);
-		this.riding = null;
+	public WeaponManager getWeaponManager() {
+		return this.weaponManager;
 	}
 }

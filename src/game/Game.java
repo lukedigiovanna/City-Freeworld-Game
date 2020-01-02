@@ -227,7 +227,7 @@ public class Game {
 			int[] xPoints = {barWidth+cameraBorderSize, barWidth+cameraBorderSize, barWidth+cameraBorderSize+150};
 			int[] yPoints = {Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize};
 			g.fillPolygon(xPoints,yPoints,3);
-			g.setStroke(new BasicStroke(cameraBorderSize/2));
+			g.setStroke(new BasicStroke(cameraBorderSize/2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_BEVEL));
 			int topY = Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize;
 			g.setColor(Color.GRAY);
 			g.drawLine(cameraBorderSize, topY, cameraBorderSize+barWidth, topY);

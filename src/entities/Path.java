@@ -40,17 +40,29 @@ public class Path {
 	}
 	
 	public void follow() {
-		if (completed())
+		if (completed()) 
 			return;
 		Vector2 goal = this.points.get(position);
 		//set the velocity to that point
 		double angle = MathUtils.getAngle(entity.getPosition(),goal);
+		entity.setRotation((float)angle);
 		entity.setVelocity(speed*(float)Math.cos(angle),speed*(float)Math.sin(angle));
 		if (MathUtils.distance(entity.getPosition(),goal) < 0.1)
 			position++;
+		
+		Vector2 pastPos = entity.getPositionHistory().getPosition(1.0f);
+		if (pastPos != null) { 
+			stalled = pastPos.equals(entity.getPosition());
+		}
+	}
+	
+	private boolean stalled = false;
+	
+	public boolean stalled() {
+		return stalled;
 	}
 	
 	public boolean completed() {
-		return this.position >= this.points.size()-1;
+		return this.position > this.points.size()-1;
 	}
 }
