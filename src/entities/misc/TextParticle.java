@@ -27,5 +27,4 @@ public class TextParticle extends Particle {
 		c.setColor(getColor());
 		c.drawString(text, getX(), getY());
 	}
-	
 }

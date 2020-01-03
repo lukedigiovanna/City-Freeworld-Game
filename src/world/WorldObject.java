@@ -1,5 +1,6 @@
 package world;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
@@ -62,6 +63,10 @@ public abstract class WorldObject {
 	 */
 	public void setVerticalHeight(float height) {
 		this.verticalHeight = MathUtils.clip(MIN_HEIGHT, MAX_HEIGHT, height);
+	}
+	
+	public Hitbox getHitbox() {
+		return this.hitbox;
 	}
 	
 	/**
@@ -296,7 +301,7 @@ public abstract class WorldObject {
 			return;
 		}
 		float checkStep = COLLISION_CHECK_STEP*MathUtils.sign(dx);
-		List<Line> walls = this.getRegion().getWalls().getWalls();
+		List<Line> walls = this.getRigidLines();
 		Vector2 intersection;
 		int iterations = (int)(dx/checkStep)+1;
 		for (int i = 0; i < iterations; i++) {
@@ -327,7 +332,7 @@ public abstract class WorldObject {
 			return;
 		}
 		float checkStep = COLLISION_CHECK_STEP*MathUtils.sign(dy);
-		List<Line> walls = this.getRegion().getWalls().getWalls();
+		List<Line> walls = this.getRigidLines();
 		Vector2 intersection;
 		int iterations = (int)(dy/checkStep)+1;
 		for (int i = 0; i < iterations; i++) {
@@ -364,7 +369,7 @@ public abstract class WorldObject {
 			this.hitbox.rotate(dr);
 			return;
 		}
-		List<Line> walls = this.getRegion().getWalls().getWalls();
+		List<Line> walls = this.getRigidLines();
 		Vector2 intersection;
 		int iterations = (int)(dr/checkStep);
 		for (int i = 0; i < iterations; i++) {
@@ -389,19 +394,38 @@ public abstract class WorldObject {
 	
 	public void correctOutOfWalls() {
 		//check if we are intersecting a wall
-		for (Line l : this.getRegion().getWalls().getWalls()) {
+		for (Line l : this.getRigidLines()) {
 			Vector2 intersection = this.hitbox.intersecting(l);
+			boolean hit = false;
+			float angle = 0.0f;
 			while (intersection != null) {
 				//correct
 				//get the angle to go out with
-				float angle = l.angleTo(this.center());
+				angle = l.angleTo(this.center());
 				float dx = (float)Math.cos(angle) * 0.01f,
 					  dy = (float)Math.sin(angle) * 0.01f; 
 				this.setX(this.getX() + dx);
 				this.setY(this.getY() + dy);
 				intersection = this.hitbox.intersecting(l);
+				hit = true;
+			}
+			if (hit) {
+			float dx = (float)Math.cos(angle) * 2f,
+				  dy = (float)Math.sin(angle) * 2f;
+			this.setVelocity(dx,dy);
 			}
 		}
+	}
+	
+	public List<Line> getRigidLines() {
+		List<Line> rigidLines = new ArrayList<Line>();
+		rigidLines.addAll(this.getRegion().getWalls().getWalls());
+		//add in the lines from rigid entities.
+		for (Entity e : this.getRegion().getEntities().get())
+			if (e.getVerticalHeight() >= this.verticalHeight && e.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE) 
+				for (Line l : e.getHitbox().getLines()) 
+					rigidLines.add(l);
+		return rigidLines;
 	}
 	
 	/**

@@ -150,6 +150,11 @@ public class Particle extends Entity {
 	}
 	
 	public Color getColor() {
-		return this.color;
+		Color c = new Color(color.getRed(),color.getGreen(),color.getBlue(),alpha);
+		return c;
+	}
+	
+	public int getAlpha() {
+		return this.alpha;
 	}
 }

@@ -20,6 +20,7 @@ public abstract class Vehicle extends Entity {
 		this.addTag("vehicle");
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.setVerticalHeight(7.5f);
+		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 	}
 	
 	public Human getDriver() {
@@ -54,8 +55,8 @@ public abstract class Vehicle extends Entity {
 	public void brake(float dt) {
 		float speed = this.getVelocity().getLength();
 		speed -= brakePower * dt;
-		if (speed < 0)
-			speed = 0;
+//		if (speed < 0)
+//			speed = 0;
 		this.getVelocity().setMagnitude(speed);
 		//this.getRegion().addParticles(Particle.Type.TIRE_MARK, java.awt.Color.BLACK, 1, 0.0f, centerX(), centerY(), 0.1f, 0.1f);
 	}

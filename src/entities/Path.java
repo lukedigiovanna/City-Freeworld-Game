@@ -51,7 +51,6 @@ public class Path {
 			position++;
 		
 		Vector2 pastPos = entity.getPositionHistory().getPosition(1);
-		System.out.println(pastPos+", "+entity.getPosition());
 		if (pastPos != null) { 
 			stalled = pastPos.equals(entity.getPosition());
 		}

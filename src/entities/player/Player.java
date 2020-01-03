@@ -40,6 +40,8 @@ public class Player extends Human {
 		this.bankAct = new BankAccount(this);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
 		this.weaponManager = new WeaponManager(this);
+		this.health = new Health(500);
+		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 		addTag("player");
 	}
 	
@@ -125,7 +127,7 @@ public class Player extends Human {
 			}
 			
 			if (this.getVelocity().r == 0) {
-				int positions = 16;
+				int positions = 32;
 				double size = Math.PI*2/positions;
 				float angle = this.getRotation();
 				while (angle < 0)

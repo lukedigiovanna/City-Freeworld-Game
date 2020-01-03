@@ -98,7 +98,8 @@ public abstract class Human extends Entity {
 		}
 		//if the vehicle is found then enter the vehicle
 		if (closest != null) {
-			pathFindToVehicle((Vehicle)closest);
+			enterVehicle((Vehicle)closest);
+			//pathFindToVehicle((Vehicle)closest);
 		}
 	}
 	

@@ -26,6 +26,7 @@ public class EntityObject extends Entity {
 		//System.out.println(this.getVerticalHeight());
 		this.setHitboxToDimension();
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 		this.addTag("entity_object");
 	}
 

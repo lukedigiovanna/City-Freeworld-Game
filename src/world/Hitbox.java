@@ -55,6 +55,9 @@ public class Hitbox {
 	}
 	
 	public Vector2 intersecting(Line line) {
+		for (Line l : lines)
+			if (l == line) //this line is from our own hitbox.
+				return null;
 		for (Line l : lines) {
 			Vector2 intersection = line.intersects(l);
 			if (intersection != null)

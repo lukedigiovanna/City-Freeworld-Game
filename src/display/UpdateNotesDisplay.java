@@ -22,9 +22,11 @@ public class UpdateNotesDisplay extends Display {
 		"Added a light-engine",
 		"    Added a Day-Night cycle",
 		"    Lamps/Fire emit light",
+		"New objects: flowers, cans, lamps",
+		"Sorts entities by vertical height now",
 		"Bug Fixes:",
 		"    Player rotation resetting to 0 when the player rotates >= 360deg",
-		
+		"    Entities following paths without stopping"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

@@ -1,5 +1,6 @@
 package entities.npcs;
 
+import java.util.List;
 import java.awt.image.BufferedImage;
 
 import entities.Entity;
@@ -7,16 +8,16 @@ import entities.Health;
 import entities.Human;
 import entities.HumanAnimationPack;
 import entities.Path;
-import misc.ImageTools;
 import misc.MathUtils;
 import weapons.Weapon;
-import world.Camera;
 import world.Properties;
+
+
 
 public class NPC extends Human {
 	
 	public NPC(float x, float y) {
-		super(x,y,HumanAnimationPack.CHARACTER_1);
+		super(x,y,HumanAnimationPack.CHARACTER_0);
 		this.health = new Health(20,20);
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_FALSE);
 		addTag("NPC");
@@ -40,10 +41,27 @@ public class NPC extends Human {
 			p.add(getX() + (float)Math.cos(angle)*distance, getY() + (float)Math.sin(angle) * distance);
 			this.queuePath(p);
 		}
+		
+		this.thisWeapon.releaseTrigger();
+		
+		if (angerAt != null) {
+			this.setRotation(this.angleTo(angerAt));
+			this.thisWeapon.pullTrigger();
+		}
+		
+		List<Entity> players = this.getRegion().getEntities().get("player");
+		if (players.size() > 0)
+			angerAt = players.get(0);
+		
+		thisWeapon.update(dt);
 	}
+	
+	private Entity angerAt = null;
 
+	private Weapon thisWeapon = new Weapon(this,Weapon.Type.GLOCK_21);
+	
 	@Override
 	public Weapon getSelectedWeapon() {
-		return null;
+		return thisWeapon;
 	}
 }

@@ -209,6 +209,11 @@ public class Line {
 		return new Vector2(endpoint2.x-endpoint1.x,endpoint2.y-endpoint1.y);
 	}
 	
+	public boolean equals(Line other) {
+		Vector2[] ep2 = other.getEndpoints();
+		return endpoint1.x == ep2[0].x && endpoint1.y == ep2[0].y && endpoint2.x == ep2[1].x && endpoint2.y == ep2[1].y;
+	}
+	
 	/**
 	 * Gets the string representation of the line
 	 * Shows the equation in slope - intercept form with the domain

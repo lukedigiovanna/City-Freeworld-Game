@@ -1,6 +1,9 @@
 package entities.misc;
 
+import java.awt.image.BufferedImage;
+
 import display.Animation;
+import misc.ImageTools;
 import world.Camera;
 
 public class CorpseParticle extends Particle {
@@ -17,7 +20,8 @@ public class CorpseParticle extends Particle {
 	
 	@Override
 	public void draw(Camera c) {
-		c.drawImage(ani.getCurrentFrame(),getX(),getY(),getWidth(),getHeight());
+		BufferedImage img = ImageTools.setTransparency(ani.getCurrentFrame(),this.getAlpha());
+		c.drawImage(img,getX(),getY(),getWidth(),getHeight());
 	}
 	
 	public void update(float dt) {

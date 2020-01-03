@@ -296,5 +296,9 @@ public class Game {
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
 		String s = "TPS: "+(int)tps;
 		g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 40);
+		s = "TICK WAIT: "+(int)wait+"ms";
+		g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 60);
+		s = "TICK EFFICIENCY: "+(int)((float)wait/IDEAL_REFRESH_RATE*100)+"%";
+		g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 80);
 	}
 }

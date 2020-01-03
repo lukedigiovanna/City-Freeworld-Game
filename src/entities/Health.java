@@ -12,6 +12,10 @@ public class Health {
 		this.maxHealth = maxHealth;
 	}
 	
+	public Health(float health) {
+		this(health,health);
+	}
+	
 	public boolean isDead() {
 		return health <= 0;
 	}
