@@ -160,7 +160,14 @@ public class EditorRegion {
 	}
 	
 	public void setGridValue(int x, int y, int value) {
-		this.grid.get(x).get(y).value = value;
+		if (getGridValue(x,y) >= -1)
+			this.grid.get(x).get(y).value = value;
+	}
+	
+	public void fillRect(int x, int y, int width, int height, int fillValue) {
+		for (int gx = x; gx < x + width; gx++)
+			for (int gy = y; gy < y + height; gy++)
+				setGridValue(gx,gy,fillValue);
 	}
 	
 	public void fillGrid(int x, int y, int fillValue) {

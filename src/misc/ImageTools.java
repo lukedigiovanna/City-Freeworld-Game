@@ -49,6 +49,35 @@ public class ImageTools {
 		return img;
 	}
 	
+	public static final int ROTATE_90 = 0, ROTATE_180 = 1, ROTATE_270 = 2;
+	
+	public static BufferedImage rotate(BufferedImage image, int rotation) {
+		int width, height;
+		switch (rotation) {
+		case ROTATE_90: case ROTATE_270:
+			width = image.getHeight();
+			height = image.getWidth();
+			break;
+		case ROTATE_180:
+			width = image.getWidth();
+			height = image.getHeight();
+			break;
+		default:
+			return image;
+		}
+		BufferedImage newImg = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
+		switch (rotation) {
+		case ROTATE_90:
+			for (int x = 0; x < width; x++)
+				for (int y = 0; y < height; y++) {
+					int rgb = image.getRGB(height-y-1, x);
+					newImg.setRGB(x, y, rgb);
+				}
+			break;
+		}
+		return newImg;
+	}
+	
 	public static BufferedImage rescale(BufferedImage image, int newWidth, int newHeight) {
 		BufferedImage rescaled = new BufferedImage(newWidth, newHeight, image.getType());
 		float widthFactor = (float)image.getWidth()/newWidth, heightFactor = (float)image.getHeight()/newHeight; 

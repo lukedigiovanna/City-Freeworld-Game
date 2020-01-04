@@ -409,11 +409,11 @@ public abstract class WorldObject {
 				intersection = this.hitbox.intersecting(l);
 				hit = true;
 			}
-			if (hit) {
-			float dx = (float)Math.cos(angle) * 2f,
-				  dy = (float)Math.sin(angle) * 2f;
-			this.setVelocity(dx,dy);
-			}
+//			if (hit) {
+//			float dx = (float)Math.cos(angle) * 2f,
+//				  dy = (float)Math.sin(angle) * 2f;
+//			this.setVelocity(dx,dy);
+//			}
 		}
 	}
 	
@@ -421,10 +421,11 @@ public abstract class WorldObject {
 		List<Line> rigidLines = new ArrayList<Line>();
 		rigidLines.addAll(this.getRegion().getWalls().getWalls());
 		//add in the lines from rigid entities.
-		for (Entity e : this.getRegion().getEntities().get())
-			if (e.getVerticalHeight() >= this.verticalHeight && e.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE) 
-				for (Line l : e.getHitbox().getLines()) 
-					rigidLines.add(l);
+		if (this.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE)
+			for (Entity e : this.getRegion().getEntities().get())
+				if (e.getVerticalHeight() >= this.verticalHeight && e.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE) 
+					for (Line l : e.getHitbox().getLines()) 
+						rigidLines.add(l);
 		return rigidLines;
 	}
 	

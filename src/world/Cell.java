@@ -19,14 +19,17 @@ public class Cell extends WorldObject {
 		this.setVerticalHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
 		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		this.animation = TexturePack.current().getTileTexture(id).getAnimation().copy();
+		this.setRotation((float)Math.toRadians(90));
 	}
 	
 	public void update(float dt) {
+		this.rotate(0.01f);
 		animation.animate(dt);
 	}
 	
 	public BufferedImage getImage() {
-		return this.animation.getCurrentFrame();
+		BufferedImage image = ImageTools.rotate(this.animation.getCurrentFrame(), ImageTools.ROTATE_90);
+		return image;
 	}
 		
 	public float centerX() {

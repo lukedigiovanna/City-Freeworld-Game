@@ -27,22 +27,23 @@ public class Weapon {
 					  ICON_HEIGHT = 15;
 	
 	public static enum Type {
-		GLOCK_21("Glock 21","glock21",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,17,10.0f),
-		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,15.0f),
-		REVOLOVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f),
+		GLOCK_21("Glock 21","glock21",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,17,10.0f,0.025f),
+		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,15.0f,0.15f),
+		REVOLOVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f,0.125f),
 		
-		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,12.0f,4.0f,30,3.0f);
+		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,12.0f,4.0f,30,3.0f,0.2f);
 		
 		public float fireRate,
 			  reloadTime,
-			  firePower;
+			  firePower,
+			  accuracy; //0 is dead on, 1 is very spread out.
 		public int magSize;
 		public int category, fireStyle;
 		public String name;
 		public BufferedImage icon;
 		public BufferedImage display;
 		
-		Type(String name, String iconName, int category, int fireStyle, float fireRate, float reloadTime, int magSize, float firePower) {
+		Type(String name, String iconName, int category, int fireStyle, float fireRate, float reloadTime, int magSize, float firePower, float accuracy) {
 			this.name = name;
 			this.category = category;
 			this.fireRate = fireRate;
@@ -50,6 +51,7 @@ public class Weapon {
 			this.magSize = magSize;
 			this.firePower = firePower;
 			this.fireStyle = fireStyle;
+			this.accuracy = accuracy;
 			this.icon = ImageTools.getImage("assets/images/weapons/icons/"+iconName+".png");
 			this.display = ImageTools.getImage("assets/images/weapons/displays/"+iconName+".png");
 		}
@@ -89,11 +91,17 @@ public class Weapon {
 	 */
 	private Entity owner;
 	
+	/**
+	 * The total radians of inaccuracy possible
+	 */
+	private float inAccuracyRange;
+	
 	public Weapon(Entity owner, Type type) {
 		this.owner = owner;
 		this.type = type;
 		this.loadedInMag = type.magSize;
 		this.stock = type.magSize * 2;
+		this.inAccuracyRange = type.accuracy * (float)Math.PI/8;
 	}
 	
 	private int shotsFiredStreak = 0;
@@ -148,7 +156,8 @@ public class Weapon {
 	}
 	
 	private void shoot() {
-		float angle = owner.getRotation();
+		float inaccuracyOffset = MathUtils.random(-inAccuracyRange, inAccuracyRange);
+		float angle = owner.getRotation() + inaccuracyOffset;
 		float dx = (float) ((owner.getWidth()/2+0.2f)*Math.cos(angle)),
 			  dy = (float) ((owner.getHeight()/2+0.2f)*Math.sin(angle));
 		float x = owner.centerX() + dx, y = owner.centerY() + dy;

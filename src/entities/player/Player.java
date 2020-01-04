@@ -127,7 +127,7 @@ public class Player extends Human {
 			}
 			
 			if (this.getVelocity().r == 0) {
-				int positions = 32;
+				int positions = 64;
 				double size = Math.PI*2/positions;
 				float angle = this.getRotation();
 				while (angle < 0)
