@@ -49,9 +49,11 @@ public class ImageTools {
 		return img;
 	}
 	
-	public static final int ROTATE_90 = 0, ROTATE_180 = 1, ROTATE_270 = 2;
+	public static final int ROTATE_0 = 0, ROTATE_90 = 1, ROTATE_180 = 2, ROTATE_270 = 3;
 	
 	public static BufferedImage rotate(BufferedImage image, int rotation) {
+		if (rotation == ROTATE_0)
+			return image;
 		int width, height;
 		switch (rotation) {
 		case ROTATE_90: case ROTATE_270:

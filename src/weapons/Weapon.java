@@ -23,7 +23,7 @@ public class Weapon {
 							CATEGORY_HEAVY_SPECIAL = 4,
 							CATEGORY_LIGHT_SPECIAL = 5;
 	
-	public static int ICON_WIDTH = 40,
+	public static final int ICON_WIDTH = 40,
 					  ICON_HEIGHT = 15;
 	
 	public static enum Type {
@@ -31,7 +31,7 @@ public class Weapon {
 		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,15.0f,0.15f),
 		REVOLOVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f,0.125f),
 		
-		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,12.0f,4.0f,30,3.0f,0.2f);
+		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,12.0f,2.0f,30,3.0f,0.2f);
 		
 		public float fireRate,
 			  reloadTime,

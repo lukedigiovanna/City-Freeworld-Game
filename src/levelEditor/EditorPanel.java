@@ -225,6 +225,8 @@ public class EditorPanel extends JPanel {
 	int vx = 230, vy = 100;
 	int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
 	
+	private int rotation = 1;
+	
 	private Vector2 wallP1 = null;
 	
 	public void redraw() {
@@ -241,6 +243,15 @@ public class EditorPanel extends JPanel {
 		Vector2 mp = this.mouseOnRegion();
 		mp.round(0.01f);
 		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+"     X: "+mp.x+" Y: "+mp.y, 230, Program.DISPLAY_HEIGHT-8);
+		
+		if (keyboard.keyPressed('1'))
+			rotation = 0;
+		if (keyboard.keyPressed('2'))
+			rotation = 1;
+		if  (keyboard.keyPressed('3'))
+			rotation = 2;
+		if (keyboard.keyPressed('4'))
+			rotation = 3;
 		
 		/*
 		 * Draw the region
@@ -265,28 +276,28 @@ public class EditorPanel extends JPanel {
 					if (!showGrid) {
 						px -= gridSize/2;
 						py -= gridSize/2;
-						pw += gridSize;
-						ph += gridSize;
+						pw += gridSize + 1;
+						ph += gridSize + 1;
 					}
 					int val = region.getGridValue(x, y);
 					if (val < 0) {
 						gw.setColor(Color.WHITE);
 						gw.fillRect(px, py, pw, ph);
 					} else {
-						gw.drawImage(tiles.get(region.getGridValue(x, y)).getAnimation().getCurrentFrame(), px, py, pw, ph, null);
+						gw.drawImage(ImageTools.rotate(tiles.get(region.getGridValue(x, y)).getAnimation().getCurrentFrame(),region.getRotationValue(x, y)), px, py, pw, ph, null);
 					}
 					//check for mouse clicks.. only if left button
 					if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL)) {
 						if (mouse.getX() > vx + px && mouse.getX() < vx + px + pw && mouse.getY() > vy + py && mouse.getY() < vy + py + ph) {
 							switch (curTool) {
 							case DRAW:
-								region.setGridValue(x, y, curTile);
+								region.setGridValue(x, y, rotation, curTile);
 								break;
 							case ERASE:
-								region.setGridValue(x, y, -1);
+								region.setGridValue(x, y, rotation, -1);
 								break;
 							case FILL:
-								region.fillGrid(x,y,curTile);
+								region.fillGrid(x,y, rotation, curTile);
 								break;
 							default:  //if any other tool, do nothing
 								break;
@@ -500,7 +511,7 @@ public class EditorPanel extends JPanel {
 				if (i % 2 == 1)
 					x += 80;
 				int y = (i / 2) * (tileSize+10) + 70 + tileScrollPos;
-				g.drawImage(tiles.get(i).getAnimation().getCurrentFrame(),x,y,tileSize,tileSize,null);
+				g.drawImage(ImageTools.rotate(tiles.get(i).getAnimation().getCurrentFrame(), rotation),x,y,tileSize,tileSize,null);
 				if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
 					g.setColor(Color.GRAY);
 					g.setStroke(new BasicStroke(4));

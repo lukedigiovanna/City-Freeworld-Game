@@ -97,7 +97,8 @@ public class EditorRegion {
 			}
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					this.setGridValue(x, y, in.read());
+					int value = in.read();
+					this.setGridValue(x, y, (x + y) % 4, value);
 				}
 			}
 			
@@ -153,37 +154,50 @@ public class EditorRegion {
 	}
 	
 	public int getGridValue(int x, int y) {
+		EditorCell cell = getGridCell(x,y);
+		return cell != null ? cell.value : -100;
+	}
+	
+	public int getRotationValue(int x, int y) {
+		EditorCell cell = getGridCell(x,y);
+		return cell != null ? cell.rotation : -1;
+	}
+	
+	public EditorCell getGridCell(int x, int y) {
 		if (x < 0 || x >= this.getWidth() || y < 0 || y >= this.getHeight())
-			return -100; //way out idk.
+			return null; //way out idk.
 		else 
-			return grid.get(x).get(y).value;
+			return grid.get(x).get(y);
 	}
 	
-	public void setGridValue(int x, int y, int value) {
-		if (getGridValue(x,y) >= -1)
-			this.grid.get(x).get(y).value = value;
+	public void setGridValue(int x, int y, int rotation, int value) {
+		if (getGridValue(x,y) >= -1) {
+			EditorCell cell = this.grid.get(x).get(y);
+			cell.value = value;
+			cell.rotation = rotation;
+		}
 	}
 	
-	public void fillRect(int x, int y, int width, int height, int fillValue) {
+	public void fillRect(int x, int y, int rotation, int width, int height, int fillValue) {
 		for (int gx = x; gx < x + width; gx++)
 			for (int gy = y; gy < y + height; gy++)
-				setGridValue(gx,gy,fillValue);
+				setGridValue(gx,gy,rotation,fillValue);
 	}
 	
-	public void fillGrid(int x, int y, int fillValue) {
-		fillGrid(x,y,fillValue,getGridValue(x,y));		
+	public void fillGrid(int x, int y, int rotation, int fillValue) {
+		fillGrid(x,y,rotation,fillValue,getGridValue(x,y));		
 	}
 	
-	public void fillGrid(int x, int y, int fillValue, int previousValue) {
+	public void fillGrid(int x, int y, int rotation, int fillValue, int previousValue) {
 		if (getGridValue(x,y) != previousValue || fillValue == previousValue) {
 			return; //end condition
 		}
 		else {
-			setGridValue(x,y,fillValue);
-			fillGrid(x-1,y,fillValue,previousValue);
-			fillGrid(x+1,y,fillValue,previousValue);
-			fillGrid(x,y-1,fillValue,previousValue);
-			fillGrid(x,y+1,fillValue,previousValue);
+			setGridValue(x,y,rotation,fillValue);
+			fillGrid(x-1,y,rotation,fillValue,previousValue);
+			fillGrid(x+1,y,rotation,fillValue,previousValue);
+			fillGrid(x,y-1,rotation,fillValue,previousValue);
+			fillGrid(x,y+1,rotation,fillValue,previousValue);
 		}
 	}
 	

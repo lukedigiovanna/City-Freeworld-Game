@@ -12,13 +12,17 @@ import misc.MathUtils;
 public class Cell extends WorldObject {
 	
 	private Animation animation;
-	private int orientation = 0; //0 = 0deg, 1 = 90deg, 2 = 180deg, 3 = 270deg
+	private int orientation = ImageTools.ROTATE_0; //0 = 0deg, 1 = 90deg, 2 = 180deg, 3 = 270deg
 
 	public Cell(int id, float x, float y) {
 		super(x,y,1.0f,1.0f);
 		this.setVerticalHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
 		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		this.animation = TexturePack.current().getTileTexture(id).getAnimation().copy();
+	}
+	
+	public void setRotation(int orientation) {
+		this.orientation = orientation;
 	}
 	
 	public void update(float dt) {
@@ -28,7 +32,7 @@ public class Cell extends WorldObject {
 	
 	public BufferedImage getImage() {
 		BufferedImage aniFrame = this.animation.getCurrentFrame();
-		BufferedImage image = ImageTools.rotate(aniFrame, ImageTools.ROTATE_270);
+		BufferedImage image = ImageTools.rotate(aniFrame, orientation);
 		return image;
 	}
 		
