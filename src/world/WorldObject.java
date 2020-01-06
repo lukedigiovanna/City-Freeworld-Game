@@ -114,11 +114,15 @@ public abstract class WorldObject {
 	}
 	
 	public void updateLightValue() {
-		float thisVal = this.getRegion().getWorld().getGlobalLightValue();
+		if (region.getWorld() == null)
+			return;
+		float globalValue = region.getWorld().getGlobalLightValue();
+		float thisVal = globalValue;
 		for (Entity e : this.getRegion().getEntities().get()) {
 			if (e.getLightEmissionValue() > 0) {
 				float d = this.squaredDistanceTo(e);
-				float light = (float) (-2/(1+Math.pow(2, -0.2 * d))+2);
+				//use the inverse square law to determine light intensity
+				float light = MathUtils.ceil(1.0f, 1/d);
 				thisVal += light * e.getLightEmissionValue();
 			}
 		}

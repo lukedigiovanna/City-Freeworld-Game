@@ -44,10 +44,10 @@ public class NPC extends Human {
 		
 		this.thisWeapon.releaseTrigger();
 		
-		if (angerAt != null) {
-			this.setRotation(this.angleTo(angerAt));
-			this.thisWeapon.pullTrigger();
-		}
+//		if (angerAt != null) {
+//			this.setRotation(this.angleTo(angerAt));
+//			this.thisWeapon.pullTrigger();
+//		}
 		
 		List<Entity> players = this.getRegion().getEntities().get("player");
 		if (players.size() > 0)

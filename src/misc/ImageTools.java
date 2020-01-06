@@ -66,15 +66,22 @@ public class ImageTools {
 			return image;
 		}
 		BufferedImage newImg = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
-		switch (rotation) {
-		case ROTATE_90:
-			for (int x = 0; x < width; x++)
-				for (int y = 0; y < height; y++) {
-					int rgb = image.getRGB(height-y-1, x);
-					newImg.setRGB(x, y, rgb);
+		for (int x = 0; x < width; x++) 
+			for (int y = 0; y < height; y++) {
+				int rgb = 0;
+				switch (rotation) {
+				case ROTATE_90:
+					rgb = image.getRGB(height-y-1, x);
+					break;
+				case ROTATE_180:
+					rgb = image.getRGB(width-x-1, height-y-1);
+					break;
+				case ROTATE_270:
+					rgb = image.getRGB(y, width-x-1);
+					break;
 				}
-			break;
-		}
+				newImg.setRGB(x, y, rgb);
+			}
 		return newImg;
 	}
 	

@@ -131,6 +131,7 @@ public class Region {
 	public void add(Entity e) {
 		entities.add(e);
 		e.setRegion(this);
+		e.updateLightValue();
 	}
 	
 	public void remove(Entity e) {
