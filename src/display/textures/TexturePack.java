@@ -16,10 +16,21 @@ import display.Animation;
 import json.JSONArray;
 import json.JSONFile;
 import json.JSONObject;
+import misc.CSVFile;
 import misc.ImageTools;
 import misc.MathUtils;
 
 public class TexturePack {
+	
+	/**
+	 * Generates the tile sheet and data from the CSV files
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		CSVFile tiles = new CSVFile("assets/texture_packs/tiles.csv");
+		tiles.removeRows(1); //remove the header
+	}
+	
 	public static final int TILE_PIXEL_SIZE = 16;
 	
 	private static final String TEXTURE_PACK_PATH = "assets/texture_packs/";
@@ -66,6 +77,7 @@ public class TexturePack {
 		addTileTexture("concrete_sidewalk","Concrete Sidewalk");
 		addTileTexture("street","Black Street");
 		addTileTexture("side_of_street","Black Street Edge");
+		addTileTexture("corner_of_street","Black Street Corner");
 		addTileTexture("street_same_way_crossing","Black Street White Dashed Lines");
 		addTileTexture("street_same_way_no_crossing","Black Street White Solid Lines");
 		addTileTexture("street_two_way_crossing","Black Street Yellow Dashed Lines");

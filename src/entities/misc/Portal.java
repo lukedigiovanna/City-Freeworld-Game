@@ -23,8 +23,8 @@ public class Portal extends Entity {
 	private float r = 0, rv = 500;
 	@Override
 	public void draw(Camera camera) {
-		camera.setColor(new Color((int)r,150,(int)r,(int)r));
-		camera.fillRect(getX(),getY(),getWidth(),getHeight());
+//		camera.setColor(new Color((int)r,150,(int)r,(int)r));
+//		camera.fillRect(getX(),getY(),getWidth(),getHeight());
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class Portal extends Entity {
 			rv*=-1;
 		}
 		Color[] rainbow = {Color.RED,Color.ORANGE,Color.YELLOW,Color.GREEN,Color.BLUE,Color.MAGENTA};
-		this.getRegion().addParticles(Particle.Type.SPARKLES,rainbow[MathUtils.random(rainbow.length)],1,0.1f,getX(),getY(),getWidth(),getHeight());
+		//this.getRegion().addParticles(Particle.Type.SPARKLES,rainbow[MathUtils.random(rainbow.length)],1,0.1f,getX(),getY(),getWidth(),getHeight());
 	}
 	
 	public static class Destination {
