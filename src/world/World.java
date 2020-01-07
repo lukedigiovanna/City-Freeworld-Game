@@ -19,7 +19,7 @@ public class World {
 	
 	private float elapsedTime = 0.0f;
 	
-	private String worldName = "krzworld";
+	private String worldName = "realworld";
 	
 	private float timeOfDay = 0.0f; //up to hour 23, at 24 it resets to 0.
 	private int elapsedDays = 0;
@@ -38,9 +38,9 @@ public class World {
 		regions.add(temp);
 		
 		regions.add(new Region(this,worldName,1));
-		regions.add(new Region(this,worldName,2));
-		regions.add(new Region(this,worldName,3));
-		regions.add(new Region(this,worldName,4));
+//		regions.add(new Region(this,worldName,2));
+//		regions.add(new Region(this,worldName,3));
+//		regions.add(new Region(this,worldName,4));
 		
 		//initialize starting region
 		getCurrentRegion().update(0);

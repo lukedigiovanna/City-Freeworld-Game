@@ -24,6 +24,9 @@ public class UpdateNotesDisplay extends Display {
 		"    Lamps/Fire emit light",
 		"New objects: flowers, cans, lamps",
 		"Sorts entities by vertical height now",
+		"Tiles can be rotated now",
+		"    Allows new maps to be created",
+		"New world with street/house",
 		"Bug Fixes:",
 		"    Player rotation resetting to 0 when the player rotates >= 360deg",
 		"    Entities following paths without stopping"

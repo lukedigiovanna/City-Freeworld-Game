@@ -100,7 +100,7 @@ public class Weapon {
 		this.owner = owner;
 		this.type = type;
 		this.loadedInMag = type.magSize;
-		this.stock = type.magSize * 2;
+		this.stock = type.magSize * 20;
 		this.inAccuracyRange = type.accuracy * (float)Math.PI/8;
 	}
 	

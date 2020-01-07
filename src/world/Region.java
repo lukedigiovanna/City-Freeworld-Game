@@ -52,7 +52,7 @@ public class Region {
 			cellGrid.setDimension(width, height);
 			for (int y = 0; y < height; y++) 
 				for (int x = 0; x < width; x++) {
-					Cell cell = new Cell(in.read(), x, y);
+					Cell cell = new Cell(in.read(), in.read(), x, y);
 					cellGrid.set(x, y, cell);
 				}
 			int numOfPortals = in.read();

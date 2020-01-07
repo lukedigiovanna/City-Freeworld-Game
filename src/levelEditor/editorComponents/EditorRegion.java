@@ -19,11 +19,11 @@ public class EditorRegion {
 	private int regNum;
 	
 	/*
-	 * DAT FILE KEY:
-	 * byte 0: width
-	 * byte 1: height
-	 * bytes 2 to (2 + width * height): grid data
-	 * bytes (2 + width * height) to (2 + width * height + 1 + portalNum * 9): portal info
+	 * DAT FILE DESCRIPTION:
+	 * bytes 0 + 1: the width and height of the region
+	 * the next bytes are the grid info:
+	 *   the cell ID and then rotation going row by row
+	 *  then the portals, walls, and objects
 	 */
 	
 	private int width, height;
@@ -98,7 +98,8 @@ public class EditorRegion {
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					int value = in.read();
-					this.setGridValue(x, y, (x + y) % 4, value);
+					int rotation = in.read();
+					this.setGridValue(x, y, rotation, value);
 				}
 			}
 			
@@ -238,8 +239,11 @@ public class EditorRegion {
 			
 			//write the grid
 			for (int y = 0; y < this.height; y++) 
-				for (int x = 0; x < this.width; x++) 
-					out.write(this.getGridValue(x, y));
+				for (int x = 0; x < this.width; x++) {
+					EditorCell cell = this.getGridCell(x, y);
+					out.write(cell.value);
+					out.write(cell.rotation);
+				}
 			
 			//write the portals
 			out.write(this.portals.size());

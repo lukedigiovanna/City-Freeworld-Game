@@ -242,7 +242,7 @@ public class EditorPanel extends JPanel {
 		g.setFont(new Font("Arial",Font.BOLD,12));
 		Vector2 mp = this.mouseOnRegion();
 		mp.round(0.01f);
-		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+"     X: "+mp.x+" Y: "+mp.y, 230, Program.DISPLAY_HEIGHT-8);
+		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+"     X: "+mp.x+" Y: "+mp.y+"    ROT: "+rotation, 230, Program.DISPLAY_HEIGHT-8);
 		
 		if (keyboard.keyPressed('1'))
 			rotation = 0;
@@ -320,16 +320,20 @@ public class EditorPanel extends JPanel {
 			if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL) && mouse.getX() > vx && mouse.getX() < vx + vw && mouse.getY() > vy && mouse.getY() < vy + vh) {
 				switch (curTool) {
 				case PORTAL:
-					EditorPortal p = new EditorPortal();
-					p.x = mp.x;
-					p.y = mp.y;
-					p.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
-					p.width = 0.5f;
-					p.height = 0.5f;
-					String[] vals = JOptionPane.showInputDialog(this,"Enter portal destination coords","Add Portal",JOptionPane.QUESTION_MESSAGE).split(" ");
-					p.destX = Float.parseFloat(vals[0]);
-					p.destY = Float.parseFloat(vals[1]);
-					this.region.getPortals().add(p);
+					try {
+						EditorPortal p = new EditorPortal();
+						p.x = mp.x;
+						p.y = mp.y;
+						p.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
+						p.width = 0.5f;
+						p.height = 0.5f;
+						String[] vals = JOptionPane.showInputDialog(this,"Enter portal destination coords","Add Portal",JOptionPane.QUESTION_MESSAGE).split(" ");
+						p.destX = Float.parseFloat(vals[0]);
+						p.destY = Float.parseFloat(vals[1]);
+						this.region.getPortals().add(p);
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(this, "Invalid entry", "Invalid Format", JOptionPane.ERROR_MESSAGE);
+					}
 					break;
 				case WALL:
 					if (wallP1 == null) {

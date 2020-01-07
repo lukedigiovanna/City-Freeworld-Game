@@ -14,8 +14,9 @@ public class Cell extends WorldObject {
 	private Animation animation;
 	private int orientation = ImageTools.ROTATE_0; //0 = 0deg, 1 = 90deg, 2 = 180deg, 3 = 270deg
 
-	public Cell(int id, float x, float y) {
+	public Cell(int id, int rotation, float x, float y) {
 		super(x,y,1.0f,1.0f);
+		this.orientation = rotation;
 		this.setVerticalHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
 		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		this.animation = TexturePack.current().getTileTexture(id).getAnimation().copy();

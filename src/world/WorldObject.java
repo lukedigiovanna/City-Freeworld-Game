@@ -89,6 +89,8 @@ public abstract class WorldObject {
 		
 		this.position.round(0.005f);
 		
+		this.updateRigidLines();
+		
 		//logic for regenerating a hitbox
 		//this is needed because sometimes the hitbox and entity's rotation fall out of sync
 		regenTimer += dt;
@@ -120,6 +122,18 @@ public abstract class WorldObject {
 		float thisVal = globalValue;
 		for (Entity e : this.getRegion().getEntities().get()) {
 			if (e.getLightEmissionValue() > 0) {
+				//make sure a wall is not in the way
+				//construct a line between our center and the entities center
+				Line l = new Line(this.center(),e.center());
+				boolean check = true;
+				//now check if it is intersecting a rigid line
+				for (Line r : this.getRigidLines())
+					if (l.intersects(r) != null) {
+						check = false;
+						break;
+					}
+				if (!check)
+					continue; //to the next entity
 				float d = this.squaredDistanceTo(e);
 				//use the inverse square law to determine light intensity
 				float light = MathUtils.ceil(1.0f, 1/d);
@@ -421,8 +435,12 @@ public abstract class WorldObject {
 		}
 	}
 	
-	public List<Line> getRigidLines() {
-		List<Line> rigidLines = new ArrayList<Line>();
+	private List<Line> rigidLines = new ArrayList<Line>();
+	/**
+	 * Updates the list of rigid lines for the object
+	 */
+	private void updateRigidLines() {
+		rigidLines.clear();
 		rigidLines.addAll(this.getRegion().getWalls().getWalls());
 		//add in the lines from rigid entities.
 		if (this.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE)
@@ -430,6 +448,9 @@ public abstract class WorldObject {
 				if (e.getVerticalHeight() >= this.verticalHeight && e.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE) 
 					for (Line l : e.getHitbox().getLines()) 
 						rigidLines.add(l);
+	}
+	
+	public List<Line> getRigidLines() {
 		return rigidLines;
 	}
 	
