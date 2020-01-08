@@ -1,0 +1,17 @@
+string id,frame rate,width,height,light emission,vertical height,display name
+fire,8,1,1,0.8,1,Fire
+wooden_bench,0,2,1,0,4,Wooden Bench
+pine_tree,0,1,1,0,8,Pine Tree
+palm_tree,0,1,1,0,8,Palm Tree
+maple_tree,0,1,1,0,8,Maple Tree
+apple_tree,0,1,1,0,8,Apple Tree
+soda_can,0,0.25,0.5,0,2,Soda Can
+red_flower,0,0.3125,0.625,0,1,Red Flower
+yellow_flower,0,0.3125,0.625,0,1,Yellow Flower
+blue_flower,0,0.3125,0.625,0,1,Blue Flower
+street_lamp_0,0,0.6875,0.6875,0.8,8,Street Lamp
+blue_bed,0,1.5,1,0,5,Blue Bed
+red_bed,0,1.5,1,0,5,Red Bed
+gray_bed,0,1.5,1,0,5,Gray Bed
+table,0,1.5,1,0,5,Table
+toilet,0,0.75,0.875,0,2.5,Toilet
