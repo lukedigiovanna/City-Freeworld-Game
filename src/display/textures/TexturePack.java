@@ -22,15 +22,6 @@ import misc.MathUtils;
 
 public class TexturePack {
 	
-	/**
-	 * Generates the tile sheet and data from the CSV files
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		CSVFile tiles = new CSVFile("assets/texture_packs/tiles.csv");
-		tiles.removeRows(1); //remove the header
-	}
-	
 	public static final int TILE_PIXEL_SIZE = 16;
 	
 	private static final String TEXTURE_PACK_PATH = "assets/texture_packs/";
@@ -61,44 +52,31 @@ public class TexturePack {
 		tileJson = new JSONFile(path+"tiles/tiles.json");
 		tilesMap = new HashMap<Integer, Texture>();
 		objectsMap = new HashMap<Integer, Texture>();
-		//add textures (these only need to be called once)
-		addTileTexture("grass","Grass");
-		addTileTexture("dirt","Dirt");
-		addTileTexture("sand","Sand");
-		addTileTexture("water","Water");
-		addTileTexture("planks","Wooden Planks 1");
-		addTileTexture("planks1","Wooden Planks 2");
-		addTileTexture("black_and_white_tile", "Black and White Tile");
-		addTileTexture("mossy_stone","Mossy Stone");
-		addTileTexture("stone","Stone");
-		addTileTexture("path","Path");
-		addTileTexture("bricks","Bricks");
-		addTileTexture("sand_sidewalk","Sand Sidewalk");
-		addTileTexture("concrete_sidewalk","Concrete Sidewalk");
-		addTileTexture("street","Black Street");
-		addTileTexture("side_of_street","Black Street Edge");
-		addTileTexture("corner_of_street","Black Street Corner");
-		addTileTexture("street_same_way_crossing","Black Street White Dashed Lines");
-		addTileTexture("street_same_way_no_crossing","Black Street White Solid Lines");
-		addTileTexture("street_two_way_crossing","Black Street Yellow Dashed Lines");
-		addTileTexture("street_two_way_no_crossing","Black Street Yellow Solid Lines");
-		addTileTexture("street_two_way_double_yellow","Black Street Yellow Double Solid Lines");
-		addTileTexture("street_stop_line","Black Street Stop Line");
-		addTileTexture("rainbow","rainbow_",6,"Rainbow");
-		addTileTexture("rainbow2","rainbow_",18,"Rainbow 2");
-		addTileTexture("arrow","Arrow");
-		//add objects
-		addObjectTexture("fire","fire_",8,1.0f,1.0f,0.8f,1.0f,"Fire");
-		addObjectTexture("wooden_bench",2.0f,1.0f,0.0f,4.0f,"Wooden Bench");
-		addObjectTexture("pine_tree",1.0f,1.0f,0.0f,8.0f,"Pine Tree");
-		addObjectTexture("palm_tree",1.0f,1.0f,0.0f,8.0f,"Palm Tree");
-		addObjectTexture("maple_tree",1.0f,1.0f,0.0f,8.0f,"Maple Tree");
-		addObjectTexture("apple_tree",1.0f,1.0f,0.0f,8.0f,"Apple Tree");
-		addObjectTexture("soda_can",0.25f,0.5f,0.0f,2.0f,"Soda Can");
-		addObjectTexture("red_flower",5f/16f,10f/16f,0.0f,1.0f,"Red Flower");
-		addObjectTexture("yellow_flower",5f/16f,10f/16f,0.0f,1.0f,"Yellow Flower");
-		addObjectTexture("blue_flower",5f/16f,10f/16f,0.0f,1.0f,"Blue Flower");
-		addObjectTexture("street_lamp_0",11f/16f,11f/16f,0.8f,8.0f,"Street Lamp 0");
+		CSVFile tiles = new CSVFile(TEXTURE_PACK_PATH+"tiles.csv");
+		tiles.removeRows(1); //remove the header
+		for (int row = 0; row < tiles.getNumberOfRows(); row++) {
+			String stringID = tiles.getString(row, 0);
+			int frameRate=  tiles.getInt(row, 1);
+			String displayName = tiles.getString(row, 2);
+			if (frameRate == 0) //static image
+				addTileTexture(stringID,displayName);
+			else //animation
+				addTileTexture(stringID,stringID+"_",frameRate,displayName);
+			System.out.println(stringID);
+		}
+		CSVFile objects = new CSVFile(TEXTURE_PACK_PATH+"objects.csv");
+		objects.removeRows(1); //remove header
+		for (int row = 0; row < objects.getNumberOfRows(); row++) {
+			String stringID = objects.getString(row, 0);
+			int frameRate = objects.getInt(row, 1);
+			float width = objects.getFloat(row, 2), height = objects.getFloat(row, 3);
+			float light = objects.getFloat(row, 4), vHeight = objects.getFloat(row, 5);
+			String displayName = objects.getString(row, 6);
+			if (frameRate == 0)
+				addObjectTexture(stringID,width,height,light,vHeight,displayName);
+			else
+				addObjectTexture(stringID,stringID+"_",frameRate,width,height,light,vHeight,displayName);
+		}
 		save();
 		load();
 	}
@@ -111,24 +89,12 @@ public class TexturePack {
 		tilesMap.put(tilesMap.size(), new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/tiles/"+folderName, prefix),frameRate,stringID));
 	}
 	
-	private void addObjectTexture(String imageName, float width, float height, String stringID) {
-		objectsMap.put(objectsMap.size(), new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName+".png"),width,height,stringID));
-	}
-	
-	private void addObjectTexture(String folderName, String prefix, int frameRate, float width, float height, String stringID) {
-		objectsMap.put(objectsMap.size(), new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/objects/"+folderName, prefix), frameRate,width,height,stringID));
-	}
-	
 	private void addObjectTexture(String imageName, float width, float height, float light, float vHeight, String stringID) {
 		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName+".png"),width,height,stringID)).setLightEmission(light).setVerticalHeight(vHeight));
 	}
 	
 	private void addObjectTexture(String folderName, String prefix, int frameRate, float width, float height, float light, float vHeight, String stringID) {
 		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/objects/"+folderName, prefix), frameRate,width,height,stringID)).setLightEmission(light).setVerticalHeight(vHeight));
-	}
-	
-	private void addObjectTexture(Texture texture) {
-		objectsMap.put(objectsMap.size(), texture);
 	}
 	
 	/**

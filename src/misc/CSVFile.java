@@ -24,13 +24,14 @@ public class CSVFile {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		for (ArrayList<String> row : data) {
-			for (String s : row)
-				System.out.print(s+" ");
-			System.out.println();
-		}
-		
+	}
+	
+	public int getNumberOfRows() {
+		return this.data.size();
+	}
+	
+	public int getNumberOfColumns(int row) {
+		return this.data.get(row).size();
 	}
 	
 	public String getString(int row, int col) {

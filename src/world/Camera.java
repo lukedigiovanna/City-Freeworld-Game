@@ -182,7 +182,7 @@ public class Camera {
 		refreshGraphics();
 		
 		//clear the screen
-		g.setColor(Color.WHITE); //dont do now because of dumbass glitch
+		g.setColor(Color.BLACK); 
 		g.fillRect(0, 0, pixelWidth, pixelHeight);
 		
 		if (region == null)  {
@@ -344,18 +344,19 @@ public class Camera {
 		return (int)(height/drawDim.y * pixelHeight + 1);
 	}
 
+	private static final float TOLERANCE = 3.0f;
 	public void move(float dx, float dy) {
 		position.add(new Vector2(dx,dy));
 		//now correct off the position
 		if (region != null) {
-			if (position.getX() < 0)
-				position.setX(0);
-			if (position.getX() > region.getWidth()-this.dimension.x)
-				position.setX(region.getWidth()-this.dimension.x);
-			if (position.getY() < 0)
-				position.setY(0);
-			if (position.getY() > region.getHeight()-this.dimension.y)
-				position.setY(region.getHeight()-this.dimension.y);
+			if (position.getX() < -TOLERANCE)
+				position.setX(-TOLERANCE);
+			if (position.getX() > region.getWidth()-this.dimension.x+TOLERANCE)
+				position.setX(region.getWidth()-this.dimension.x+TOLERANCE);
+			if (position.getY() < -TOLERANCE)
+				position.setY(-TOLERANCE);
+			if (position.getY() > region.getHeight()-this.dimension.y+TOLERANCE)
+				position.setY(region.getHeight()-this.dimension.y+TOLERANCE);
 		}
 	}
 	
