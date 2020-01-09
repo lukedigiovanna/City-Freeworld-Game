@@ -62,7 +62,6 @@ public class TexturePack {
 				addTileTexture(stringID,displayName);
 			else //animation
 				addTileTexture(stringID,stringID+"_",frameRate,displayName);
-			System.out.println(stringID);
 		}
 		CSVFile objects = new CSVFile(TEXTURE_PACK_PATH+"objects.csv");
 		objects.removeRows(1); //remove header

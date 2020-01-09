@@ -222,10 +222,10 @@ public class EditorPanel extends JPanel {
 	
 	private double size = 30;
 	private int offX = 50, offY = 0;
-	int vx = 230, vy = 100;
-	int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
+	private int vx = 230, vy = 100;
+	private int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
 	
-	private int rotation = 1;
+	private int rotation = 0;
 	
 	private Vector2 wallP1 = null;
 	
@@ -252,6 +252,14 @@ public class EditorPanel extends JPanel {
 			rotation = 2;
 		if (keyboard.keyPressed('4'))
 			rotation = 3;
+		
+		if (keyboard.keyPressed(KeyEvent.VK_RIGHT))
+			rotation = (rotation + 1)%4;
+		if (keyboard.keyPressed(KeyEvent.VK_LEFT)) {
+			rotation--;
+			if (rotation < 0)
+				rotation = 3;
+		}
 		
 		/*
 		 * Draw the region
