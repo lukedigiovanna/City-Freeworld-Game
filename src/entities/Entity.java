@@ -72,8 +72,19 @@ public abstract class Entity extends WorldObject {
 		return tags;
 	}
 	
+	/**
+	 * Checks if the entity is following a path
+	 * @return
+	 */
 	public boolean isFollowingPath() {
 		return paths.size() > 0;
+	}
+	
+	/**
+	 * Clears the path queue
+	 */
+	public void clearPaths() {
+		this.paths.clear();
 	}
 	
 	/**

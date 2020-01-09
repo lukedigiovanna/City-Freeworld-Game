@@ -121,19 +121,8 @@ public abstract class WorldObject {
 		float globalValue = region.getWorld().getGlobalLightValue();
 		float thisVal = globalValue;
 		for (Entity e : this.getRegion().getEntities().get()) {
-			if (e.getLightEmissionValue() > 0) {
+			if (e.getLightEmissionValue() > 0 && e.canSee(this)) {
 				//make sure a wall is not in the way
-				//construct a line between our center and the entities center
-				Line l = new Line(this.center(),e.center());
-				boolean check = true;
-				//now check if it is intersecting a rigid line
-				for (Line r : this.getRigidLines())
-					if (l.intersects(r) != null) {
-						check = false;
-						break;
-					}
-				if (!check)
-					continue; //to the next entity
 				float d = this.squaredDistanceTo(e);
 				//use the inverse square law to determine light intensity
 				float light = MathUtils.ceil(1.0f, 1/d);
@@ -212,6 +201,21 @@ public abstract class WorldObject {
 	
 	public Vector2 center() {
 		return new Vector2(centerX(),centerY());
+	}
+	
+	/**
+	 * Checks if there is a direct view from between the objects
+	 * that is not obstructed by any rigid lines such as walls
+	 * @param other
+	 * @return
+	 */
+	public boolean canSee(WorldObject other) {
+		Line l = new Line(this.center(),other.center());
+		//now check if it is intersecting a rigid line
+		for (Line r : this.getRigidLines())
+			if (l.intersects(r) != null) 
+				return false;
+		return true;
 	}
 	
 	public float getWidth() {

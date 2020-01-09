@@ -53,6 +53,16 @@ public class NPC extends Human {
 		if (players.size() > 0)
 			angerAt = players.get(0);
 		
+		if (this.canSee(angerAt) && this.distanceTo(angerAt) > 3) {
+			float angle = this.angleTo(angerAt);
+			float speed = 1.0f;
+			this.setVelocity((float)Math.cos(angle) * speed, (float)Math.sin(angle) * speed);
+			this.setRotation(angle);
+			this.clearPaths();
+		} else if (!this.isFollowingPath()) {
+			this.setVelocity(0,0);
+		}
+		
 		thisWeapon.update(dt);
 	}
 	
