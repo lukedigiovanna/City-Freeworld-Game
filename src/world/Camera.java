@@ -211,8 +211,6 @@ public class Camera {
 			for (int iy = startIndexY; iy < startIndexY+gridHeight; iy++) {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
-					float rotation = cell.getRotation();
-					float x = cell.centerX(), y = cell.centerY();
 					setLightValue(cell.getLightValue());
 					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
 				}

@@ -27,13 +27,17 @@ public class Game {
 	
 	private boolean paused = true;
 	
+	private boolean gameActive = true; //says whether or not this game should exist
+	
 	public Game() {
 		ft = new FrameTimer();
 		world = new World(this);
 		
+		gameScreen = new BufferedImage(Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB);
+		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
-				while (true) {
+				while (gameActive) {
 					try {
 						long before = System.currentTimeMillis();
 						if (Program.initialized() && DisplayController.getCurrentScreen() == DisplayController.Screen.GAME)
@@ -50,6 +54,13 @@ public class Game {
 			}
 		});
 		updateLoop.start();
+	}
+	
+	/**
+	 * Stops the update loop
+	 */
+	public void quit() {
+		gameActive = false;
 	}
 	
 	public Vector2 getMousePositionOnCamera() {
@@ -75,6 +86,7 @@ public class Game {
 	
 	public void pause() {
 		paused = true;
+		pauseBackground = ImageTools.colorscale(gameScreen, Color.WHITE);
 	}
 	
 	public void unpause() {
@@ -82,7 +94,10 @@ public class Game {
 	}
 	
 	public void togglePause() {
-		paused = !paused;
+		if (paused)
+			unpause();
+		else
+			pause();
 	}
 	
 	public boolean isPaused() {
@@ -190,18 +205,20 @@ public class Game {
 		}
 	}, new PauseButton("QUIT",Program.DISPLAY_HEIGHT/2+40) {
 		public void onMouseUp() {
+			quit();
 			display.DisplayController.setScreen(display.DisplayController.Screen.MAIN);
 		}
 	}};
 	
-	public void draw(Graphics2D g) {
-		if (!paused)
-			world.draw();	
-		BufferedImage cameraView = world.getCamera().getView();
+	private BufferedImage gameScreen;
+	private BufferedImage pauseBackground;
+	
+	public void draw(Graphics2D sg) {
+		Graphics2D g = this.gameScreen.createGraphics();
 
 		if (paused) {
 			//make the game gray scaled
-			g.drawImage(ImageTools.colorscale(cameraView,Color.WHITE), 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
+			g.drawImage(pauseBackground, 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 			g.setColor(Color.RED);
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
 			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
@@ -210,95 +227,84 @@ public class Game {
 				b.draw(g);
 			}
 		} else {
+			world.draw();	
+			BufferedImage cameraView = world.getCamera().getView();
+			
 			g.drawImage(cameraView, 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
-		}
 		
-		g.setColor(Color8.GRAY);
-		g.setStroke(new BasicStroke(cameraBorderSize*2));
-		g.drawRect(0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT);
-		
-		//draw the profile bar
-		List<Player> players = this.world.getPlayers();
-		if (players.size() > 0) {
-			Player player = (Player) this.world.getPlayers().get(0);
-			int cameraHeight = CAMERA_PIXEL_HEIGHT-150-cameraBorderSize;
-			int profileHeight = Program.DISPLAY_HEIGHT-cameraHeight;
-			int barHeight = 150, barWidth = 340;
-			float padding = 0.15f;
-			int pixelPadding = (int)(padding*profileHeight);
-			int ppX = cameraBorderSize+pixelPadding, ppY = cameraHeight+pixelPadding,
-					ppS = (int)((1-padding*2)*profileHeight);
-			g.setColor(new Color(0,0,0,175));
-			g.fillRect(cameraBorderSize, cameraHeight, barWidth, barHeight);
-			int[] xPoints = {barWidth+cameraBorderSize, barWidth+cameraBorderSize, barWidth+cameraBorderSize+150};
-			int[] yPoints = {Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize};
-			g.fillPolygon(xPoints,yPoints,3);
-			g.setStroke(new BasicStroke(cameraBorderSize/2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_BEVEL));
-			int topY = Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize;
-			g.setColor(Color.GRAY);
-			g.drawLine(cameraBorderSize, topY, cameraBorderSize+barWidth, topY);
-			g.drawLine(cameraBorderSize+barWidth, topY, xPoints[2], yPoints[2]);
+			g.setColor(Color8.GRAY);
+			g.setStroke(new BasicStroke(cameraBorderSize*2));
+			g.drawRect(0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT);
 			
-			g.setColor(Color.GRAY);
-			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
-			g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);
-			String[] info = {
-				"Name: "+player.getName(),
-				"Money: "+player.getMoneyDisplay(),
-				"Reputation: "+player.getReputation()
-			};
-			Color[] colors = {
-				Color.LIGHT_GRAY,
-				Color.GREEN,
-				Color.BLUE
-			};
-			int y = ppY;
-			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,ppS/5));
-			int si = g.getFontMetrics().getHeight();
-			int add = 4;
-			for (int i = 0; i < info.length; i++) {
-				g.setColor(colors[i]);
-				g.drawString(info[i], ppX+ppS+10, y+i*(si+add)+si);
-			}
-			
-			int weaponSpace = 180;
-			Weapon selected = player.getSelectedWeapon();
-			if (selected != null) {
-				int iconWidth = 90,
-					iconHeight = iconWidth * Weapon.ICON_HEIGHT / Weapon.ICON_WIDTH;
-				g.drawImage(selected.getType().icon, Program.DISPLAY_WIDTH - weaponSpace, Program.DISPLAY_HEIGHT-cameraBorderSize-10-iconHeight,iconWidth,iconHeight,null);
-				String ammo = selected.getLoadedAmmo()+"/"+selected.getAmmoStock();
-				g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD | Font.ITALIC,20));
-				g.setColor(Color.BLACK);
-				int ax = Program.DISPLAY_WIDTH-cameraBorderSize-10-g.getFontMetrics().stringWidth(ammo),
-					ay = Program.DISPLAY_HEIGHT-cameraBorderSize-10-iconHeight/2+10;
-				int aSize = 1;
-				g.drawString(ammo, ax-aSize, ay-aSize);
-				g.drawString(ammo, ax-aSize, ay+aSize);
-				g.drawString(ammo, ax+aSize, ay-aSize);
-				g.drawString(ammo, ax+aSize, ay+aSize);
-				g.setColor(Color.LIGHT_GRAY);
-				g.drawString(ammo, ax, ay);
-				int reloadBarWidth = g.getFontMetrics().stringWidth(ammo), reloadBarHeight = 5;
+			//draw the profile bar
+			List<Player> players = this.world.getPlayers();
+			if (players.size() > 0) {
+				Player player = (Player) this.world.getPlayers().get(0);
+				int cameraHeight = CAMERA_PIXEL_HEIGHT-150-cameraBorderSize;
+				int barHeight = 150, barWidth = 340;
+				float padding = 0.1f;
+				int pixelPadding = (int)(padding*barHeight);
+				int profileHeight = barHeight - pixelPadding * 2;
+				int ppX = cameraBorderSize+pixelPadding, ppY = cameraHeight+pixelPadding,
+						ppS = (int)(profileHeight);
+				g.setColor(new Color(0,0,0,175));
+				g.fillRect(cameraBorderSize, cameraHeight, barWidth, barHeight);
+				int[] xPoints = {barWidth+cameraBorderSize, barWidth+cameraBorderSize, barWidth+cameraBorderSize+150};
+				int[] yPoints = {Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize,Program.DISPLAY_HEIGHT-cameraBorderSize};
+				g.fillPolygon(xPoints,yPoints,3);
+				g.setStroke(new BasicStroke(cameraBorderSize/2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_BEVEL));
+				int topY = Program.DISPLAY_HEIGHT-barHeight-cameraBorderSize;
+				g.setColor(Color.GRAY);
+				g.drawLine(cameraBorderSize, topY, cameraBorderSize+barWidth, topY);
+				g.drawLine(cameraBorderSize+barWidth, topY, xPoints[2], yPoints[2]);
+				
+				g.setColor(Color.GRAY);
+				g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
+				g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);
+				
+				g.setColor(Color.RED);
+				g.fillRect(ppX+ppS+pixelPadding, ppY, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getDisplayPercent()), 20);
+				
+				int weaponSpace = 180;
+				Weapon selected = player.getSelectedWeapon();
+				if (selected != null) {
+					int iconWidth = 90,
+						iconHeight = iconWidth * Weapon.ICON_HEIGHT / Weapon.ICON_WIDTH;
+					g.drawImage(selected.getType().icon, Program.DISPLAY_WIDTH - weaponSpace, Program.DISPLAY_HEIGHT-cameraBorderSize-10-iconHeight,iconWidth,iconHeight,null);
+					String ammo = selected.getLoadedAmmo()+"/"+selected.getAmmoStock();
+					g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD | Font.ITALIC,20));
+					g.setColor(Color.BLACK);
+					int ax = Program.DISPLAY_WIDTH-cameraBorderSize-10-g.getFontMetrics().stringWidth(ammo),
+						ay = Program.DISPLAY_HEIGHT-cameraBorderSize-10-iconHeight/2+10;
+					int aSize = 1;
+					g.drawString(ammo, ax-aSize, ay-aSize);
+					g.drawString(ammo, ax-aSize, ay+aSize);
+					g.drawString(ammo, ax+aSize, ay-aSize);
+					g.drawString(ammo, ax+aSize, ay+aSize);
+					g.setColor(Color.LIGHT_GRAY);
+					g.drawString(ammo, ax, ay);
+					int reloadBarWidth = g.getFontMetrics().stringWidth(ammo), reloadBarHeight = 5;
+					g.setColor(Color.WHITE);
+					g.fillRect(ax,ay+6,(int)(reloadBarWidth*selected.getReloadPercent()),reloadBarHeight);
+				}
+				
+				String time = this.world.getStringTime();
 				g.setColor(Color.WHITE);
-				g.fillRect(ax,ay+6,(int)(reloadBarWidth*selected.getReloadPercent()),reloadBarHeight);
-			}
-			
-			String time = this.world.getStringTime();
-			g.setColor(Color.WHITE);
-			g.drawString(time, Program.DISPLAY_WIDTH-weaponSpace-g.getFontMetrics().stringWidth(time)-160, Program.DISPLAY_HEIGHT-cameraBorderSize-15);
-			
-			if (!paused)
+				g.drawString(time, Program.DISPLAY_WIDTH-weaponSpace-g.getFontMetrics().stringWidth(time)-160, Program.DISPLAY_HEIGHT-cameraBorderSize-15);
+				
 				player.getWeaponManager().draw(g);
+			}
 		}
 		
-		g.setColor(Color.WHITE);
-		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
+		sg.drawImage(gameScreen, 0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT, null);
+		
+		sg.setColor(Color.WHITE);
+		sg.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
 		String s = "TPS: "+(int)tps;
-		g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 40);
+		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 40);
 		s = "TICK WAIT: "+(int)wait+"ms";
-		g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 60);
+		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 60);
 		s = "TICK EFFICIENCY: "+(int)((float)wait/IDEAL_REFRESH_RATE*100)+"%";
-		g.drawString(s, Program.DISPLAY_WIDTH-10-g.getFontMetrics().stringWidth(s), 80);
+		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 80);
 	}
 }

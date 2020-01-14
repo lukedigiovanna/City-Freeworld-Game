@@ -53,11 +53,16 @@ public class NPC extends Human {
 		if (players.size() > 0)
 			angerAt = players.get(0);
 		
-		if (this.canSee(angerAt) && this.distanceTo(angerAt) > 3) {
+		if (this.canSee(angerAt)) {
 			float angle = this.angleTo(angerAt);
-			float speed = 1.0f;
-			this.setVelocity((float)Math.cos(angle) * speed, (float)Math.sin(angle) * speed);
 			this.setRotation(angle);
+			if (this.distanceTo(angerAt) > 3) {
+				float speed = 1.0f;
+				this.setVelocity((float)Math.cos(angle) * speed, (float)Math.sin(angle) * speed);
+			} else {
+				this.setVelocity(0,0);
+				this.getSelectedWeapon().pullTrigger();
+			}
 			this.clearPaths();
 		} else if (!this.isFollowingPath()) {
 			this.setVelocity(0,0);
@@ -68,7 +73,7 @@ public class NPC extends Human {
 	
 	private Entity angerAt = null;
 
-	private Weapon thisWeapon = new Weapon(this,Weapon.Type.GLOCK_21);
+	private Weapon thisWeapon = new Weapon(this,Weapon.Type.AK_47);
 	
 	@Override
 	public Weapon getSelectedWeapon() {

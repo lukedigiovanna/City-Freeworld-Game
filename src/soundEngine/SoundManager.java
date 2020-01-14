@@ -21,6 +21,10 @@ public class SoundManager {
 		sounds.add(sound);
 	}
 	
+	public static void play(String soundName) {
+		play(Sounds.get(soundName));
+	}
+	
 	public static void pauseAll() {
 		for (Sound s : sounds)
 			s.pause();

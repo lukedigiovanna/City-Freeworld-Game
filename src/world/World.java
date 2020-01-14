@@ -21,7 +21,7 @@ public class World {
 	
 	private String worldName = "realworld";
 	
-	private float timeOfDay = 0.0f; //up to hour 23, at 24 it resets to 0.
+	private float timeOfDay = 12.0f; //up to hour 23, at 24 it resets to 0.
 	private int elapsedDays = 0;
 	
 	public World(Game game) {
@@ -104,9 +104,9 @@ public class World {
 		elapsedTime += dt;
 		
 		//where 1 second = 1/60 of an hour.
-		//timeOfDay += (dt/60.0f);
+		timeOfDay += (dt/60.0f);
 
-		timeOfDay+=dt;
+		//timeOfDay+=dt;
 		
 		if (timeOfDay >= 24.0f) {
 			elapsedDays++;

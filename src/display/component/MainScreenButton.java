@@ -15,12 +15,12 @@ public class MainScreenButton extends Button {
 	public void draw(Graphics2D g) {
 		int fs = (int)(fontSize*Program.DISPLAY_HEIGHT);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,fs));
-		String str = "< "+this.getText()+" >";
+		String str = "[ "+this.getText()+" ]";
 		int width = g.getFontMetrics().stringWidth(str);
 		this.setDimension(width,g.getFontMetrics().getHeight());
 		g.setColor(new Color(225,225,225,125));
 		g.drawString(str, x-1, y+this.getHeight()-1);
-		g.setColor(new Color(0,150,160));
+		g.setColor(new Color(0,100,150));
 		g.drawString(str, x, y+this.getHeight());
 	}
 	

@@ -5,10 +5,6 @@ import java.io.*;
 
 public class Sound {
 	
-	public static final Sound 
-			GUN_SHOT = new Sound("assets/sounds/gunfire.wav"),
-			GUN_CLICK = new Sound("assets/sounds/gunclick.wav");
-	
 	//any sound lower than MIN_VOLUME should completely mute the sound.
 	public static final float MIN_VOLUME = -50.0f, MAX_VOLUME = 0.0f;
 	

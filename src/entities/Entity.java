@@ -45,7 +45,7 @@ public abstract class Entity extends WorldObject {
 				this.getVelocity().zero();
 			}
 		}
-		//entity general update.... just overrides the world object general update but calls that method
+		this.health.update(dt);
 		if (this.health.isDead()) {
 			this.destroy();
 		}
@@ -66,6 +66,10 @@ public abstract class Entity extends WorldObject {
 	public void send(int regionNumber, float x, float y) {
 		Region destination = this.getWorld().getRegion(regionNumber);
 		send(destination,x,y);
+	}
+	
+	public Health getHealth() {
+		return this.health;
 	}
 	
 	public List<String> getTags() {

@@ -19,16 +19,6 @@ import world.Properties;
 
 public class Player extends Human {
 	
-	private static final List<BufferedImage> 
-		WALK_0 = ImageTools.getImages("assets/images/characters/character_0", "walk_"),
-		IDLE_0 = ImageTools.getImages("assets/images/characters/character_0", "idle_"),
-		HOLDING_SHORT_GUN_0 = ImageTools.getImages("assets/images/characters/character_0", "holding_short_gun_"),
-		HOLDING_LONG_GUN_0 = ImageTools.getImages("assets/images/characters/character_0", "holding_long_gun_"),
-		WALK_1 = ImageTools.getImages("assets/images/characters/character_1", "walk_"),
-		IDLE_1 = ImageTools.getImages("assets/images/characters/character_1", "idle_"),
-		HOLDING_SHORT_GUN_1 = ImageTools.getImages("assets/images/characters/character_1", "holding_short_gun_"),
-		HOLDING_LONG_GUN_1 = ImageTools.getImages("assets/images/characters/character_1", "holding_long_gun_");
-	
 	private String name = "Earl";
 	private BankAccount bankAct;
 	private BufferedImage profilePicture;
@@ -38,7 +28,7 @@ public class Player extends Human {
 	public Player(float x, float y) {
 		super(x,y,HumanAnimationPack.CHARACTER_0);
 		this.bankAct = new BankAccount(this);
-		this.profilePicture = ImageTools.getImage("profile_1.png");
+		this.profilePicture = ImageTools.fade(ImageTools.getImage("profile_1.png"),0.5f);
 		this.weaponManager = new WeaponManager(this);
 		this.health = new Health(500);
 		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);

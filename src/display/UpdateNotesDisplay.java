@@ -24,12 +24,16 @@ public class UpdateNotesDisplay extends Display {
 		"    Lamps/Fire emit light",
 		"New objects: flowers, cans, lamps",
 		"Sorts entities by vertical height now",
+		"Added text particles and corpses",
 		"Tiles can be rotated now",
 		"    Allows new maps to be created",
 		"New world with street/house",
 		"Bug Fixes:",
 		"    Player rotation resetting to 0 when the player rotates >= 360deg",
-		"    Entities following paths without stopping"
+		"    Entities following paths without stopping on the final goal",
+		"    Draws the fully grayed out game screen on the pause screen now",
+		"    Game loop would run even if the game was quit",
+		"        Caused bugs like random noises playing and not being able to use keys"
 	};
 	
 	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {

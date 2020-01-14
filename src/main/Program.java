@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import display.DisplayController;
 import misc.ImageTools;
 import soundEngine.SoundManager;
+import soundEngine.Sounds;
 
 //static class that holds some innate information about this application
 public class Program {
@@ -58,6 +59,8 @@ public class Program {
 		keyboard = new Keyboard(panel);
 		DisplayController.initialize();
 		SoundManager.initialize();
+		Sounds.initialize();
+		
 		initialized = true;
 	}
 	

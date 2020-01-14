@@ -27,11 +27,11 @@ public class Weapon {
 					  ICON_HEIGHT = 15;
 	
 	public static enum Type {
-		GLOCK_21("Glock 21","glock21",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,17,10.0f,0.025f),
-		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,15.0f,0.15f),
+		GLOCK_21("Glock 21","glock21",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,17,8.0f,0.025f),
+		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,10.0f,0.15f),
 		REVOLOVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f,0.125f),
 		
-		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,12.0f,2.0f,30,3.0f,0.2f);
+		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,10.0f,2.0f,30,5.0f,0.3f);
 		
 		public float fireRate,
 			  reloadTime,
@@ -130,11 +130,11 @@ public class Weapon {
 		
 		//for making the click sound when the player tries to shoot with no ammo
 		if (this.triggerPulled && this.getLoadedAmmo() == 0 && shotsFiredStreak == 0) {
-			SoundManager.play(Sound.GUN_CLICK);
+			SoundManager.play("gun_click");
 			shotsFiredStreak++;
 		}
 		
-		if (this.triggerPulled && this.getLoadedAmmo() > 0 && fireTime >= 1/type.fireRate) {
+		if (this.triggerPulled && this.getLoadedAmmo() > 0 && fireTime >= 1/type.fireRate && this.reloadTimer == 0.0f) {
 			switch (this.type.fireStyle) {
 			case FIRE_STYLE_ONE:
 				if (shotsFiredStreak == 0) {
@@ -166,8 +166,8 @@ public class Weapon {
 		owner.getRegion().addParticles(Particle.Type.GUNFIRE, null, 1, 0, x, y, 0, 0);
 		owner.getRegion().add(p);
 		this.loadedInMag--;
-		this.fireTime = 0;
-		SoundManager.play(Sound.GUN_SHOT);
+		this.fireTime%=(1/type.fireRate);
+		SoundManager.play("gun_shot");
 	}
 	
 	private boolean reload = false;

@@ -47,9 +47,6 @@ public class MainScreenDisplay extends Display {
 		
 		for (Button b : buttons)
 			add(b);
-		
-//		slider = new Slider(50,50,100,20, Component.FORM_LEFT);
-//		add(slider);
 	}
 	
 	private BufferedImage background = (ImageTools.getImage("gta.jpg"));
@@ -57,6 +54,8 @@ public class MainScreenDisplay extends Display {
 	@Override
 	public void draw(Graphics2D g) {
 		fillBackground(g,background);
+		
+		fillBackground(g,Color.DARK_GRAY);
 		
 		float size = 0.4f;
 		g.drawImage(Program.PROGRAM_ICON, Program.DISPLAY_WIDTH/2-(int)(size/2*Program.DISPLAY_WIDTH), Program.DISPLAY_HEIGHT/2-(int)(size/2*Program.DISPLAY_HEIGHT), (int)(size*Program.DISPLAY_WIDTH), (int)(size*Program.DISPLAY_HEIGHT), null);

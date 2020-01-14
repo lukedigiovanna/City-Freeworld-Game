@@ -169,7 +169,6 @@ public class ImageTools {
 			for (int y = 0; y < rgbs[x].length; y++)
 				nrgb[x][y] = rgbs[x][rgbs[x].length-y-1];
 		return get(nrgb);
-		
 	}
 	
 	public static List<BufferedImage> flipHorizontal(List<BufferedImage> images) {
@@ -193,6 +192,29 @@ public class ImageTools {
 		for (BufferedImage bi : images)
 			newList.add(flipVertical(bi));
 		return newList;
+	}
+	
+	/**
+	 * Fades the corners of the image based on the intensity inputted
+	 * @param image
+	 * @param intensity how hard the fade is -- 0 is no fade, 1 is very faded
+	 * @return
+	 */
+	public static BufferedImage fade(BufferedImage image, float intensity) {
+		BufferedImage newImg = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		int[][] rgbs = getRGB(image);
+		double maxDistance = Math.sqrt(image.getWidth()/2.0 * image.getWidth()/2.0 + image.getHeight()/2.0 * image.getHeight()/2.0);
+		for (int x = 0; x < rgbs.length; x++) {
+			for (int y = 0; y < rgbs[x].length; y++) {
+				double dx = x - image.getWidth() / 2.0, dy = y - image.getHeight() / 2.0;
+				double distance = Math.sqrt(dx * dx + dy * dy);
+				double percent = distance/maxDistance;
+				float fade = 1f-(float)(percent * intensity);
+				Color c = new Color(rgbs[x][y]);
+				newImg.setRGB(x, y, (new Color((int)(c.getRed() * fade), (int)(c.getGreen() * fade), (int)(c.getBlue() * fade), c.getAlpha())).getRGB());
+			}
+		}
+		return newImg;
 	}
 	
 	private static BufferedImage apply(BufferedImage image, Modifiable mod) {

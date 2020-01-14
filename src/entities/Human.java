@@ -132,7 +132,9 @@ public abstract class Human extends Entity {
 	@Override
 	public void destroy() {
 		//add a corpse particle
-		this.getRegion().add(new CorpseParticle(this.corpseAni,getX(),getY()));
+		CorpseParticle corpse = new CorpseParticle(this.corpseAni,getX(),getY());
+		corpse.setRotation(this.getRotation()-(float)Math.PI/2);
+		getRegion().add(corpse);
 		
 		super.destroy();
 	}

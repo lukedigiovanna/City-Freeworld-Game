@@ -24,6 +24,9 @@ public abstract class WorldObject {
 	private float mass; //in kilograms
 	private Properties properties;
 	
+	//holds a list of events to run for the object on collision with a rigid line
+	private List<Runnable> onCollisionWithRigidLine;
+	
 	private float lightValue = 1.0f; //value from 0 - 1 that indicates light, 0 is pitch black, 1 is bright
 	private float lightEmission = 0.0f; //value that indicates distance of light production
 	
@@ -42,6 +45,10 @@ public abstract class WorldObject {
 		// *reduces the chance of a lag spike
 		this.properties = new Properties();
 		this.positionHistory = new PositionHistory(this);
+	}
+	
+	public void addRigidCollisionEvent(Runnable event) {
+		this.onCollisionWithRigidLine.add(event);
 	}
 	
 	public void setModel(float ... model) {
@@ -309,7 +316,7 @@ public abstract class WorldObject {
 	 * A lower number indicates less precise collision detection.
 	 */
 	private static final float COLLISION_CHECK_STEP = 0.01f,
-							   COLLISION_ROTATION_CHECK_STEP = (float)Math.PI/300.0f;
+							   COLLISION_ROTATION_CHECK_STEP = (float)Math.PI/3.0f;
 	
 	/**
 	 * Moves the object along the x-axis using collision detection
@@ -418,7 +425,6 @@ public abstract class WorldObject {
 		//check if we are intersecting a wall
 		for (Line l : this.getRigidLines()) {
 			Vector2 intersection = this.hitbox.intersecting(l);
-			boolean hit = false;
 			float angle = 0.0f;
 			while (intersection != null) {
 				//correct
@@ -429,13 +435,7 @@ public abstract class WorldObject {
 				this.setX(this.getX() + dx);
 				this.setY(this.getY() + dy);
 				intersection = this.hitbox.intersecting(l);
-				hit = true;
 			}
-//			if (hit) {
-//			float dx = (float)Math.cos(angle) * 2f,
-//				  dy = (float)Math.sin(angle) * 2f;
-//			this.setVelocity(dx,dy);
-//			}
 		}
 	}
 	

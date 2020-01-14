@@ -24,6 +24,7 @@ public abstract class Projectile extends Entity {
 		this.setVelocity(vi);;
 		this.setRotation(vi.getAngle());
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		this.setProperty(Properties.KEY_DESTROY_ON_COLLISION, Properties.VALUE_DESTROY_ON_COLLISION_TRUE);
 		
 		this.setVerticalHeight(7.5f);
 	}  
@@ -68,9 +69,6 @@ public abstract class Projectile extends Entity {
 			if (e.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE && !e.isDestroyed()) {
 				if (this.colliding(e)) {
 					e.hurt(damage);
-					for (String tag : e.getTags())
-						System.out.print(tag+", ");
-					System.out.println();
 					this.destroy();
 					return; //already hit one.. were done now
 				}
