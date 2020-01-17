@@ -1,0 +1,26 @@
+string id,frame rate,display name
+grass,0,Grass
+dirt,0,Dirt
+sand,0,Sand
+water,0,Water
+planks,0,Planks 1
+planks1,0,Planks 2
+black_and_white_tile,0,Black and White Tile
+mossy_stone,0,Mossy Stone
+stone,0,Stone
+path,0,Path
+bricks,0,Bricks
+sand_sidewalk,0,Sand Sidewalk
+concrete_sidewalk,0,Concrete Sidewalk
+street,0,Black Street
+side_of_street,0,Black Street Edge
+corner_of_street,0,Black Street Corner
+street_same_way_crossing,0,Black Street White Dashed Lines
+street_same_way_no_crossing,0,Black Street White Solid Lines
+street_two_way_crossing,0,Black Street Yellow Dashed Lines
+street_two_way_no_crossing,0,Black Street Yellow Solid Lines
+street_two_way_double_yellow,0,Black Street Yellow Double Solid Lines
+street_stop_line,0,Black Street Stop Line
+rainbow,6,Rainbow
+rainbow2,18,Rainbow 2
+arrow,0,Arrow

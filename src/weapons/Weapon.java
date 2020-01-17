@@ -31,7 +31,7 @@ public class Weapon {
 		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,10.0f,0.15f),
 		REVOLOVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f,0.125f),
 		
-		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,10.0f,2.0f,30,5.0f,0.3f);
+		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,10.0f,2.0f,30,4.0f,0.3f);
 		
 		public float fireRate,
 			  reloadTime,
