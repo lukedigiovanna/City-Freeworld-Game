@@ -27,12 +27,12 @@ public class GamePanel extends JPanel {
 				while (true) {
 					try {
 						long first = System.currentTimeMillis();
-						int targetFPS = Integer.parseInt(Settings.getSetting("max_fps"));
-						int targetRefresh = 1000/targetFPS;
+						double targetFPS = (double)Settings.getSetting("max_fps");
+						int targetRefresh = (int)(1000/targetFPS);
 						repaint();
 						long elapsed = System.currentTimeMillis()-first;
 						long wait = targetRefresh;
-						if (Settings.getSetting("vsync_enabled").contentEquals("true"))
+						if ((boolean)Settings.getSetting("vsync_enabled") == true)
 							wait = (long)MathUtils.floor(10, targetRefresh-elapsed-1);
 						Thread.sleep(wait);
 					} catch (Exception e) {

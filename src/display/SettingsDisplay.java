@@ -56,11 +56,11 @@ public class SettingsDisplay extends Display {
 		}
 	}, mute = new Checkbox(200,245,35,35) {
 		public void onEnable() {
-			Settings.setSetting("master_volume", "0.0");
+			Settings.setSetting("muted", "true");
 		}
 		
 		public void onDisable() {
-			Settings.setSetting("master_volume", "1.0");
+			Settings.setSetting("muted", "false");
 		}
 	};
 	
@@ -68,11 +68,11 @@ public class SettingsDisplay extends Display {
 		super();
 		add(backButton);
 		vsync.setValue(false);
-		if (Settings.getSetting("vsync_enabled").contentEquals("true"))
+		if ((boolean)Settings.getSetting("vsync_enabled") == true)
 			vsync.setValue(true);
 		add(vsync);
 		mute.setValue(false);
-		if (Settings.getSetting("master_volume").contentEquals("0.0"))
+		if ((boolean)Settings.getSetting("muted") == true)
 			mute.setValue(true);
 		add(mute);
 	}

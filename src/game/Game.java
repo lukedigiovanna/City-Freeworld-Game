@@ -25,7 +25,7 @@ public class Game {
 	private FrameTimer ft;
 	private World world;
 	
-	private boolean paused = true;
+	private boolean paused = true, pause = false;
 	
 	private boolean gameActive = true; //says whether or not this game should exist
 	
@@ -85,8 +85,7 @@ public class Game {
 	}
 	
 	public void pause() {
-		paused = true;
-		pauseBackground = ImageTools.colorscale(gameScreen, Color.WHITE);
+		pause = true;
 	}
 	
 	public void unpause() {
@@ -106,8 +105,6 @@ public class Game {
 	
 	private float tps = 0.0f, elapsedSinceLastCapture = 0.0f;
 	private int captures = 0;
-	
-	private Sound sound = new Sound("assets/sounds/music/song1.wav");
 
 	public void gameLoop() {
 		//lets check for pausing
@@ -117,11 +114,6 @@ public class Game {
 		//elapsed time since last loop call.. for regulating game operation speeds
 		//across varying operating system performances
 		float dt = ft.mark();
-		
-		if (this.paused) {
-			sound.pause();
-			return; //dont run the game loop if we are paused
-		}
 		
 		if (Program.keyboard.keyDown(KeyEvent.VK_CONTROL)) {
 			if (Program.keyboard.keyPressed(KeyEvent.VK_H))
@@ -134,10 +126,6 @@ public class Game {
 			for (Entity e : world.getCurrentRegion().getEntities().get())
 				System.out.println(e.getVerticalHeight());
 		}
-		
-		
-		if (Settings.getSetting("master_volume").contentEquals("1.0"))
-			sound.loop();
 		
 		world.update(dt);
 		
@@ -293,6 +281,13 @@ public class Game {
 				g.drawString(time, Program.DISPLAY_WIDTH-weaponSpace-g.getFontMetrics().stringWidth(time)-160, Program.DISPLAY_HEIGHT-cameraBorderSize-15);
 				
 				player.getWeaponManager().draw(g);
+			}
+			
+			if (pause) {
+				pause();
+				pauseBackground = ImageTools.colorscale(gameScreen, Color.WHITE);
+				pause = false;
+				paused = true;
 			}
 		}
 		

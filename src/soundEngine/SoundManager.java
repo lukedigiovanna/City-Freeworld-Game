@@ -3,6 +3,8 @@ package soundEngine;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Settings;
+
 /**
  * For sound effects and stuff game-wise
  * Does not include music sounds.
@@ -16,6 +18,8 @@ public class SoundManager {
 	}
 	
 	public static void play(Sound sound) {
+		if ((boolean)Settings.getSetting("muted"))
+			return;
 		sound = sound.copy();
 		sound.play();
 		sounds.add(sound);
@@ -44,7 +48,7 @@ public class SoundManager {
 	}
 	
 	public static void muteAll() {
-		setVolume(-60.0f);
+		setVolume(Sound.MIN_VOLUME-1f);
 	}
 	
 	/**

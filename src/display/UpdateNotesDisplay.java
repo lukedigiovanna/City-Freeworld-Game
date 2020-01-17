@@ -28,6 +28,7 @@ public class UpdateNotesDisplay extends Display {
 		"Tiles can be rotated now",
 		"    Allows new maps to be created",
 		"New world with street/house",
+		"Reworked settings to use JSON file",
 		"Bug Fixes:",
 		"    Player rotation resetting to 0 when the player rotates >= 360deg",
 		"    Entities following paths without stopping on the final goal",

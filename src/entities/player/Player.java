@@ -1,20 +1,14 @@
 package entities.player;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import entities.*;
-import entities.misc.TextParticle;
-import entities.vehicles.Vehicle;
 import weapons.Weapon;
 import weapons.WeaponManager;
-import display.Animation;
 import main.Program;
 import main.Settings;
 import misc.*;
-import world.Camera;
 import world.Properties;
 
 public class Player extends Human {
@@ -63,10 +57,10 @@ public class Player extends Human {
 	public void update(float dt) {
 		super.update(dt);
 		
-		char up = Settings.getSetting("move_up").charAt(0);
-		char down = Settings.getSetting("move_down").charAt(0);
-		char left = Settings.getSetting("move_left").charAt(0);
-		char right = Settings.getSetting("move_right").charAt(0);
+		char up = ((String)Settings.getSetting("move_up")).charAt(0);
+		char down = ((String)Settings.getSetting("move_down")).charAt(0);
+		char left = ((String)Settings.getSetting("move_left")).charAt(0);
+		char right = ((String)Settings.getSetting("move_right")).charAt(0);
 		
 		if (Program.keyboard.keyPressed('p')) {
 			Path p = new Path();
