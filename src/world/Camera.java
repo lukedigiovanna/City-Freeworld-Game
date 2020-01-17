@@ -212,7 +212,16 @@ public class Camera {
 				Cell cell = grid.get(ix, iy);
 				if (cell != null) {
 					setLightValue(cell.getLightValue());
-					drawImage(cell.getImage(), cell.getX(), cell.getY(), 1.0f, 1.0f);
+					BufferedImage image = cell.getImage();
+					if (ix > 0)
+						image = ImageTools.zipper(image, grid.get(ix-1, iy).getImage(), ImageTools.LEFT_EDGE, 1);
+					if (ix < grid.getWidth()-1)
+						image = ImageTools.zipper(image, grid.get(ix+1, iy).getImage(), ImageTools.RIGHT_EDGE, 1);
+					if (iy > 0)
+						image = ImageTools.zipper(image, grid.get(ix, iy-1).getImage(), ImageTools.TOP_EDGE, 1);
+					if (iy < grid.getHeight()-1)
+						image = ImageTools.zipper(image, grid.get(ix, iy+1).getImage(), ImageTools.BOTTOM_EDGE, 1);
+					drawImage(image, cell.getX(), cell.getY(), 1.0f, 1.0f);
 				}
 			}
 		}

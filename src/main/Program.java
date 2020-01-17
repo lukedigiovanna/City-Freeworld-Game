@@ -14,7 +14,7 @@ import soundEngine.Sounds;
 //static class that holds some innate information about this application
 public class Program {
 	private static final double ratio = 4.0f/3.0f; //WIDTH/HEIGHT
-	public static final int DISPLAY_WIDTH = 1000, DISPLAY_HEIGHT = (int)(DISPLAY_WIDTH/ratio);
+	public static final int DISPLAY_WIDTH = 1080, DISPLAY_HEIGHT = (int)(DISPLAY_WIDTH/ratio);
 	
 	public static final int VERSION_MAJOR = 5, VERSION_MINOR = 0, VERSION_TINY = 0;
 	

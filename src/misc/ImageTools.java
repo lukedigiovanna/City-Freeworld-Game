@@ -141,6 +141,37 @@ public class ImageTools {
 		});
 	}
 	
+	public static final int TOP_EDGE = 0, RIGHT_EDGE = 1, BOTTOM_EDGE = 2, LEFT_EDGE = 3;
+	/**
+	 * Zippers the images edges together
+	 * @param image
+	 * @param other
+	 * @param edge
+	 * @param depth
+	 * @return
+	 */
+	public static BufferedImage zipper(BufferedImage image, BufferedImage other, int edge, int depth) {
+		BufferedImage newImg = copy(image);
+		switch (edge) {
+		case TOP_EDGE:
+			for (int x = 0; x < image.getWidth(); x+=2)
+				newImg.setRGB(x, 0, other.getRGB(x, other.getHeight()-1));
+			break;
+		case BOTTOM_EDGE:
+			for (int x = 1; x < image.getWidth(); x+=2)
+				newImg.setRGB(x, image.getHeight()-1, other.getRGB(x, 0));
+			break;
+		case LEFT_EDGE:
+			for (int y = 0; y < image.getHeight(); y+=2)
+				newImg.setRGB(0, y, other.getRGB(other.getWidth()-1, y));
+			break;
+		case RIGHT_EDGE:
+			for (int y = 1; y < image.getHeight(); y+=2)
+				newImg.setRGB(image.getWidth()-1, y, other.getRGB(0, y));
+		}
+		return newImg;
+	}
+	
 	/**
 	 * Darkens the image according to a value
 	 * @param image
@@ -253,6 +284,11 @@ public class ImageTools {
 			for (int y = 0; y < rgbs[x].length; y++) 
 				newImg.setRGB(x, y, rgbs[x][y]);
 		return newImg;
+	}
+	
+	private static BufferedImage copy(BufferedImage image) {
+		int[][] rgbs = getRGB(image);
+		return get(rgbs);
 	}
 	
 	public static BufferedImage getImage(String filePath) {

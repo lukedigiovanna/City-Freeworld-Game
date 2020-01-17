@@ -111,9 +111,14 @@ public class Game {
 		if (Program.keyboard.keyPressed(KeyEvent.VK_ESCAPE))
 			togglePause();
 		
+		
+		
 		//elapsed time since last loop call.. for regulating game operation speeds
 		//across varying operating system performances
 		float dt = ft.mark();
+		
+		if (paused)
+			return;
 		
 		if (Program.keyboard.keyDown(KeyEvent.VK_CONTROL)) {
 			if (Program.keyboard.keyPressed(KeyEvent.VK_H))
@@ -284,7 +289,6 @@ public class Game {
 			}
 			
 			if (pause) {
-				pause();
 				pauseBackground = ImageTools.colorscale(gameScreen, Color.WHITE);
 				pause = false;
 				paused = true;
