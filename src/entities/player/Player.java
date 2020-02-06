@@ -77,9 +77,11 @@ public class Player extends Human {
 			if (this.getRiding() == null) {
 				float mag = 0.0f;
 				float r = 0.0f;
+				
 				speed = 2;
 				if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
 					speed = 4;
+				
 				if (Program.keyboard.keyDown(up))
 					mag += speed;
 				if (Program.keyboard.keyDown(down))
@@ -90,7 +92,7 @@ public class Player extends Human {
 					r += rotationalSpeed;
 				
 				this.getVelocity().r = r;
-				this.getVelocity().setMagnitude(mag);
+				this.walkForward(mag);
 				this.getVelocity().setAngle(this.getRotation());
 				if (mag < 0)
 					this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);

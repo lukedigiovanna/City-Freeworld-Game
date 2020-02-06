@@ -20,6 +20,8 @@ public abstract class Human extends Entity {
 		curAni,
 		walkAni, idleAni, corpseAni, holdingLongGun, holdingShortGun;
 	
+	private float walkAniSpeed = 0;
+	
 	//private Vehicle riding;
 	
 	public Human(float x, float y, HumanAnimationPack animations) {
@@ -69,6 +71,12 @@ public abstract class Human extends Entity {
 	}
 	
 	public abstract Weapon getSelectedWeapon();
+	
+	public void walkForward(float speed)  {
+		this.walkAniSpeed = speed;
+		float a = this.getRotation();
+		this.setVelocity((float)(Math.cos(a) * speed), (float)(Math.sin(a) * speed));
+	}
 	
 	public Vehicle getRiding() {
 		return this.riding;
@@ -162,7 +170,7 @@ public abstract class Human extends Entity {
 			curAni = walkAni;
 		
 		if (curAni == walkAni) 
-			curAni.animate(dt * this.getVelocity().getLength()/NORMAL_WALKING_SPEED);
+			curAni.animate(dt * this.walkAniSpeed/NORMAL_WALKING_SPEED);
 		else
 			curAni.animate(dt);
 	}

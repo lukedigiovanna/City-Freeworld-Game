@@ -22,6 +22,7 @@ public class Region {
 	private CellGrid cellGrid;
 	private EntityList entities;
 	private Walls walls;
+	private RoadMap roadMap;
 	private int width, height;
 	
 	private List<Line> rigidLines;

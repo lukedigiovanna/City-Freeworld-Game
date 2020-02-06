@@ -58,7 +58,7 @@ public class NPC extends Human {
 			this.setRotation(angle);
 			if (this.distanceTo(angerAt) > 3) {
 				float speed = 1.0f;
-				this.setVelocity((float)Math.cos(angle) * speed, (float)Math.sin(angle) * speed);
+				this.walkForward(speed);
 			} else {
 				this.setVelocity(0,0);
 				this.getSelectedWeapon().pullTrigger();
