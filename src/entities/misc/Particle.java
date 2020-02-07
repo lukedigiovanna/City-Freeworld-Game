@@ -9,6 +9,7 @@ import misc.ImageTools;
 import misc.MathUtils;
 import misc.Vector2;
 import world.*;
+import world.regions.Region;
 
 public class Particle extends Entity {
 	private Type type;

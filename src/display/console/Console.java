@@ -31,6 +31,7 @@ public class Console {
 		currentMessage = "";
 	}
 	
+	private static int[] untypableKeys = {KeyEvent.VK_SHIFT,KeyEvent.VK_CAPS_LOCK,KeyEvent.VK_CONTROL,KeyEvent.VK_ALT,KeyEvent.VK_TAB};
 	/**
 	 * Waits for keyboard input to active the console.
 	 * If the console is activated then it looks for keyboard
@@ -53,10 +54,18 @@ public class Console {
 				this.messages.add(new ConsoleMessage(this.currentMessage,ConsoleMessage.PLAIN_MESSAGE));
 				this.currentMessage = "";
 			} else {
-				char character = key.character();
-				if (Program.getToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK) || Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
-					character = Character.toUpperCase(character);
-				this.currentMessage+=character;
+				//check to make sure the key is an actual key
+				boolean type = true;
+				for (int untypable : untypableKeys)
+					if (key.keycode() == untypable) 
+						type = false;
+				//then add it to the line
+				if (type) {
+					char character = key.character();
+					if (Program.getToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK) || Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
+						character = Character.toUpperCase(character);
+					this.currentMessage+=character;
+				}
 			}
 		}
 	}
@@ -79,7 +88,7 @@ public class Console {
 		g.fillRect(0, 0, width, height);
 		g.setColor(Color.GRAY);
 		g.setStroke(new BasicStroke(5));
-		g.drawRoundRect(20, height-10-textSize, width-40, textSize+10,5,5);
+		g.drawRoundRect(20, height-15-textSize, width-40, textSize+10,5,5);
 		g.setColor(Color.WHITE);
 		String s = this.currentMessage;
 		if (timer > 10)
@@ -100,10 +109,18 @@ public class Console {
 	}
 	
 	public void log(String message, int type) {
-		log(new ConsoleMessage(message,type));
+		this.log(new ConsoleMessage(message,type));
 	}
 	
 	public void log(ConsoleMessage message) {
 		this.messages.add(message);
+	}
+	
+	/**
+	 * Logs it as a plain message if no type is specified
+	 * @param message
+	 */
+	public void log(String message) {
+		this.log(message,ConsoleMessage.PLAIN_MESSAGE);
 	}
 }

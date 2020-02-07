@@ -10,6 +10,7 @@ import entities.player.Player;
 import entities.vehicles.Car;
 import game.Game;
 import misc.*;
+import world.regions.Region;
 
 public class World {
 	private Game game;

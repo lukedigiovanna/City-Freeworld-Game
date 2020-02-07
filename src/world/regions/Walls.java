@@ -1,10 +1,11 @@
-package world;
+package world.regions;
 
 import java.util.List;
 import java.util.*;
 import java.awt.*;
 
 import misc.Line;
+import world.Camera;
 
 /**
  * To do:

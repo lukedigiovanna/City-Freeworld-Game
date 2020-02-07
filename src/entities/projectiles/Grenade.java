@@ -17,5 +17,4 @@ public class Grenade extends Projectile {
 		camera.setColor(Color.GREEN);
 		camera.fillOval(getX(), getY(), getWidth(), getHeight());
 	}
-
 }

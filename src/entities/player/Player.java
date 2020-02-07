@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import entities.*;
+import entities.projectiles.Grenade;
 import weapons.Weapon;
 import weapons.WeaponManager;
 import main.Program;
@@ -22,7 +23,7 @@ public class Player extends Human {
 	public Player(float x, float y) {
 		super(x,y,HumanAnimationPack.CHARACTER_0);
 		this.bankAct = new BankAccount(this);
-		this.profilePicture = ImageTools.fade(ImageTools.getImage("profile_1.png"),0.5f);
+		this.profilePicture = ImageTools.getImage("profile_1.png");
 		this.weaponManager = new WeaponManager(this);
 		this.health = new Health(500);
 		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
@@ -69,6 +70,11 @@ public class Player extends Human {
 			p.add(getX(),getY()-3.0f);
 			p.add(getX(),getY());
 			this.queuePath(p);
+		}
+		
+		if (Program.keyboard.keyPressed(KeyEvent.VK_SPACE)) {
+			Grenade g = new Grenade(this,getX(),getY(),getRotation());
+			this.getRegion().add(g);
 		}
 		
 		if (!this.isFollowingPath()) {

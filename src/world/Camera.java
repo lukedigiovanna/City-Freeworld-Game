@@ -4,6 +4,10 @@ import misc.ImageTools;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
+import world.regions.Cell;
+import world.regions.CellGrid;
+import world.regions.Region;
+import world.regions.Walls;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -213,14 +217,14 @@ public class Camera {
 				if (cell != null) {
 					setLightValue(cell.getLightValue());
 					BufferedImage image = cell.getImage();
-					if (ix > 0)
-						image = ImageTools.zipper(image, grid.get(ix-1, iy).getImage(), ImageTools.LEFT_EDGE, 1);
-					if (ix < grid.getWidth()-1)
-						image = ImageTools.zipper(image, grid.get(ix+1, iy).getImage(), ImageTools.RIGHT_EDGE, 1);
-					if (iy > 0)
-						image = ImageTools.zipper(image, grid.get(ix, iy-1).getImage(), ImageTools.TOP_EDGE, 1);
-					if (iy < grid.getHeight()-1)
-						image = ImageTools.zipper(image, grid.get(ix, iy+1).getImage(), ImageTools.BOTTOM_EDGE, 1);
+//					if (ix > 0)
+//						image = ImageTools.zipper(image, grid.get(ix-1, iy).getImage(), ImageTools.LEFT_EDGE, 1);
+//					if (ix < grid.getWidth()-1)
+//						image = ImageTools.zipper(image, grid.get(ix+1, iy).getImage(), ImageTools.RIGHT_EDGE, 1);
+//					if (iy > 0)
+//						image = ImageTools.zipper(image, grid.get(ix, iy-1).getImage(), ImageTools.TOP_EDGE, 1);
+//					if (iy < grid.getHeight()-1)
+//						image = ImageTools.zipper(image, grid.get(ix, iy+1).getImage(), ImageTools.BOTTOM_EDGE, 1);
 					drawImage(image, cell.getX(), cell.getY(), 1.0f, 1.0f);
 				}
 			}

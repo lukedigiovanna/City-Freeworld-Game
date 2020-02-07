@@ -3,8 +3,7 @@ package entities;
 import java.util.*;
 
 import entities.player.*;
-
-import world.Region;
+import world.regions.Region;
 
 public class EntityList {
 	//for now lets just hold an array list of entities

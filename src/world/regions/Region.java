@@ -1,4 +1,4 @@
-package world;
+package world.regions;
 
 import java.awt.Color;
 import java.io.DataInputStream;
@@ -16,6 +16,7 @@ import entities.misc.Particle.Type;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
+import world.World;
 
 public class Region {
 	private World world;

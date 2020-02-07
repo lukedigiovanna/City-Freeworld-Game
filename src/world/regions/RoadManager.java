@@ -1,4 +1,4 @@
-package world;
+package world.regions;
 
 import java.util.List;
 

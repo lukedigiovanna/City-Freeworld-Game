@@ -12,6 +12,7 @@ import misc.MathUtils;
 import misc.Vector2;
 import world.*;
 import world.Properties;
+import world.regions.Region;
 
 public abstract class Entity extends WorldObject {
 	protected Health health;

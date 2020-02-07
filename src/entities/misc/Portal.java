@@ -8,7 +8,7 @@ import entities.misc.Particle.Type;
 import misc.MathUtils;
 import world.Camera;
 import world.Properties;
-import world.Region;
+import world.regions.Region;
 
 public class Portal extends Entity {
 

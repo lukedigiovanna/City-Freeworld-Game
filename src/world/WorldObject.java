@@ -8,6 +8,7 @@ import entities.player.Player;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
+import world.regions.Region;
 
 /**
  * Super class for all objects that will be in the world : cells, entities, etc.

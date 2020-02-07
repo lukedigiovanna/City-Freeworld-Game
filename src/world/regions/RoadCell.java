@@ -1,4 +1,4 @@
-package world;
+package world.regions;
 
 public class RoadCell {
 	public static enum Type {

@@ -1,4 +1,4 @@
-package world;
+package world.regions;
 
 /**
  * Each 1 x 1 dimension on the region represents a road behavior
