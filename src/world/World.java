@@ -8,12 +8,12 @@ import entities.npcs.NPC;
 import entities.player.Player;
 import entities.vehicles.Car;
 import game.Game;
+import game.GameDrawer;
 import misc.*;
 import world.regions.Region;
 
 public class World {
 	private Game game;
-	private Camera camera;
 	private List<Region> regions;
 	private int currentRegion;
 	
@@ -30,7 +30,6 @@ public class World {
 
 		Region temp = new Region(this,worldName,0);
 
-		temp.add(new Player(temp.getWidth()/2.0f,temp.getHeight()/2.0f));
 		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
 		for (int i = 0; i < 7; i++)
 		temp.add(new NPC(10+MathUtils.random(-3f,3f),10+MathUtils.random(-3f,3f)));
@@ -44,35 +43,18 @@ public class World {
 		
 		//initialize starting region
 		getCurrentRegion().update(0);
-		
-		int cameraWidth = Game.CAMERA_PIXEL_WIDTH, 
-				    cameraHeight = Game.CAMERA_PIXEL_HEIGHT;
-		float worldViewWidth = 13.0f;
-		camera = new Camera(getCurrentRegion(), 0, 0, worldViewWidth, worldViewWidth/(cameraWidth/(float)cameraHeight),cameraWidth,cameraHeight);
-		camera.setFocus(getPlayers().get(0));
+	
+	}
+	
+	public Player addPlayer() {
+		Region reg0 = this.getRegion(0);
+		Player p = new Player(reg0.getWidth()/2,reg0.getHeight()/2);
+		reg0.add(p);
+		return p;
 	}
 	
 	public Game getGame() {
 		return this.game;
-	}
-	
-	public void loadFromFile() {
-		
-	}
-	
-	public void saveToFile() {
-		
-	}
-	
-	/**
-	 * Returns where the mouse is in on the world
-	 * @return
-	 */
-	public Vector2 getMousePositionOnWorld() {
-		Vector2 onCam = game.getPercentMousePositionOnCamera();
-		float x = camera.getX()+onCam.x*camera.getWidth(), 
-			  y = camera.getY()+onCam.y*camera.getHeight();
-		return new Vector2(x,y);
 	}
 	
 	public Region getCurrentRegion() {
@@ -114,24 +96,11 @@ public class World {
 		}
 		
 		getCurrentRegion().update(dt);
-		if (newRegion > -1) {
-			currentRegion = newRegion;
-			camera.linkToRegion(getCurrentRegion());
-			newRegion = -1;
-		}
-		camera.adjustPosition(dt);
+
 	}
 	
 	public int getElapsedDays() {
 		return this.elapsedDays;
-	}
-	
-	public void draw() {
-		camera.draw();
-	}
-	
-	public Camera getCamera() {
-		return this.camera;
 	}
 	
 	public List<Player> getPlayers() {

@@ -37,7 +37,7 @@ public class Camera {
 	private Map<RenderingHints.Key,Object> map = new HashMap<RenderingHints.Key,Object>();
 	private RenderingHints rh;
 	
-	public Camera(Region region, float x, float y, float width, float height, int pixelWidth, int pixelHeight) {
+	public Camera(Entity focus, float x, float y, float width, float height, int pixelWidth, int pixelHeight) {
 		this.position = new Vector2(x,y,0);
 		this.dimension = new Vector2(width,height);
 		this.pixelWidth = pixelWidth;
@@ -45,7 +45,8 @@ public class Camera {
 		
 		image = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_ARGB);
 
-		this.region = region;
+		this.focus = focus;
+		this.region = focus.getRegion();
 		
 		map.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		map.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
@@ -55,8 +56,8 @@ public class Camera {
 		rh = new RenderingHints(map);
 	}
 	
-	public Camera(Region region, float x, float y, float width, float height) {
-		this(region,x,y,width,height,(int)(width*CELL_SIZE),(int)(height*CELL_SIZE));
+	public Camera(Entity focus, float x, float y, float width, float height) {
+		this(focus,x,y,width,height,(int)(width*CELL_SIZE),(int)(height*CELL_SIZE));
 	}
 	/**
 	 * Generates a camera given a world position and world dimension
@@ -76,8 +77,8 @@ public class Camera {
 	 * @param width pixel width of camera
 	 * @param height pixel height of camera
 	 */
-	public Camera(Region region, float x, float y, int width, int height) {
-		this(region, x, y, (float)width/CELL_SIZE, (float)height/CELL_SIZE);
+	public Camera(Entity focus, float x, float y, int width, int height) {
+		this(focus, x, y, (float)width/CELL_SIZE, (float)height/CELL_SIZE);
 	}
 	
 	public void linkToRegion(Region region) {
@@ -215,14 +216,6 @@ public class Camera {
 				if (cell != null) {
 					setLightValue(cell.getLightValue());
 					BufferedImage image = cell.getImage();
-//					if (ix > 0)
-//						image = ImageTools.zipper(image, grid.get(ix-1, iy).getImage(), ImageTools.LEFT_EDGE, 1);
-//					if (ix < grid.getWidth()-1)
-//						image = ImageTools.zipper(image, grid.get(ix+1, iy).getImage(), ImageTools.RIGHT_EDGE, 1);
-//					if (iy > 0)
-//						image = ImageTools.zipper(image, grid.get(ix, iy-1).getImage(), ImageTools.TOP_EDGE, 1);
-//					if (iy < grid.getHeight()-1)
-//						image = ImageTools.zipper(image, grid.get(ix, iy+1).getImage(), ImageTools.BOTTOM_EDGE, 1);
 					drawImage(image, cell.getX(), cell.getY(), 1.0f, 1.0f);
 				}
 			}

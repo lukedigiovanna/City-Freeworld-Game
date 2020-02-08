@@ -218,6 +218,9 @@ public abstract class WorldObject {
 	 * @return
 	 */
 	public boolean canSee(WorldObject other) {
+		if (other == null)
+			return false;
+		
 		Line l = new Line(this.center(),other.center());
 		//now check if it is intersecting a rigid line
 		for (Line r : this.getRigidLines())

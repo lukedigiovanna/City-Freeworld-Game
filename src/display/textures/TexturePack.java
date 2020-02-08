@@ -56,10 +56,8 @@ public class TexturePack {
 			String stringID = tiles.getString(row, 0);
 			int frameRate=  tiles.getInt(row, 1);
 			String displayName = tiles.getString(row, 2);
-			if (frameRate == 0) //static image
-				addTileTexture(stringID,displayName);
-			else //animation
-				addTileTexture(stringID,stringID+"_",frameRate,displayName);
+			float drivability = tiles.getFloat(row, 3);
+			addTileTexture(stringID,stringID+"_",frameRate,displayName);
 		}
 		CSVFile objects = new CSVFile(TEXTURE_PACK_PATH+"objects.csv");
 		objects.removeRows(1); //remove header
@@ -83,7 +81,10 @@ public class TexturePack {
 	}
 	
 	private void addTileTexture(String folderName, String prefix, int frameRate, String stringID) {
-		tilesMap.put(tilesMap.size(), new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/tiles/"+folderName, prefix),frameRate,stringID));
+		if (frameRate == 0)
+			addTileTexture(folderName,stringID);
+		else
+			tilesMap.put(tilesMap.size(), new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/tiles/"+folderName, prefix),frameRate,stringID));
 	}
 	
 	private void addObjectTexture(String imageName, float width, float height, float light, float vHeight, String stringID) {
