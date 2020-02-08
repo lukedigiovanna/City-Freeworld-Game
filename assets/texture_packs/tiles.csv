@@ -1,26 +1,26 @@
-string id,frame rate,display name
-grass,0,Grass
-dirt,0,Dirt
-sand,0,Sand
-water,0,Water
-planks,0,Planks 1
-planks1,0,Planks 2
-black_and_white_tile,0,Black and White Tile
-mossy_stone,0,Mossy Stone
-stone,0,Stone
-path,0,Path
-bricks,0,Bricks
-sand_sidewalk,0,Sand Sidewalk
-concrete_sidewalk,0,Concrete Sidewalk
-street,0,Black Street
-side_of_street,0,Black Street Edge
-corner_of_street,0,Black Street Corner
-street_same_way_crossing,0,Black Street White Dashed Lines
-street_same_way_no_crossing,0,Black Street White Solid Lines
-street_two_way_crossing,0,Black Street Yellow Dashed Lines
-street_two_way_no_crossing,0,Black Street Yellow Solid Lines
-street_two_way_double_yellow,0,Black Street Yellow Double Solid Lines
-street_stop_line,0,Black Street Stop Line
-rainbow,6,Rainbow
-rainbow2,18,Rainbow 2
-arrow,0,Arrow
+string id,frame rate,display name,drivability
+grass,0,Grass,0.4
+dirt,0,Dirt,0.5
+sand,0,Sand,0.1
+water,0,Water,0.05
+planks,0,Planks 1,0.8
+planks1,0,Planks 2,0.8
+black_and_white_tile,0,Black and White Tile,1
+mossy_stone,0,Mossy Stone,0.8
+stone,0,Stone,0.8
+path,0,Path,0.6
+bricks,0,Bricks,0.9
+sand_sidewalk,0,Sand Sidewalk,0.8
+concrete_sidewalk,0,Concrete Sidewalk,0.8
+street,0,Black Street,1
+side_of_street,0,Black Street Edge,1
+corner_of_street,0,Black Street Corner,1
+street_same_way_crossing,0,Black Street White Dashed Lines,1
+street_same_way_no_crossing,0,Black Street White Solid Lines,1
+street_two_way_crossing,0,Black Street Yellow Dashed Lines,1
+street_two_way_no_crossing,0,Black Street Yellow Solid Lines,1
+street_two_way_double_yellow,0,Black Street Yellow Double Solid Lines,1
+street_stop_line,0,Black Street Stop Line,1
+rainbow,6,Rainbow,1.5
+rainbow2,18,Rainbow 2,1.5
+arrow,0,Arrow,1
