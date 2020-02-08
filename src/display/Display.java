@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-import display.component.*;
 import display.component.Component;
 import main.Program;
 import misc.ImageTools;

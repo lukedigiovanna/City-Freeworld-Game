@@ -1,6 +1,5 @@
 package display;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import misc.ImageTools;

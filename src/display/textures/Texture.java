@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import display.Animation;
-import misc.ImageTools;
 import misc.MathUtils;
 import misc.Vector2;
 

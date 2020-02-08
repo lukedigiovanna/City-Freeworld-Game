@@ -4,7 +4,6 @@ import java.util.List;
 
 import entities.Entity;
 import misc.Vector2;
-import world.Camera;
 import world.Properties;
 
 /*

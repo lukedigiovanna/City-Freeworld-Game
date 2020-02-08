@@ -1,20 +1,12 @@
 package world.regions;
 
 import java.awt.Color;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 
-import display.textures.TexturePack;
-import entities.Entity;
-import entities.EntityList;
-import entities.misc.EntityObject;
-import entities.misc.Particle;
-import entities.misc.Portal;
+import entities.*;
+import entities.misc.*;
 import entities.misc.Particle.Type;
 import misc.Line;
-import misc.MathUtils;
 import misc.Vector2;
 import world.World;
 
@@ -26,8 +18,6 @@ public class Region {
 	private RoadMap roadMap;
 	private int width, height;
 	
-	private List<Line> rigidLines;
-	
 	private String id = "reg-0"; //this should match the folder path
 	
 	public Region(World world, int width, int height) {
@@ -36,7 +26,6 @@ public class Region {
 		cellGrid = new CellGrid(this,width,height);
 		entities = new EntityList(this);
 		walls = new Walls();
-		this.rigidLines = new ArrayList<Line>();
 		this.world = world;
 		this.addBoundingWalls();
 	}
@@ -46,7 +35,6 @@ public class Region {
 		this.cellGrid = new CellGrid(this);
 		this.entities = new EntityList(this);
 		this.walls = new Walls();
-		this.rigidLines = new ArrayList<Line>();
 		try {
 			DataInputStream in = new DataInputStream(new FileInputStream(path));
 			this.width = in.read();

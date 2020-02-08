@@ -1,11 +1,9 @@
 package entities.projectiles;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import entities.Entity;
 import misc.ImageTools;
-import misc.Vector2;
 import world.Camera;
 
 public class Bullet extends Projectile {

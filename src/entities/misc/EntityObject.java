@@ -3,8 +3,6 @@
  */
 package entities.misc;
 
-import java.util.List;
-
 import display.Animation;
 import display.textures.*;
 import entities.Entity;

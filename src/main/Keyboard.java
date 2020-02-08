@@ -129,12 +129,10 @@ public class Keyboard {
 	public class Key {
 		private int keycode;
 		private char c;
-		private KeyEvent keyEvent;
 		
 		public Key(KeyEvent e) {
 			keycode = e.getKeyCode();
 			c = Character.toLowerCase(e.getKeyChar());
-			this.keyEvent = e;
 		}
 		
 		public int keycode() {

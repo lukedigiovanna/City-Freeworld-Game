@@ -10,10 +10,8 @@ import world.regions.Region;
 import world.regions.Walls;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.List;
 
 import entities.Entity;
 import entities.EntityList;

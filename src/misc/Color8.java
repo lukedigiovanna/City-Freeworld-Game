@@ -1,10 +1,10 @@
 package misc;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 
 //represents an 8 bit color
 public class Color8 extends Color {
+	private static final long serialVersionUID = 1L;
 	
 	private int r, g, b;
 	

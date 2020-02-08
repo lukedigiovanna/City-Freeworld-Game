@@ -1,8 +1,6 @@
 package entities.misc;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 import main.Program;
 import misc.MathUtils;

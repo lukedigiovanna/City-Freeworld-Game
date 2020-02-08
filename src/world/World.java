@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
-import entities.misc.EntityObject;
 import entities.npcs.NPC;
 import entities.player.Player;
 import entities.vehicles.Car;
@@ -121,6 +120,10 @@ public class World {
 			newRegion = -1;
 		}
 		camera.adjustPosition(dt);
+	}
+	
+	public int getElapsedDays() {
+		return this.elapsedDays;
 	}
 	
 	public void draw() {

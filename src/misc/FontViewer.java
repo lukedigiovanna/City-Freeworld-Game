@@ -24,6 +24,8 @@ public class FontViewer {
 	
 	
 	private static class Panel extends JPanel {
+		private static final long serialVersionUID = 1L;
+		
 		private double position = 0;
 		
 		private String[] fonts;

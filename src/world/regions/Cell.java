@@ -1,13 +1,10 @@
 package world.regions;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 import display.Animation;
 import display.textures.TexturePack;
 import misc.ImageTools;
-import misc.MathUtils;
 import world.Properties;
 import world.WorldObject;
 

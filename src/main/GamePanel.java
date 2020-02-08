@@ -7,8 +7,6 @@ import java.util.Collections;
 import javax.swing.*;
 
 import display.DisplayController;
-import misc.Color8;
-import misc.ImageTools;
 import misc.MathUtils;
 
 public class GamePanel extends JPanel {

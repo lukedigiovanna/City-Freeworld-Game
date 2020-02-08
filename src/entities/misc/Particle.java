@@ -123,6 +123,8 @@ public class Particle extends Entity {
 		case GUNFIRE:
 			c.drawImage(image, getX(), getY(), getWidth(), getHeight());
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -144,6 +146,8 @@ public class Particle extends Entity {
 			break;
 		case TEXT:
 			this.getVelocity().y += dt * 4;
+		default:
+			break;
 		}
 		
 		if (timeUntilDeath <= 0)

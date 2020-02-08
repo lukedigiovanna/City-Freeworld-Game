@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import main.Program;
-import display.component.*;
 import display.component.Button;
 import display.component.Component;
 
@@ -68,7 +67,6 @@ public class UpdateNotesDisplay extends Display {
 		g.setColor(Color.WHITE);
 		g.setFont(new Font(Program.FONT_FAMILY,Font.PLAIN,ptpY(size)));
 		for (String s : notes) {
-			int i = 0;
 			String str = "";
 			while (s.charAt(0) == ' ') {
 				str+=" ";

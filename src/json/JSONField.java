@@ -5,14 +5,6 @@ public class JSONField {
 	private String name;
 	private JSONValue value;
 	
-	//we don't want to publicly call this method
-	//because not all objects can be stored in here
-	//the specifier is there just to avoid recursion
-	private JSONField(String name, JSONValue value, int specifier) {
-		this.name = name;
-		this.value = value;
-	}
-	
 	/**
 	 * Generates the field based on a given token
 	 * @param token

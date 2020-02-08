@@ -11,8 +11,7 @@ public class JSONFile {
 	//this holds all the information for a json file
 	
 	private JSONObject mainObject;
-	
-	private String filePath;
+
 	private File jsonFile;
 	
 	/**
@@ -25,7 +24,6 @@ public class JSONFile {
 		if (!extension.contentEquals(".json") && !extension.contentEquals(".JSON"))
 			throw new JSONException("File is not of type JSON");
 		
-		this.filePath = filePath;
 		this.jsonFile = new File(filePath);
 		
 		if (this.jsonFile.exists()) { //we only want to try to read if the json file exists

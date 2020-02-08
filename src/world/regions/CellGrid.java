@@ -1,9 +1,5 @@
 package world.regions;
 
-import java.io.*;
-
-import display.textures.TexturePack;
-
 public class CellGrid {
 	//stored such that the x value is the first element and the y value is the second element
 	private Cell[][] grid;

@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import display.Animation;
 import misc.ImageTools;
 import world.Camera;
-import world.Properties;
 
 public class CorpseParticle extends Particle {
 	

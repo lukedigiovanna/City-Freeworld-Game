@@ -1,6 +1,5 @@
 package entities.vehicles;
 
-import entities.Human.*;
 import misc.MathUtils;
 import world.Properties;
 import entities.*;

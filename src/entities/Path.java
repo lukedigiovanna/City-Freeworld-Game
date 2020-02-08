@@ -5,7 +5,6 @@ import java.util.List;
 
 import misc.MathUtils;
 import misc.Vector2;
-import world.regions.Region;
 
 /**
  * Defines a path for an Entity to follow

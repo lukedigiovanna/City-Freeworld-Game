@@ -1,13 +1,8 @@
 package entities.npcs;
 
 import java.util.List;
-import java.awt.image.BufferedImage;
 
-import entities.Entity;
-import entities.Health;
-import entities.Human;
-import entities.HumanAnimationPack;
-import entities.Path;
+import entities.*;
 import misc.MathUtils;
 import weapons.Weapon;
 import world.Properties;

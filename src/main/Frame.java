@@ -6,6 +6,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 public class Frame extends JFrame {
+	private static final long serialVersionUID = 1L;
+	
 	public Frame(String name, JPanel panel) {
 		super(name);
 		//add something that asks if you actually want to close the frame on close

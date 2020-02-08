@@ -7,7 +7,6 @@ import misc.ImageTools;
 import misc.MathUtils;
 
 import java.awt.image.*;
-import java.io.File;
 
 public class Animation {
 	private List<BufferedImage> frames;

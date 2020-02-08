@@ -7,7 +7,6 @@ import entities.misc.CorpseParticle;
 import entities.vehicles.Vehicle;
 import misc.Vector2;
 import weapons.Weapon;
-import weapons.WeaponManager;
 import world.Camera;
 import world.Properties;
 

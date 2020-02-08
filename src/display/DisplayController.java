@@ -6,9 +6,6 @@ import display.console.Console;
 import display.console.ConsoleMessage;
 import game.FrameTimer;
 import main.Program;
-import misc.Color8;
-import misc.ImageTools;
-import misc.MathUtils;
 import soundEngine.SoundManager;
 
 /*

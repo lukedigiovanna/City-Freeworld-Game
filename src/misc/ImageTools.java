@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-
-import main.Program;
 
 public class ImageTools {
 	public static final BufferedImage IMAGE_NOT_FOUND = getImageNotFound(),

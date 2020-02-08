@@ -1,10 +1,6 @@
 package main;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 import display.DisplayController;
 import display.console.Command;

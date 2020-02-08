@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 
 import main.Program;
 import main.Settings;
-import display.component.*;
 import display.component.Button;
 import display.component.Checkbox;
 import display.component.Component;

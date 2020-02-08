@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 import display.component.Button;
-import display.component.Component;
 import display.component.*;
 import main.Program;
 import misc.Color8;

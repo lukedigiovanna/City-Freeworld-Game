@@ -8,7 +8,6 @@ import entities.projectiles.Bullet;
 import entities.projectiles.Projectile;
 import misc.ImageTools;
 import misc.MathUtils;
-import soundEngine.Sound;
 import soundEngine.SoundManager;
 
 /**

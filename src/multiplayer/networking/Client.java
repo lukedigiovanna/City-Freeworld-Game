@@ -2,7 +2,6 @@ package multiplayer.networking;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -36,6 +35,9 @@ public class Client {
 					System.out.println("[CLIENT] "+fromUser);
 				}
 			}
+			
+			consoleIn.close();
+			socket.close();
 			
 		} catch (Exception e) {
 			

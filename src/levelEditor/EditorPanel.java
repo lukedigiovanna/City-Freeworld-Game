@@ -2,7 +2,6 @@ package levelEditor;
 
 import javax.swing.*;
 
-import display.*;
 import display.textures.TexturePack;
 import display.textures.Texture;
 import levelEditor.editorComponents.EditorObject;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditorPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 	
 	private BufferedImage screen;
 	private List<Texture> tiles;
@@ -387,6 +387,8 @@ public class EditorPanel extends JPanel {
 						}
 					}
 					break;
+				default:
+					break;
 				}
 				if (curTool == Tool.PORTAL || curTool == Tool.OBJECT || curTool == Tool.WALL || curTool == Tool.DELETE)
 					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
@@ -466,6 +468,8 @@ public class EditorPanel extends JPanel {
 				region.removeColumnLeft();
 			if (keyboard.keyPressed(KeyEvent.VK_RIGHT))
 				region.removeColumnRight();
+			break;
+		default:
 			break;
 		}
 		

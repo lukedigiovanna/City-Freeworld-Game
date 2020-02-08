@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -18,7 +17,6 @@ import json.JSONFile;
 import json.JSONObject;
 import misc.CSVFile;
 import misc.ImageTools;
-import misc.MathUtils;
 
 public class TexturePack {
 	
