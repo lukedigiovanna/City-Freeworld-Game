@@ -7,6 +7,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import display.DisplayController;
+import display.console.Command;
 import misc.ImageTools;
 import soundEngine.SoundManager;
 import soundEngine.Sounds;
@@ -53,6 +54,7 @@ public class Program {
 	private static boolean initialized = false;
 	
 	public static void init() {
+		Command.initialize();
 		Settings.initialize();
 		initFrame(); //opens up the window and creates a game panel object
 		mouse = new Mouse(panel,Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT);

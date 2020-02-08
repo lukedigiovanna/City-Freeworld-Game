@@ -47,11 +47,13 @@ public class Console {
 			Keyboard.Key key = Program.keyboard.getNextKey();
 			if (key == null)
 				return;
-			if (key.keycode() == KeyEvent.VK_BACK_SPACE) {
+			else if (key.keycode() == KeyEvent.VK_ESCAPE) { 
+				this.active = false;
+			} else if (key.keycode() == KeyEvent.VK_BACK_SPACE) {
 				if (this.currentMessage.length() > 0)
 					this.currentMessage = this.currentMessage.substring(0,this.currentMessage.length()-1);
 			} else if (key.keycode() == KeyEvent.VK_ENTER) {
-				this.messages.add(new ConsoleMessage(this.currentMessage,ConsoleMessage.PLAIN_MESSAGE));
+				this.parse(this.currentMessage);
 				this.currentMessage = "";
 			} else {
 				//check to make sure the key is an actual key
@@ -94,8 +96,8 @@ public class Console {
 		if (timer > 10)
 			s+="|";
 		g.setFont(new Font("Consolas",Font.PLAIN,textSize));
-		g.drawString(s, 25, height-8);
-		int y = height-8-textSize, x = 20;
+		g.drawString(s, 25, height-13);
+		int y = height-13-textSize, x = 20;
 		for (int i = messages.size()-1; i >= 0; i--) {
 			y -= textSize + 2;
 			g.setColor(messages.get(i).getMessageColor());
@@ -106,6 +108,28 @@ public class Console {
 		g.setFont(new Font("Consolas",Font.BOLD,textSize));
 		s = "Developer Console";
 		g.drawString(s, width-g.getFontMetrics().stringWidth(s)-5, 15);
+	}
+	
+	/**
+	 * If the input is preceded by a forward slash '/' then parse it as a command
+	 * Else then just add the message to the console
+	 * @param input
+	 */
+	private void parse(String input) {
+		if (input.length() == 0)
+			return;
+		else if (input.charAt(0) == '/') 
+			parseCommand(input.substring(1));
+		else
+			this.log(input);
+	}
+	
+	/**
+	 * Sends the message to the command parser to parse the command
+	 * @param command
+	 */
+	private void parseCommand(String command) {
+		CommandParser.parseCommand(this,command);
 	}
 	
 	public void log(String message, int type) {
@@ -122,5 +146,13 @@ public class Console {
 	 */
 	public void log(String message) {
 		this.log(message,ConsoleMessage.PLAIN_MESSAGE);
+	}
+	
+	/**
+	 * Logs it as an error
+	 * @param message
+	 */
+	public void err(String message) {
+		this.log(message,ConsoleMessage.ERROR_MESSAGE);
 	}
 }
