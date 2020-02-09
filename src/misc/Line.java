@@ -114,17 +114,6 @@ public class Line {
 	 */
 	public float angle() {
 		return (float)MathUtils.getAngle(endpoint1.x, endpoint1.y, endpoint2.x, endpoint2.y);
-//		if (slope == MathUtils.INFINITY) {
-//			if (endpoint1.y < endpoint2.y)
-//				return (float) (Math.PI/2);
-//			else
-//				return (float) (3 * Math.PI / 2);
-//		} else {
-//			float angle = (float)Math.atan(slope);
-//			if (endpoint1.x > endpoint2.x)
-//				angle += Math.PI;
-//			return angle;
-//		}
 	}
 	
 	/**

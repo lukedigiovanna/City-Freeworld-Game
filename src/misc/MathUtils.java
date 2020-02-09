@@ -126,6 +126,59 @@ public class MathUtils {
 			return num2;
 	}
 	
+	/**
+	 * Checks if the angle is between two others
+	 * 
+	 * The lower limit specifies the starting position and
+	 * goes around the unit circle (+rad direction) to the upper limit
+	 * to determine the area of acceptability for the angle
+	 * 
+	 * Angles are put between [0,2pi)
+	 * 
+	 * The angle is inclusive to the limits
+	 * 
+	 * @param lowerLimit 
+	 * @param upperLimit
+	 * @param angle
+	 * @return
+	 */
+	public static boolean isAngleWithin(double lowerLimit, double upperLimit, double angle) {
+		lowerLimit = limitAngleDomain(lowerLimit);
+		upperLimit = limitAngleDomain(upperLimit);
+		angle = limitAngleDomain(angle);
+		
+		if (angle >= lowerLimit && angle <= upperLimit)
+			return true;
+		
+		//for when the bounds cross 0pi
+		if (lowerLimit > upperLimit) {
+			if (angle >= lowerLimit)
+				return true;
+			else if (angle <= upperLimit) 
+				return true;
+		}
+		
+		//inclusive of the entire circle
+		if (lowerLimit == upperLimit) 
+			return true;
+		
+		return false;
+		
+	}
+	
+	/**
+	 * Limits the angle between [0,2pi)
+	 * @param angle
+	 * @return
+	 */
+	public static double limitAngleDomain(double angle) {
+		while (angle < 0)
+			angle += Math.PI * 2;
+		while (angle >= Math.PI * 2)
+			angle -= Math.PI * 2;
+		return angle;
+	}
+	
 	//give in y = mx + b form
 	/**
 	 * Returns the point of intersection on a line if it exists

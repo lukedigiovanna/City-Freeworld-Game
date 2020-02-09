@@ -4,10 +4,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import display.Display;
+import entities.Entity;
 import entities.player.Player;
 import main.Program;
 import misc.Color8;
@@ -48,14 +49,32 @@ public class GameDrawer {
 	
 	private FrameTimer ft = new FrameTimer();
 	
-	public void updateCamera() {
-		
+	private void updateCamera() {
 		float dt = ft.mark();
 		
 		boolean gamePaused = game.isPaused();
 		if (!gamePaused) {
 			camera.linkToRegion(player.getRegion());
 			camera.adjustPosition(dt);
+		}
+	}
+	
+	private void checkKeys() {
+		if (Program.keyboard.keyDown(KeyEvent.VK_CONTROL)) {
+			if (Program.keyboard.keyPressed(KeyEvent.VK_H))
+				camera.toggleHitboxes();
+			if (Program.keyboard.keyPressed(KeyEvent.VK_W))
+				camera.toggleWalls();
+		}
+		
+		if (Program.keyboard.keyDown('c'))
+			camera.zoom(0.01f);
+		if (Program.keyboard.keyDown('x'))
+			camera.zoom(-0.01f);
+		
+		if (Program.keyboard.keyPressed('h')) {
+			for (Entity e : player.getRegion().getEntities().get())
+				System.out.println(e.getVerticalHeight());
 		}
 	}
 	
@@ -72,6 +91,8 @@ public class GameDrawer {
 		Graphics2D g = this.gameScreen.createGraphics();
 		
 		updateCamera();
+		
+		checkKeys();
 		
 		if (game.isPaused()) {
 			//make the game gray scaled
@@ -100,7 +121,7 @@ public class GameDrawer {
 			g.drawRect(0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT);
 			
 			minimap.draw();
-			g.drawImage(minimap.getImage(), 0,  0, 200, 200, null);
+			g.drawImage(minimap.getImage(), 0,  0, 250, 250, null);
 			
 			//draw the profile bar
 			int cameraHeight = CAMERA_PIXEL_HEIGHT-150-cameraBorderSize;

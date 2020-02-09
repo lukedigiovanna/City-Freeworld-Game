@@ -15,7 +15,7 @@ public class NPC extends Human {
 		super(x,y,HumanAnimationPack.CHARACTER_0);
 		this.health = new Health(20,20);
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_FALSE);
-		addTag("NPC");
+		addTag("npc");
 	}
 
 	private float timer = MathUtils.random(5.0f,15.0f);

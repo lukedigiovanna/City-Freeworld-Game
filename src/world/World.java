@@ -8,7 +8,6 @@ import entities.npcs.NPC;
 import entities.player.Player;
 import entities.vehicles.Car;
 import game.Game;
-import game.GameDrawer;
 import misc.*;
 import world.regions.Region;
 
@@ -65,9 +64,8 @@ public class World {
 		return regions.get(number);
 	}
 	
-	private int newRegion = -1;
 	public void setCurrentRegion(Region region) {
-		newRegion = regions.indexOf(region);
+		currentRegion = regions.indexOf(region);
 	}
 	
 	/**
@@ -78,7 +76,6 @@ public class World {
 	 * @return
 	 */
 	public float getGlobalLightValue() {
-		//12 = 1.0f
 		return (float) (Math.sin(this.timeOfDay * Math.PI / 12 - 2) * 0.4 + 0.6);
 	}
 	
@@ -96,7 +93,6 @@ public class World {
 		}
 		
 		getCurrentRegion().update(dt);
-
 	}
 	
 	public int getElapsedDays() {

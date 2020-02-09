@@ -1,14 +1,8 @@
 package game;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.util.List;
 
 import display.*;
-import entities.Entity;
-import entities.player.Player;
-import weapons.Weapon;
 import main.*;
 import misc.*;
 import world.*;
@@ -106,23 +100,6 @@ public class Game {
 		
 		if (paused)
 			return;
-		
-//		if (Program.keyboard.keyDown(KeyEvent.VK_CONTROL)) {
-//			if (Program.keyboard.keyPressed(KeyEvent.VK_H))
-//				this.world.getCamera().toggleHitboxes();
-//			if (Program.keyboard.keyPressed(KeyEvent.VK_W))
-//				this.world.getCamera().toggleWalls();
-//		}
-//		
-//		if (Program.keyboard.keyDown('c'))
-//			world.getCamera().zoom(0.01f);
-//		if (Program.keyboard.keyDown('x'))
-//			world.getCamera().zoom(-0.01f);
-		
-		if (Program.keyboard.keyPressed('h')) {
-			for (Entity e : world.getCurrentRegion().getEntities().get())
-				System.out.println(e.getVerticalHeight());
-		}
 		
 		world.update(dt);
 		
