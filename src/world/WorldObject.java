@@ -48,6 +48,7 @@ public abstract class WorldObject {
 		// *reduces the chance of a lag spike
 		this.properties = new Properties();
 		this.positionHistory = new PositionHistory(this);
+		this.collisionEvents = new ArrayList<ObjectEvent>();
 	}
 	
 	public void addRigidCollisionEvent(Runnable event) {

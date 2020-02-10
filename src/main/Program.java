@@ -47,6 +47,8 @@ public class Program {
 	public static Mouse mouse;
 	public static Keyboard keyboard;
 	
+	private static long startingUsedMemory;
+	
 	private static boolean initialized = false;
 	
 	public static void init() {
@@ -59,7 +61,23 @@ public class Program {
 		SoundManager.initialize();
 		Sounds.initialize();
 		
+		Runtime rt = Runtime.getRuntime();
+		
+		startingUsedMemory = rt.totalMemory()-rt.freeMemory();
+		
 		initialized = true;
+	}
+	
+	/**
+	 * Calculates the total used memory and returns
+	 * the value in MB (1,000,000 bytes)
+	 * @return
+	 */
+	public static long getUsedMemory() {
+		Runtime rt = Runtime.getRuntime();
+		long currentUsedMemory = rt.totalMemory()-rt.freeMemory();
+		long appUsedMemory = currentUsedMemory-startingUsedMemory;
+		return currentUsedMemory/(1024L*1024L);
 	}
 	
 	private static void initFrame() {

@@ -189,6 +189,8 @@ public class GameDrawer {
 		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 60);
 		s = "TICK EFFICIENCY: "+(int)((float)game.getWait()/Game.IDEAL_REFRESH_RATE*100)+"%";
 		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 80);
+		s = "MEM: "+Program.getUsedMemory()+" MB";
+		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 100);
 	}
 	
 	private abstract class PauseButton extends display.component.Button {

@@ -9,5 +9,9 @@ public class CollisionEvent {
 			public void run(WorldObject object) {
 				
 			}
+		},
+		TEST = (WorldObject obj) -> {
+			System.out.println("test");
+			System.out.println("double test");
 		};
 }
