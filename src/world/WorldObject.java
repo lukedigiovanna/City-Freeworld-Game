@@ -27,9 +27,6 @@ public abstract class WorldObject {
 	private float mass; //in kilograms
 	private Properties properties;
 	
-	//holds a list of events to run for the object on collision with a rigid line
-	private List<Runnable> onCollisionWithRigidLine;
-	
 	private float lightValue = 1.0f; //value from 0 - 1 that indicates light, 0 is pitch black, 1 is bright
 	private float lightEmission = 0.0f; //value that indicates distance of light production
 	
@@ -48,11 +45,9 @@ public abstract class WorldObject {
 		// *reduces the chance of a lag spike
 		this.properties = new Properties();
 		this.positionHistory = new PositionHistory(this);
-		this.collisionEvents = new ArrayList<ObjectEvent>();
-	}
-	
-	public void addRigidCollisionEvent(Runnable event) {
-		this.onCollisionWithRigidLine.add(event);
+		
+		this.collisionEvents = new ArrayList<CollisionEvent>();
+		addCollisionEvent(CollisionEvent.STOP);
 	}
 	
 	public void setModel(float ... model) {
@@ -127,7 +122,7 @@ public abstract class WorldObject {
 	}
 	
 	public void updateLightValue() {
-		if (region.getWorld() == null)
+		if (region == null || region.getWorld() == null)
 			return;
 		float globalValue = region.getWorld().getGlobalLightValue();
 		float thisVal = globalValue;
@@ -331,24 +326,26 @@ public abstract class WorldObject {
 	 * @param dr amount of rotation about the midpoint of this object
 	 */
 	public void move(float dx, float dy, float dr) {
-		boolean hitX = moveX(dx);
-		boolean hitY = moveY(dy);
-		boolean hitR = moveR(dr);
-		boolean hit = hitX || hitY || hitR;
-		if (hit) {
-			onCollisionWithWall();
-		}
+		Line hitX = moveX(dx);
+		Line hitY = moveY(dy);
+		Line hitR = moveR(dr);
+		if (hitX != null)
+			onCollisionWithWall(hitX);
+		else if (hitY != null)
+			onCollisionWithWall(hitY);
+		else if (hitR != null)
+			onCollisionWithWall(hitR);
 	}
 	
-	private List<ObjectEvent> collisionEvents;
+	private List<CollisionEvent> collisionEvents;
 	
-	public void addCollisionEvent(ObjectEvent event) {
+	public void addCollisionEvent(CollisionEvent event) {
 		this.collisionEvents.add(event);
 	}
 	
-	public void onCollisionWithWall() {
-		for (ObjectEvent event : this.collisionEvents) {
-			event.run(this);
+	public void onCollisionWithWall(Line wall) {
+		for (CollisionEvent event : this.collisionEvents) {
+			event.run(this, wall);
 		}
 	}
 	
@@ -364,12 +361,12 @@ public abstract class WorldObject {
 	 * Moves the object along the x-axis using collision detection
 	 * @param dx
 	 */
-	public boolean moveX(float dx) {
+	public Line moveX(float dx) {
 		if (dx == 0)
-			return false; //no movement
+			return null; //no movement
 		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
 			this.setX(this.getX() + dx);
-			return false;
+			return null;
 		}
 		float checkStep = COLLISION_CHECK_STEP*MathUtils.sign(dx);
 		List<Line> walls = this.getRigidLines();
@@ -383,25 +380,25 @@ public abstract class WorldObject {
 				if (intersection != null) {
 					this.setX(getX()-checkStep); //go back out of the collision zone
 					//this.velocity.x = 0; //no more movement in X direction now
-					return true;
+					return l;
 				}
 			}
 		}
 		float extraMovement = checkStep * iterations - dx;
 		this.setX(getX() - extraMovement);
-		return false;
+		return null;
 	}
 	
 	/**
 	 * Moves the object along the y-axis using collision detection
 	 * @param dy
 	 */
-	public boolean moveY(float dy) {
+	public Line moveY(float dy) {
 		if (dy == 0)
-			return false;
+			return null;
 		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
 			this.setY(this.getY() + dy);
-			return false;
+			return null;
 		}
 		float checkStep = COLLISION_CHECK_STEP*MathUtils.sign(dy);
 		List<Line> walls = this.getRigidLines();
@@ -416,13 +413,13 @@ public abstract class WorldObject {
 					//we done
 					this.setY(getY()-checkStep); //go back out of the collision zone
 					//this.velocity.y = 0; //no more movement in y direction now
-					return true;
+					return l;
 				}
 			}
 		}
 		float extraMovement = checkStep * iterations - dy;
 		this.setY(getY() - extraMovement);
-		return false;
+		return null;
 	}
 	
 	/**
@@ -430,18 +427,18 @@ public abstract class WorldObject {
 	 * Returns true if the object collided with a wall during movement
 	 * @param dr
 	 */
-	public boolean moveR(float dr) {
+	public Line moveR(float dr) {
 		if (dr == 0)
-			return false;
+			return null;
 		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
 			this.position.r += dr;
-			return false;
+			return null;
 		}
 		float checkStep = COLLISION_ROTATION_CHECK_STEP*MathUtils.sign(dr);
 		if (this.getRegion() == null) {
 			this.position.r += dr;
 			this.hitbox.rotate(dr);
-			return false;
+			return null;
 		}
 		List<Line> walls = this.getRigidLines();
 		Vector2 intersection;
@@ -457,14 +454,14 @@ public abstract class WorldObject {
 					this.position.r -= checkStep; //go back out of the collision zone
 					this.hitbox.rotate(-checkStep);
 					//this.velocity.r = 0; //no more movement in X direction now
-					return true;
+					return l;
 				}
 			}
 		}
 		float extraMovement = iterations * checkStep - dr;
 		this.position.r -= extraMovement;
 		this.hitbox.rotate(-extraMovement);
-		return false;
+		return null;
 	}
 	
 	public void correctOutOfWalls() {

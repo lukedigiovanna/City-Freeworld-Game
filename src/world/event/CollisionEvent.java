@@ -1,17 +1,23 @@
 package world.event;
 
+import misc.Line;
 import world.WorldObject;
 
-public class CollisionEvent {
-	public static final ObjectEvent
-		STOP_X = new ObjectEvent() {
-			@Override
-			public void run(WorldObject object) {
-				
-			}
+public interface CollisionEvent {
+	public static final CollisionEvent
+		/**
+		 * Object simply stops all movement when it hits a wall
+		 */
+		STOP = (WorldObject obj, Line wall) -> {
+			obj.getVelocity().zero();
 		},
-		TEST = (WorldObject obj) -> {
-			System.out.println("test");
-			System.out.println("double test");
+		/**
+		 * Object slides along the wall in the direction of its prior movement and the shape of the wall
+		 */
+		SLIDE = (WorldObject obj, Line wall) -> {
+			float objDirection = obj.getVelocity().getAngle();
+			
 		};
+		
+	void run(WorldObject object, Line wall);
 }

@@ -28,6 +28,10 @@ public class Minimap {
 	private float margin = 0.05f;
 	
 	public void draw() {
+		if (focus == null || focus.getRegion() == null) { // i.e. they were removed from the game (death or whatever)
+			return; //don't draw
+		}
+		
 		Graphics2D g = image.createGraphics();
 		//fill in the background
 		g.setColor(Color.DARK_GRAY);

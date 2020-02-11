@@ -47,7 +47,7 @@ public class Particle extends Entity {
 		
 		setVelocity(new Vector2((float)Math.cos(theta)*speed,(float)Math.sin(theta)*speed));
 		
-		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
+		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		setProperty(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
 		setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		
@@ -56,7 +56,7 @@ public class Particle extends Entity {
 	
 	public static enum Type {
 		BALL(0.3f,0.3f),
-		SPARKLES(0.4f,0.4f,2.5f,"sparkles"),
+		SPARKLES(0.3125f,0.3125f,2.5f,"sparkles"),
 		TIRE_MARK(0.05f,0.05f,Color.BLACK),
 		GUNFIRE(0.15f,0.15f,0.05f,"gunfire"),
 		TEXT(0.0f,0.0f,1.5f),
