@@ -8,8 +8,7 @@ import entities.player.Player;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
-import world.event.CollisionEvent;
-import world.event.ObjectEvent;
+import world.event.*;
 import world.regions.Region;
 
 /**
@@ -73,6 +72,10 @@ public abstract class WorldObject {
 	
 	public Hitbox getHitbox() {
 		return this.hitbox;
+	}
+
+	public float getMass() {
+		return this.mass;
 	}
 	
 	/**

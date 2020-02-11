@@ -13,4 +13,8 @@ public class BankAccount {
 	public double getMoney() {
 		return money;
 	}
+
+	public Player getPlayer() {
+		return this.player;
+	}
 }
