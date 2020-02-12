@@ -30,13 +30,27 @@ public class World {
 		Region temp = new Region(this,worldName,0);
 
 		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
-		for (int i = 0; i < 7; i++)
-		temp.add(new NPC(10+MathUtils.random(-3f,3f),10+MathUtils.random(-3f,3f)));
+		for (int i = 0; i < 1; i++)
+			temp.add(new NPC(10+MathUtils.random(-3f,3f),10+MathUtils.random(-3f,3f)));
 		
 		regions.add(temp);
 		
 		regions.add(new Region(this,worldName,1));
-//		regions.add(new Region(this,worldName,2));
+		Region r = new Region(this,worldName,2);
+		r.getWalls().getWalls().clear();
+		float topY = 10;
+		for (float x = r.getWidth()/2-4; x < r.getWidth()/2+4; x+=0.2f) {
+			float cx = x - r.getWidth()/2;
+			float y = topY + cx * cx;
+			float nx = x + 0.2f;
+			cx = nx - r.getWidth()/2;
+			float ny = topY + cx * cx;
+			r.addWall(new Line(new Vector2(x,y),new Vector2(nx,ny)));
+		}
+		regions.add(r);
+
+
+
 //		regions.add(new Region(this,worldName,3));
 //		regions.add(new Region(this,worldName,4));
 		

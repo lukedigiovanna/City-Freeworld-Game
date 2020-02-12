@@ -239,14 +239,15 @@ public abstract class WorldObject {
 		
 		float thisAngle = this.getRotation();
 		
+		//get limits of the field of view.
 		float lowerLimit = thisAngle - FIELD_OF_VIEW/2,
 			  upperLimit = thisAngle + FIELD_OF_VIEW/2;
 		
 		//check if the other object is within this objects field of view
-		if (!MathUtils.isAngleWithin(lowerLimit, upperLimit, thisAngle))
-			return false;
+		if (MathUtils.isAngleWithin(lowerLimit, upperLimit, sightAngle))
+			return true;
 		
-		return true;
+		return false;
 	}
 	
 	public float getWidth() {
@@ -313,6 +314,15 @@ public abstract class WorldObject {
 		hitbox.draw(c);
 	}
 	
+	public void drawFieldOfView(Camera c) {
+		c.setColor(java.awt.Color.BLUE);
+		float length = 5.0f;
+		float angle = this.getRotation() + FIELD_OF_VIEW/2;
+		c.drawLine(this.centerX(),this.centerY(),this.centerX()+length*(float)Math.cos(angle),this.centerY()+length*(float)Math.sin(angle));
+		angle = this.getRotation() - FIELD_OF_VIEW/2;
+		c.drawLine(this.centerX(),this.centerY(),this.centerX()+length*(float)Math.cos(angle),this.centerY()+length*(float)Math.sin(angle));
+	}
+
 	/**
 	 * Moves the object based on its instantaenous velocity
 	 * Will stop if it hits a wall
@@ -346,6 +356,10 @@ public abstract class WorldObject {
 		this.collisionEvents.add(event);
 	}
 	
+	public void removeCollisionEvent(CollisionEvent event) {
+		this.collisionEvents.remove(event);
+	}
+
 	public void onCollisionWithWall(Line wall) {
 		for (CollisionEvent event : this.collisionEvents) {
 			event.run(this, wall);
