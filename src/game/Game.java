@@ -24,7 +24,7 @@ public class Game {
 	
 	public Game() {
 		ft = new FrameTimer();
-		world = new World(this);
+		world = new World("realworld");
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {

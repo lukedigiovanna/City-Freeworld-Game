@@ -52,7 +52,6 @@ public class MainScreenDisplay extends Display {
 
 	@Override
 	public void draw(Graphics2D g) {
-		fillBackground(g,background);
 		
 		fillBackground(g,Color.DARK_GRAY);
 		

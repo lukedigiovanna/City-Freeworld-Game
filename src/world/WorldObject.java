@@ -315,6 +315,10 @@ public abstract class WorldObject {
 	}
 	
 	public void drawFieldOfView(Camera c) {
+		if (!(this instanceof entities.Human)) //only humans have a field of view
+			return;
+		
+		c.setStrokeWidth(0.025f);
 		c.setColor(java.awt.Color.BLUE);
 		float length = 5.0f;
 		float angle = this.getRotation() + FIELD_OF_VIEW/2;

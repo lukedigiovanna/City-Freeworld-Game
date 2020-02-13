@@ -65,17 +65,14 @@ public class GameDrawer {
 				camera.toggleHitboxes();
 			if (Program.keyboard.keyPressed(KeyEvent.VK_W))
 				camera.toggleWalls();
+			if (Program.keyboard.keyPressed(KeyEvent.VK_F))
+				camera.toggleFieldOfView();
 		}
 		
 		if (Program.keyboard.keyDown('c'))
 			camera.zoom(0.01f);
 		if (Program.keyboard.keyDown('x'))
 			camera.zoom(-0.01f);
-		
-		if (Program.keyboard.keyPressed('h')) {
-			for (Entity e : player.getRegion().getEntities().get())
-				System.out.println(e.getVerticalHeight());
-		}
 	}
 	
 	/*

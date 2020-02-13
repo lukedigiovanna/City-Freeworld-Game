@@ -4,59 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
-import entities.npcs.NPC;
 import entities.player.Player;
-import entities.vehicles.Car;
-import game.Game;
-import misc.*;
 import world.regions.Region;
 
 public class World {
-	private Game game;
 	private List<Region> regions;
 	private int currentRegion;
 	
 	private float elapsedTime = 0.0f;
 	
-	private String worldName = "realworld";
+	private String worldName;
 	
 	private float timeOfDay = 12.0f; //up to hour 23, at 24 it resets to 0.
 	private int elapsedDays = 0;
 	
-	public World(Game game) {
-		this.game = game;
+	/**
+	 * Instantiates a world from the specified world
+	 * folder name.
+	 * @param name The name of the world folder
+	 */
+	public World(String name) {
+		this.worldName = name;
+		
 		regions = new ArrayList<Region>();
-
-		Region temp = new Region(this,worldName,0);
-
-		temp.add(new Car(Car.Model.RED_CAR,temp.getWidth()/2.0f+4,temp.getHeight()/2.0f));
-		for (int i = 0; i < 1; i++)
-			temp.add(new NPC(10+MathUtils.random(-3f,3f),10+MathUtils.random(-3f,3f)));
 		
-		regions.add(temp);
-		
-		regions.add(new Region(this,worldName,1));
-		Region r = new Region(this,worldName,2);
-		r.getWalls().getWalls().clear();
-		float topY = 10;
-		for (float x = r.getWidth()/2-4; x < r.getWidth()/2+4; x+=0.2f) {
-			float cx = x - r.getWidth()/2;
-			float y = topY + cx * cx;
-			float nx = x + 0.2f;
-			cx = nx - r.getWidth()/2;
-			float ny = topY + cx * cx;
-			r.addWall(new Line(new Vector2(x,y),new Vector2(nx,ny)));
-		}
-		regions.add(r);
-
-
-
-//		regions.add(new Region(this,worldName,3));
-//		regions.add(new Region(this,worldName,4));
+		//add in all the regions
+		Region next;
+		while ((next = Region.generateWorldRegion(this,worldName,regions.size())) != null)
+			regions.add(next);
 		
 		//initialize starting region
 		getCurrentRegion().update(0);
-	
 	}
 	
 	public Player addPlayer() {
@@ -64,10 +42,6 @@ public class World {
 		Player p = new Player(reg0.getWidth()/2,reg0.getHeight()/2);
 		reg0.add(p);
 		return p;
-	}
-	
-	public Game getGame() {
-		return this.game;
 	}
 	
 	public Region getCurrentRegion() {

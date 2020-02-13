@@ -11,6 +11,14 @@ import misc.Vector2;
 import world.World;
 
 public class Region {
+	public static Region generateWorldRegion(World world, String worldName, int index) {
+		Region region = new Region(world, worldName, index);
+		if (region.exists)
+			return region;
+		else
+			return null;
+	}
+	
 	private World world;
 	private CellGrid cellGrid;
 	private EntityList entities;
@@ -29,6 +37,8 @@ public class Region {
 		this.world = world;
 		this.addBoundingWalls();
 	}
+	
+	private boolean exists = true;
 	
 	public Region(World world, String worldName, int regionNumber) {
 		String path = "assets/worlds/"+worldName+"/regions/reg-"+regionNumber+".DAT";
@@ -54,7 +64,6 @@ public class Region {
 				float height = in.read() + in.read()/256.0f;
 				float destX = in.read() + in.read()/256.0f;
 				float destY = in.read() + in.read()/256.0f;
-				System.out.println("d: "+destRegion+" x: "+x+" y: "+y+" w: "+width+" h: "+height+" dx: "+destX+" dy: "+destY);
 				
 				Portal p = new Portal(new Portal.Destination(destRegion, destX, destY), x, y, width, height);
 				this.add(p);
@@ -78,7 +87,7 @@ public class Region {
 			}
 			in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			exists = false; //the file does not exist
 		}
 		this.world = world;
 		this.addBoundingWalls();
