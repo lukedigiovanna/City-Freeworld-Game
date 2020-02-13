@@ -86,12 +86,12 @@ public class Keyboard {
 			if (!boo)
 				return false; //dont have it
 		}
-		for (int kc : keycodes)
-			for (int i = 0; i < keys.size(); i++)
-				if (keys.get(i).keycode == kc) {
-					keys.remove(keys.get(i));
-					i--;
-				}
+//		for (int kc : keycodes)
+//			for (int i = 0; i < keys.size(); i++)
+//				if (keys.get(i).keycode == kc) {
+//					keys.remove(keys.get(i));
+//					i--;
+//				}
 		return true;
 	}
 	
@@ -103,7 +103,7 @@ public class Keyboard {
 	public boolean keyPressed(char c) {
 		for (Key k : keys)
 			if (k.character() == c) {
-				keys.remove(k);
+				//keys.remove(k);
 				return true;
 			}
 		return false;

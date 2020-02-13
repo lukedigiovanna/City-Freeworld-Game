@@ -1,5 +1,6 @@
 package entities.player;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
@@ -10,6 +11,7 @@ import weapons.WeaponManager;
 import main.Program;
 import main.Settings;
 import misc.*;
+import world.Camera;
 import world.Properties;
 
 public class Player extends Human {
@@ -40,6 +42,13 @@ public class Player extends Human {
 		return "$"+monStr;
 	}
 
+	public void draw(Camera c) {
+		super.draw(c);
+		c.setColor(Color.CYAN);
+		c.setStrokeWidth(0.025f);
+		c.drawOval(getX()-0.1f, getY()-0.1f, getWidth()+0.2f, getHeight()+0.2f);
+	}
+	
 	public BufferedImage getProfilePicture() {
 		return this.profilePicture;
 	}

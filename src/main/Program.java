@@ -17,7 +17,7 @@ public class Program {
 	
 	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
-							   DEVELOPMENT_PERIOD = "January 2020";
+							   DEVELOPMENT_PERIOD = "February 2020";
 	
 	public static final String FONT_FAMILY = "Consolas";
 	
@@ -70,13 +70,12 @@ public class Program {
 	
 	/**
 	 * Calculates the total used memory and returns
-	 * the value in MB (1,000,000 bytes)
+	 * the value in MB (binary)
 	 * @return
 	 */
 	public static long getUsedMemory() {
 		Runtime rt = Runtime.getRuntime();
 		long currentUsedMemory = rt.totalMemory()-rt.freeMemory();
-		long appUsedMemory = currentUsedMemory-startingUsedMemory;
 		return currentUsedMemory/(1024L*1024L);
 	}
 	
