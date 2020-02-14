@@ -449,6 +449,15 @@ public class EditorPanel extends JPanel {
 			showGrid = !showGrid;
 			curTool = prevTool;
 			break;
+		case SET_LIGHT:
+			try {
+				String input = JOptionPane.showInputDialog(this, "Enter the local light value as a number\nbetween 0 and 1");
+				float val = Float.parseFloat(input);
+				this.region.setLocalLightValue(val);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, "Must be a number!");
+			}
+			curTool = prevTool;
 		case EXPAND:
 			if (keyboard.keyPressed(KeyEvent.VK_UP))
 				region.addRowTop();

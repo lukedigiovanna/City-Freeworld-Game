@@ -1,6 +1,7 @@
 package world.event;
 
 import misc.Line;
+import misc.MathUtils;
 import misc.Vector2;
 import world.WorldObject;
 
@@ -30,7 +31,18 @@ public interface CollisionEvent {
 		 * The velocity vector is reflected off the wall
 		 */
 		BOUNCE = (WorldObject obj, Line wall) -> {
+			float objDirection = obj.getVelocity().getAngle();
+			float lineDirection = wall.angleToXAxis();
+			float newDirection = 2 * lineDirection - objDirection;
 			
+			if (MathUtils.equals(lineDirection,0) || MathUtils.equals(lineDirection, (float)Math.PI)) {
+				if (objDirection < Math.PI)
+					newDirection = (float)Math.PI - objDirection;
+				else
+					newDirection = (float)Math.PI * 3 - 2 * objDirection;
+			}
+			
+			obj.getVelocity().setAngle(newDirection);
 		};
 		
 	void run(WorldObject object, Line wall);

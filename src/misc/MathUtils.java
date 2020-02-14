@@ -84,6 +84,11 @@ public class MathUtils {
 		return Math.round(val)/scale;
 	}
 	
+	//they are considered equal if they are within +/-0.001 of each other
+	public static boolean equals(float val1, float val2) {
+		return Math.abs(val1-val2) < 0.001f;
+	}
+	
 	public static int min(int num1, int num2) {
 		if (num1 < num2)
 			return num1;
@@ -246,9 +251,10 @@ public class MathUtils {
 				return 0;
 		}
 		double theta = Math.atan(y/x);
-		if (x < 0) { //tan is defined from -pi/2 to pi/2.. so if x is negative we need to add pi
+		if (x < 0)  //tan is defined from -pi/2 to pi/2.. so if x is negative we need to add pi
 			theta += Math.PI;
-		}
+		else if (y < 0)
+			theta += Math.PI * 2;
 		return theta;
 	}
 	

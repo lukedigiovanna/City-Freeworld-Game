@@ -7,6 +7,7 @@ import entities.*;
 import entities.misc.*;
 import entities.misc.Particle.Type;
 import misc.Line;
+import misc.MathUtils;
 import misc.Vector2;
 import world.World;
 
@@ -25,6 +26,9 @@ public class Region {
 	private Walls walls;
 	private RoadMap roadMap;
 	private int width, height;
+	
+	//0 means its dictated fully by the time, 1 means the time plays no role in light level
+	private float localLightValue = 0.0f; 
 	
 	private String id = "reg-0"; //this should match the folder path
 	
@@ -58,33 +62,37 @@ public class Region {
 			int numOfPortals = in.read();
 			for (int i = 0; i < numOfPortals; i++) {
 				int destRegion = in.read();
-				float x = in.read() + in.read()/256.0f;
-				float y = in.read() + in.read()/256.0f;
-				float width = in.read() + in.read()/256.0f;
-				float height = in.read() + in.read()/256.0f;
-				float destX = in.read() + in.read()/256.0f;
-				float destY = in.read() + in.read()/256.0f;
+				float x = in.read() + in.read()/255.0f;
+				float y = in.read() + in.read()/255.0f;
+				float width = in.read() + in.read()/255.0f;
+				float height = in.read() + in.read()/255.0f;
+				float destX = in.read() + in.read()/255.0f;
+				float destY = in.read() + in.read()/255.0f;
 				
 				Portal p = new Portal(new Portal.Destination(destRegion, destX, destY), x, y, width, height);
 				this.add(p);
 			}
 			int numOfWalls = in.read();
 			for (int i = 0; i < numOfWalls; i++) {
-				float x1 = in.read() + in.read()/256.0f;
-				float y1 = in.read() + in.read()/256.0f;
-				float x2 = in.read() + in.read()/256.0f;
-				float y2 = in.read() + in.read()/256.0f;
+				float x1 = in.read() + in.read()/255.0f;
+				float y1 = in.read() + in.read()/255.0f;
+				float x2 = in.read() + in.read()/255.0f;
+				float y2 = in.read() + in.read()/255.0f;
 				Line w = new Line(new Vector2(x1,y1), new Vector2(x2,y2));
 				this.addWall(w);
 			}
 			int numOfObjects = in.read();
 			for (int i = 0; i < numOfObjects; i++) {
 				int id = in.read();
-				float x = in.read() + in.read()/256.0f;
-				float y = in.read() + in.read()/256.0f;
+				float x = in.read() + in.read()/255.0f;
+				float y = in.read() + in.read()/255.0f;
 				EntityObject o = new EntityObject(id,x,y);
 				this.add(o);
 			}
+			
+			this.localLightValue = in.read()/255.0f;
+			System.out.println(localLightValue);
+			
 			in.close();
 		} catch (Exception e) {
 			exists = false; //the file does not exist
@@ -125,6 +133,15 @@ public class Region {
 	
 	public EntityList getEntities() {
 		return entities;
+	}
+	
+	public void setLocalLightLevel(float level) {
+		this.localLightValue = level;
+	}
+	
+	//combines the local and global light values with a maximum value of 1 possible
+	public float getLightLevel() {
+		return MathUtils.min(this.localLightValue + world.getGlobalLightValue(), 1.0f);
 	}
 	
 	public void add(Entity e) {

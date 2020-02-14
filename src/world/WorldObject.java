@@ -9,6 +9,7 @@ import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
 import world.event.*;
+import world.regions.Cell;
 import world.regions.Region;
 
 /**
@@ -127,10 +128,10 @@ public abstract class WorldObject {
 	public void updateLightValue() {
 		if (region == null || region.getWorld() == null)
 			return;
-		float globalValue = region.getWorld().getGlobalLightValue();
+		float globalValue = region.getLightLevel();
 		float thisVal = globalValue;
 		for (Entity e : this.getRegion().getEntities().get()) {
-			if (e.getLightEmissionValue() > 0 && e.canSee(this)) {
+			if (e.getLightEmissionValue() > 0 && e.hasDirectPathTo(this)) {
 				//make sure a wall is not in the way
 				float d = this.squaredDistanceTo(e);
 				//use the inverse square law to determine light intensity
@@ -166,6 +167,10 @@ public abstract class WorldObject {
 	
 	public World getWorld() {
 		return this.region.getWorld();
+	}
+	
+	public Cell getCellOn() {
+		return this.region.getGrid().get((int)this.centerX(),(int)this.centerY());
 	}
 	
 	public float getAge() {
@@ -220,7 +225,7 @@ public abstract class WorldObject {
 	 * @param other
 	 * @return
 	 */
-	public boolean canSee(WorldObject other) {
+	public boolean hasDirectPathTo(WorldObject other) {
 		if (other == null)
 			return false;
 		
@@ -229,6 +234,26 @@ public abstract class WorldObject {
 		for (Line r : this.getRigidLines())
 			if (l.intersects(r) != null) 
 				return false;
+		
+		return true;
+	}
+	
+	/**
+	 * Returns true if the object is within this objects
+	 * field of view and the sight is unobstructed.
+	 * @param other
+	 * @return
+	 */
+	public boolean canSee(WorldObject other) {
+		if (other == null)
+			return false;
+		
+		boolean hasPathTo = this.hasDirectPathTo(other);
+		
+		if (!hasPathTo)
+			return false;
+	
+		Line l = new Line(this.center(),other.center());
 		
 		float sightAngle = l.angle();
 		//limit the value to be within [0,2pi)

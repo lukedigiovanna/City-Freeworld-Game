@@ -43,10 +43,10 @@ public class Player extends Human {
 	}
 
 	public void draw(Camera c) {
-		super.draw(c);
 		c.setColor(Color.CYAN);
 		c.setStrokeWidth(0.025f);
 		c.drawOval(getX()-0.1f, getY()-0.1f, getWidth()+0.2f, getHeight()+0.2f);
+		super.draw(c);
 	}
 	
 	public BufferedImage getProfilePicture() {

@@ -23,8 +23,8 @@ public class EditorObject {
 	public void write(DataOutputStream out) throws IOException {
 		out.write(id);
 		out.write((int)x);
-		out.write((int)(x%1.0f*256));
+		out.write((int)(x%1.0f*255));
 		out.write((int)y);
-		out.write((int)(y%1.0f*256));
+		out.write((int)(y%1.0f*255));
 	}
 }

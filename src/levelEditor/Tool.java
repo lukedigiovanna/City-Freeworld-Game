@@ -14,7 +14,8 @@ public enum Tool {
 	OBJECT("object","Object","Add objects to the world such as trees/benches"),
 	EXPAND("expand","Expand","Use arrows to adjust the size"),
 	SHRINK("shrink","Shrink","Use arrows to adjust the size"),
-	DELETE("delete","Delete","Delete objects/walls/portals");
+	DELETE("delete","Delete","Delete objects/walls/portals"),
+	SET_LIGHT("light","Local Light","Set the regional light value");
 	
 	BufferedImage img;
 	String name;

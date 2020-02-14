@@ -35,6 +35,8 @@ public class EditorRegion {
 	
 	private List<EditorObject> objects;
 	
+	private float localLightValue = 0.0f;
+	
 	/**
 	 * For intializing a new region
 	 * @param worldName
@@ -140,6 +142,11 @@ public class EditorRegion {
 				o.y = in.read() + in.read()/256.0f;
 				objects.add(o);
 			}
+			
+			//set the local light value
+			int localLight = in.read();
+			this.localLightValue = (float)localLight/256.0f;
+			
 			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -218,6 +225,14 @@ public class EditorRegion {
 		return objects;
 	}
 	
+	public float getLocalLightValue() {
+		return localLightValue;
+	}
+	
+	public void setLocalLightValue(float val) {
+		this.localLightValue = val;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -249,12 +264,17 @@ public class EditorRegion {
 			out.write(this.portals.size());
 			for (EditorPortal p : portals)
 				p.write(out);
+			//write the walls
 			out.write(this.walls.size());
 			for (EditorWall w : walls) 
 				w.write(out);
+			//write the objects
 			out.write(this.objects.size());
 			for (EditorObject o : objects)
 				o.write(out);
+			
+			//write the local light
+			out.write((int)(this.localLightValue * 255));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

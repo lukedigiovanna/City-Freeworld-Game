@@ -109,11 +109,36 @@ public class Line {
 	}
 	
 	/**
-	 * Gets the angle that the line makes with the horizontal
+	 * Gets the angle between endpoint1 and endpoint2
 	 * @return
 	 */
 	public float angle() {
 		return (float)MathUtils.getAngle(endpoint1.x, endpoint1.y, endpoint2.x, endpoint2.y);
+	}
+	
+	/**
+	 * Gets the angle that the line makes with the horizontal
+	 * @return
+	 */
+	public float angleToXAxis() {
+		Vector2 ep1 = endpoint1, ep2 = endpoint2;
+		if (ep1.y > endpoint2.y) {
+			ep1 = endpoint2;
+			ep2 = endpoint1;
+		}
+		return (float)MathUtils.getAngle(ep1.x, ep1.y, ep2.x, ep2.y);
+	}
+	
+	/**
+	 * Returns true if the inputted point is above the line, if the line is 
+	 * imagined to extend to infinity in both directions.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public boolean isAboveLine(float x, float y) {
+		float lineY = this.slope * x + this.intercept;
+		return (y > lineY);
 	}
 	
 	/**

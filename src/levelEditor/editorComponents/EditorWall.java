@@ -19,12 +19,12 @@ public class EditorWall {
 	
 	public void write(DataOutputStream out) throws IOException {
 		out.write((int)(x1));                //x1-coord whole number
-		out.write((int)((x1%1.0f)*256));     //x1-coord decimal
+		out.write((int)((x1%1.0f)*255));     //x1-coord decimal
 		out.write((int)(y1));                //y1 coord whole number
-		out.write((int)((y1%1.0f)*256));     //y1 coord decimal
+		out.write((int)((y1%1.0f)*255));     //y1 coord decimal
 		out.write((int)(x2));                //x2 whole number
-		out.write((int)((x2%1.0f)*256));     //x2 decimal
+		out.write((int)((x2%1.0f)*255));     //x2 decimal
 		out.write((int)(y2));                //y2 whole number
-		out.write((int)((y2%1.0f)*256));     //y2 decimal
+		out.write((int)((y2%1.0f)*255));     //y2 decimal
 	}
 }

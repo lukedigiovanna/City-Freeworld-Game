@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import display.Display;
 import entities.Entity;
 import entities.player.Player;
+import main.Keyboard;
 import main.Program;
 import misc.Color8;
 import misc.ImageTools;
@@ -59,19 +60,23 @@ public class GameDrawer {
 		}
 	}
 	
+	private Keyboard kbd;
+	
 	private void checkKeys() {
-		if (Program.keyboard.keyDown(KeyEvent.VK_CONTROL)) {
-			if (Program.keyboard.keyPressed(KeyEvent.VK_H))
+		if (kbd == null)
+			kbd = new Keyboard(Program.panel);
+		if (kbd.keyDown(KeyEvent.VK_CONTROL)) {
+			if (kbd.keyPressed(KeyEvent.VK_H))
 				camera.toggleHitboxes();
-			if (Program.keyboard.keyPressed(KeyEvent.VK_W))
+			if (kbd.keyPressed(KeyEvent.VK_W))
 				camera.toggleWalls();
-			if (Program.keyboard.keyPressed(KeyEvent.VK_F))
+			if (kbd.keyPressed(KeyEvent.VK_F))
 				camera.toggleFieldOfView();
 		}
 		
-		if (Program.keyboard.keyDown('c'))
+		if (kbd.keyDown('c'))
 			camera.zoom(0.01f);
-		if (Program.keyboard.keyDown('x'))
+		if (kbd.keyDown('x'))
 			camera.zoom(-0.01f);
 	}
 	
@@ -89,8 +94,6 @@ public class GameDrawer {
 		
 		updateCamera();
 		
-		checkKeys();
-		
 		if (game.isPaused()) {
 			//make the game gray scaled
 			if (pauseBackground == null)
@@ -104,6 +107,8 @@ public class GameDrawer {
 				b.draw(g);
 			}
 		} else {
+			checkKeys();
+			
 			pauseBackground = null;
 			
 			World world = game.getWorld();
@@ -116,9 +121,6 @@ public class GameDrawer {
 			g.setColor(Color8.GRAY);
 			g.setStroke(new BasicStroke(cameraBorderSize*2));
 			g.drawRect(0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT);
-			
-			minimap.draw();
-			g.drawImage(minimap.getImage(), 0,  0, 250, 250, null);
 			
 			//draw the profile bar
 			int cameraHeight = CAMERA_PIXEL_HEIGHT-150-cameraBorderSize;
@@ -169,25 +171,32 @@ public class GameDrawer {
 				g.fillRect(ax,ay+6,(int)(reloadBarWidth*selected.getReloadPercent()),reloadBarHeight);
 			}
 			
+			minimap.draw();
+			g.drawImage(minimap.getImage(), 0,  0, 250, 250, null);
+			
 			String time = world.getStringTime();
 			g.setColor(Color.WHITE);
-			g.drawString(time, Program.DISPLAY_WIDTH-weaponSpace-g.getFontMetrics().stringWidth(time)-160, Program.DISPLAY_HEIGHT-cameraBorderSize-15);
+			g.setFont(new Font(Program.FONT_FAMILY, Font.BOLD | Font.ITALIC, 14));
+			g.drawString(time, 125-g.getFontMetrics().stringWidth(time)/2, 270);
 			
 			player.getWeaponManager().draw(g);
 		}
 		
 		sg.drawImage(gameScreen, 0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT, null);
 		
+		String[] info = {
+				"TPS: "+(int)game.getTPS(),
+				"TICK WAIT: "+(int)game.getWait()+"ms",
+				"TICK EFFICIENCY: "+(int)((float)game.getWait()/Game.IDEAL_REFRESH_RATE*100)+"%",
+				"MEM: "+Program.getUsedMemory()+" MB",
+		};
+		
 		sg.setColor(Color.WHITE);
 		sg.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
-		String s = "TPS: "+(int)game.getTPS();
-		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 40);
-		s = "TICK WAIT: "+(int)game.getWait()+"ms";
-		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 60);
-		s = "TICK EFFICIENCY: "+(int)((float)game.getWait()/Game.IDEAL_REFRESH_RATE*100)+"%";
-		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 80);
-		s = "MEM: "+Program.getUsedMemory()+" MB";
-		sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 100);
+		for (int i = 0; i < info.length; i++) {
+			String s = info[i];
+			sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 40+20*i);
+		}
 	}
 	
 	private abstract class PauseButton extends display.component.Button {

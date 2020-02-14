@@ -67,13 +67,14 @@ public class World {
 		return (float) (Math.sin(this.timeOfDay * Math.PI / 12 - 2) * 0.4 + 0.6);
 	}
 	
+	private float timeRate = 100f; //how many game minutes per real seconds
+	
 	public void update(float dt) {
 		elapsedTime += dt;
 		
 		//where 1 second = 1/60 of an hour.
-		timeOfDay += (dt/60.0f);
-
-		//timeOfDay+=dt;
+		float elapsedGameTime = timeRate/60 * dt;
+		timeOfDay += elapsedGameTime;
 		
 		if (timeOfDay >= 24.0f) {
 			elapsedDays++;

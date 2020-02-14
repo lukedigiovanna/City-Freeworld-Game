@@ -58,6 +58,10 @@ public class Texture {
 		return this.animation;
 	}
 	
+	public Animation createAnimation() {
+		return this.animation.copy();
+	}
+	
 	public String getStringID() {
 		return stringID;
 	}
