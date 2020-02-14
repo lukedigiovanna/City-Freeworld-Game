@@ -49,6 +49,7 @@ public class Region {
 		this.cellGrid = new CellGrid(this);
 		this.entities = new EntityList(this);
 		this.walls = new Walls();
+		this.roadMap = new RoadMap(this);
 		try {
 			DataInputStream in = new DataInputStream(new FileInputStream(path));
 			this.width = in.read();
@@ -111,6 +112,10 @@ public class Region {
 		addWall(new Line(new Vector2(0,getHeight()),new Vector2(0,0)));
 	}
 	
+	public RoadMap getRoadMap() {
+		return this.roadMap;
+	}
+	
 	public void addParticles(Type type, Color color, int count, float heat, float x, float y, float width, float height) {
 		Particle.add(this,type,color,count,heat,x,y,width,height);
 	}
@@ -170,5 +175,6 @@ public class Region {
 	public void update(float dt) {
 		entities.update(dt);
 		cellGrid.update(dt);
+		roadMap.update(dt);
 	}
 }

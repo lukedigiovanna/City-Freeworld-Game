@@ -5,7 +5,10 @@ import java.util.List;
 
 import entities.Entity;
 import entities.player.Player;
+import misc.Line;
+import misc.Vector2;
 import world.regions.Region;
+import world.regions.Road;
 
 public class World {
 	private List<Region> regions;
@@ -32,6 +35,11 @@ public class World {
 		Region next;
 		while ((next = Region.generateWorldRegion(this,worldName,regions.size())) != null)
 			regions.add(next);
+		
+		Region reg0 = regions.get(0);
+		Road road = new Road(reg0);
+		road.addLine(new Line(new Vector2(0,0), new Vector2(20,20)));
+		reg0.getRoadMap().addRoad(road);
 		
 		//initialize starting region
 		getCurrentRegion().update(0);

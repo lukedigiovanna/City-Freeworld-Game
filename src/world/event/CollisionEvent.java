@@ -37,9 +37,13 @@ public interface CollisionEvent {
 			
 			if (MathUtils.equals(lineDirection,0) || MathUtils.equals(lineDirection, (float)Math.PI)) {
 				if (objDirection < Math.PI)
-					newDirection = (float)Math.PI - objDirection;
+					newDirection =  - objDirection;
 				else
-					newDirection = (float)Math.PI * 3 - 2 * objDirection;
+					newDirection = (float)Math.PI - (objDirection - (float)Math.PI);
+			}
+			
+			if (MathUtils.equals(lineDirection, (float)Math.PI/2) || MathUtils.equals(lineDirection, (float)Math.PI*3/2)) {
+				newDirection = (float)Math.PI - objDirection;
 			}
 			
 			obj.getVelocity().setAngle(newDirection);

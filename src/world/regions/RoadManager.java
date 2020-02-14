@@ -10,10 +10,11 @@ import entities.vehicles.Vehicle;
  *
  */
 public class RoadManager {
-	private List<Vehicle> cars;
-	private Region region;
+	private RoadMap roadMap;
 	
 	public RoadManager(RoadMap roadMap) {
-		this.region = roadMap.getRegion();
+		this.roadMap = roadMap;
 	}
+	
+	
 }
