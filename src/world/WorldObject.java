@@ -32,9 +32,6 @@ public abstract class WorldObject {
 	
 	private float age; //the number of real seconds the object has existed in the world
 	
-	private static final float regenPeriod = 30.0f;
-	private float regenTimer = MathUtils.random(regenPeriod);
-	
 	public WorldObject(float x, float y, float width, float height) {
 		this.position = new Vector2(x,y,0);
 		this.verticalHeight = MIN_HEIGHT; //by default
@@ -47,7 +44,7 @@ public abstract class WorldObject {
 		this.positionHistory = new PositionHistory(this);
 		
 		this.collisionEvents = new ArrayList<CollisionEvent>();
-		addCollisionEvent(CollisionEvent.STOP);
+		addCollisionEvent(CollisionEvent.STOP); //default collision event
 	}
 	
 	public void setModel(float ... model) {
@@ -60,6 +57,14 @@ public abstract class WorldObject {
 	
 	public float getVerticalHeight() {
 		return this.verticalHeight;
+	}
+	
+	public void enabledHitbox() {
+		this.hitbox.enable();
+	}
+	
+	public void disableHitbox() {
+		this.hitbox.disable();
 	}
 	
 	/**
@@ -101,15 +106,6 @@ public abstract class WorldObject {
 		
 		this.updateRigidLines();
 		
-		//logic for regenerating a hitbox
-		//this is needed because sometimes the hitbox and entity's rotation fall out of sync
-		regenTimer += dt;
-		
-		if (regenTimer >= regenPeriod) {
-			regenTimer = 0;
-			regenerateHitbox();
-		}
-		
 		//update the position history..
 		this.positionHistory.update(dt);
 		
@@ -119,6 +115,8 @@ public abstract class WorldObject {
 		//collision correction
 		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_TRUE)
 			this.correctOutOfWalls();
+		
+		this.regenerateHitbox();
 		
 		updateLightValue();
 		
@@ -425,7 +423,6 @@ public abstract class WorldObject {
 				intersection = this.hitbox.intersecting(l);
 				if (intersection != null) {
 					this.setX(getX()-checkStep); //go back out of the collision zone
-					//this.velocity.x = 0; //no more movement in X direction now
 					return l;
 				}
 			}
@@ -458,7 +455,6 @@ public abstract class WorldObject {
 				if (intersection != null) {
 					//we done
 					this.setY(getY()-checkStep); //go back out of the collision zone
-					//this.velocity.y = 0; //no more movement in y direction now
 					return l;
 				}
 			}
@@ -499,7 +495,6 @@ public abstract class WorldObject {
 					//we done
 					this.position.r -= checkStep; //go back out of the collision zone
 					this.hitbox.rotate(-checkStep);
-					//this.velocity.r = 0; //no more movement in X direction now
 					return l;
 				}
 			}

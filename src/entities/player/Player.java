@@ -43,6 +43,9 @@ public class Player extends Human {
 	}
 
 	public void draw(Camera c) {
+		if (this.getRiding() != null)
+			return; //don't draw if we are in a car
+		
 		c.setColor(Color.CYAN);
 		c.setStrokeWidth(0.025f);
 		c.drawOval(getX()-0.1f, getY()-0.1f, getWidth()+0.2f, getHeight()+0.2f);
@@ -90,6 +93,7 @@ public class Player extends Human {
 			this.getVelocity().zero();
 			
 			if (this.getRiding() == null) {
+				this.enabledHitbox();
 				float mag = 0.0f;
 				float r = 0.0f;
 				
@@ -112,6 +116,8 @@ public class Player extends Human {
 				if (mag < 0)
 					this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);
 			} else { //then we are in a car
+				this.disableHitbox();
+				
 				if (Program.keyboard.keyDown(up))
 					this.getRiding().accelerate(dt);
 				

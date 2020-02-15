@@ -10,26 +10,28 @@ import misc.MathUtils;
 import misc.Vector2;
 
 public class Road {
-	private List<Line> lines;
+	private List<Vector2> points;
+	private List<Car> cars;
 	//on average how many cars are spawned at the start of the road per real minute
-	private float carRate = 5.0f;
+	private float carRate = 10.0f;
 	private Region region;
 	
-	private Car.Model[] models = {Car.Model.RED_CAR};
+	private Car.Model[] models = Car.Model.values();
 	
-	private static final float MIN_WAIT = 3.0f; //how long to wait between each car
+	private static final float MIN_WAIT = 1.5f; //how long to wait between each car
 	
 	private float timer = 0.0f, wait;
 	
 	public Road(Region region) {
 		this.region = region;
-		this.lines = new ArrayList<Line>();
+		this.points = new ArrayList<Vector2>();
+		this.cars = new ArrayList<Car>();
 		
 		resetWait();
 	}
 	
-	public void addLine(Line l) {
-		this.lines.add(l);
+	public void addPoint(Vector2 p) {
+		this.points.add(p);
 	}
 	
 	public void update(float dt) {
@@ -39,25 +41,21 @@ public class Road {
 			
 			//add in a car at the start of the wait
 			Car.Model model = models[MathUtils.random(models.length)];
-			Line startLine = this.lines.get(0);
-			Car car = new Car(model,startLine.getEndpoints()[0].x,startLine.getEndpoints()[0].y);
+			Vector2 startPoint = this.points.get(0);
+			Car car = new Car(model,startPoint.x,startPoint.y);
 			this.region.add(car);
-			Path path = new Path();
-			for (int i = 0; i < this.lines.size(); i++) {
-				Line l = lines.get(i);
-				Vector2 ep = l.getEndpoints()[0];
-				path.add(ep.x,ep.y);
-				if (i == this.lines.size() - 1) {
-					Vector2 ep2 = l.getEndpoints()[1];
-					path.add(ep2.x,ep2.y);
-				}
-			}
+			Path path = new Path(car);
+			for (int i = 1; i < this.points.size(); i++) 
+				path.add(points.get(i).x,points.get(i).y);
+			path.print();
 			car.queuePath(path);
+			this.cars.add(car);
 		}
 	}
 	
 	private void resetWait() {
 		wait = MIN_WAIT + (60-MIN_WAIT) / carRate + MathUtils.random(-4,4);
+		wait = MathUtils.max(MIN_WAIT,wait);
 	}
 	
 	public float carRate() {

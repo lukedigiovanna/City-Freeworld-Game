@@ -367,6 +367,8 @@ public class Camera {
 			if (position.getY() > region.getHeight()-this.dimension.y+TOLERANCE)
 				position.setY(region.getHeight()-this.dimension.y+TOLERANCE);
 		}
+		this.position.x = MathUtils.round(this.position.x, 1.0f/this.dimension.x);
+		this.position.y = MathUtils.round(this.position.y, 1.0f/this.dimension.y);
 	}
 	
 	public void moveX(float dx) {

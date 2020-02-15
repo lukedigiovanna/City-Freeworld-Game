@@ -7,6 +7,8 @@ import misc.*;
 public class Hitbox {
 	private WorldObject owner;
 	
+	private boolean enabled = true;
+	
 	public float[] model = {
 			/* Example Model (square) */
 			0.0f, 0.0f, 
@@ -17,11 +19,18 @@ public class Hitbox {
 	
 	private Line[] lines;
 	
-	
 	public Hitbox(WorldObject owner, float[] model) {
 		this.owner = owner;
 		this.model = model;
 		generateLines();
+	}
+	
+	public void enable() {
+		this.enabled = true;
+	}
+	
+	public void disable() {
+		this.enabled = false;
 	}
 	
 	/**
@@ -43,9 +52,11 @@ public class Hitbox {
 	 * Checks if two hitboxes are currently intersecting each other (collision)
 	 * by checking the lines of the hitboxes.
 	 * @param other The other hitbox to check
-	 * @return true if they are intersecting, false if not
+	 * @return a vector if they are intersecting, null if not
 	 */
 	public Vector2 intersecting(Hitbox other) {
+		if (!enabled)
+			return null;
 		for (Line o : other.lines) {
 			Vector2 intersection = intersecting(o);
 			if (intersection != null)
@@ -55,6 +66,8 @@ public class Hitbox {
 	}
 	
 	public Vector2 intersecting(Line line) {
+		if (!enabled)
+			return null;
 		for (Line l : lines)
 			if (l == line) //this line is from our own hitbox.
 				return null;
@@ -72,6 +85,8 @@ public class Hitbox {
 	 * @return whether or not they are colliding
 	 */
 	public boolean satIntersecting(Hitbox other) {
+		if (!enabled)
+			return false;
 		//were testing two different shapes
 		Hitbox h1 = this;
 		Hitbox h2 = other;
@@ -159,11 +174,6 @@ public class Hitbox {
 		return lines;
 	}
 	
-	public void updatePosition() {
-		System.out.println("udpated pos");
-		generateLines();
-	}
-	
 	/**
 	 * Gets the minimum x and y values in the first vector
 	 * Gets the maximum x and y values in the second vector
@@ -189,6 +199,8 @@ public class Hitbox {
 	
 	public void draw(Camera c) {
 		c.setColor(Color.RED);
+		if (!this.enabled)
+			c.setColor(Color.ORANGE);
 		c.setStrokeWidth(0.025f);
 		for (Line l : lines) {
 			if (l == null)

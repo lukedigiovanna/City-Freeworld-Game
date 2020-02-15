@@ -44,7 +44,7 @@ public class GameDrawer {
 		
 		this.minimap = new Minimap(player);
 		
-		float worldViewWidth = 13.0f;
+		float worldViewWidth = 18.0f;
 		camera = new Camera(player, 0, 0, worldViewWidth, worldViewWidth/(CAMERA_PIXEL_WIDTH/(float)CAMERA_PIXEL_HEIGHT),CAMERA_PIXEL_WIDTH,CAMERA_PIXEL_HEIGHT);
 	}
 	

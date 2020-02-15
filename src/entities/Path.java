@@ -26,6 +26,14 @@ public class Path {
 		this.entity = entity;
 	}
 	
+	public void print() {
+		System.out.println("Entity Tags: "+entity.getTags());
+		for (int i = 0; i < this.points.size(); i++) {
+			System.out.println(i+": "+points.get(i).x+", "+points.get(i).y);	
+		}
+		System.out.println("goal: "+position);
+	}
+	
 	public void setEntity(Entity e) {
 		this.entity = e;
 	}
@@ -34,6 +42,12 @@ public class Path {
 		this.points.add(point);
 	}
 	
+	/**
+	 * Adds a the next point along the path that the entity
+	 * must reach
+	 * @param x
+	 * @param y
+	 */
 	public void add(float x, float y) {
 		this.add(new Vector2(x,y));
 	}

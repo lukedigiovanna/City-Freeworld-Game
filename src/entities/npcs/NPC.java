@@ -12,7 +12,7 @@ import world.Properties;
 public class NPC extends Human {
 	
 	public NPC(float x, float y) {
-		super(x,y,HumanAnimationPack.CHARACTER_0);
+		super(x,y,HumanAnimationPack.CHARACTER_1);
 		this.health = new Health(20,20);
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_FALSE);
 		addTag("npc");

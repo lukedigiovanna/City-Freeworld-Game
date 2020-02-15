@@ -38,7 +38,8 @@ public class World {
 		
 		Region reg0 = regions.get(0);
 		Road road = new Road(reg0);
-		road.addLine(new Line(new Vector2(0,0), new Vector2(20,20)));
+		road.addPoint(new Vector2(4,1.5f));
+		road.addPoint(new Vector2(4,35));
 		reg0.getRoadMap().addRoad(road);
 		
 		//initialize starting region
