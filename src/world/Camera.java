@@ -31,7 +31,7 @@ public class Camera {
 	private Entity focus;	
 	private Region region;
 	
-	private boolean drawHitboxes = false, drawWalls = false, drawFieldOfView = false;
+	private boolean drawHitboxes = false, drawWalls = false, drawFieldOfView = false, drawRoads = false;
 	
 	//rendering hints for more high quality graphics
 	private Map<RenderingHints.Key,Object> map = new HashMap<RenderingHints.Key,Object>();
@@ -101,6 +101,10 @@ public class Camera {
 		this.drawFieldOfView = !this.drawFieldOfView;
 	}
 	
+	public void toggleRoads() {
+		this.drawRoads = !this.drawRoads;
+	}
+	
 	/**
 	 * The value for 1 world unit converted to pixels.
 	 * @return
@@ -128,7 +132,7 @@ public class Camera {
 	/**
 	 * Moves the camera to adjust for centering on the focused entity
 	 */
-	private float margin = 0.2f;
+	private float margin = 0.1f;
 	public void adjustPosition(float dt) {
 		if (focus == null)
 			return; //don't adjust camera pos if there is no focus
@@ -244,6 +248,9 @@ public class Camera {
 		
 		if (this.drawWalls)
 			walls.draw(this);
+		
+		if (this.drawRoads)
+			this.region.getRoadMap().draw(this);
 	}
 	
 	/*

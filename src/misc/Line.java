@@ -1,6 +1,9 @@
 package misc;
 
-public class Line {
+import java.io.Serializable;
+
+public class Line implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	//endpoint info
 	private Vector2 endpoint1, endpoint2;

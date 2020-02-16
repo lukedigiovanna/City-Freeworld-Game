@@ -20,7 +20,7 @@ public class GameDisplay extends Display {
 	
 	public void set() {
 		currentGame = new Game();
-		Player player = currentGame.getWorld().addPlayer();
+		Player player = currentGame.getWorld().getPlayers().get(0);
 		gameDrawer = new GameDrawer(currentGame, player);
 		currentGame.unpause();
 		Program.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

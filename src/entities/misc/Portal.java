@@ -1,5 +1,6 @@
 package entities.misc;
 
+import java.io.Serializable;
 import java.util.List;
 
 import entities.Entity;
@@ -44,7 +45,9 @@ public class Portal extends Entity {
 		//this.getRegion().addParticles(Particle.Type.SPARKLES,rainbow[MathUtils.random(rainbow.length)],1,0.1f,getX(),getY(),getWidth(),getHeight());
 	}
 	
-	public static class Destination {
+	public static class Destination implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		public float x, y;
 		public int regionNumber;
 		

@@ -7,6 +7,7 @@ import misc.ImageTools;
 import misc.MathUtils;
 
 import java.awt.image.*;
+import java.io.Serializable;
 
 public class Animation {
 	private List<BufferedImage> frames;

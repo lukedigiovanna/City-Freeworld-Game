@@ -11,13 +11,16 @@ import world.Properties;
 
 public class EntityObject extends Entity {
 	
-	private Texture texture;
-	private Animation animation;
+	private transient Texture texture;
+	private transient Animation animation;
+	
+	private int id;
 	
 	public EntityObject(int id, float x, float y) {
 		super(x,y);
+		this.id = id;
 		this.texture = TexturePack.current().getObjectTexture(id);
-		this.animation = this.texture.getAnimation().copy(); 
+		this.animation = this.texture.getAnimation().copy();
 		this.setDimension(this.texture.getDimension().copy());
 		this.setLightEmissionValue(texture.getLightEmissionValue());
 		this.setVerticalHeight(texture.getVerticalHeight());
@@ -27,6 +30,11 @@ public class EntityObject extends Entity {
 		this.setProperty(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
 		//this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 		this.addTag("entity_object");
+	}
+	
+	public void loadAssets() {
+		this.texture = TexturePack.current().getObjectTexture(id);
+		this.animation = this.texture.getAnimation().copy();
 	}
 
 	@Override

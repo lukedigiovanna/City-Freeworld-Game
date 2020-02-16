@@ -1,11 +1,14 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.*;
 
 import entities.player.*;
 import world.regions.Region;
 
-public class EntityList {
+public class EntityList implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	//for now lets just hold an array list of entities
 	
 	private List<Entity> list;

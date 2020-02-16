@@ -2,6 +2,7 @@ package weapons;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 
 import entities.player.Player;
 import main.Program;
@@ -9,7 +10,9 @@ import main.Program;
 /**
  * Contains player stuff like guns, knives, grenades, other misc weapons...
  */
-public class WeaponManager {
+public class WeaponManager implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private int numOfScrolls = 2;
 	private WeaponScroll[] scrolls;
 	

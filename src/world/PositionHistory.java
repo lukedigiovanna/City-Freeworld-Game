@@ -1,11 +1,15 @@
 package world;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import misc.Vector2;
+import world.event.CollisionEvent;
 
-public class PositionHistory {
+public class PositionHistory implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private static final int MAX_LENGTH = 10;
 	
 	private WorldObject object;
@@ -61,7 +65,9 @@ public class PositionHistory {
 		return h == null ? null : h.position;
 	}
 	
-	private class HistoryPoint {
+	private class HistoryPoint implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		public float time;
 		public Vector2 position, velocity, acceleration;
 		

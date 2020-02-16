@@ -1,5 +1,6 @@
 package world;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import world.regions.Region;
  * Super class for all objects that will be in the world : cells, entities, etc.
  *
  */
-public abstract class WorldObject {
+public abstract class WorldObject implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public static final float MIN_HEIGHT = 0, MAX_HEIGHT = 25;
 	
 	private PositionHistory positionHistory;
@@ -704,5 +707,14 @@ public abstract class WorldObject {
 	
 	public PositionHistory getPositionHistory() {
 		return this.positionHistory;
+	}
+	
+	/**
+	 * This method can optionally be implemented in subclasses
+	 * that use animations or buffered images or other data types
+	 * so that serialization can be done without serializing an image.
+	 */
+	public void loadAssets() {
+		
 	}
 }

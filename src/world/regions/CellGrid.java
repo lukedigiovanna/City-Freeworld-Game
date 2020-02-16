@@ -1,6 +1,10 @@
 package world.regions;
 
-public class CellGrid {
+import java.io.Serializable;
+
+public class CellGrid implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	//stored such that the x value is the first element and the y value is the second element
 	private Cell[][] grid;
 	private int width, height;

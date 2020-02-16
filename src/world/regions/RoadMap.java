@@ -1,16 +1,20 @@
 package world.regions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import misc.Line;
+import world.Camera;
 
 /**
  * Each 1 x 1 dimension on the region represents a road behavior
  * This should correspond to the cell grid
  *
  */
-public class RoadMap {
+public class RoadMap implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private Region region;
 
 	/**
@@ -23,6 +27,12 @@ public class RoadMap {
 		this.region = region;
 		
 		this.roads = new ArrayList<Road>();
+	}
+	
+	public void draw(Camera c) {
+		for (Road road : roads) {
+			road.draw(c);
+		}
 	}
 	
 	public void update(float dt) {

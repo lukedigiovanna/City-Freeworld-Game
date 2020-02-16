@@ -15,26 +15,34 @@ public abstract class Human extends Entity {
 	public static final int WALK_ANIMATION = 0, IDLE_ANIMATION = 1, CORPSE_ANIMATION = 2,
 							HOLDING_SHORT_GUN_ANIMATION = 3, HOLDING_LONG_GUN_ANIMATION = 4;
 	
-	private Animation
+	private transient Animation
 		curAni,
 		walkAni, idleAni, corpseAni, holdingLongGun, holdingShortGun;
 	
 	private float walkAniSpeed = 0;
 	
+	private HumanAnimationPack animations;
+	
 	//private Vehicle riding;
 	
 	public Human(float x, float y, HumanAnimationPack animations) {
 		super(x,y,animations.width,animations.height);
+		
+		this.animations = animations;
+		this.loadAssets();
+		
+		this.setVerticalHeight(7.0f); //high up
+		
+		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
+	}
+	
+	public void loadAssets() {
 		walkAni = animations.walk.copy();
 		idleAni = animations.idle.copy();
 		corpseAni = animations.corpse.copy();
 		holdingLongGun = animations.holdingLongGun.copy();
 		holdingShortGun = animations.holdingShortGun.copy();
 		curAni = idleAni;
-		
-		this.setVerticalHeight(7.0f); //high up
-		
-		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 	}
 	
 	public void setAnimation(int animationNumber) {
@@ -172,5 +180,9 @@ public abstract class Human extends Entity {
 			curAni.animate(dt * this.walkAniSpeed/NORMAL_WALKING_SPEED);
 		else
 			curAni.animate(dt);
+	}
+	
+	public Animation getCorpseAnimation() {
+		return this.corpseAni;
 	}
 }

@@ -11,15 +11,21 @@ import world.WorldObject;
 
 public class Cell extends WorldObject {
 	
-	private Animation animation;
+	private transient Animation animation;
 	private int orientation = ImageTools.ROTATE_0; //0 = 0deg, 1 = 90deg, 2 = 180deg, 3 = 270deg
-	private Texture texture;
+	private transient Texture texture;
+	private int id;
 	
 	public Cell(int id, int rotation, float x, float y) {
 		super(x,y,1.0f,1.0f);
 		this.orientation = rotation;
 		this.setVerticalHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
 		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
+		this.id = id;
+		loadAssets();
+	}
+	
+	public void loadAssets() {
 		this.texture = TexturePack.current().getTileTexture(id);
 		this.animation = texture.createAnimation();
 	}

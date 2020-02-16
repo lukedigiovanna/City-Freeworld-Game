@@ -11,7 +11,9 @@ import misc.MathUtils;
 import misc.Vector2;
 import world.World;
 
-public class Region {
+public class Region implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	public static Region generateWorldRegion(World world, String worldName, int index) {
 		Region region = new Region(world, worldName, index);
 		if (region.exists)

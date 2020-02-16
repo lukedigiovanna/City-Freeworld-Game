@@ -27,7 +27,7 @@ public class Bullet extends Projectile {
 		this.removeCollisionEvent(CollisionEvent.STOP);
 	}
 	
-	private BufferedImage bullet = ImageTools.getImage("assets/images/weapons/bullet.png");
+	private transient BufferedImage bullet = ImageTools.getImage("assets/images/weapons/bullet.png");
 	
 	public void draw(Camera c) {
 		c.drawImage(bullet, getX(), getY(), getWidth(), getHeight());

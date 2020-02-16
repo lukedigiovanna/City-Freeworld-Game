@@ -1,8 +1,11 @@
 package entities;
 
+import java.io.Serializable;
+
 import misc.MathUtils;
 
-public class Health {
+public class Health implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	private float health;
 	private float maxHealth;

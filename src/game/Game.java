@@ -9,7 +9,7 @@ import world.*;
 
 public class Game {
 	
-	private static final int TICKS_PER_SECOND = 20;
+	private static final int TICKS_PER_SECOND = 50;
 	public static final int IDEAL_REFRESH_RATE = 1000/TICKS_PER_SECOND;
 	private long wait = IDEAL_REFRESH_RATE; //default
 	
@@ -24,7 +24,8 @@ public class Game {
 	
 	public Game() {
 		ft = new FrameTimer();
-		world = new World("realworld");
+		//world = new World("realworld");
+		world = World.loadWorld("save1.world");
 		
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
@@ -52,6 +53,7 @@ public class Game {
 	 */
 	public void quit() {
 		gameActive = false;
+		this.world.save();
 	}
 	
 	public void pause() {

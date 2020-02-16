@@ -1,10 +1,13 @@
 package world;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 import misc.*;
 
-public class Hitbox {
+public class Hitbox implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private WorldObject owner;
 	
 	private boolean enabled = true;

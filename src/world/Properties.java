@@ -1,9 +1,12 @@
 package world;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Properties {
+public class Properties implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	public static final Key
 		/**
 		 * Key for whether or not the object should have collision with rigid structures
@@ -72,7 +75,9 @@ public class Properties {
 		return map.get(key);
 	}
 	
-	public static class Key {
+	public static class Key implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		private int num = 0;
 		public Key(int num) {
 			this.num = num;
@@ -83,7 +88,9 @@ public class Properties {
 		}
 	}
 	
-	public static class Value {
+	public static class Value implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		private int num = 0;
 		public Value(int num) {
 			this.num = num;

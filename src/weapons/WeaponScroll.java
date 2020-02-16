@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import entities.player.Player;
 import main.Program;
@@ -11,7 +12,8 @@ import main.Program;
 /**
  * The inventory type thing for weapons
  */
-public class WeaponScroll {
+public class WeaponScroll implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	public static final int[] SCROLL_PRIMARY = {Weapon.CATEGORY_RIFLE,Weapon.CATEGORY_SUB_MACHINE_GUN,Weapon.CATEGORY_SHOT_GUN,Weapon.CATEGORY_HEAVY_SPECIAL},
 							  SCROLL_SECONDARY = {Weapon.CATEGORY_HAND_GUN,Weapon.CATEGORY_LIGHT_SPECIAL};

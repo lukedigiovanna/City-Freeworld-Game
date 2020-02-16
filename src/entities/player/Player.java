@@ -18,7 +18,7 @@ public class Player extends Human {
 	
 	private String name = "Earl";
 	private BankAccount bankAct;
-	private BufferedImage profilePicture;
+	private transient BufferedImage profilePicture;
 	
 	private WeaponManager weaponManager;
 	

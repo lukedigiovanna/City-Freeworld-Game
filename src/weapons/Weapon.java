@@ -1,6 +1,7 @@
 package weapons;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 import entities.Entity;
 import entities.misc.Particle;
@@ -13,7 +14,8 @@ import soundEngine.SoundManager;
 /**
  * Includes all firearms such as pistols that fire bullets
  */
-public class Weapon {
+public class Weapon implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	public static final int CATEGORY_HAND_GUN = 0,
 							CATEGORY_SUB_MACHINE_GUN = 1,
@@ -39,8 +41,8 @@ public class Weapon {
 		public int magSize;
 		public int category, fireStyle;
 		public String name;
-		public BufferedImage icon;
-		public BufferedImage display;
+		public transient BufferedImage icon;
+		public transient BufferedImage display;
 		
 		Type(String name, String iconName, int category, int fireStyle, float fireRate, float reloadTime, int magSize, float firePower, float accuracy) {
 			this.name = name;

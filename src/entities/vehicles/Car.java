@@ -6,16 +6,17 @@ import misc.ImageTools;
 import world.Camera;
 
 public class Car extends Vehicle {
-	
+	private static final long serialVersionUID = 1L;
+
 	public static enum Model {
 		RED_RACECAR("red_racecar.png",19.0f/16.0f,14.0f/16.0f),
 		BLUE_RACECAR("blue_racecar.png",19.0f/16.0f,14.0f/16.0f),
 		WHITE_RACECAR("white_racecar.png",19.0f/16.0f,14.0f/16.0f),
 		SCIFI_RACECAR("scifi_racecar.png",19.0f/16.0f,14.0f/16.0f);
 		
-		float width, height;
+		public float width, height;
 		String path;
-		BufferedImage image = ImageTools.IMAGE_NOT_FOUND;
+		transient BufferedImage image = ImageTools.IMAGE_NOT_FOUND;
 		Model(String path, float width, float height) {
 			this.width = width;
 			this.height = height;

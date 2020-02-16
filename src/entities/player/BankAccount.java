@@ -1,6 +1,10 @@
 package entities.player;
 
-public class BankAccount {
+import java.io.Serializable;
+
+public class BankAccount implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private double money;
 	
 	private Player player;

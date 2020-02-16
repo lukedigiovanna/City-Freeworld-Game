@@ -7,7 +7,7 @@ public enum HumanAnimationPack {
 	CHARACTER_0("character_0",11f/16f,12f/16f),
 	CHARACTER_1("character_1",11f/16f,12f/16f);
 	
-	Animation idle, walk, corpse, holdingLongGun, holdingShortGun;
+	transient Animation idle, walk, corpse, holdingLongGun, holdingShortGun;
 	
 	float width, height;
 	

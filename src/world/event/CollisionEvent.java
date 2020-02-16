@@ -1,5 +1,7 @@
 package world.event;
 
+import java.io.Serializable;
+
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
@@ -10,13 +12,13 @@ public interface CollisionEvent {
 		/**
 		 * Object simply stops all movement when it hits a wall
 		 */
-		STOP = (WorldObject obj, Line wall) -> {
+		STOP = (CollisionEvent & Serializable)(WorldObject obj, Line wall) -> {
 			obj.getVelocity().zero();
 		},
 		/**
 		 * Object slides along the wall in the direction of its prior movement and the shape of the wall
 		 */
-		SLIDE = (WorldObject obj, Line wall) -> {
+		SLIDE = (CollisionEvent & Serializable)(WorldObject obj, Line wall) -> {
 			Vector2 vel = obj.getVelocity();
 
 			float objDirection = vel.getAngle();
@@ -30,7 +32,7 @@ public interface CollisionEvent {
 		/**
 		 * The velocity vector is reflected off the wall
 		 */
-		BOUNCE = (WorldObject obj, Line wall) -> {
+		BOUNCE = (CollisionEvent & Serializable)(WorldObject obj, Line wall) -> {
 			float objDirection = obj.getVelocity().getAngle();
 			float lineDirection = wall.angleToXAxis();
 			float newDirection = 2 * lineDirection - objDirection;

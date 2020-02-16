@@ -9,6 +9,7 @@ import misc.ImageTools;
 import misc.MathUtils;
 import misc.Vector2;
 import world.*;
+import world.event.CollisionEvent;
 import world.regions.Region;
 
 public class Particle extends Entity {
@@ -16,7 +17,7 @@ public class Particle extends Entity {
 	
 	private float fadeTime = 0.5f;
 	
-	private BufferedImage image;
+	private transient BufferedImage image;
 	private Color color;
 	
 	public Particle(Type type, float x, float y) {
@@ -47,9 +48,12 @@ public class Particle extends Entity {
 		
 		setVelocity(new Vector2((float)Math.cos(theta)*speed,(float)Math.sin(theta)*speed));
 		
-		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
+		//setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		setProperty(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
 		setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		
+		this.addCollisionEvent(CollisionEvent.BOUNCE);
+		this.removeCollisionEvent(CollisionEvent.STOP);
 		
 		this.setVerticalHeight(10.0f);
 	}
@@ -63,7 +67,7 @@ public class Particle extends Entity {
 		CORPSE(0.0f,0.0f,60.0f); //this is a place holder for the TextParticles
 		
 		float width, height;
-		List<BufferedImage> images;
+		transient List<BufferedImage> images;
 		Color defaultColor = Color.WHITE;
 		float lifeSpan = 5.0f;
 		

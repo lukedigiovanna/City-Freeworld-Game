@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import misc.Vector2;
 /**
  * Defines a path for an Entity to follow
  */
-public class Path {
+public class Path implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private Entity entity;
 	
 	private List<Vector2> points; //paths are defined by a list of points for the entity to follow.. like bread crumbs

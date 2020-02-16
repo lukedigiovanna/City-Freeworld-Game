@@ -44,7 +44,7 @@ public class GameDrawer {
 		
 		this.minimap = new Minimap(player);
 		
-		float worldViewWidth = 18.0f;
+		float worldViewWidth = 26.0f;
 		camera = new Camera(player, 0, 0, worldViewWidth, worldViewWidth/(CAMERA_PIXEL_WIDTH/(float)CAMERA_PIXEL_HEIGHT),CAMERA_PIXEL_WIDTH,CAMERA_PIXEL_HEIGHT);
 	}
 	
@@ -72,6 +72,8 @@ public class GameDrawer {
 				camera.toggleWalls();
 			if (kbd.keyPressed(KeyEvent.VK_F))
 				camera.toggleFieldOfView();
+			if (kbd.keyPressed(KeyEvent.VK_R))
+				camera.toggleRoads();
 		}
 		
 		if (kbd.keyDown('c'))
