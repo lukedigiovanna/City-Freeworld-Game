@@ -22,7 +22,6 @@ public class NewGameDisplay extends Display {
 	public void set() {
 		GameController.createNewGame("New World");
 		DisplayController.setScreen(DisplayController.Screen.GAME);
-		System.out.println("how");
 	}
 
 }

@@ -229,7 +229,17 @@ public class GameDrawer {
 		public void onMouseUp() {
 			game.unpause();
 		}
-	}, new PauseButton("QUIT",Program.DISPLAY_HEIGHT/2+40) {
+	}, new PauseButton("SAVE",Program.DISPLAY_HEIGHT/2+30) {
+		public void onMouseUp() {
+			game.getWorld().save();
+		}
+	}, new PauseButton("SAVE AND QUIT",Program.DISPLAY_HEIGHT/2+60) {
+		public void onMouseUp() {
+			game.getWorld().save();
+			game.quit();
+			display.DisplayController.setScreen(display.DisplayController.Screen.MAIN);
+		}
+	}, new PauseButton("QUIT WITHOUT SAVING",Program.DISPLAY_HEIGHT/2+90) {
 		public void onMouseUp() {
 			game.quit();
 			display.DisplayController.setScreen(display.DisplayController.Screen.MAIN);

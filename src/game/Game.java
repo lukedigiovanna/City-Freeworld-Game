@@ -59,7 +59,6 @@ public class Game {
 	 */
 	public void quit() {
 		gameActive = false;
-		this.world.save();
 	}
 	
 	public void pause() {

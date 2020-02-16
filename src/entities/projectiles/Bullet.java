@@ -34,6 +34,6 @@ public class Bullet extends Projectile {
 	}
 	
 	public void loadAssets() {
-		//bullet = ImageTools.getImage("assets/images/weapons/bullet.png");
+		bullet = ImageTools.getImage("assets/images/weapons/bullet.png");
 	}
 }
