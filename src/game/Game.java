@@ -22,11 +22,17 @@ public class Game {
 	
 	private boolean gameActive = true; //says whether or not this game should exist
 	
-	public Game() {
+	public Game(String saveName, boolean loadFromSave) {
 		ft = new FrameTimer();
-		//world = new World("realworld");
-		world = World.loadWorld("save1.world");
-		
+		if (loadFromSave) {
+			world = World.loadWorld(saveName);
+		} else {
+			world = new World("realworld",saveName);
+		}
+		startUpdateLoop();
+	}
+	
+	private void startUpdateLoop() {
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
 				while (gameActive) {

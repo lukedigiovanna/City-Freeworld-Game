@@ -35,6 +35,7 @@ public class EntityObject extends Entity {
 	public void loadAssets() {
 		this.texture = TexturePack.current().getObjectTexture(id);
 		this.animation = this.texture.getAnimation().copy();
+		System.out.println("loaded!");
 	}
 
 	@Override

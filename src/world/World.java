@@ -24,14 +24,14 @@ public class World implements Serializable {
 	
 	private float elapsedTime = 0.0f;
 	
-	private String worldName;
+	private String worldName, saveName;
 	
 	private float timeOfDay = 12.0f; //up to hour 23, at 24 it resets to 0.
 	private int elapsedDays = 0;
 	
-	public static World loadWorld(String filePath) {
+	public static World loadWorld(String saveName) {
 		try {
-			FileInputStream fis = new FileInputStream(filePath);
+			FileInputStream fis = new FileInputStream("assets/saves/"+saveName+".world");
 			ObjectInputStream in = new ObjectInputStream(fis);
 			World world = (World)in.readObject();
 			in.close();
@@ -56,8 +56,9 @@ public class World implements Serializable {
 	 * folder name.
 	 * @param name The name of the world folder
 	 */
-	public World(String name) {
-		this.worldName = name;
+	public World(String worldName, String saveName) {
+		this.worldName = worldName;
+		this.saveName = saveName;
 		
 		regions = new ArrayList<Region>();
 		
@@ -202,7 +203,7 @@ public class World implements Serializable {
 	
 	public void save() {
 		try {
-			FileOutputStream fos = new FileOutputStream("save1.world");
+			FileOutputStream fos = new FileOutputStream("assets/saves/"+saveName+".world");
 			ObjectOutputStream out = new ObjectOutputStream(fos);
 			
 			out.writeObject(this);

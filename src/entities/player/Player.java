@@ -32,6 +32,11 @@ public class Player extends Human {
 		addTag("player");
 	}
 	
+	public void loadAssets() {
+		super.loadAssets();
+		profilePicture = ImageTools.getImage("profile_1.png");
+	}
+	
 	public String getMoneyDisplay() {
 		double money = MathUtils.round(bankAct.getMoney(), 0.01);
 		String monStr = money+"";
