@@ -6,13 +6,13 @@ public class GameController {
 	private static Game game;
 	private static GameDrawer gameDrawer;
 	
-	public static void createNewGame(String name) {
-		game = new Game(name,false);
+	public static void createNewGame(String worldName, String name) {
+		game = new Game(worldName,name);
 		loadGameDrawer();
 	}
 	
 	public static void loadSaveGame(String name) {
-		game = new Game(name,true);
+		game = new Game(name);
 		loadGameDrawer();
 	}
 	

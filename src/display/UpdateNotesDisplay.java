@@ -4,46 +4,21 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import main.Program;
+import display.component.BackButton;
 import display.component.Button;
 import display.component.Component;
 
 public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
 		"Implemented a command system in the developer console",
-		"    These are only accessible in developer versions not releases"
+		"    These are only accessible in developer versions not releases",
+		"NPCs now see within a field of view",
+		"Road structure added",
+		"    Cars travel down the roads now",
+		"Added saving/loading game saves"
 	};
 	
-	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
-		@Override
-		public void onMouseDown() {}
-
-		@Override
-		public void onMouseUp() {
-			DisplayController.setScreen(DisplayController.Screen.MAIN);
-		}
-
-		@Override
-		public void onMouseMoved(int dx, int dy) {}
-
-		@Override
-		public void onMouseOver() {
-			c = Color.gray;
-		}
-
-		@Override
-		public void onMouseOut() {
-			c = Color.white;
-		}
-		
-		Color c = Color.white;
-		Font f = new Font(Program.FONT_FAMILY,Font.BOLD,ptpY(0.025f));
-		public void draw(Graphics2D g) {
-			g.setFont(f);
-			setDimension(g.getFontMetrics().stringWidth(this.getText()),g.getFontMetrics().getHeight());
-			g.setColor(c);
-			g.drawString(getText(), x, y+getHeight());
-		}
-	};
+	private Button backButton = new BackButton(0.025f,0.025f);
 	
 	public UpdateNotesDisplay() {
 		super();

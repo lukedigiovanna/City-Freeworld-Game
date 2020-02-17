@@ -15,6 +15,14 @@ public abstract class Button extends Component {
 		this(s,x,y,w,h,Component.FORM_LEFT);
 	}
 	
+	public Button(String s, int x, int y, int formation) {
+		this(s,x,y,0,0,formation);
+	}
+	
+	public Button(String s, int x, int y) {
+		this(s,x,y,0,0,Component.FORM_LEFT);
+	}
+	
 	public Button(String s) {
 		this(s,0,0,0,0);
 	}

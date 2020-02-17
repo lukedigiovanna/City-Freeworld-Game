@@ -1,10 +1,14 @@
 package world;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,62 @@ import world.regions.Road;
 
 public class World implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private static List<String> worlds; //list of world names held on the client hard drive
+	
+	private static final String wFP = "assets/saves/worlds.txt";
+	
+	/**
+	 * Initializes the "worlds" list to be have each world from the worlds.txt file
+	 */
+	public static void loadWorldsList() {
+		worlds = new ArrayList<String>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(wFP));
+			String line;
+			while ((line = br.readLine()) != null)
+				worlds.add(line); 
+			System.out.println(worlds);
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Saves the current worlds list to the worlds file
+	 */
+	public static void saveWorldsList() {
+		try {
+			File file = new File(wFP);
+			PrintWriter out = new PrintWriter(file);
+			for (String w : worlds)
+				out.println(w);
+			out.close();
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	/**
+	 * Adds a world name to the client side list of worlds
+	 * If the world name is already used then it returns null and does not
+	 * add the world to the list.
+	 * @param worldName
+	 * @return
+	 */
+	public static boolean addWorld(String worldName) {
+		for (String w : worlds) 
+			if (w.contentEquals(worldName))
+				return false;
+		worlds.add(worldName);
+		saveWorldsList();
+		return true;
+	}
+	
+	public static List<String> getWorldsList() {
+		return worlds;
+	}
 	
 	private List<Region> regions;
 	private int currentRegion;
@@ -47,6 +107,7 @@ public class World implements Serializable {
 			}		
 			return world;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -209,6 +270,8 @@ public class World implements Serializable {
 			out.writeObject(this);
 			
 			out.close();
+			
+			World.addWorld(saveName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

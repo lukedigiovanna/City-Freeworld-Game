@@ -19,6 +19,7 @@ public class DisplayController {
 		GAME(new GameDisplay()),
 		NEW_GAME(new NewGameDisplay()),
 		LOAD_SAVE(new LoadSaveDisplay()),
+		MULTIPLAYER(new MultiplayerDisplay()),
 		UPDATE_NOTES(new UpdateNotesDisplay()),
 		SETTINGS(new SettingsDisplay());
 		

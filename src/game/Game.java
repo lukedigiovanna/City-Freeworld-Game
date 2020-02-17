@@ -9,7 +9,7 @@ import world.*;
 
 public class Game {
 	
-	private static final int TICKS_PER_SECOND = 50;
+	private static final int TICKS_PER_SECOND = 20;
 	public static final int IDEAL_REFRESH_RATE = 1000/TICKS_PER_SECOND;
 	private long wait = IDEAL_REFRESH_RATE; //default
 	
@@ -22,14 +22,19 @@ public class Game {
 	
 	private boolean gameActive = true; //says whether or not this game should exist
 	
-	public Game(String saveName, boolean loadFromSave) {
+	private Game() {
 		ft = new FrameTimer();
-		if (loadFromSave) {
-			world = World.loadWorld(saveName);
-		} else {
-			world = new World("realworld",saveName);
-		}
 		startUpdateLoop();
+	}
+	
+	public Game(String worldName, String saveName) {
+		this();
+		world = new World(worldName, saveName);
+	}
+	
+	public Game(String saveName) {
+		this();
+		world = World.loadWorld(saveName);
 	}
 	
 	private void startUpdateLoop() {
@@ -97,6 +102,9 @@ public class Game {
 	}
 
 	public void gameLoop() {
+		if (world == null)
+			return;
+		
 		//lets check for pausing
 		if (Program.keyboard.keyPressed(KeyEvent.VK_ESCAPE))
 			togglePause();

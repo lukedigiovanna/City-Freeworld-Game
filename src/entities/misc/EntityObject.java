@@ -40,11 +40,15 @@ public class EntityObject extends Entity {
 
 	@Override
 	public void draw(Camera camera) {
+		if (animation == null)
+			this.loadAssets(); //protective measure
 		camera.drawImage(animation.getCurrentFrame(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 	}
 
 	@Override
 	public void update(float dt) {
+		if (animation == null)
+			this.loadAssets();
 		animation.animate(dt);
 	}
 }

@@ -32,6 +32,10 @@ public abstract class Display {
 		}
 	}
 	
+	public void clearComponents() {
+		this.components.clear();
+	}
+	
 	public static void fillBackground(Graphics2D g, Color color) {
 		g.setColor(color);
 		g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);

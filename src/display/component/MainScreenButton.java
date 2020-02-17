@@ -20,7 +20,7 @@ public class MainScreenButton extends Button {
 		this.setDimension(width,g.getFontMetrics().getHeight());
 		g.setColor(new Color(225,225,225,125));
 		g.drawString(str, x-1, y+this.getHeight()-1);
-		g.setColor(new Color(0,100,150));
+		g.setColor(new Color(0,120,150));
 		g.drawString(str, x, y+this.getHeight());
 	}
 	

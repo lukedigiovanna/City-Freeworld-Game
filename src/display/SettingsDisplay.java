@@ -5,42 +5,13 @@ import java.awt.event.KeyEvent;
 
 import main.Program;
 import main.Settings;
+import display.component.BackButton;
 import display.component.Button;
 import display.component.Checkbox;
 import display.component.Component;
 
 public class SettingsDisplay extends Display {
-	private Button backButton = new Button("Back to menu",ptpX(0.025f),ptpY(0.025f),0,0,Component.FORM_LEFT) {
-		@Override
-		public void onMouseDown() {}
-
-		@Override
-		public void onMouseUp() {
-			DisplayController.setScreen(DisplayController.Screen.MAIN);
-		}
-
-		@Override
-		public void onMouseMoved(int dx, int dy) {}
-
-		@Override
-		public void onMouseOver() {
-			c = Color.gray;
-		}
-
-		@Override
-		public void onMouseOut() {
-			c = Color.white;
-		}
-		
-		Color c = Color.white;
-		Font f = new Font(Program.FONT_FAMILY,Font.BOLD,ptpY(0.025f));
-		public void draw(Graphics2D g) {
-			g.setFont(f);
-			setDimension(g.getFontMetrics().stringWidth(this.getText()),g.getFontMetrics().getHeight());
-			g.setColor(c);
-			g.drawString(getText(), x, y+getHeight());
-		}
-	};
+	private Button backButton = new BackButton(0.025f,0.025f);
 	
 	private Checkbox vsync = new Checkbox(200,200,35,35) {
 

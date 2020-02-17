@@ -7,6 +7,7 @@ import display.console.Command;
 import misc.ImageTools;
 import soundEngine.SoundManager;
 import soundEngine.Sounds;
+import world.World;
 
 //static class that holds some innate information about this application
 public class Program {
@@ -60,6 +61,8 @@ public class Program {
 		DisplayController.initialize();
 		SoundManager.initialize();
 		Sounds.initialize();
+		
+		World.loadWorldsList();
 		
 		Runtime rt = Runtime.getRuntime();
 		
