@@ -36,11 +36,11 @@ public class NewGameDisplay extends Display {
 		String original = worldName;
 		int tries = 0;
 		while (!World.addWorld(worldName)) {
-			worldName = original + " "+tries;
+			worldName = original + " ("+tries+")";
 			tries++;
 		}
 		GameController.createNewGame("realworld", worldName);
 		DisplayController.setScreen(DisplayController.Screen.GAME);
 	}
-
+		
 }
