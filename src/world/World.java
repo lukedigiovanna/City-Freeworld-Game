@@ -61,18 +61,27 @@ public class World implements Serializable {
 	
 	/**
 	 * Adds a world name to the client side list of worlds
-	 * If the world name is already used then it returns null and does not
-	 * add the world to the list.
 	 * @param worldName
 	 * @return
 	 */
-	public static boolean addWorld(String worldName) {
-		for (String w : worlds) 
-			if (w.contentEquals(worldName))
-				return false;
-		worlds.add(worldName);
-		saveWorldsList();
-		return true;
+	public static void addWorld(String worldName) {
+		if (!hasWorld(worldName)) {
+			worlds.add(worldName);
+			saveWorldsList();
+		}
+	}
+	
+	/**
+	 * Checks if the world name has been used in the client side list
+	 * of worlds.
+	 * @param worldName
+	 * @return
+	 */
+	public static boolean hasWorld(String worldName) {
+		for (String world : worlds) 
+			if (world.contentEquals(worldName))
+				return true;
+		return false;
 	}
 	
 	public static List<String> getWorldsList() {

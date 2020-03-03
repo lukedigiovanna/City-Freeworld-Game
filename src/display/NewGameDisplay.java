@@ -35,7 +35,7 @@ public class NewGameDisplay extends Display {
 		String worldName = JOptionPane.showInputDialog(Program.panel,"Enter a world name");
 		String original = worldName;
 		int tries = 0;
-		while (!World.addWorld(worldName)) {
+		while (World.hasWorld(worldName)) {
 			worldName = original + " ("+tries+")";
 			tries++;
 		}

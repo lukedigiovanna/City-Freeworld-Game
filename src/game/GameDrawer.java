@@ -237,6 +237,7 @@ public class GameDrawer {
 		public void onMouseUp() {
 			game.getWorld().save();
 			game.quit();
+			
 			display.DisplayController.setScreen(display.DisplayController.Screen.MAIN);
 		}
 	}, new PauseButton("QUIT WITHOUT SAVING",Program.DISPLAY_HEIGHT/2+90) {
