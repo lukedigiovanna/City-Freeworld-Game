@@ -19,14 +19,14 @@ public class MainScreenDisplay extends Display {
 	
 	public MainScreenDisplay() {
 		super();
-		String[] buttonNames = {"New Game","Load Save","Mutiplayer","Settings","Update Notes","Quit"};
+		String[] buttonNames = {"PLAY","MULTIPLAYER","SETTINGS","UPDATE NOTES","QUIT"};
 		Runnable[] buttonActions = {
 				() -> {
 					DisplayController.setScreen(DisplayController.Screen.NEW_GAME);
 				}, 
-				() -> {
-					DisplayController.setScreen(DisplayController.Screen.LOAD_SAVE);
-				},
+//				() -> {
+//					DisplayController.setScreen(DisplayController.Screen.LOAD_SAVE);
+//				},
 				() -> {
 					DisplayController.setScreen(DisplayController.Screen.MULTIPLAYER);
 				},

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 
 import entities.Entity;
+import misc.ImageTools;
 
 public class Minimap {
 	private BufferedImage image, blanked;
@@ -83,6 +84,9 @@ public class Minimap {
 		g.setStroke(new BasicStroke(pm));
 		g.setColor(Color.BLACK);
 		g.drawOval(pm/2, pm/2, PIXEL_SIZE-pm, PIXEL_SIZE-pm);
+		
+		//now gray scale the image
+		this.image = ImageTools.grayscale(this.image);
 	}
 	
 	public BufferedImage getImage() {

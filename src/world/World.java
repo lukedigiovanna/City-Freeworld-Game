@@ -37,7 +37,6 @@ public class World implements Serializable {
 			String line;
 			while ((line = br.readLine()) != null)
 				worlds.add(line); 
-			System.out.println(worlds);
 			br.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -273,14 +272,14 @@ public class World implements Serializable {
 	
 	public void save() {
 		try {
-			FileOutputStream fos = new FileOutputStream("assets/saves/"+saveName+".world");
-			ObjectOutputStream out = new ObjectOutputStream(fos);
-			
-			out.writeObject(this);
-			
-			out.close();
-			
-			World.addWorld(saveName);
+//			FileOutputStream fos = new FileOutputStream("assets/saves/"+saveName+".world");
+//			ObjectOutputStream out = new ObjectOutputStream(fos);
+//			
+//			out.writeObject(this);
+//			
+//			out.close();
+//			
+//			World.addWorld(saveName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
