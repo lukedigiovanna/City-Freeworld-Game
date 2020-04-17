@@ -81,16 +81,17 @@ public class Road implements Serializable {
 			int goalIndex = goals.get(i);
 			Vector2 goal = this.points.get(goalIndex);
 			//set the cars trajectory to be towards the goal
-			car.setRotation((float)MathUtils.getAngle(car.center(), goal));
+			float angleToGoal = (float)MathUtils.getAngle(car.center(), goal);
+			car.setRotation(angleToGoal);
 			float currentSpeed = car.getVelocity().getLength();
 			//if that currentSpeed is below our speed limit we want to accelerate the car
 			if (currentSpeed < this.speedLimit) {
 				car.accelerate(dt);
-			} else if (currentSpeed > this.speedLimit) {
+			} else if (currentSpeed > this.speedLimit) { //slow down if we are above the speed limit (we are law abiding citizens here)
 				car.accelerate(-dt);
 			}
 			//if the car has reached the goal within some threshold, then move on to the next
-			if (MathUtils.distance(car.center(), goal) < 0.1) {
+			if (MathUtils.distance(car.center(), goal) < 0.25) {
 				goals.set(i,goals.get(i)+1);
 			}
 			goalIndex = goals.get(i);

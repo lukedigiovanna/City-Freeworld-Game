@@ -29,7 +29,6 @@ public class Portal extends Entity {
 		for (Entity e : checkers)
 			if (this.colliding(e)) 
 				e.send(destination.regionNumber, destination.x, destination.y);
-		System.out.println(this.getRotation());
 	}
 	
 	public static class Destination implements Serializable {
