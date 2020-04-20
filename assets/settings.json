@@ -7,7 +7,7 @@
 "master_volume":1.0,
 "max_fps":20.0,
 "move_right":"d",
-"vsync_enabled":false,
+"vsync_enabled":true,
 "muted":false,
 "move_left":"a",
 }

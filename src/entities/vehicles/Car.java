@@ -1,7 +1,9 @@
 package entities.vehicles;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
+import entities.Entity;
 import misc.ImageTools;
 import world.Camera;
 
@@ -35,7 +37,19 @@ public class Car extends Vehicle {
 
 	public void update(float dt) {
 		super.update(dt);
-		//this.regenerateHitbox();
+		
+		//Check in front of the car: if we are close then slow down, otherwise maintain speed
+		//first get the entities that we care about - humans and other cars
+		List<Entity> others = this.getRegion().getEntities().get("vehicle","human");
+		for (Entity e : others) {
+			if (this == e)
+				continue; //dont check ourselves -- will always be true
+			if (this.canSee_IgnoreWalls(e) && this.squaredDistanceTo(e) < 16) {
+				this.brake(dt);
+				System.out.println("coolio");
+				return;
+			}
+		}
 	}
 	
 	@Override

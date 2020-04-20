@@ -29,6 +29,7 @@ public abstract class WorldObject implements Serializable {
 	private Hitbox hitbox; //identifies the physical boundaries with walls
 	private float mass; //in kilograms
 	private Properties properties;
+	private float fieldOfView = 0;
 	
 	private float lightValue = 1.0f; //value from 0 - 1 that indicates light, 0 is pitch black, 1 is bright
 	private float lightEmission = 0.0f; //value that indicates distance of light production
@@ -45,6 +46,10 @@ public abstract class WorldObject implements Serializable {
 		// *reduces the chance of a lag spike
 		this.properties = new Properties();
 		this.positionHistory = new PositionHistory(this);
+		
+		this.mass = 1;
+		
+		this.objectCollisionEvents = new ArrayList<ObjectCollisionEvent>();
 		
 		this.collisionEvents = new ArrayList<CollisionEvent>();
 		addCollisionEvent(CollisionEvent.STOP); //default collision event
@@ -70,6 +75,23 @@ public abstract class WorldObject implements Serializable {
 		this.hitbox.disable();
 	}
 	
+	public void setMass(float mass) {
+		this.mass = mass;
+	}
+	
+	public float getMass() {
+		return this.mass;
+	}
+	
+	// for calculations that deal with the angular physical world
+	public float getMomentOfInertia() {
+		// we will assume that all objects are rectangular in nature and 
+		// rotate about their center
+		// we can then deduce that the I = 1/12 * bh(b^2 + h^2) * M... 
+		// where b = the width and h = the height of this object.
+		return this.mass/12f * this.getWidth() * this.getHeight() * (this.getWidth() * this.getWidth() + this.getHeight() * this.getHeight());
+	}
+	
 	/**
 	 * Sets the height of the object
 	 * Limits it between the minimum and maximum heights
@@ -81,10 +103,6 @@ public abstract class WorldObject implements Serializable {
 	
 	public Hitbox getHitbox() {
 		return this.hitbox;
-	}
-
-	public float getMass() {
-		return this.mass;
 	}
 	
 	/**
@@ -218,7 +236,7 @@ public abstract class WorldObject implements Serializable {
 		return new Vector2(centerX(),centerY());
 	}
 	
-	private static final float FIELD_OF_VIEW = (float) (Math.PI - Math.PI/6.0f);
+	public static final float DEFAULT_FIELD_OF_VIEW = (float) (Math.PI - Math.PI/6.0f);
 	
 	/**
 	 * Checks if there is a direct view from between the objects
@@ -240,6 +258,46 @@ public abstract class WorldObject implements Serializable {
 	}
 	
 	/**
+	 * Checks if the other object is within the FOV of this object
+	 * @param other
+	 * @return
+	 */
+	public boolean canSee_IgnoreWalls(WorldObject other) {
+		if (!this.hasFieldOfView())
+			return true; //if no FOV, then we assume the object has a line of sight to everything on the region (360 deg FOV)
+		
+		Vector2[] vertices = this.hitbox.getVertices();
+		float[] anglesToTest = new float[1 + vertices.length];
+		
+		anglesToTest[0] = (new Line(this.center(),other.center())).angle();
+		//now add the other angles from the hitbox vertices
+		int count = 1;
+		for (Vector2 vertex : vertices) {
+			anglesToTest[count++] = (new Line(this.center(),vertex)).angle();
+		}
+		
+		float thisAngle = this.getRotation();
+		
+		//get limits of the field of view.
+		float lowerLimit = thisAngle - this.fieldOfView/2,
+			  upperLimit = thisAngle + this.fieldOfView/2;
+		
+		for (float sightAngle : anglesToTest) {
+			//limit the value to be within [0,2pi)
+			while (sightAngle < 0)
+				sightAngle += Math.PI * 2;
+			while (sightAngle >= Math.PI * 2)
+				sightAngle -= Math.PI * 2;
+			
+			//check if the other object is within this objects field of view
+			if (MathUtils.isAngleWithin(lowerLimit, upperLimit, sightAngle))
+				return true;
+		}
+		
+		return false; //if none of those test points worked.
+	}
+	
+	/**
 	 * Returns true if the object is within this objects
 	 * field of view and the sight is unobstructed.
 	 * @param other
@@ -253,27 +311,9 @@ public abstract class WorldObject implements Serializable {
 		
 		if (!hasPathTo)
 			return false;
-	
-		Line l = new Line(this.center(),other.center());
 		
-		float sightAngle = l.angle();
-		//limit the value to be within [0,2pi)
-		while (sightAngle < 0)
-			sightAngle += Math.PI * 2;
-		while (sightAngle >= Math.PI * 2)
-			sightAngle -= Math.PI * 2;
-		
-		float thisAngle = this.getRotation();
-		
-		//get limits of the field of view.
-		float lowerLimit = thisAngle - FIELD_OF_VIEW/2,
-			  upperLimit = thisAngle + FIELD_OF_VIEW/2;
-		
-		//check if the other object is within this objects field of view
-		if (MathUtils.isAngleWithin(lowerLimit, upperLimit, sightAngle))
-			return true;
-		
-		return false;
+		//now we check to make sure we are in the correct field of view
+		return this.canSee_IgnoreWalls(other);
 	}
 	
 	public float getWidth() {
@@ -341,16 +381,28 @@ public abstract class WorldObject implements Serializable {
 	}
 	
 	public void drawFieldOfView(Camera c) {
-		if (!(this instanceof entities.Human)) //only humans have a field of view
+		if (!this.hasFieldOfView()) //only humans have a field of view
 			return;
 		
 		c.setStrokeWidth(0.025f);
 		c.setColor(java.awt.Color.BLUE);
 		float length = 5.0f;
-		float angle = this.getRotation() + FIELD_OF_VIEW/2;
+		float angle = this.getRotation() + this.fieldOfView/2;
 		c.drawLine(this.centerX(),this.centerY(),this.centerX()+length*(float)Math.cos(angle),this.centerY()+length*(float)Math.sin(angle));
-		angle = this.getRotation() - FIELD_OF_VIEW/2;
+		angle = this.getRotation() - this.fieldOfView/2;
 		c.drawLine(this.centerX(),this.centerY(),this.centerX()+length*(float)Math.cos(angle),this.centerY()+length*(float)Math.sin(angle));
+	}
+	
+	public boolean hasFieldOfView() {
+		return (this.fieldOfView > 0);
+	}
+	
+	public void setFieldOfView(float fov) {
+		this.fieldOfView = fov;
+	}
+	
+	public float getFieldOfView() {
+		return this.fieldOfView;
 	}
 
 	/**
@@ -378,6 +430,22 @@ public abstract class WorldObject implements Serializable {
 			onCollisionWithWall(hitY);
 		else if (hitR != null)
 			onCollisionWithWall(hitR);
+	}
+	
+	private List<ObjectCollisionEvent> objectCollisionEvents;
+	
+	public void addObjectCollisionEvent(ObjectCollisionEvent event) {
+		this.objectCollisionEvents.add(event);
+	}
+	
+	public void removeObjectCollisionEvent(ObjectCollisionEvent event) {
+		this.objectCollisionEvents.remove(event);
+	}
+	
+	public void onObjectCollision(WorldObject other) {
+		for (ObjectCollisionEvent event : this.objectCollisionEvents) {
+			event.run(this, other);
+		}
 	}
 	
 	private List<CollisionEvent> collisionEvents;

@@ -17,6 +17,9 @@ public abstract class Vehicle extends Entity {
 	public Vehicle(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		this.addTag("vehicle");
+		
+		this.setFieldOfView((float)Math.PI/8f);
+		
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.setVerticalHeight(7.5f);
 		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);

@@ -9,6 +9,7 @@ import misc.Vector2;
 import weapons.Weapon;
 import world.Camera;
 import world.Properties;
+import world.WorldObject;
 
 public abstract class Human extends Entity {
 	
@@ -28,8 +29,12 @@ public abstract class Human extends Entity {
 	public Human(float x, float y, HumanAnimationPack animations) {
 		super(x,y,animations.width,animations.height);
 		
+		this.addTag("human");
+		
 		this.animations = animations;
 		this.loadAssets();
+		
+		this.setFieldOfView(WorldObject.DEFAULT_FIELD_OF_VIEW);
 		
 		this.setVerticalHeight(7.0f); //high up
 		

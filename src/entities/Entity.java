@@ -12,6 +12,7 @@ import misc.MathUtils;
 import misc.Vector2;
 import world.*;
 import world.Properties;
+import world.event.ObjectCollisionEvent;
 import world.regions.Region;
 
 public abstract class Entity extends WorldObject {
@@ -34,11 +35,23 @@ public abstract class Entity extends WorldObject {
 		addTag("entity");
 		paths = new ArrayList<Path>();
 		this.health = new Health(1,1);
+		this.addObjectCollisionEvent(ObjectCollisionEvent.CONSERVE_MOMENTUM_AND_KINETIC_ENERGY);
 	}
 	
 	@Override
 	public void generalUpdate(float dt) {
 		super.generalUpdate(dt);
+		Region thisRegion = this.getRegion();
+		if (thisRegion != null) {
+			for (Entity e : thisRegion.getEntities().get("entity_object")) {
+				if (this != e) {
+					if (this.colliding(e)) {
+						this.onObjectCollision(e);
+						break;
+					}
+				}
+			}
+		}
 		if (this.paths.size() > 0) {
 			paths.get(0).follow(dt);
 			if (paths.get(0).completed() || paths.get(0).stalled()) {
