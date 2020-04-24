@@ -46,9 +46,10 @@ public interface ObjectCollisionEvent {
 		float loss = totalKE * ENERGY_LOSS_COEFFICIENT;
 		loss = 0;
 		//get a, b, and c coefficients of standard equation for calculation of quadratic formula
-		float a = m2 * m2 / m1 * + m2;
-		float b = -2  * m2 * v1 - 2 * m2 * m2 * v2 / m1;
-		float c = m1 * v1 * v1 + 2 * m2 * v1 * v2 + m2 * m2 * v2 * v2 / m1 - m2 * v2 * v2 + 2 * loss;
+		float a = (m2 * m2) / m1 + m2;
+		float b = -2  * m2 * v1 - (2 * m2 * m2 * v2) / m1;
+		float c = m1 * v1 * v1 + 2 * m2 * v1 * v2 + (m2 * m2 * v2 * v2) / m1 - m1 * v1 * v1 - m2 * v2 * v2 + 2 * loss;
+		System.out.println(a+"x*x + "+b+"x + "+c);
 		//now utilize quadratic equation
 		//first in positive direction
 		float vf2 = (float)((-b + Math.sqrt(b * b - 4 * a * c))/(2 * a));
