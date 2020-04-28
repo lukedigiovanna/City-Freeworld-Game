@@ -35,7 +35,6 @@ public abstract class Entity extends WorldObject {
 		addTag("entity");
 		paths = new ArrayList<Path>();
 		this.health = new Health(1,1);
-		this.addObjectCollisionEvent(ObjectCollisionEvent.CONSERVE_MOMENTUM_AND_KINETIC_ENERGY);
 	}
 	
 	@Override

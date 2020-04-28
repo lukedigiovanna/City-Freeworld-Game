@@ -604,7 +604,7 @@ public abstract class WorldObject implements Serializable {
 		//add in the lines from rigid entities.
 		if (this.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE)
 			for (Entity e : this.getRegion().getEntities().get())
-				if (e.getVerticalHeight() >= this.verticalHeight && e.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE) 
+				if (e != this && e.getVerticalHeight() >= this.verticalHeight && e.getProperty(Properties.KEY_HAS_RIGID_BODY) == Properties.VALUE_HAS_RIGID_BODY_TRUE) 
 					for (Line l : e.getHitbox().getLines()) 
 						rigidLines.add(l);
 	}

@@ -22,7 +22,8 @@ public abstract class Vehicle extends Entity {
 		
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.setVerticalHeight(7.5f);
-		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
+		//this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
+		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 	}
 	
 	public Human getDriver() {
@@ -36,6 +37,7 @@ public abstract class Vehicle extends Entity {
 	private float frictionalEffect = 0.2f;
 	
 	public void update(float dt) {
+		this.timeSinceLastBrake+=dt;
 		float speed = this.getVelocity().getLength();
 		speed -= frictionalEffect * dt;
 		speed = MathUtils.clip(0, maxSpeed, speed);
@@ -47,19 +49,21 @@ public abstract class Vehicle extends Entity {
 	private float maxSpeed = 5.0f;
 	
 	public void accelerate(float dt) {
+		if (this.timeSinceLastBrake < 1f) //min wait of 1 second before the car can start accelerating again.
+			return;
 		float speed = this.getVelocity().getLength();
 		speed += acceleration * dt;
 		this.getVelocity().setMagnitude(speed);
 	}
 	
-	private float brakePower = 3.0f;
-	
+	private float brakePower = 2.0f;
+	private float timeSinceLastBrake = MathUtils.INFINITY;
 	public void brake(float dt) {
 		float speed = this.getVelocity().getLength();
 		speed -= brakePower * dt;
-//		if (speed < 0)
-//			speed = 0;
+		if (speed < 0) speed = 0;
 		this.getVelocity().setMagnitude(speed);
+		this.timeSinceLastBrake = 0;
 		//this.getRegion().addParticles(Particle.Type.TIRE_MARK, java.awt.Color.BLACK, 1, 0.0f, centerX(), centerY(), 0.1f, 0.1f);
 	}
 	

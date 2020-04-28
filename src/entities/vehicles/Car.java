@@ -46,8 +46,7 @@ public class Car extends Vehicle {
 				continue; //dont check ourselves -- will always be true
 			if (this.canSee_IgnoreWalls(e) && this.squaredDistanceTo(e) < 16) {
 				this.brake(dt);
-				System.out.println("coolio");
-				return;
+				break;
 			}
 		}
 	}
@@ -55,6 +54,5 @@ public class Car extends Vehicle {
 	@Override
 	public void draw(Camera camera) {
 		camera.drawImage(model.image, getX(), getY(), getWidth(), getHeight());
-		//this.drawHitbox(camera);
 	}
 }
