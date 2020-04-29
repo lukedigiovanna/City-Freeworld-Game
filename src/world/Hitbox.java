@@ -22,9 +22,12 @@ public class Hitbox implements Serializable {
 	
 	private Line[] lines;
 	
+	private Vector2 position;
+	
 	public Hitbox(WorldObject owner, float[] model) {
 		this.owner = owner;
 		this.model = model;
+		this.position = owner.getPosition().copy();
 		generateLines();
 	}
 	
@@ -136,9 +139,11 @@ public class Hitbox implements Serializable {
 	}
 	
 	public void rotate(float radians) {
+		if (radians == 0)
+			return;
 		if (this.owner.getProperty(Properties.KEY_HITBOX_HAS_ROTATION) == Properties.VALUE_HITBOX_HAS_ROTATION_TRUE)
 			for (Line l : lines)
-				l.rotateAbout(owner.center(),radians);
+				l.rotateAbout(owner.center(),radians%((float)Math.PI * 2));
 	}
 	
 	public void translate(float dx, float dy) {
@@ -158,7 +163,6 @@ public class Hitbox implements Serializable {
 			y+=mp.y;
 		}
 		Vector2 mp = new Vector2(x/lines.length,y/lines.length);
-		mp.round(0.01f);
 		return mp;
 	}
 	

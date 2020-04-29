@@ -110,8 +110,8 @@ public abstract class Human extends Entity {
 			if (vehicle.getVelocity().getLength() != 0)
 				continue;
 			//get the distance
-			float distance = this.distanceTo(vehicle);
-			if (distance < maxDistance && distance < distanceToVehicle) {
+			float distance = this.squaredDistanceTo(vehicle);
+			if (distance < maxDistance * maxDistance && distance < distanceToVehicle * distanceToVehicle) {
 				distanceToVehicle = distance;
 				closest = vehicle;
 			}
@@ -145,6 +145,10 @@ public abstract class Human extends Entity {
 	 * if the player is riding one
 	 */
 	public void exitVehicle() {
+		//move the human out the left side of the vehicle
+		float dir = (float)(-Math.PI/2+this.riding.getRotation());
+		float dist =  1.0f;
+		this.setPosition(this.getX() + (float)Math.cos(dir) * dist, this.getY() + (float)Math.sin(dir) * dist);
 		this.riding.setDriver(null);
 		this.riding = null;
 	}

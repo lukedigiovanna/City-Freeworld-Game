@@ -98,7 +98,7 @@ public class Player extends Human {
 			this.getVelocity().zero();
 			
 			if (this.getRiding() == null) {
-				this.enabledHitbox();
+				this.enableHitbox();
 				float mag = 0.0f;
 				float r = 0.0f;
 				

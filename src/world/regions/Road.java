@@ -78,6 +78,11 @@ public class Road implements Serializable {
 		//loop through each car on the road to update it
 		for (int i = 0; i < cars.size(); i++) {
 			Car car = cars.get(i);
+			if (!car.isAIControlled()) {
+				removeCar(car);
+				i--;
+				continue;
+			}
 			int goalIndex = goals.get(i);
 			Vector2 goal = this.points.get(goalIndex);
 			//set the cars trajectory to be towards the goal

@@ -23,7 +23,7 @@ public abstract class Vehicle extends Entity {
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.setVerticalHeight(7.5f);
 		//this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
-		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
+		//this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 	}
 	
 	public Human getDriver() {
@@ -77,5 +77,9 @@ public abstract class Vehicle extends Entity {
 	public void turnLeft(float dt) {
 		this.rotate(-turnSpeed * dt);
 		//this.velocity.r = -turnSpeed;
+	}
+	
+	public boolean isAIControlled() {
+		return this.driver == null;
 	}
 }

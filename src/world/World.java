@@ -130,7 +130,6 @@ public class World implements Serializable {
 		this.saveName = saveName;
 		
 		regions = new ArrayList<Region>();
-		
 		//add in all the regions
 		Region next;
 		while ((next = Region.generateWorldRegion(this,worldName,regions.size())) != null)

@@ -67,7 +67,7 @@ public abstract class WorldObject implements Serializable {
 		return this.verticalHeight;
 	}
 	
-	public void enabledHitbox() {
+	public void enableHitbox() {
 		this.hitbox.enable();
 	}
 	
@@ -123,8 +123,6 @@ public abstract class WorldObject implements Serializable {
 		if (this.getRegion() == null)
 			return;
 		
-		this.position.round(0.005f);
-		
 		this.updateRigidLines();
 		
 		//update the position history..
@@ -137,7 +135,7 @@ public abstract class WorldObject implements Serializable {
 		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_TRUE)
 			this.correctOutOfWalls();
 		
-		this.regenerateHitbox();
+		//this.regenerateHitbox();
 		
 		updateLightValue();
 		
@@ -342,6 +340,11 @@ public abstract class WorldObject implements Serializable {
 		move(0,0,radians);
 	}
 	
+	/**
+	 * Sets the rotation of the object accounting for collision
+	 * Different from setR(), which sets the value no matter what.
+	 * @param radians
+	 */
 	public void setRotation(float radians) {
 		this.moveR(radians-this.getRotation());
 	}
@@ -378,6 +381,9 @@ public abstract class WorldObject implements Serializable {
 	
 	public void drawHitbox(Camera c) {
 		hitbox.draw(c);
+		c.setColor(java.awt.Color.BLUE);
+		c.fillOval(getX()-0.05f, getY()-0.05f, 0.1f, 0.1f);
+		c.fillOval(centerX()-0.05f, centerY()-0.05f, 0.1f, 0.1f);
 	}
 	
 	public void drawFieldOfView(Camera c) {
@@ -543,36 +549,29 @@ public abstract class WorldObject implements Serializable {
 	public Line moveR(float dr) {
 		if (dr == 0)
 			return null;
-		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE) {
-			this.position.r += dr;
+		if (this.getProperty(Properties.KEY_HAS_COLLISION) == Properties.VALUE_HAS_COLLISION_FALSE || this.getRegion() == null) {
+			this.setR(this.getRotation() + dr);
 			return null;
 		}
 		float checkStep = COLLISION_ROTATION_CHECK_STEP*MathUtils.sign(dr);
-		if (this.getRegion() == null) {
-			this.position.r += dr;
-			this.hitbox.rotate(dr);
-			return null;
-		}
 		List<Line> walls = this.getRigidLines();
 		Vector2 intersection;
 		int iterations = (int)(dr/checkStep);
 		for (int i = 0; i < iterations; i++) {
-			this.position.r += checkStep;
-			this.hitbox.rotate(checkStep);
+			this.setR(this.position.r + checkStep);
 			//now check for collision
 			for (Line l : walls) {
 				intersection = this.hitbox.intersecting(l);
 				if (intersection != null) {
 					//we done
-					this.position.r -= checkStep; //go back out of the collision zone
-					this.hitbox.rotate(-checkStep);
+					//go back out of the collision zone
+					this.setR(this.position.r - checkStep);
 					return l;
 				}
 			}
 		}
 		float extraMovement = iterations * checkStep - dr;
-		this.position.r -= extraMovement;
-		this.hitbox.rotate(-extraMovement);
+		this.setR(this.position.r - extraMovement);
 		return null;
 	}
 	
@@ -622,6 +621,10 @@ public abstract class WorldObject implements Serializable {
 		setPosition(new Vector2(x,y,position.r));
 	}
 	
+	public void setPosition(float x, float y, float r) {
+		setPosition(new Vector2(x,y,r));
+	}
+	
 	/**
 	 * Sets the current position from a vector
 	 * ALL CHANGES TO POSITION SHOULD RUN THROUGH THIS METHOD
@@ -629,8 +632,12 @@ public abstract class WorldObject implements Serializable {
 	 * @param pos the vector
 	 */
 	public void setPosition(Vector2 pos) {
-		hitbox.translate(pos.x-position.x,pos.y-position.y);
-		this.position = pos;
+		Vector2 copy = this.position.copy();
+		this.position.x = pos.x;
+		this.position.y = pos.y;
+		this.position.r = pos.r;
+		hitbox.translate(pos.x-copy.x,pos.y-copy.y);
+		hitbox.rotate(pos.r-copy.r);
 	}
 	
 	public void setX(float x) {
@@ -639,6 +646,10 @@ public abstract class WorldObject implements Serializable {
 	
 	public void setY(float y) {
 		setPosition(getX(),y);
+	}
+	
+	public void setR(float r) {
+		setPosition(getX(),getY(),r);
 	}
 	
 	/**
@@ -725,13 +736,13 @@ public abstract class WorldObject implements Serializable {
 			this.setY(this.getY() + dy);
 			this.setRotation(this.getRotation() + dr);
 			if(hitbox.satIntersecting(other.hitbox)) {
-				this.position = constPos;
+				this.setPosition(constPos);
 				return true; //we found collision.. cut out now.
 			}
 		}
 		
 		//reset the position
-		this.position = constPos;
+		this.setPosition(constPos);
 	
 		return false;
 	}

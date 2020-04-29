@@ -267,8 +267,12 @@ public class Camera {
 	}
 	
 	private void updateVectors() {
-		this.drawPos = this.position.copy();
 		this.drawDim = this.dimension.copy();
+		//get world width of a pixel
+		float pixelWidth = (1f/drawDim.x)/16f,
+			  pixelHeight = (1f/drawDim.y)/16f;
+		this.drawPos = this.position.copy();
+		this.drawPos.round(MathUtils.max(pixelWidth, pixelHeight)/2);
 	}
 	 
 	/*
