@@ -9,7 +9,7 @@ import world.*;
 
 public class Game {
 	
-	private static final int TICKS_PER_SECOND = 20;
+	private static final int TICKS_PER_SECOND = 1000;
 	public static final int IDEAL_REFRESH_RATE = 1000/TICKS_PER_SECOND;
 	private long wait = IDEAL_REFRESH_RATE; //default
 	

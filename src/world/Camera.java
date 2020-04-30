@@ -81,7 +81,10 @@ public class Camera {
 		this(focus, x, y, (float)width/CELL_SIZE, (float)height/CELL_SIZE);
 	}
 	
+	private float timeInCurrentRegion = 0f;
 	public void linkToRegion(Region region) {
+		if (this.region != region)
+			this.timeInCurrentRegion = 0;
 		this.region = region;
 	}
 	
@@ -133,9 +136,23 @@ public class Camera {
 	 * Moves the camera to adjust for centering on the focused entity
 	 */
 	private float margin = 0.1f;
+	private float maxSize = 30, normalSize = 20;
+	private final float zoomTime = 5f;
 	public void adjustPosition(float dt) {
+		this.timeInCurrentRegion+=dt;
 		if (focus == null)
 			return; //don't adjust camera pos if there is no focus
+		if (this.timeInCurrentRegion < zoomTime/2) {
+			float term = this.timeInCurrentRegion - zoomTime;
+			float percent = (term*term*term*term)*(1f/(zoomTime*zoomTime*zoomTime*zoomTime));
+			float size = normalSize + (maxSize-normalSize)*percent;
+			float ratio = this.getHeight() / this.getWidth();
+			this.dimension.x = size;
+			this.dimension.y = size * ratio;
+			//keep the focus as the center
+			this.position.x = focus.getX() - this.dimension.x/2;
+			this.position.y = focus.getY() - this.dimension.y/2;
+		}
 		float cx = position.x + dimension.x/2, cy = position.y + dimension.y/2;
 		float mx = dimension.x*margin, my = dimension.y*margin;
 		float fx = focus.centerX(), fy = focus.centerY();

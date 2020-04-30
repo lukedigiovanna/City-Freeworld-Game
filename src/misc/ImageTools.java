@@ -38,9 +38,6 @@ public class ImageTools {
 		if (image == null || image.getWidth(null) < 0 || image.getHeight(null) < 0)
 			return IMAGE_NOT_FOUND;
 		
-		if (image instanceof BufferedImage)
-			return (BufferedImage)image;
-		
 		BufferedImage img = new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
 		img.getGraphics().drawImage(image, 0, 0, null);
 		return img;

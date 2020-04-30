@@ -301,6 +301,14 @@ public class EditorRegion {
 	public void addRowTop() {
 		for (ArrayList<EditorCell> list : grid)
 			list.add(0, new EditorCell());
+		for (EditorObject o : this.objects)
+			o.y++;
+		for (EditorPortal p : this.portals)
+			p.y++;
+		for (EditorWall w : this.walls){
+			w.y1++;
+			w.y2++;
+		}
 		this.height++;
 	}
 	
@@ -309,6 +317,14 @@ public class EditorRegion {
 		for (int i = 0; i < height; i++)
 			newCol.add(new EditorCell());
 		grid.add(0, newCol);
+		for (EditorObject o : this.objects)
+			o.x++;
+		for (EditorPortal p : this.portals)
+			p.x++;
+		for (EditorWall w : this.walls){
+			w.x1++;
+			w.x2++;
+		}
 		this.width++;
 	}
 	

@@ -14,6 +14,7 @@ import main.Keyboard;
 import main.Program;
 import misc.Color8;
 import misc.ImageTools;
+import misc.MathUtils;
 import weapons.Weapon;
 import world.Camera;
 import world.World;
@@ -50,9 +51,7 @@ public class GameDrawer {
 	
 	private FrameTimer ft = new FrameTimer();
 	
-	private void updateCamera() {
-		float dt = ft.mark();
-		
+	private void updateCamera(float dt) {
 		boolean gamePaused = game.isPaused();
 		if (!gamePaused) {
 			camera.linkToRegion(player.getRegion());
@@ -91,24 +90,36 @@ public class GameDrawer {
 	public static final float CAMERA_PERCENT_WIDTH = 1.0f, CAMERA_PERCENT_HEIGHT = 1.0f;
 	public static final int CAMERA_PIXEL_WIDTH = (int)(CAMERA_PERCENT_WIDTH*Program.DISPLAY_WIDTH), CAMERA_PIXEL_HEIGHT = (int)(CAMERA_PERCENT_HEIGHT*Program.DISPLAY_HEIGHT);
 	
+	private float pauseTimer = 0;
+	private BufferedImage pauseScreenBackgroundStill = null;
 	public void draw(Graphics2D sg) {
 		Graphics2D g = this.gameScreen.createGraphics();
 		
-		updateCamera();
+		float dt = ft.mark();
+		updateCamera(dt);
 		
 		if (game.isPaused()) {
+			if (pauseTimer == 0)
+				pauseScreenBackgroundStill = ImageTools.toBufferedImage(gameScreen);
+			pauseTimer+=dt;
 			//make the game gray scaled
-			if (pauseBackground == null)
-				pauseBackground = ImageTools.colorscale(gameScreen, Color.WHITE);
+			int cVal = MathUtils.max((int)(255 - 155 * (pauseTimer/0.75)),100);
+			Color c = new Color(cVal,cVal,cVal);
+			if (pauseTimer < 0.75f)
+				pauseBackground = ImageTools.colorscale(pauseScreenBackgroundStill, c);
 			g.drawImage(pauseBackground, 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
-			g.setColor(Color.RED);
-			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
-			Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
-			for (PauseButton b : pButs) {
-				b.check();
-				b.draw(g);
+			if (pauseTimer > 0.75) {
+				g.setColor(Color.RED);
+				g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
+				Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
+				for (PauseButton b : pButs) {
+					b.check();
+					b.draw(g);
+				}
 			}
 		} else {
+			pauseTimer = 0;
+			
 			checkKeys();
 			
 			pauseBackground = null;

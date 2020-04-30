@@ -89,6 +89,12 @@ public class MathUtils {
 		return Math.abs(val1-val2) < 0.001f;
 	}
 	
+	/**
+	 * Returns the lower of two integers
+	 * @param num1
+	 * @param num2
+	 * @return
+	 */
 	public static int min(int num1, int num2) {
 		if (num1 < num2)
 			return num1;
@@ -110,6 +116,12 @@ public class MathUtils {
 			return num2;
 	}
 	
+	/**
+	 * Returns the greater of the two integer numbers
+	 * @param num1
+	 * @param num2
+	 * @return
+	 */
 	public static int max(int num1, int num2) {
 		if (num1 > num2)
 			return num1;
