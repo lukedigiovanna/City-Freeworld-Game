@@ -269,6 +269,26 @@
 "id":24.0,
 "frame_rate":999.0,
 "string_id":"Arrow",
+}, {
+"frames":[{
+"w":16.0,
+"x":80.0,
+"h":16.0,
+"y":64.0,
+}],
+"id":25.0,
+"frame_rate":999.0,
+"string_id":"Roof 1 Corner",
+}, {
+"frames":[{
+"w":16.0,
+"x":0.0,
+"h":16.0,
+"y":80.0,
+}],
+"id":26.0,
+"frame_rate":999.0,
+"string_id":"Roof 1 Edge",
 }],
 "sprite_path":"assets/texture_packs/default/tiles/tiles.json",
 }
