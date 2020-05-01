@@ -34,23 +34,13 @@ public abstract class Entity extends WorldObject {
 		tags = new ArrayList<String>();
 		addTag("entity");
 		paths = new ArrayList<Path>();
-		this.health = new Health(1,1);
+		this.health = new Health(this,1,1);
+		this.addObjectCollisionEvent(ObjectCollisionEvent.CONSERVE_MOMENTUM_AND_KINETIC_ENERGY);
 	}
 	
 	@Override
 	public void generalUpdate(float dt) {
 		super.generalUpdate(dt);
-		Region thisRegion = this.getRegion();
-		if (thisRegion != null) {
-			for (Entity e : thisRegion.getEntities().get("entity_object")) {
-				if (this != e) {
-					if (this.colliding(e)) {
-						this.onObjectCollision(e);
-						break;
-					}
-				}
-			}
-		}
 		if (this.paths.size() > 0) {
 			paths.get(0).follow(dt);
 			if (paths.get(0).completed() || paths.get(0).stalled()) {
@@ -60,7 +50,8 @@ public abstract class Entity extends WorldObject {
 		}
 		this.health.update(dt);
 		if (this.health.isDead()) {
-			this.destroy();
+			if (!this.hasTag("player"))
+				this.destroy();
 		}
 	}
 	
@@ -125,6 +116,10 @@ public abstract class Entity extends WorldObject {
 		this.paths.add(path);
 	}
 	
+	public void popTextParticle(String text, Color color) {
+		getRegion().add(new TextParticle(text,color,getX(),getY(),0.25f));
+	}
+	
 	/**
 	 * Deals damage to the entity if it is not invulnerable
 	 * @param amount
@@ -133,7 +128,7 @@ public abstract class Entity extends WorldObject {
 		//only if we aren't invulnerable
 		if (this.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE) {
 			this.health.hurt(amount);
-			this.getRegion().add(new TextParticle("-"+amount,Color.RED,getX(),getY(),0.25f));
+			this.popTextParticle("-"+amount, Color.RED);
 		}
 	}
 	

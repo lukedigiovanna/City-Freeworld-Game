@@ -10,6 +10,7 @@ import weapons.Weapon;
 import world.Camera;
 import world.Properties;
 import world.WorldObject;
+import world.regions.Region;
 
 public abstract class Human extends Entity {
 	
@@ -24,7 +25,7 @@ public abstract class Human extends Entity {
 	
 	private HumanAnimationPack animations;
 	
-	//private Vehicle riding;
+	
 	
 	public Human(float x, float y, HumanAnimationPack animations) {
 		super(x,y,animations.width,animations.height);
@@ -37,6 +38,8 @@ public abstract class Human extends Entity {
 		this.setFieldOfView(WorldObject.DEFAULT_FIELD_OF_VIEW);
 		
 		this.setVerticalHeight(7.0f); //high up
+		
+		this.setMass(60);
 		
 		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 	}

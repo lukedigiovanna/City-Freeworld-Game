@@ -8,6 +8,7 @@ import display.textures.*;
 import entities.Entity;
 import world.Camera;
 import world.Properties;
+import world.regions.Region;
 
 public class EntityObject extends Entity {
 	

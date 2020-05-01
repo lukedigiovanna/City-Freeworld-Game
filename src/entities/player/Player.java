@@ -3,9 +3,12 @@ package entities.player;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import entities.*;
+import entities.npcs.NPC;
 import entities.projectiles.Grenade;
+import entities.vehicles.Vehicle;
 import weapons.Weapon;
 import weapons.WeaponManager;
 import main.Program;
@@ -27,7 +30,8 @@ public class Player extends Human {
 		this.bankAct = new BankAccount(this);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
 		this.weaponManager = new WeaponManager(this);
-		this.health = new Health(500);
+		this.health = new Health(this,50);
+		this.health.setRegenerationRate(2.0f);
 		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 		addTag("player");
 	}
@@ -37,12 +41,17 @@ public class Player extends Human {
 		profilePicture = ImageTools.getImage("profile_1.png");
 	}
 	
+	public void addMoney(float amount) {
+		this.popTextParticle("+$"+MathUtils.round(amount, 0.01), Color.GREEN.darker());
+		this.bankAct.addMoney(amount);
+	}
+	
 	public String getMoneyDisplay() {
 		double money = MathUtils.round(bankAct.getMoney(), 0.01);
 		String monStr = money+"";
 		if (money % 0.1 == 0)
 			monStr+="0";
-		if (money % 1.0 == 0)
+		if (money % 1.0 == 0 && money > 0)
 			monStr+="0";
 		return "$"+monStr;
 	}
@@ -164,6 +173,10 @@ public class Player extends Human {
 				else
 					exitVehicle();
 			}	
+			
+			if (Program.keyboard.keyPressed(KeyEvent.VK_E)) {
+				attemptRobbery();
+			}
 		}
 		
 		Weapon selected = this.getSelectedWeapon();
@@ -180,6 +193,26 @@ public class Player extends Human {
 	
 		this.weaponManager.listen();
 		this.weaponManager.update(dt);
+	}
+	
+	public void attemptRobbery() {
+		List<Entity> npcs = this.getRegion().getEntities().get("npc");
+		Entity closest = null;
+		float maxDistance = 3.0f; //maximum distance the NPC can be away
+		float distanceToNPC = 99999.0f; //start the distance high
+		for (Entity npc : npcs) {
+			//get the distance
+			float distance = this.squaredDistanceTo(npc);
+			if (distance < maxDistance * maxDistance && distance < distanceToNPC * distanceToNPC) {
+				distanceToNPC = distance;
+				closest = npc;
+			}
+		}
+		//if the NPC is found then try to rob it
+		if (closest != null) {
+			NPC npc = (NPC)closest;
+			npc.rob(this);
+		}
 	}
 	
 	public Weapon getSelectedWeapon() {

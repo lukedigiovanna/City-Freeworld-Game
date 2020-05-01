@@ -1,8 +1,11 @@
 package entities.npcs;
 
+import java.awt.Color;
 import java.util.List;
 
 import entities.*;
+import entities.misc.TextParticle;
+import entities.player.Player;
 import misc.MathUtils;
 import weapons.Weapon;
 import world.Properties;
@@ -12,12 +15,16 @@ import world.Properties;
 public class NPC extends Human {
 	
 	public NPC(float x, float y) {
-		super(x,y,HumanAnimationPack.CHARACTER_1);
-		this.health = new Health(20,20);
+		super(x,y,HumanAnimationPack.CHARACTER_0);
+		this.health = new Health(this,20);
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_FALSE);
 		addTag("npc");
+		
+		moneyOnHand = MathUtils.round(MathUtils.random(30f,250f), 0.01f);
 	}
 
+	private float moneyOnHand = 0; //how much money the NPC has (which can be robbed)
+	
 	private float timer = MathUtils.random(5.0f,15.0f);
 	private float timerCount = 0.0f;
 	
@@ -39,39 +46,87 @@ public class NPC extends Human {
 		
 		this.thisWeapon.releaseTrigger();
 		
-//		if (angerAt != null) {
-//			this.setRotation(this.angleTo(angerAt));
-//			this.thisWeapon.pullTrigger();
-//		}
-		
-		List<Entity> players = this.getRegion().getEntities().get("player");
-		if (players.size() > 0)
-			angerAt = players.get(0);
-		
-		if (this.canSee(angerAt)) {
-			float angle = this.angleTo(angerAt);
-			this.setRotation(angle);
-			if (this.distanceTo(angerAt) > 3) {
-				float speed = 1.0f;
-				this.walkForward(speed);
-			} else {
-				this.setVelocity(0,0);
-				this.getSelectedWeapon().pullTrigger();
+		if (this.canSee(focusedAt)) {
+			float angle = this.angleTo(focusedAt);
+			if (this.state == State.ANGRY) {
+				this.setRotation(angle);
+				if (this.distanceTo(focusedAt) > 3) {
+					float speed = 1.0f;
+					this.walkForward(speed);
+				} else {
+					this.setVelocity(0,0);
+					this.getSelectedWeapon().pullTrigger();
+				}
+			} else if (this.state == State.SCARED) {
+				this.setRotation(angle + (float)Math.PI);
+				if (this.distanceTo(focusedAt) < 10) {
+					float speed = 2.0f;
+					this.walkForward(speed);
+				}
 			}
 			this.clearPaths();
 		} else if (!this.isFollowingPath()) {
 			this.setVelocity(0,0);
 		}
 		
+		if (this.beingRobbed) {
+			robTimer += dt;
+			System.out.println(robTimer);
+			particleTimer += dt;
+			this.getVelocity().zero();
+			float angle = this.angleTo(focusedAt);
+			angle += Math.PI/8 * Math.cos(robTimer * Math.PI * 4);
+			this.setRotation(angle);
+			if (particleTimer > 0.25f) {
+				particleTimer %= 0.25f;
+				this.getRegion().add(new TextParticle("!",Color.CYAN,getX(),getY(),0.25f));
+			}
+			if (robTimer > 5.0f) {
+				robber.addMoney(this.moneyOnHand);
+				this.moneyOnHand = 0.0f;
+				this.state = State.SCARED;
+				this.beingRobbed = false;
+			}
+		}
+		
 		thisWeapon.update(dt);
 	}
 	
-	private Entity angerAt = null;
-
+	private float fightWillingness = MathUtils.random(0,0f);
+	private boolean beingRobbed = false;
+	private float robTimer = 0.0f;
+	private float particleTimer = 0.0f;
+	private Player robber;
+	public void rob(Player robber) {
+		if (beingRobbed)
+			return;
+		if (Math.random() * fightWillingness < 0.5f) {
+			//go into rob mode
+			beingRobbed = true;
+			this.robber = robber;
+		} else {
+			//fight the robber	
+			this.state = State.ANGRY;
+		}
+		this.focusedAt = robber;
+	}
+	
+	public static enum State {
+		ANGRY(),
+		SCARED(),
+		IDLE()
+	}
+	
+	private Entity focusedAt = null;
+	private State state = State.IDLE;
+	
 	private Weapon thisWeapon = new Weapon(this,Weapon.Type.AK_47);
 	
 	@Override
 	public Weapon getSelectedWeapon() {
-		return thisWeapon;
+		if (this.state == State.ANGRY)
+			return thisWeapon;
+		else
+			return null;
 	}
 }

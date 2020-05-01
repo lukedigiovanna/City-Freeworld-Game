@@ -34,7 +34,8 @@ public interface ObjectCollisionEvent {
 			float w1 = obj.getVelocity().r, w2 = other.getVelocity().r;
 			Vector2 vfr = getFinalVelocities(i1, i2, w1, w2);
 			obj.setVelocity(vfx.x, vfy.x, vfr.x);
-//			other.setVelocity(vfx.y, vfy.y, vfr.y);
+			other.setVelocity(vfx.y, vfy.y, vfr.y);
+			System.out.println("called this method thing");
 		};
 		
 	public static final float ENERGY_LOSS_COEFFICIENT = 0.10f;

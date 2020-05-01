@@ -14,6 +14,11 @@ public abstract class Vehicle extends Entity {
 	 */
 	private Human driver;
 	
+	/**
+	 * The 'lawful' owner of the vehicle.
+	 */
+	private Human owner;
+	
 	public Vehicle(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		this.addTag("vehicle");
@@ -24,6 +29,14 @@ public abstract class Vehicle extends Entity {
 		this.setVerticalHeight(7.5f);
 		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_TRUE);
+	}
+	
+	public Human getOwner() {
+		return this.owner;
+	}
+	
+	public void setOwner(Human human) {
+		this.owner = human;
 	}
 	
 	public Human getDriver() {

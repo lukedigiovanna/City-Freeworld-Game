@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
+import entities.npcs.NPC;
 import entities.player.Player;
 import misc.Line;
+import misc.MathUtils;
 import misc.Vector2;
 import world.regions.Region;
 import world.regions.Road;
@@ -175,7 +177,8 @@ public class World implements Serializable {
 		
 		road2.linkRoad(road3);
 		
-		
+		for (int i = 0; i < 5; i++)
+			reg0.add(new NPC(15+MathUtils.random(-4,4),15+MathUtils.random(-4,4)));
 		
 		
 		//initialize starting region

@@ -11,7 +11,11 @@ public class BankAccount implements Serializable {
 	
 	public BankAccount(Player player) {
 		this.player = player;
-		this.money = 500.00; //default
+		this.money = 0.00; //default
+	}
+	
+	public void addMoney(double amount) {
+		this.money += amount;
 	}
 	
 	public double getMoney() {

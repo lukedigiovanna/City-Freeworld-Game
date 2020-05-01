@@ -102,11 +102,9 @@ public class GameDrawer {
 			if (pauseTimer == 0)
 				pauseScreenBackgroundStill = ImageTools.toBufferedImage(gameScreen);
 			pauseTimer+=dt;
-			//make the game gray scaled
-			int cVal = MathUtils.max((int)(255 - 155 * (pauseTimer/0.75)),100);
-			Color c = new Color(cVal,cVal,cVal);
+			//darken the screen
 			if (pauseTimer < 0.75f)
-				pauseBackground = ImageTools.colorscale(pauseScreenBackgroundStill, c);
+				pauseBackground = ImageTools.darken(pauseScreenBackgroundStill, 1-pauseTimer/1.0f);
 			g.drawImage(pauseBackground, 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 			if (pauseTimer > 0.75) {
 				g.setColor(Color.RED);
@@ -158,9 +156,17 @@ public class GameDrawer {
 			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
 			g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);
 				
+			g.setColor(Color.GREEN);
+			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), 20);
 			g.setColor(Color.RED);
-			g.fillRect(ppX+ppS+pixelPadding, ppY, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getDisplayPercent()), 20);
-				
+			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getDisplayPercent()), 20);
+			g.setColor(Color.YELLOW);
+			g.fillRect(ppX+ppS+pixelPadding+(int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * (player.getHealth().getDisplayPercent() - player.getHealth().getPercent())), 20);
+			
+			g.setColor(Color.WHITE);
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,20));
+			g.drawString(player.getMoneyDisplay(),ppX+ppS+pixelPadding, ppY+ppS-40);
+			
 			int weaponSpace = 180;
 			Weapon selected = player.getSelectedWeapon();
 			if (selected != null) {

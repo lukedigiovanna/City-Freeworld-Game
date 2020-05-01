@@ -16,6 +16,9 @@ import misc.Vector2;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,8 +113,12 @@ public class EditorPanel extends JPanel {
 					} catch (Exception e) {
 						
 					}
-					redraw();
-					
+					try {
+						redraw();
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(EditorPanel.this, "Something unexpected occurred!");
+						e.printStackTrace();
+					}
 					long now = System.currentTimeMillis();
 					
 					float dt = (float)(now-last)/1000.0f;
@@ -229,7 +236,7 @@ public class EditorPanel extends JPanel {
 	
 	private Vector2 wallP1 = null;
 	
-	public void redraw() {
+	public void redraw() throws Exception {
 		Graphics2D g = screen.createGraphics();
 		
 		//draw background
@@ -244,21 +251,23 @@ public class EditorPanel extends JPanel {
 		mp.round(0.01f);
 		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+"     X: "+mp.x+" Y: "+mp.y+"    ROT: "+rotation, 230, Program.DISPLAY_HEIGHT-8);
 		
-		if (keyboard.keyPressed('1'))
-			rotation = 0;
-		if (keyboard.keyPressed('2'))
-			rotation = 1;
-		if  (keyboard.keyPressed('3'))
-			rotation = 2;
-		if (keyboard.keyPressed('4'))
-			rotation = 3;
-		
-		if (keyboard.keyPressed(KeyEvent.VK_RIGHT))
-			rotation = (rotation + 1)%4;
-		if (keyboard.keyPressed(KeyEvent.VK_LEFT)) {
-			rotation--;
-			if (rotation < 0)
+		if (this.curTool == Tool.DRAW || this.curTool == Tool.FILL) {
+			if (keyboard.keyPressed('1'))
+				rotation = 0;
+			if (keyboard.keyPressed('2'))
+				rotation = 1;
+			if  (keyboard.keyPressed('3'))
+				rotation = 2;
+			if (keyboard.keyPressed('4'))
 				rotation = 3;
+			
+			if (keyboard.keyPressed(KeyEvent.VK_RIGHT))
+				rotation = (rotation + 1)%4;
+			if (keyboard.keyPressed(KeyEvent.VK_LEFT)) {
+				rotation--;
+				if (rotation < 0)
+					rotation = 3;
+			}
 		}
 		
 		/*
