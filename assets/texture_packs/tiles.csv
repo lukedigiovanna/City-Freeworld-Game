@@ -21,8 +21,8 @@ street_two_way_crossing,0,Black Street Yellow Dashed Lines,1
 street_two_way_no_crossing,0,Black Street Yellow Solid Lines,1
 street_two_way_double_yellow,0,Black Street Yellow Double Solid Lines,1
 street_stop_line,0,Black Street Stop Line,1
-rainbow,6,Rainbow,1.5
-rainbow2,18,Rainbow 2,1.5
+rainbow,6,Rainbow,10
+rainbow2,18,Rainbow 2,3.5
 arrow,0,Arrow,1
 roof1_corner,0,Roof 1 Corner,0.8
 roof1_edge,0,Roof 1 Edge,0.8
