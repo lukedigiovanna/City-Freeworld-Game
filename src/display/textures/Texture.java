@@ -11,11 +11,11 @@ public class Texture {
 	/*
 	 * Note the integer id is stored as the value in the hash map.
 	 */
-	
 	private Vector2 dimension;
 	private Animation animation;
 	private String stringID;
 	private float lightEmission = 0.0f;
+	private float drivability = 0.0f;
 	private float verticalHeight = 0.0f;
 	
 	public Texture(BufferedImage image, String stringID) {
@@ -44,14 +44,16 @@ public class Texture {
 		this.dimension = new Vector2(width,height);
 	}
 	
-	public Texture setLightEmission(float value) {
+	public void setLightEmission(float value) {
 		this.lightEmission  = MathUtils.clip(0, 1, value);
-		return this;
 	}
 	
-	public Texture setVerticalHeight(float value) {
+	public void setVerticalHeight(float value) {
 		this.verticalHeight = value;
-		return this;
+	}
+	
+	public void setDrivability(float value) {
+		this.drivability = value;
 	}
 	
 	public Animation getAnimation() {
@@ -72,6 +74,10 @@ public class Texture {
 	
 	public float getVerticalHeight() {
 		return this.verticalHeight;
+	}
+	
+	public float getDrivability() {
+		return this.drivability;
 	}
 	
 	public Vector2 getDimension() {

@@ -26,7 +26,7 @@ public class GamePanel extends JPanel {
 					try {
 						long first = System.currentTimeMillis();
 						double targetFPS = (double)Settings.getSetting("max_fps");
-						int targetRefresh = (int)(1000/targetFPS);
+						int targetRefresh = MathUtils.max((int)(1000/targetFPS),20);
 						repaint();
 						long elapsed = System.currentTimeMillis()-first;
 						long wait = targetRefresh;

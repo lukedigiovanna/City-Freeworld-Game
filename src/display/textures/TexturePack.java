@@ -52,12 +52,15 @@ public class TexturePack {
 		objectsMap = new HashMap<Integer, Texture>();
 		CSVFile tiles = new CSVFile(TEXTURE_PACK_PATH+"tiles.csv");
 		tiles.removeRows(1); //remove the header
+		System.out.println("Creating texture pack: "+this.name);
 		for (int row = 0; row < tiles.getNumberOfRows(); row++) {
 			String stringID = tiles.getString(row, 0);
 			int frameRate=  tiles.getInt(row, 1);
 			String displayName = tiles.getString(row, 2);
 			float drivability = tiles.getFloat(row, 3);
 			addTileTexture(stringID,stringID+"_",frameRate,displayName);
+			Texture texture = this.tilesMap.get(tilesMap.size()-1);
+			texture.setDrivability(drivability);
 		}
 		CSVFile objects = new CSVFile(TEXTURE_PACK_PATH+"objects.csv");
 		objects.removeRows(1); //remove header
@@ -68,9 +71,12 @@ public class TexturePack {
 			float light = objects.getFloat(row, 4), vHeight = objects.getFloat(row, 5);
 			String displayName = objects.getString(row, 6);
 			if (frameRate == 0)
-				addObjectTexture(stringID,width,height,light,vHeight,displayName);
+				addObjectTexture(stringID,width,height,displayName);
 			else
-				addObjectTexture(stringID,stringID+"_",frameRate,width,height,light,vHeight,displayName);
+				addObjectTexture(stringID,stringID+"_",frameRate,width,height,displayName);
+			Texture texture = objectsMap.get(objectsMap.size()-1);
+			texture.setLightEmission(light);
+			texture.setVerticalHeight(vHeight);
 		}
 		save();
 		load();
@@ -87,12 +93,12 @@ public class TexturePack {
 			tilesMap.put(tilesMap.size(), new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/tiles/"+folderName, prefix),frameRate,stringID));
 	}
 	
-	private void addObjectTexture(String imageName, float width, float height, float light, float vHeight, String stringID) {
-		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName+".png"),width,height,stringID)).setLightEmission(light).setVerticalHeight(vHeight));
+	private void addObjectTexture(String imageName, float width, float height, String stringID) {
+		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImage("assets/texture_packs/"+this.name+"/objects/"+imageName+".png"),width,height,stringID)));
 	}
 	
-	private void addObjectTexture(String folderName, String prefix, int frameRate, float width, float height, float light, float vHeight, String stringID) {
-		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/objects/"+folderName, prefix), frameRate,width,height,stringID)).setLightEmission(light).setVerticalHeight(vHeight));
+	private void addObjectTexture(String folderName, String prefix, int frameRate, float width, float height, String stringID) {
+		objectsMap.put(objectsMap.size(), (new Texture(ImageTools.getImages("assets/texture_packs/"+this.name+"/objects/"+folderName, prefix), frameRate,width,height,stringID)));
 	}
 	
 	/**

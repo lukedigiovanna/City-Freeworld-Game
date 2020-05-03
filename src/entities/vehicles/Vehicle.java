@@ -2,6 +2,7 @@ package entities.vehicles;
 
 import misc.MathUtils;
 import world.Properties;
+import display.textures.Texture;
 import entities.*;
 
 /**
@@ -52,21 +53,37 @@ public abstract class Vehicle extends Entity {
 	public void update(float dt) {
 		this.timeSinceLastBrake+=dt;
 		float speed = this.getVelocity().getLength();
-		speed -= frictionalEffect * dt;
+		if (this.driver != null)
+			System.out.println(this.getDrivability());
+		float friction = 1-this.getDrivability();
+		friction += frictionalEffect;
+		speed -= friction * dt;
 		speed = MathUtils.clip(0, maxSpeed, speed);
 		this.getVelocity().setMagnitude(speed);
 		this.getVelocity().setAngle(this.getRotation());
 	}
 	
 	private float acceleration = 1.0f;
-	private float maxSpeed = 5.0f;
+	private float maxSpeed = 50.0f;
 	
 	public void accelerate(float dt) {
 		if (this.timeSinceLastBrake < 1f) //min wait of 1 second before the car can start accelerating again.
 			return;
+		float tileFriction = this.getDrivability();
 		float speed = this.getVelocity().getLength();
-		speed += acceleration * dt;
+		speed += acceleration * tileFriction * dt;
 		this.getVelocity().setMagnitude(speed);
+	}
+	
+	/**
+	 * Gets the drivability of the tile that the vehicle is currently on
+	 * @return
+	 */
+	private float getDrivability() {
+		Texture texture = this.getRegion().getGrid().get((int)this.centerX(),(int)this.centerY()).getTexture();
+		if (this.driver != null)
+			System.out.println(texture.getStringID());
+		return texture.getDrivability();
 	}
 	
 	private float brakePower = 2.0f;

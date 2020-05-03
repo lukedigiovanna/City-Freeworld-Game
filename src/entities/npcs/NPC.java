@@ -5,6 +5,7 @@ import java.util.List;
 
 import entities.*;
 import entities.misc.TextParticle;
+import entities.misc.pickups.CashPickup;
 import entities.player.Player;
 import misc.MathUtils;
 import weapons.Weapon;
@@ -62,6 +63,10 @@ public class NPC extends Human {
 				if (this.distanceTo(focusedAt) < 10) {
 					float speed = 2.0f;
 					this.walkForward(speed);
+				} else {
+					this.state = State.IDLE;
+					this.focusedAt = null;
+					this.setVelocity(0,0);
 				}
 			}
 			this.clearPaths();
@@ -71,7 +76,6 @@ public class NPC extends Human {
 		
 		if (this.beingRobbed) {
 			robTimer += dt;
-			System.out.println(robTimer);
 			particleTimer += dt;
 			this.getVelocity().zero();
 			float angle = this.angleTo(focusedAt);
@@ -79,20 +83,21 @@ public class NPC extends Human {
 			this.setRotation(angle);
 			if (particleTimer > 0.25f) {
 				particleTimer %= 0.25f;
-				this.getRegion().add(new TextParticle("!",Color.CYAN,getX(),getY(),0.25f));
+				this.popTextParticle("!", Color.CYAN);
 			}
 			if (robTimer > 5.0f) {
 				robber.addMoney(this.moneyOnHand);
 				this.moneyOnHand = 0.0f;
 				this.state = State.SCARED;
 				this.beingRobbed = false;
+				robTimer = 0;
 			}
 		}
 		
 		thisWeapon.update(dt);
 	}
 	
-	private float fightWillingness = MathUtils.random(0,0f);
+	private float fightWillingness = MathUtils.random(0,1.0f);
 	private boolean beingRobbed = false;
 	private float robTimer = 0.0f;
 	private float particleTimer = 0.0f;
@@ -100,7 +105,7 @@ public class NPC extends Human {
 	public void rob(Player robber) {
 		if (beingRobbed)
 			return;
-		if (Math.random() * fightWillingness < 0.5f) {
+		if (Math.random() * fightWillingness < 0.6f) { //most people will succumb
 			//go into rob mode
 			beingRobbed = true;
 			this.robber = robber;
@@ -128,5 +133,14 @@ public class NPC extends Human {
 			return thisWeapon;
 		else
 			return null;
+	}
+	
+	@Override
+	public void destroy() {
+		if (this.health.isDead()) {
+			//summon our cash
+			this.getRegion().add(new CashPickup(this.getX(),this.getY(),this.moneyOnHand));
+		}
+		super.destroy();
 	}
 }
