@@ -24,8 +24,13 @@ public class TexturePack {
 	
 	private static final String TEXTURE_PACK_PATH = "assets/texture_packs/";
 	
-	public static final TexturePack DEFAULT = new TexturePack("default");
-	private static TexturePack currentPack = DEFAULT;
+	public static TexturePack DEFAULT;
+	private static TexturePack currentPack;
+	
+	public static void initialize() {
+		DEFAULT = new TexturePack("default");
+		currentPack = DEFAULT;
+	}
 	
 	public static TexturePack current() {
 		return currentPack;

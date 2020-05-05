@@ -54,6 +54,7 @@ public class Texture {
 	
 	public void setDrivability(float value) {
 		this.drivability = value;
+		System.out.println(this.stringID+", "+this.getDrivability());
 	}
 	
 	public Animation getAnimation() {

@@ -4,6 +4,7 @@ import java.awt.*;
 
 import display.DisplayController;
 import display.console.Command;
+import display.textures.TexturePack;
 import misc.ImageTools;
 import soundEngine.SoundManager;
 import soundEngine.Sounds;
@@ -53,6 +54,7 @@ public class Program {
 	private static boolean initialized = false;
 	
 	public static void init() {
+		TexturePack.initialize();
 		Command.initialize();
 		Settings.initialize();
 		initFrame(); //opens up the window and creates a game panel object
