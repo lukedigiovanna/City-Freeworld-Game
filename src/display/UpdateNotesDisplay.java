@@ -12,9 +12,21 @@ public class UpdateNotesDisplay extends Display {
 	private String[] notes = {
 		"Implemented a command system in the developer console",
 		"    These are only accessible in developer versions not releases",
-		"NPCs now see within a field of view",
-		"Road structure added",
+		"New NPC logic",
+		"    Can only 'see' the player within a field of view",
+		"    Player can mug NPCs and still their money by pressing 'E'",
+		"    NPC may turn hostile and try to kill the player when mugged",
+		"    NPCs drop their money, if any, when killed",
+		"Some more visual updates:",
+		"    Updated the player GUI, better health display and shows money",
+		"    Pause screen now fades the gameplay",
+		"    Loading screen until the scene loads",
+		"    Camera zooms in on the player at the beginning of a new scene",
+		"Vehicle modifcations",
 		"    Cars travel down the roads now",
+		"    Vehicle movement now responds to the tile it drives across",
+		"    Vehicles controlled by AI will no longer ram into each other",
+		"        Allows the player to steal vehicles when they stop",
 		"Added saving/loading game saves"
 	};
 	

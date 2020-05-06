@@ -25,10 +25,9 @@ public class Cell extends WorldObject {
 		loadAssets();
 	}
 	
-	public void loadAssets() {
+	public void loadAssets() { 
 		this.texture = TexturePack.current().getTileTexture(id);
-		//texture.setDrivability(1.0f);
-		System.out.println(texture.getStringID()+" "+texture.getDrivability());
+		System.out.println(this.texture.getDrivability());
 		this.animation = texture.createAnimation();
 	}
 	

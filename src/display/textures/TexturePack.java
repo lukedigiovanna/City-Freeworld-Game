@@ -84,7 +84,7 @@ public class TexturePack {
 			texture.setVerticalHeight(vHeight);
 		}
 		save();
-		load();
+		//load();
 	}
 	
 	private void addTileTexture(String imageName, String stringID) {

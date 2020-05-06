@@ -55,9 +55,10 @@ public abstract class Vehicle extends Entity {
 		float speed = this.getVelocity().getLength();
 		if (this.driver != null)
 			System.out.println(this.getDrivability());
-		float friction = 1-this.getDrivability();
-		friction += frictionalEffect;
-		speed -= friction * dt;
+		float friction = 0.05f/this.getDrivability() + frictionalEffect;
+		if (this.driver != null)
+			System.out.println(friction + ", "+ speed);
+		speed -= (friction * dt);
 		speed = MathUtils.clip(0, maxSpeed, speed);
 		this.getVelocity().setMagnitude(speed);
 		this.getVelocity().setAngle(this.getRotation());
@@ -71,7 +72,7 @@ public abstract class Vehicle extends Entity {
 			return;
 		float tileFriction = this.getDrivability();
 		float speed = this.getVelocity().getLength();
-		speed += acceleration * tileFriction * dt;
+		speed = speed + (acceleration * tileFriction * dt);
 		this.getVelocity().setMagnitude(speed);
 	}
 	

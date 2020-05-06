@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * Represents an EntityObject in the Level Editor
  */
-public class EditorObject {
+public class EditorObject implements EditorComponent {
 	public int id;
 	public float x, y;
 	

@@ -137,9 +137,10 @@ public class NPC extends Human {
 	
 	@Override
 	public void destroy() {
-		if (this.health.isDead()) {
+		if (this.health.isDead()) { //only if killed from hit depletion, not other game mechanics
 			//summon our cash
-			this.getRegion().add(new CashPickup(this.getX(),this.getY(),this.moneyOnHand));
+			if (this.moneyOnHand > 0)
+				this.getRegion().add(new CashPickup(this.getX(),this.getY(),this.moneyOnHand));
 		}
 		super.destroy();
 	}
