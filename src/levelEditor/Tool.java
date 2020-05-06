@@ -15,7 +15,8 @@ public enum Tool {
 	EXPAND("expand","Expand","Use arrows to adjust the size"),
 	SHRINK("shrink","Shrink","Use arrows to adjust the size"),
 	DELETE("delete","Delete","Delete objects/walls/portals"),
-	SET_LIGHT("light","Local Light","Set the regional light value");
+	SET_LIGHT("light","Local Light","Set the regional light value"),
+	ROAD("road","Road","Add in roads");
 	
 	BufferedImage img;
 	String name;

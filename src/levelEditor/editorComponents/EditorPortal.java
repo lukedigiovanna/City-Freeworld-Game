@@ -1,9 +1,10 @@
 package levelEditor.editorComponents;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class EditorPortal {
+public class EditorPortal implements EditorComponent {
 	public int destinationNumber;
 	
 	public float x, y, width, height;
@@ -37,6 +38,25 @@ public class EditorPortal {
 		out.write((int)((destX%1.0f)*255)); //dest x-coord decimal
 		out.write((int)(destY));            //dest y-coord whole number
 		out.write((int)((destY%1.0f)*255)); //dest y-coord decimal
+	}
+	
+	public void read(DataInputStream in) throws IOException {
+		this.destinationNumber = in.read();
+		this.x = in.read() + in.read() / 256.0f;
+		this.y = in.read() + in.read() / 256.0f;
+		this.width = in.read() + in.read() / 256.0f;
+		this.height = in.read() + in.read() / 256.0f;
+		this.destX = in.read() + in.read() / 256.0f;
+		this.destY = in.read() + in.read() / 256.0f;
+	}
+	
+	public void translate(int dx, int dy) {
+		this.x += dx;
+		this.y += dy;
+	}
+	
+	public String getString() {
+		return "portal";
 	}
 	
 	public String toString() {

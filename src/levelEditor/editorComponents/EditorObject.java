@@ -1,5 +1,6 @@
 package levelEditor.editorComponents;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -26,5 +27,20 @@ public class EditorObject implements EditorComponent {
 		out.write((int)(x%1.0f*255));
 		out.write((int)y);
 		out.write((int)(y%1.0f*255));
+	}
+	
+	public void read(DataInputStream in) throws IOException {
+		this.id = in.read();
+		this.x = in.read() + in.read()/256.0f;
+		this.y = in.read() + in.read()/256.0f;
+	}
+	
+	public void translate(int dx, int dy) {
+		this.x += dx;
+		this.y += dy;
+	}
+	
+	public String getString() {
+		return "object";
 	}
 }

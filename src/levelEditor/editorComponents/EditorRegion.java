@@ -29,11 +29,8 @@ public class EditorRegion {
 	private int width, height;
 	private ArrayList<ArrayList<EditorCell>> grid; // a value of -1 indicates that no tile has been defined
 	
-	private List<EditorPortal> portals;
-	
-	private List<EditorWall> walls;
-	
-	private List<EditorObject> objects;
+	private static final String[] TYPES = {"portal","wall","object"};
+	private List<EditorComponent> components; //all other float position components of the game board
 	
 	private float localLightValue = 0.0f;
 	
@@ -65,14 +62,8 @@ public class EditorRegion {
 			grid.add(column);
 		}
 		
-		//initialize the portal list
-		portals = new ArrayList<EditorPortal>();
-		
-		//initialize the wall list
-		walls = new ArrayList<EditorWall>();
-		
-		//initialize the object list
-		objects = new ArrayList<EditorObject>();
+		//initialize the component list
+		this.components = new ArrayList<EditorComponent>();
 	}
 	
 	/**
@@ -105,42 +96,27 @@ public class EditorRegion {
 				}
 			}
 			
-			//add in the portals next
-			this.portals = new ArrayList<EditorPortal>();
-			int numPortals = in.read();
-			for (int i = 0; i < numPortals; i++) {
+			this.components = new ArrayList<EditorComponent>();
+			
+			int numOfPortals = in.read();
+			for (int i = 0; i < numOfPortals; i++) {
 				EditorPortal p = new EditorPortal();
-				p.destinationNumber = in.read();
-				p.x = in.read() + in.read()/256.0f;
-				p.y = in.read() + in.read()/256.0f;
-				p.width = in.read() + in.read()/256.0f;
-				p.height = in.read() + in.read()/256.0f;
-				p.destX = in.read() + in.read()/256.0f;
-				p.destY = in.read() + in.read()/256.0f;
-				portals.add(p);
+				p.read(in);
+				this.components.add(p);
 			}
 			
-			//add in the walls next
-			this.walls = new ArrayList<EditorWall>();
-			int numWalls = in.read();
-			for (int i = 0; i < numWalls; i++) {
-				EditorWall w = new EditorWall();
-				w.x1 = in.read() + in.read()/256.0f;
-				w.y1 = in.read() + in.read()/256.0f;
-				w.x2 = in.read() + in.read()/256.0f;
-				w.y2 = in.read() + in.read()/256.0f;
-				walls.add(w);
+			int numOfWalls = in.read();
+			for (int i = 0; i < numOfWalls; i++) {
+				EditorWall p = new EditorWall();
+				p.read(in);
+				this.components.add(p);
 			}
 			
-			//add in the objects next
-			this.objects = new ArrayList<EditorObject>();
-			int numObjects = in.read();
-			for (int i = 0; i < numObjects; i++) {
-				EditorObject o = new EditorObject();
-				o.id = in.read();
-				o.x = in.read() + in.read()/256.0f;
-				o.y = in.read() + in.read()/256.0f;
-				objects.add(o);
+			int numOfObjects = in.read();
+			for (int i = 0; i < numOfObjects; i++) {
+				EditorObject p = new EditorObject();
+				p.read(in);
+				this.components.add(p);
 			}
 			
 			//set the local light value
@@ -213,16 +189,30 @@ public class EditorRegion {
 		return grid;
 	}
 	
-	public List<EditorPortal> getPortals() {
-		return portals;
+	public void addComponent(EditorComponent c) {
+		this.components.add(c);
 	}
 	
-	public List<EditorWall> getWalls() {
-		return walls;
+	public void removeComponent(EditorComponent c) {
+		this.components.remove(c);
 	}
 	
-	public List<EditorObject> getObjects() {
-		return objects;
+	public int getNumber(String type) {
+		int count = 0;
+		for (EditorComponent c : this.components) 
+			if (c.getString().contentEquals(type))
+				count++;
+		return count;
+	}
+	
+	public List<EditorComponent> getType(String type) {
+		List<EditorComponent> list = new ArrayList<EditorComponent>();
+		for (EditorComponent c : this.components) {
+			if (c.getString().contentEquals(type)) {
+				list.add(c);
+			}
+		}
+		return list;
 	}
 	
 	public float getLocalLightValue() {
@@ -260,18 +250,13 @@ public class EditorRegion {
 					out.write(cell.rotation);
 				}
 			
-			//write the portals
-			out.write(this.portals.size());
-			for (EditorPortal p : portals)
-				p.write(out);
-			//write the walls
-			out.write(this.walls.size());
-			for (EditorWall w : walls) 
-				w.write(out);
-			//write the objects
-			out.write(this.objects.size());
-			for (EditorObject o : objects)
-				o.write(out);
+			
+			for (String type : TYPES) {
+				out.write(this.getNumber(type));
+				for (EditorComponent c : this.getType(type)) {
+					c.write(out);
+				}
+			}
 			
 			//write the local light
 			out.write((int)(this.localLightValue * 255));
@@ -301,14 +286,8 @@ public class EditorRegion {
 	public void addRowTop() {
 		for (ArrayList<EditorCell> list : grid)
 			list.add(0, new EditorCell());
-		for (EditorObject o : this.objects)
-			o.y++;
-		for (EditorPortal p : this.portals)
-			p.y++;
-		for (EditorWall w : this.walls){
-			w.y1++;
-			w.y2++;
-		}
+		for (EditorComponent c : this.components)
+			c.translate(0, 1);
 		this.height++;
 	}
 	
@@ -317,14 +296,8 @@ public class EditorRegion {
 		for (int i = 0; i < height; i++)
 			newCol.add(new EditorCell());
 		grid.add(0, newCol);
-		for (EditorObject o : this.objects)
-			o.x++;
-		for (EditorPortal p : this.portals)
-			p.x++;
-		for (EditorWall w : this.walls){
-			w.x1++;
-			w.x2++;
-		}
+		for (EditorComponent c : this.components)
+			c.translate(1, 0);
 		this.width++;
 	}
 	

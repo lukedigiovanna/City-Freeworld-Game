@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import display.textures.TexturePack;
 import display.textures.Texture;
+import levelEditor.editorComponents.EditorComponent;
 import levelEditor.editorComponents.EditorObject;
 import levelEditor.editorComponents.EditorPortal;
 import levelEditor.editorComponents.EditorRegion;
@@ -326,7 +327,8 @@ public class EditorPanel extends JPanel {
 			EditorWall closest = null;
 			float dist = 0.25f;
 			if (curTool == Tool.DELETE)
-				for (EditorWall w : region.getWalls()) {
+				for (EditorComponent c : region.getType("wall")) {
+					EditorWall w = (EditorWall)c;
 					Line l = new Line(new Vector2(w.x1,w.y1),new Vector2(w.x2,w.y2));
 					float indDist = l.distance(mp);
 					if (indDist < dist) {
@@ -347,7 +349,7 @@ public class EditorPanel extends JPanel {
 						String[] vals = JOptionPane.showInputDialog(this,"Enter portal destination coords","Add Portal",JOptionPane.QUESTION_MESSAGE).split(" ");
 						p.destX = Float.parseFloat(vals[0]);
 						p.destY = Float.parseFloat(vals[1]);
-						this.region.getPortals().add(p);
+						this.region.addComponent(p);
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(this, "Invalid entry", "Invalid Format", JOptionPane.ERROR_MESSAGE);
 					}
@@ -363,7 +365,7 @@ public class EditorPanel extends JPanel {
 						if (Math.abs(wallP2.y-wallP1.y)<0.15)
 							wallP2.y = wallP1.y;
 						EditorWall e = new EditorWall(wallP1.x,wallP1.y,wallP2.x,wallP2.y);
-						region.getWalls().add(e);
+						region.addComponent(e);
 						wallP1 = null;
 					}
 					break;
@@ -372,26 +374,27 @@ public class EditorPanel extends JPanel {
 					o.id = curObject;
 					o.x = mp.x;
 					o.y = mp.y;
-					region.getObjects().add(o);
+					region.addComponent(o);
 					break;
 				case DELETE:
 					//if the closest wall is not null then we delete it
 					if (closest != null) {
-						region.getWalls().remove(closest);
+						region.removeComponent(closest);
 						break;
 					}
 					//check to see if the mouse is over a portal
-					for (EditorPortal portal : region.getPortals()) {
+					for (EditorComponent c : region.getType("portal")) {
+						EditorPortal portal = (EditorPortal)c;
 						if (mp.x > portal.x && mp.x < portal.x + portal.width && mp.y > portal.y && mp.y < portal.y + portal.height) {
-							region.getPortals().remove(portal);
+							region.removeComponent(portal);
 							break;
 						}
 					}
-					for (int i = 0; i < region.getObjects().size(); i++) {
-						EditorObject ob = region.getObjects().get(i);
+					for (EditorComponent c : region.getType("object")) {
+						EditorObject ob = (EditorObject)c;
 						Texture t = objects.get(ob.id);
 						if (mp.x > ob.x && mp.x < ob.x + t.getWidth() && mp.y > ob.y && mp.y < ob.y + t.getHeight()) {
-							region.getObjects().remove(ob);
+							region.removeComponent(ob);
 							break;
 						}
 					}
@@ -402,7 +405,8 @@ public class EditorPanel extends JPanel {
 				if (curTool == Tool.PORTAL || curTool == Tool.OBJECT || curTool == Tool.WALL || curTool == Tool.DELETE)
 					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 			}
-			for (EditorPortal p : region.getPortals()) {
+			for (EditorComponent c : region.getType("portal")) {
+				EditorPortal p = (EditorPortal)c;
 				int px = offX + (int)(p.x * size), py = offY + (int)(p.y * size);
 				int pw = (int)(p.width * size), ph = (int)(p.height * size);
 				if (curTool == Tool.DELETE && mp.x > p.x && mp.x < p.x + p.width && mp.y > p.y && mp.y < p.y + p.height)
@@ -411,7 +415,8 @@ public class EditorPanel extends JPanel {
 					gw.setColor(Color.MAGENTA);
 				gw.fillRoundRect(px, py, pw, ph, (int)size/10, (int)size/10);
 			}
-			for (EditorWall w : region.getWalls()) {
+			for (EditorComponent c : region.getType("wall")) {
+				EditorWall w = (EditorWall)c;
 				int px1 = offX + (int)(w.x1 * size), py1 = offY + (int)(w.y1 * size);
 				int px2 = offX + (int)(w.x2 * size), py2 = offY + (int)(w.y2 * size);
 				if (w == closest)
@@ -421,7 +426,8 @@ public class EditorPanel extends JPanel {
 				gw.setStroke(new BasicStroke((int)(size * 0.1)));
 				gw.drawLine(px1, py1, px2, py2);
 			}
-			for (EditorObject o : region.getObjects()) {
+			for (EditorComponent c : region.getType("object")) {
+				EditorObject o = (EditorObject)c;
 				int px = offX + (int)(o.x * size), py = offY + (int)(o.y * size);
 				Texture texture = objects.get(o.id);
 				int pw = (int)(texture.getWidth() * size), ph = (int)(texture.getHeight() * size);
