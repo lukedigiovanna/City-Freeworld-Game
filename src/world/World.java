@@ -151,7 +151,7 @@ public class World implements Serializable {
 	
 	public Player addPlayer() {
 		Region reg0 = this.getRegion(0);
-		Player p = new Player(reg0.getWidth()/2,reg0.getHeight()/2);
+		Player p = new Player(reg0.getWidth()/2-6,reg0.getHeight()/2);
 		reg0.add(p);
 		return p;
 	}

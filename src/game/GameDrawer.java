@@ -156,12 +156,17 @@ public class GameDrawer {
 			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
 			g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);
 				
-			g.setColor(Color.GREEN);
-			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), 20);
-			g.setColor(Color.RED);
-			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getDisplayPercent()), 20);
-			g.setColor(Color.YELLOW);
-			g.fillRect(ppX+ppS+pixelPadding+(int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * (player.getHealth().getDisplayPercent() - player.getHealth().getPercent())), 20);
+			//g.setColor(Color.GREEN);
+			//g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), 20);
+			this.drawSplicedImage(g, BORDER, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0.4f, 0);
+			this.drawSplicedImage(g, GREEN_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0, 1-player.getHealth().getPercent());
+			this.drawSplicedImage(g, RED_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0, 1-player.getHealth().getDisplayPercent());
+			this.drawSplicedImage(g, YELLOW_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth -ppS - pixelPadding * 2), 20, player.getHealth().getPercent(), 0);
+			//this.drawSplicedImage(g, YELLOW_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, player.getHealth().getPercent());
+//			g.setColor(Color.RED);
+//			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getDisplayPercent()), 20);
+//			g.setColor(Color.YELLOW);
+//			g.fillRect(ppX+ppS+pixelPadding+(int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * (player.getHealth().getDisplayPercent() - player.getHealth().getPercent())), 20);
 			
 			g.setColor(Color.WHITE);
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,20));
@@ -216,6 +221,20 @@ public class GameDrawer {
 			String s = info[i];
 			sg.drawString(s, Program.DISPLAY_WIDTH-10-sg.getFontMetrics().stringWidth(s), 40+20*i);
 		}
+	}
+	
+	private static final BufferedImage 
+		BORDER = ImageTools.getImage("health_bar/border.png"),
+		RED_BAR = ImageTools.getImage("health_bar/red_bar.png"),
+		GREEN_BAR = ImageTools.getImage("health_bar/green_bar.png"),
+		YELLOW_BAR = ImageTools.getImage("health_bar/yellow_bar.png");
+	private void drawSplicedImage(Graphics2D g, BufferedImage image, int x, int y, int width, int height, float leftPercent, float rightPercent) {
+		leftPercent = MathUtils.clip(0, 1, leftPercent);
+		rightPercent = MathUtils.clip(0, 1, rightPercent);
+		BufferedImage newImg = ImageTools.spliceHorizontal(image, leftPercent, rightPercent);
+		float widthPercent = (float)newImg.getWidth()/image.getWidth();
+		int margin = (int)(leftPercent*width);
+		g.drawImage(newImg, x + margin, y, (int)(width * widthPercent), height, null);
 	}
 	
 	private abstract class PauseButton extends display.component.Button {

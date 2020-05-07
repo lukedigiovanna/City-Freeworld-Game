@@ -81,6 +81,23 @@ public class ImageTools {
 		return newImg;
 	}
 	
+	/**
+	 * Removes a percentage of the image
+	 * @param image the image to splice
+	 * @param leftPercent how much to remove from the left side of the image
+	 * @param rightPercent how much to remove from the right side of the image
+	 * @return
+	 */
+	public static BufferedImage spliceHorizontal(BufferedImage image, float leftPercent, float rightPercent) {
+		leftPercent = MathUtils.clip(0, 1, leftPercent);
+		rightPercent = MathUtils.clip(0, 1, rightPercent);
+		int width = (int)(image.getWidth() * (1-leftPercent-rightPercent));
+		int x = (int)(image.getWidth() * leftPercent);
+		if (width == 0)
+			return BLANK;
+		return image.getSubimage(x, 0, width, image.getHeight());
+	}
+	
 	public static BufferedImage rescale(BufferedImage image, int newWidth, int newHeight) {
 		BufferedImage rescaled = new BufferedImage(newWidth, newHeight, image.getType());
 		float widthFactor = (float)image.getWidth()/newWidth, heightFactor = (float)image.getHeight()/newHeight; 

@@ -15,6 +15,7 @@ concrete_sidewalk,0,Concrete Sidewalk,0.8
 street,0,Black Street,1
 side_of_street,0,Black Street Edge,1
 corner_of_street,0,Black Street Corner,1
+turn_of_street,0,Turn of Street,1
 street_same_way_crossing,0,Black Street White Dashed Lines,1
 street_same_way_no_crossing,0,Black Street White Solid Lines,1
 street_two_way_crossing,0,Black Street Yellow Dashed Lines,1

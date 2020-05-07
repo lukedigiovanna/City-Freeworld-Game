@@ -105,8 +105,11 @@ public class Region implements Serializable {
 				for (int j = 0; j < numOfLinkedRoads; j++) {
 					road.linkRoad(in.read());
 				}
+				road.setCarRate(in.read() + in.read()/256.0f);
+				road.setSpeedLimit(in.read() + in.read()/256.0f);
 				this.roadMap.addRoad(road);
 			}
+			this.roadMap.linkRoads();
 			
 			this.localLightValue = in.read()/255.0f;
 			System.out.println(localLightValue);

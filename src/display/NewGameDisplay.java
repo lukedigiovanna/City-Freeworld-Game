@@ -40,7 +40,7 @@ public class NewGameDisplay extends Display {
 //			tries++;
 //		}
 		String worldName = "temp_world"; //this for now, because we are not saving games
-		GameController.createNewGame("realworld", worldName);
+		GameController.createNewGame("newworld", worldName);
 		DisplayController.setScreen(DisplayController.Screen.GAME);
 	}
 		

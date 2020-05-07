@@ -325,11 +325,15 @@ public class EditorRegion {
 	public void removeRowTop() {
 		for (ArrayList<EditorCell> col : grid)
 			col.remove(0);
+		for (EditorComponent c : this.components) 
+			c.translate(0, -1);
 		this.height--;
 	}
 	
 	public void removeColumnLeft() {
 		grid.remove(0);
+		for (EditorComponent c : this.components) 
+			c.translate(-1, 0);
 		this.width--;
 	}
 	

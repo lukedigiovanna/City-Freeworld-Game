@@ -4,24 +4,13 @@ import javax.swing.*;
 
 import display.textures.TexturePack;
 import display.textures.Texture;
-import levelEditor.editorComponents.EditorComponent;
-import levelEditor.editorComponents.EditorObject;
-import levelEditor.editorComponents.EditorPortal;
-import levelEditor.editorComponents.EditorRegion;
-import levelEditor.editorComponents.EditorRoad;
-import levelEditor.editorComponents.EditorWall;
+import levelEditor.editorComponents.*;
 import main.*;
-import misc.ImageTools;
-import misc.Line;
-import misc.MathUtils;
-import misc.Vector2;
+import misc.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,6 +232,7 @@ public class EditorPanel extends JPanel {
 	
 	private Vector2 wallP1 = null;
 	private EditorRoad curRoad = null;
+	private EditorRoad linkingRoad = null;
 	
 	public void redraw() throws Exception {
 		Graphics2D g = screen.createGraphics();
@@ -309,7 +299,12 @@ public class EditorPanel extends JPanel {
 						gw.setColor(Color.WHITE);
 						gw.fillRect(px, py, pw, ph);
 					} else {
-						gw.drawImage(ImageTools.rotate(tiles.get(region.getGridValue(x, y)).getAnimation().getCurrentFrame(),region.getRotationValue(x, y)), px, py, pw, ph, null);
+						int gridVal = region.getGridValue(x, y);
+						if (gridVal >= 0 && gridVal < tiles.size()) {	
+							Texture text = tiles.get(gridVal);
+							if (text != null)
+								gw.drawImage(ImageTools.rotate(text.getAnimation().getCurrentFrame(),region.getRotationValue(x, y)), px, py, pw, ph, null);
+						}
 					}
 					//check for mouse clicks.. only if left button
 					if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL)) {
@@ -352,6 +347,22 @@ public class EditorPanel extends JPanel {
 						if (indDist < dist) {
 							dist = indDist;
 							closest = r;
+						}
+					}
+				}
+			}
+			EditorRoad linkerClosest = null;
+			dist = 0.25f;
+			if (this.curTool == Tool.ROAD_LINKER || this.curTool == Tool.ROAD_ATTRIB) {
+				for (EditorComponent c : region.getType("road")) {
+					EditorRoad r = (EditorRoad)c;
+					for (int i = 0; i < r.getPoints().size()-1; i++) {
+						Vector2 p1 = r.getPoints().get(i), p2 = r.getPoints().get(i+1);
+						Line l = new Line(new Vector2(p1.x,p1.y),new Vector2(p2.x,p2.y));
+						float indDist = l.distance(mp);
+						if (indDist < dist) {
+							dist = indDist;
+							linkerClosest = r;
 						}
 					}
 				}
@@ -436,6 +447,27 @@ public class EditorPanel extends JPanel {
 						}
 					}
 					break;
+				case ROAD_LINKER:
+					if (linkerClosest != null) {
+						if (this.linkingRoad != null && this.linkingRoad != linkerClosest) {
+							this.linkingRoad.link(linkerClosest);
+							System.out.println("linked "+this.linkingRoad.getID()+" to "+linkerClosest.getID());
+							this.linkingRoad = null;
+							mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+						} else {
+							this.linkingRoad = linkerClosest;
+						}
+					}
+					break;
+				case ROAD_ATTRIB:
+					if (linkerClosest != null) {
+						//set the properties
+						float carRate = Float.parseFloat(JOptionPane.showInputDialog("Enter the car rate"));
+						float speedLimit = Float.parseFloat(JOptionPane.showInputDialog("Enter the speed limit"));
+						linkerClosest.setCarRate(carRate);
+						linkerClosest.setSpeedLimit(speedLimit);
+						mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+					}
 				default:
 					break;
 				}
@@ -471,6 +503,11 @@ public class EditorPanel extends JPanel {
 					gw.setColor(Color.GREEN);
 				if (curRoad == r && timer % 1f > 0.5f)
 					gw.setColor(Color.CYAN);
+				if (linkerClosest == r)
+					gw.setColor(Color.BLUE);
+				if (linkingRoad == r && timer % 1f > 0.5f)
+					gw.setColor(Color.YELLOW);
+				
 				gw.setStroke(new BasicStroke((int)(size * 0.1)));
 				List<Vector2> points = r.getPoints();
 				for (int i = 0; i < points.size()-1; i++) {
@@ -491,6 +528,18 @@ public class EditorPanel extends JPanel {
 						epx = px + Math.cos(backAngle)*wingSize;
 						epy = py + Math.sin(backAngle)*wingSize;
 						drawLine(gw,px,py,epx,epy);
+					}
+				}
+				gw.setColor(Color.CYAN);
+				float[] dash = {(float) (0.2f * size)};
+				gw.setStroke(new BasicStroke((int)(0.1 * size),BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,5,dash,0));
+				for (Integer id : r.getLinkedIDs()) {
+					for (EditorComponent other : region.getType("road")) {
+						EditorRoad otherR = (EditorRoad)other;
+						if (id == otherR.getID()) {
+							//draw a dashed line
+							drawLine(gw, r.getLastPoint().x, r.getLastPoint().y, otherR.getFirstPoint().x, otherR.getFirstPoint().y);
+						} 
 					}
 				}
 			}

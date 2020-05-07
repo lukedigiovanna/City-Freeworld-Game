@@ -67,6 +67,14 @@ public class Road implements Serializable {
 		this.linkedRoadsID.add(id);
 	}
 	
+	public List<Integer> getLinkedIDs() {
+		return this.linkedRoadsID;
+	}
+	
+	public int getID() {
+		return this.id;
+	}
+	
 	public void setCarRate(float rate) {
 		this.carRate = rate;
 		resetWait();

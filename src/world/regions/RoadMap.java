@@ -51,6 +51,21 @@ public class RoadMap implements Serializable {
 		return this.roads;
 	}
 	
+	/**
+	 * Uses the link IDs to actually link the roads together
+	 */
+	public void linkRoads() {
+		for (Road road : this.roads) {
+			for (Integer id : road.getLinkedIDs()) {
+				for (Road link : this.roads) {
+					if (id == link.getID()) {
+						road.linkRoad(link);
+					}
+				}
+			}
+		}
+	}
+	
 	public Region getRegion() {
 		return this.region;
 	}
