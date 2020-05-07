@@ -38,10 +38,7 @@ public class DisplayController {
 	public static void redraw(Graphics2D g) {
 		if (!initialized) 
 			return;
-		
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
-		
+				
 		currentScreen.display.draw(g);
 		
 		console.listen();

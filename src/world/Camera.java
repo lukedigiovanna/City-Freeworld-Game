@@ -251,6 +251,9 @@ public class Camera {
 			Entity e = entities.get(i);
 			float rotation = e.getRotation();
 			float x = e.centerX(), y = e.centerY();
+			//check if we are within the camera viewing
+			if (x + e.getWidth() < this.drawPos.getX() || x > this.drawPos.getX()+this.drawDim.getX() || y + e.getWidth() < this.drawPos.getY() || y > this.drawPos.getY()+this.drawDim.getY())
+				continue; //no need to draw object that is out of viewing
 			rotate(rotation,x,y);
 			setLightValue(e.getLightValue());
 			e.draw(this);

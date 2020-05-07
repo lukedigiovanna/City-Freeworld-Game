@@ -250,7 +250,7 @@ public class EditorPanel extends JPanel {
 		g.setFont(new Font("Arial",Font.BOLD,12));
 		Vector2 mp = this.mouseOnRegion();
 		mp.round(0.01f);
-		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+"     X: "+mp.x+" Y: "+mp.y+"    ROT: "+rotation, 230, Program.DISPLAY_HEIGHT-8);
+		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+" ("+curTile+")     X: "+mp.x+" Y: "+mp.y+"    ROT: "+rotation, 230, Program.DISPLAY_HEIGHT-8);
 		
 		if (this.curTool == Tool.DRAW || this.curTool == Tool.FILL) {
 			if (keyboard.keyPressed('1'))
