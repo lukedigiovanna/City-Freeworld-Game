@@ -2,6 +2,7 @@ package entities.vehicles;
 
 import misc.MathUtils;
 import world.Properties;
+import world.regions.Cell;
 import display.textures.Texture;
 import entities.*;
 
@@ -81,9 +82,10 @@ public abstract class Vehicle extends Entity {
 	 * @return
 	 */
 	private float getDrivability() {
-		Texture texture = this.getRegion().getGrid().get((int)this.centerX(),(int)this.centerY()).getTexture();
-		if (this.driver != null)
-			System.out.println(texture.getStringID());
+		Cell cell = this.getRegion().getGrid().get((int)this.centerX(),(int)this.centerY());
+		if (cell == null)
+			return 1;
+		Texture texture = cell.getTexture();
 		return texture.getDrivability();
 	}
 	
@@ -95,19 +97,16 @@ public abstract class Vehicle extends Entity {
 		if (speed < 0) speed = 0;
 		this.getVelocity().setMagnitude(speed);
 		this.timeSinceLastBrake = 0;
-		//this.getRegion().addParticles(Particle.Type.TIRE_MARK, java.awt.Color.BLACK, 1, 0.0f, centerX(), centerY(), 0.1f, 0.1f);
 	}
 	
 	private float turnSpeed = (float)Math.PI/2.0f;
 	
 	public void turnRight(float dt) {
 		this.rotate(turnSpeed * dt);
-		//this.velocity.r = turnSpeed;
 	}
 	
 	public void turnLeft(float dt) {
 		this.rotate(-turnSpeed * dt);
-		//this.velocity.r = -turnSpeed;
 	}
 	
 	public boolean isAIControlled() {

@@ -140,42 +140,6 @@ public class World implements Serializable {
 		addPlayer();
 		
 		Region reg0 = regions.get(0);
-		Road road0 = new Road(reg0);
-		road0.addPoint(new Vector2(6.5f,18));
-		road0.addPoint(new Vector2(6.5f,2));
-		road0.setCarRate(0);
-		reg0.getRoadMap().addRoad(road0);
-		Road road3 = new Road(reg0);
-		road3.addPoint(new Vector2(4.5f,23));
-		road3.addPoint(new Vector2(4.5f,36));
-		road3.setCarRate(0);
-		reg0.getRoadMap().addRoad(road3);
-		Road road2 = new Road(reg0);
-		road2.addPoint(new Vector2(36,19.5f));
-		road2.addPoint(new Vector2(8,19.5f));
-		road2.linkRoad(road0);
-		road2.setSpeedLimit(2);
-		reg0.getRoadMap().addRoad(road2);
-		Road road4 = new Road(reg0);
-		road4.addPoint(new Vector2(8,21.5f));
-		road4.addPoint(new Vector2(36,21.5f));
-		road4.setSpeedLimit(2);
-		road4.setCarRate(0);
-		reg0.getRoadMap().addRoad(road4);
-		Road road = new Road(reg0);
-		road.addPoint(new Vector2(6.5f,36));
-		road.addPoint(new Vector2(6.5f,23));
-		road.linkRoad(road0);
-		road.linkRoad(road4);
-		reg0.getRoadMap().addRoad(road);
-		Road road1 = new Road(reg0);
-		road1.addPoint(new Vector2(4.5f,1.5f));
-		road1.addPoint(new Vector2(4.5f,18));
-		road1.linkRoad(road3);
-		road1.linkRoad(road4);
-		reg0.getRoadMap().addRoad(road1);
-		
-		road2.linkRoad(road3);
 		
 		for (int i = 0; i < 5; i++)
 			reg0.add(new NPC(15+MathUtils.random(-4,4),15+MathUtils.random(-4,4)));

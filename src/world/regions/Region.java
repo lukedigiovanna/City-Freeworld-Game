@@ -92,6 +92,21 @@ public class Region implements Serializable {
 				EntityObject o = new EntityObject(id,x,y);
 				this.add(o);
 			}
+			int numOfRoads = in.read();
+			for (int i = 0; i< numOfRoads; i++) {
+				int id = in.read();
+				Road road = new Road(this,id);
+				int numOfPoints = in.read();
+				for (int j = 0; j < numOfPoints; j++) {
+					Vector2 point = new Vector2(in.read() + in.read()/256.0f, in.read() + in.read()/256.0f);
+					road.addPoint(point);
+				}
+				int numOfLinkedRoads = in.read();
+				for (int j = 0; j < numOfLinkedRoads; j++) {
+					road.linkRoad(in.read());
+				}
+				this.roadMap.addRoad(road);
+			}
 			
 			this.localLightValue = in.read()/255.0f;
 			System.out.println(localLightValue);
@@ -101,7 +116,7 @@ public class Region implements Serializable {
 			exists = false; //the file does not exist
 		}
 		this.world = world;
-		this.addBoundingWalls();
+		//this.addBoundingWalls();
 	}
 	
 	/**

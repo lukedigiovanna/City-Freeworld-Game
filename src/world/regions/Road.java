@@ -15,8 +15,11 @@ import world.Camera;
 public class Road implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private int id; //for linking purposes in the data format representation of the road map
+	
 	private List<Vector2> points; //every road should be made up of AT LEAST 2 points
 	private List<Road> linkedRoads; //possible roads for the car to go to once it reaches the end of this road
+	private List<Integer> linkedRoadsID;
 	private List<Car> cars; 
 	private List<Integer> goals; //the index of the cars and goals arrays should match
 	//on average how many cars are spawned at the start of the road per real minute
@@ -31,12 +34,14 @@ public class Road implements Serializable {
 	
 	private float speedLimit = 3; //measured in m/s
 	
-	public Road(Region region) {
+	public Road(Region region, int id) {
+		this.id = id;
 		this.region = region;
 		this.points = new ArrayList<Vector2>();
 		this.cars = new ArrayList<Car>();
 		this.goals = new ArrayList<Integer>();
 		this.linkedRoads = new ArrayList<Road>();
+		this.linkedRoadsID = new ArrayList<Integer>();
 		
 		resetWait();
 	}
@@ -56,6 +61,10 @@ public class Road implements Serializable {
 	
 	public void linkRoad(Road road) {
 		this.linkedRoads.add(road);
+	}
+	
+	public void linkRoad(Integer id) {
+		this.linkedRoadsID.add(id);
 	}
 	
 	public void setCarRate(float rate) {

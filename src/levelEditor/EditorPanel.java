@@ -8,10 +8,12 @@ import levelEditor.editorComponents.EditorComponent;
 import levelEditor.editorComponents.EditorObject;
 import levelEditor.editorComponents.EditorPortal;
 import levelEditor.editorComponents.EditorRegion;
+import levelEditor.editorComponents.EditorRoad;
 import levelEditor.editorComponents.EditorWall;
 import main.*;
 import misc.ImageTools;
 import misc.Line;
+import misc.MathUtils;
 import misc.Vector2;
 
 import java.awt.*;
@@ -38,6 +40,8 @@ public class EditorPanel extends JPanel {
 	private EditorRegion region;
 	private Tool curTool = Tool.DRAW;
 	private Tool prevTool = Tool.DRAW;
+	
+	private float timer = 0.0f;
 	
 	public EditorPanel() {
 		this.setFocusable(true);
@@ -133,6 +137,8 @@ public class EditorPanel extends JPanel {
 						Texture tt = pack.getObjectTexture(i);
 						tt.getAnimation().animate(dt);
 					}
+					
+					timer+=dt;
 					
 					last = now;
 				}
@@ -236,6 +242,7 @@ public class EditorPanel extends JPanel {
 	private int rotation = 0;
 	
 	private Vector2 wallP1 = null;
+	private EditorRoad curRoad = null;
 	
 	public void redraw() throws Exception {
 		Graphics2D g = screen.createGraphics();
@@ -324,9 +331,9 @@ public class EditorPanel extends JPanel {
 					}
 				}
 			}
-			EditorWall closest = null;
+			EditorComponent closest = null;
 			float dist = 0.25f;
-			if (curTool == Tool.DELETE)
+			if (curTool == Tool.DELETE) {
 				for (EditorComponent c : region.getType("wall")) {
 					EditorWall w = (EditorWall)c;
 					Line l = new Line(new Vector2(w.x1,w.y1),new Vector2(w.x2,w.y2));
@@ -336,6 +343,20 @@ public class EditorPanel extends JPanel {
 						closest = w;
 					}
 				}
+				for (EditorComponent c : region.getType("road")) {
+					EditorRoad r = (EditorRoad)c;
+					for (int i = 0; i < r.getPoints().size()-1; i++) {
+						Vector2 p1 = r.getPoints().get(i), p2 = r.getPoints().get(i+1);
+						Line l = new Line(new Vector2(p1.x,p1.y),new Vector2(p2.x,p2.y));
+						float indDist = l.distance(mp);
+						if (indDist < dist) {
+							dist = indDist;
+							closest = r;
+						}
+					}
+				}
+			}
+			//handle tool operations that deal with clicking
 			if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL) && mouse.getX() > vx && mouse.getX() < vx + vw && mouse.getY() > vy && mouse.getY() < vy + vh) {
 				switch (curTool) {
 				case PORTAL:
@@ -367,6 +388,22 @@ public class EditorPanel extends JPanel {
 						EditorWall e = new EditorWall(wallP1.x,wallP1.y,wallP2.x,wallP2.y);
 						region.addComponent(e);
 						wallP1 = null;
+					}
+					break;
+				case ROAD:
+					if (curRoad == null) {
+						curRoad = new EditorRoad(region.getNumber("road"));
+						region.addComponent(curRoad);
+						curRoad.add(mp.copy());
+					} else {
+						Vector2 roadP2 = mp.copy();
+						Vector2 roadP1 = curRoad.getLastPoint();
+						//for straight line correction
+						if (Math.abs(roadP2.x-roadP1.x)< 0.15)
+							roadP2.x = roadP1.x;
+						if (Math.abs(roadP2.y-roadP1.y)<0.15)
+							roadP2.y = roadP1.y;
+						curRoad.add(roadP2);
 					}
 					break;
 				case OBJECT:
@@ -426,6 +463,37 @@ public class EditorPanel extends JPanel {
 				gw.setStroke(new BasicStroke((int)(size * 0.1)));
 				gw.drawLine(px1, py1, px2, py2);
 			}
+			for (EditorComponent c : region.getType("road")) {
+				EditorRoad r = (EditorRoad)c;
+				if (r == closest)
+					gw.setColor(Color.RED);
+				else
+					gw.setColor(Color.GREEN);
+				if (curRoad == r && timer % 1f > 0.5f)
+					gw.setColor(Color.CYAN);
+				gw.setStroke(new BasicStroke((int)(size * 0.1)));
+				List<Vector2> points = r.getPoints();
+				for (int i = 0; i < points.size()-1; i++) {
+					Vector2 p1 = points.get(i), p2 = points.get(i+1);
+					drawLine(gw,p1.x,p1.y,p2.x,p2.y);
+					//draw the arrows too
+					float interval = 2;
+					float wingSize = 0.5f;
+					double angle = MathUtils.getAngle(p1.x, p1.y, p2.x, p2.y);
+					float distance = MathUtils.distance(p1.x, p1.y, p2.x, p2.y);
+					for (float d = interval; d < distance; d += interval) {
+						double px = (p1.x + Math.cos(angle) * d), py = (p1.y + Math.sin(angle) * d);
+						double backAngle = angle + Math.PI*6/5;
+						double epx = px + Math.cos(backAngle)*wingSize;
+						double epy = py + Math.sin(backAngle)*wingSize;
+						drawLine(gw,px,py,epx,epy);
+						backAngle = angle - Math.PI*6/5.0;
+						epx = px + Math.cos(backAngle)*wingSize;
+						epy = py + Math.sin(backAngle)*wingSize;
+						drawLine(gw,px,py,epx,epy);
+					}
+				}
+			}
 			for (EditorComponent c : region.getType("object")) {
 				EditorObject o = (EditorObject)c;
 				int px = offX + (int)(o.x * size), py = offY + (int)(o.y * size);
@@ -457,8 +525,25 @@ public class EditorPanel extends JPanel {
 			gw.setStroke(new BasicStroke((int)(size * 0.1)));
 			gw.drawLine(px1,py1,px2,py2);
 		}
+		if (curRoad != null) {
+			gw.setColor(Color.CYAN);
+			Vector2 p1 = curRoad.getLastPoint();
+			int px1 = (int)(p1.x * size + offX), py1 = (int)(p1.y * size + offY);
+			Vector2 p2 = mp;
+			if (Math.abs(p2.x - p1.x) < 0.15)
+				p2.x = p1.x;
+			if (Math.abs(p2.y - p1.y) < 0.15)
+				p2.y = p1.y;
+			int px2 = (int)(p2.x * size + offX), py2 = (int)(p2.y * size + offY);
+			gw.setStroke(new BasicStroke((int)(size * 0.1)));
+			gw.drawLine(px1, py1, px2, py2);
+			if (this.keyboard.keyPressed(KeyEvent.VK_ENTER))
+				curRoad = null;
+		}
 		if (curTool != Tool.WALL)
 			wallP1 = null;
+		if (curTool != Tool.ROAD)
+			curRoad = null;
 		switch (curTool) {
 		case TOGGLE_GRID:
 			showGrid = !showGrid;
@@ -509,6 +594,10 @@ public class EditorPanel extends JPanel {
 		drawButtons(g);
 		
 		repaint();
+	}
+	
+	private void drawLine(Graphics2D g, double x1, double y1, double x2, double y2) {
+		g.drawLine((int)(offX + x1 * size), (int)(offY + y1 * size), (int)(offX + x2 * size), (int)(offY + y2 * size));
 	}
 	
 	private void drawButtons(Graphics2D g) {
