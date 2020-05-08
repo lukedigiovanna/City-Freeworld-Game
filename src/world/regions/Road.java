@@ -96,6 +96,9 @@ public class Road implements Serializable {
 		resetWait();
 	}
 	
+	private float carWaitTimer = 0f;
+	private boolean isCarAtStopSign = false;
+	
 	public void update(float dt) {
 		timer += dt;
 		if (timer >= wait) {
@@ -145,7 +148,7 @@ public class Road implements Serializable {
 				}
 				//if the car has reached the goal within some threshold, then move on to the next
 				
-				if (distanceToGoal < 0.25) {
+				if (distanceToGoal < 0.15) {
 					goals.set(i,goals.get(i)+1);
 				}
 			}
@@ -153,6 +156,15 @@ public class Road implements Serializable {
 			if (goalIndex >= this.points.size()) {
 				if (this.hasStopSign()) {
 					car.brake(dt * 3);
+					if (!this.isCarAtStopSign)
+						this.carWaitTimer = 0f;
+					this.isCarAtStopSign = true;
+					if (this.carWaitTimer > 2f) {
+						Road other = this.linkedRoads.get(MathUtils.random(this.linkedRoads.size()));
+						other.addCar(car);
+						removeCar(car);
+						this.isCarAtStopSign = false;
+					}
 				} else {
 					//we finished the road so determine the next action for the car
 					if (this.linkedRoads.size() > 0) {
@@ -166,6 +178,9 @@ public class Road implements Serializable {
 					removeCar(car);	
 				}
 			}
+		}
+		if (this.isCarAtStopSign) {
+			this.carWaitTimer += dt;
 		}
 	}
 	
