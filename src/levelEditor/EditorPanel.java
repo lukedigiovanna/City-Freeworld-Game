@@ -209,9 +209,15 @@ public class EditorPanel extends JPanel {
 	
 	private void addToolButton(Tool tool) {
 		int x = 220;
-		for (ToolButton b : toolButtons)
+		int y = Program.DISPLAY_HEIGHT-170;
+		for (ToolButton b : toolButtons) {
 			x += b.getWidth() + 10;
-		ToolButton tb = new ToolButton(tool, x, Program.DISPLAY_HEIGHT-100, this);
+			if (x > Program.DISPLAY_WIDTH-b.getWidth()) {
+				x = 220;
+				y += b.getHeight() + 25;
+			}
+		}
+		ToolButton tb = new ToolButton(tool, x, y, this);
 		toolButtons.add(tb);
 	}
 	
@@ -225,7 +231,7 @@ public class EditorPanel extends JPanel {
 	
 	private double size = 30;
 	private int offX = 50, offY = 0;
-	private int vx = 230, vy = 100;
+	private int vx = 230, vy = 70;
 	private int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
 	
 	private int rotation = 0;
@@ -353,7 +359,7 @@ public class EditorPanel extends JPanel {
 			}
 			EditorRoad linkerClosest = null;
 			dist = 0.25f;
-			if (this.curTool == Tool.ROAD_LINKER || this.curTool == Tool.ROAD_ATTRIB) {
+			if (this.curTool == Tool.ROAD_LINKER || this.curTool == Tool.ROAD_ATTRIB || this.curTool == Tool.ROAD_STOP) {
 				for (EditorComponent c : region.getType("road")) {
 					EditorRoad r = (EditorRoad)c;
 					for (int i = 0; i < r.getPoints().size()-1; i++) {
@@ -403,7 +409,20 @@ public class EditorPanel extends JPanel {
 					break;
 				case ROAD:
 					if (curRoad == null) {
-						curRoad = new EditorRoad(region.getNumber("road"));
+						int id = 0;
+						boolean cont = true;
+						while (cont) {
+							cont = false;
+							id = MathUtils.random(255);
+							for (EditorComponent c : region.getType("road")) {
+								EditorRoad r = (EditorRoad)c;
+								if (r.getID() == id) {
+									cont = true; //continue searching for an unused ID
+									break;
+								}
+							}
+						}
+						curRoad = new EditorRoad(id);
 						region.addComponent(curRoad);
 						curRoad.add(mp.copy());
 					} else {
@@ -416,6 +435,7 @@ public class EditorPanel extends JPanel {
 							roadP2.y = roadP1.y;
 						curRoad.add(roadP2);
 					}
+					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 					break;
 				case OBJECT:
 					EditorObject o = new EditorObject();
@@ -447,11 +467,13 @@ public class EditorPanel extends JPanel {
 						}
 					}
 					break;
-				case ROAD_LINKER:
+				case ROAD_LINKER: case ROAD_STOP:
 					if (linkerClosest != null) {
 						if (this.linkingRoad != null && this.linkingRoad != linkerClosest) {
-							this.linkingRoad.link(linkerClosest);
-							System.out.println("linked "+this.linkingRoad.getID()+" to "+linkerClosest.getID());
+							if (this.curTool == Tool.ROAD_LINKER) 
+								this.linkingRoad.link(linkerClosest);
+							else
+								this.linkingRoad.intersect(linkerClosest);
 							this.linkingRoad = null;
 							mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 						} else {
@@ -462,12 +484,13 @@ public class EditorPanel extends JPanel {
 				case ROAD_ATTRIB:
 					if (linkerClosest != null) {
 						//set the properties
-						float carRate = Float.parseFloat(JOptionPane.showInputDialog("Enter the car rate"));
-						float speedLimit = Float.parseFloat(JOptionPane.showInputDialog("Enter the speed limit"));
+						float carRate = Float.parseFloat(JOptionPane.showInputDialog(this,"Enter the car rate",linkerClosest.getCarRate()+""));
+						float speedLimit = Float.parseFloat(JOptionPane.showInputDialog(this,"Enter the speed limit",linkerClosest.getSpeedLimit()+""));
 						linkerClosest.setCarRate(carRate);
 						linkerClosest.setSpeedLimit(speedLimit);
 						mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 					}
+					break;
 				default:
 					break;
 				}
@@ -530,16 +553,30 @@ public class EditorPanel extends JPanel {
 						drawLine(gw,px,py,epx,epy);
 					}
 				}
-				gw.setColor(Color.CYAN);
-				float[] dash = {(float) (0.2f * size)};
-				gw.setStroke(new BasicStroke((int)(0.1 * size),BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,5,dash,0));
-				for (Integer id : r.getLinkedIDs()) {
-					for (EditorComponent other : region.getType("road")) {
-						EditorRoad otherR = (EditorRoad)other;
-						if (id == otherR.getID()) {
-							//draw a dashed line
-							drawLine(gw, r.getLastPoint().x, r.getLastPoint().y, otherR.getFirstPoint().x, otherR.getFirstPoint().y);
-						} 
+				if (curTool == Tool.ROAD_LINKER || curTool == Tool.ROAD_STOP) {
+					List<Integer> ids;
+					if (curTool == Tool.ROAD_LINKER) {
+						gw.setColor(Color.CYAN);
+						ids = r.getLinkedIDs();
+					} else {
+						gw.setColor(Color.RED);
+						ids = r.getIntersectionIDs();
+					}
+					float[] dash = {(float) (0.2f * size)};
+					gw.setStroke(new BasicStroke((int)(0.1 * size),BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND,5,dash,0));
+					for (Integer id : ids) {
+						for (EditorComponent other : region.getType("road")) {
+							EditorRoad otherR = (EditorRoad)other;
+							if (r == otherR)
+								continue;
+							if (id == otherR.getID()) {
+								//draw a dashed line
+								if (curTool == Tool.ROAD_LINKER)
+									drawLine(gw, r.getLastPoint().x, r.getLastPoint().y, otherR.getFirstPoint().x, otherR.getFirstPoint().y);
+								else
+									drawLine(gw, r.getLastPoint().x, r.getLastPoint().y, otherR.getLastPoint().x, otherR.getLastPoint().y);
+							} 
+						}
 					}
 				}
 			}
@@ -663,19 +700,11 @@ public class EditorPanel extends JPanel {
 	private void drawRegionInfo(Graphics2D g) {
 		g.setColor(Color.DARK_GRAY);
 		g.setFont(new Font("Consolas",Font.ITALIC | Font.BOLD,14));
-		String[] info = {
-			"No Region",
-			"No World",
-			"No Number"
-		};
-		if (region != null ) {
-			info[0] = "Region: "+region.getFilePath();
-			info[1] = "World: "+region.getWorldName();
-			info[2] = "Number: "+region.getRegionNumber();
+		String info = "No Info";
+		if (region != null) {
+			info = "Region: "+region.getFilePath()+" | World: "+region.getWorldName()+" | Number: "+region.getRegionNumber();
 		}
-		for (int i = 0; i < info.length; i++) {
-			g.drawString(info[i], 230, 60+i*16);
-		}
+		g.drawString(info, 230, 60);
 	}
 	
 	private void drawSideBar(Graphics2D g) {

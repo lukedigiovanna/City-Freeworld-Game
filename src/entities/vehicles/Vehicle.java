@@ -54,11 +54,7 @@ public abstract class Vehicle extends Entity {
 	public void update(float dt) {
 		this.timeSinceLastBrake+=dt;
 		float speed = this.getVelocity().getLength();
-		if (this.driver != null)
-			System.out.println(this.getDrivability());
 		float friction = 0.05f/this.getDrivability() + frictionalEffect;
-		if (this.driver != null)
-			System.out.println(friction + ", "+ speed);
 		speed -= (friction * dt);
 		speed = MathUtils.clip(0, maxSpeed, speed);
 		this.getVelocity().setMagnitude(speed);

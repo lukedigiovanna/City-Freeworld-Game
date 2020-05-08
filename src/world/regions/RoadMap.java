@@ -7,11 +7,6 @@ import java.util.List;
 import misc.Line;
 import world.Camera;
 
-/**
- * Each 1 x 1 dimension on the region represents a road behavior
- * This should correspond to the cell grid
- *
- */
 public class RoadMap implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -60,6 +55,21 @@ public class RoadMap implements Serializable {
 				for (Road link : this.roads) {
 					if (id == link.getID()) {
 						road.linkRoad(link);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Uses the link IDs to actually add the intersections
+	 */
+	public void intersectRoads() {
+		for (Road road : this.roads) {
+			for (Integer id : road.getIntersectionIDs()) {
+				for (Road link : this.roads) {
+					if (id == link.getID()) {
+						road.intersectRoad(link);
 					}
 				}
 			}

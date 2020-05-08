@@ -95,7 +95,8 @@ public class ImageTools {
 		int x = (int)(image.getWidth() * leftPercent);
 		if (width == 0)
 			return BLANK;
-		return image.getSubimage(x, 0, width, image.getHeight());
+		else
+			return image.getSubimage(x, 0, width, image.getHeight());
 	}
 	
 	public static BufferedImage rescale(BufferedImage image, int newWidth, int newHeight) {

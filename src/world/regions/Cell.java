@@ -27,7 +27,6 @@ public class Cell extends WorldObject {
 	
 	public void loadAssets() { 
 		this.texture = TexturePack.current().getTileTexture(id);
-		System.out.println(this.texture.getDrivability());
 		this.animation = texture.createAnimation();
 	}
 	

@@ -38,14 +38,10 @@ public class Texture {
 		this(animation,1.0f,1.0f,stringID);	
 	}
 	
-	private static int count = 0;
-	
 	public Texture(Animation animation, float width, float height, String stringID) {
 		this.animation = animation;
 		this.stringID = stringID;
 		this.dimension = new Vector2(width,height);
-		count++;
-		System.out.println(count);
 	}
 	
 	public void setLightEmission(float value) {

@@ -57,7 +57,6 @@ public class TexturePack {
 		objectsMap = new HashMap<Integer, Texture>();
 		CSVFile tiles = new CSVFile(TEXTURE_PACK_PATH+"tiles.csv");
 		tiles.removeRows(1); //remove the header
-		System.out.println("Creating texture pack: "+this.name);
 		for (int row = 0; row < tiles.getNumberOfRows(); row++) {
 			String stringID = tiles.getString(row, 0);
 			int frameRate=  tiles.getInt(row, 1);

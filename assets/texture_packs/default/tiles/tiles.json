@@ -168,7 +168,7 @@
 }],
 "id":16.0,
 "frame_rate":999.0,
-"string_id":"Black Street White Dashed Lines",
+"string_id":"Turn of Street",
 }, {
 "frames":[{
 "w":16.0,
@@ -178,7 +178,7 @@
 }],
 "id":17.0,
 "frame_rate":999.0,
-"string_id":"Black Street White Solid Lines",
+"string_id":"Black Street White Dashed Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -188,7 +188,7 @@
 }],
 "id":18.0,
 "frame_rate":999.0,
-"string_id":"Black Street Yellow Dashed Lines",
+"string_id":"Black Street White Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -198,7 +198,7 @@
 }],
 "id":19.0,
 "frame_rate":999.0,
-"string_id":"Black Street Yellow Solid Lines",
+"string_id":"Black Street Yellow Dashed Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -208,7 +208,7 @@
 }],
 "id":20.0,
 "frame_rate":999.0,
-"string_id":"Black Street Yellow Double Solid Lines",
+"string_id":"Black Street Yellow Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
@@ -218,14 +218,19 @@
 }],
 "id":21.0,
 "frame_rate":999.0,
-"string_id":"Black Street Stop Line",
+"string_id":"Black Street Yellow Double Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
 "x":64.0,
 "h":16.0,
 "y":48.0,
+}],
+"id":22.0,
+"frame_rate":999.0,
+"string_id":"Black Street Stop Line",
 }, {
+"frames":[{
 "w":16.0,
 "x":80.0,
 "h":16.0,
@@ -250,20 +255,15 @@
 "x":48.0,
 "h":16.0,
 "y":64.0,
-}],
-"id":22.0,
-"frame_rate":6.0,
-"string_id":"Rainbow",
 }, {
-"frames":[{
 "w":16.0,
 "x":64.0,
 "h":16.0,
 "y":64.0,
 }],
 "id":23.0,
-"frame_rate":999.0,
-"string_id":"Roof 1 Corner",
+"frame_rate":6.0,
+"string_id":"Rainbow",
 }, {
 "frames":[{
 "w":16.0,
@@ -273,7 +273,7 @@
 }],
 "id":24.0,
 "frame_rate":999.0,
-"string_id":"Roof 1 Edge",
+"string_id":"Roof 1 Corner",
 }, {
 "frames":[{
 "w":16.0,
@@ -283,7 +283,7 @@
 }],
 "id":25.0,
 "frame_rate":999.0,
-"string_id":" Roof 1 Side Corner",
+"string_id":"Roof 1 Edge",
 }, {
 "frames":[{
 "w":16.0,
@@ -293,7 +293,7 @@
 }],
 "id":26.0,
 "frame_rate":999.0,
-"string_id":"Roof 1 Side Edge",
+"string_id":" Roof 1 Side Corner",
 }, {
 "frames":[{
 "w":16.0,
@@ -302,6 +302,16 @@
 "y":80.0,
 }],
 "id":27.0,
+"frame_rate":999.0,
+"string_id":"Roof 1 Side Edge",
+}, {
+"frames":[{
+"w":16.0,
+"x":48.0,
+"h":16.0,
+"y":80.0,
+}],
+"id":28.0,
 "frame_rate":999.0,
 "string_id":"Void",
 }],

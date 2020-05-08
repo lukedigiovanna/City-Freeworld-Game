@@ -17,8 +17,9 @@ public enum Tool {
 	DELETE("delete","Delete","Delete objects/walls/portals"),
 	SET_LIGHT("light","Local Light","Set the regional light value"),
 	ROAD("road","Road","Add in roads"),
-	ROAD_LINKER("road_linker","Road Linker","Link roads together"),
-	ROAD_ATTRIB("road_attrib","Road Attrib","Set the attributes of a road");
+	ROAD_LINKER("road_linker","Road Link.","Link roads together"),
+	ROAD_ATTRIB("road_attrib","Road Att.","Set the attributes of a road"),
+	ROAD_STOP("road_stop","Road Stop","Set road intersections");
 	
 	BufferedImage img;
 	String name;

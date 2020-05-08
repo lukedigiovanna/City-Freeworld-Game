@@ -36,7 +36,7 @@ public class Health implements Serializable {
 		}
 		//check for difference in health
 		float dif = getPercent() - getDisplayPercent();
-		float rate = dif * this.health;
+		float rate = dif * 15;
 		if (Math.abs(rate) < 1)
 			rate = MathUtils.sign(rate);
 		this.displayHealth += rate * 3 * dt;

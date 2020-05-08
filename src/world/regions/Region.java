@@ -48,6 +48,7 @@ public class Region implements Serializable {
 	
 	public Region(World world, String worldName, int regionNumber) {
 		String path = "assets/worlds/"+worldName+"/regions/reg-"+regionNumber+".DAT";
+		System.out.println("Generating "+worldName+"."+regionNumber);
 		this.cellGrid = new CellGrid(this);
 		this.entities = new EntityList(this);
 		this.walls = new Walls();
@@ -97,6 +98,7 @@ public class Region implements Serializable {
 				int id = in.read();
 				Road road = new Road(this,id);
 				int numOfPoints = in.read();
+				System.out.println(numOfPoints);
 				for (int j = 0; j < numOfPoints; j++) {
 					Vector2 point = new Vector2(in.read() + in.read()/256.0f, in.read() + in.read()/256.0f);
 					road.addPoint(point);
@@ -105,14 +107,18 @@ public class Region implements Serializable {
 				for (int j = 0; j < numOfLinkedRoads; j++) {
 					road.linkRoad(in.read());
 				}
+				int numOfIntersectionRoads = in.read();
+				for (int j = 0; j < numOfIntersectionRoads; j++) {
+					road.intersectRoad(in.read());
+				}
 				road.setCarRate(in.read() + in.read()/256.0f);
 				road.setSpeedLimit(in.read() + in.read()/256.0f);
 				this.roadMap.addRoad(road);
 			}
 			this.roadMap.linkRoads();
+			this.roadMap.intersectRoads();
 			
-			this.localLightValue = in.read()/255.0f;
-			System.out.println(localLightValue);
+			this.localLightValue = in.read()/256.0f;
 			
 			in.close();
 		} catch (Exception e) {

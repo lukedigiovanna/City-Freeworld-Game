@@ -20,6 +20,8 @@ public class Road implements Serializable {
 	private List<Vector2> points; //every road should be made up of AT LEAST 2 points
 	private List<Road> linkedRoads; //possible roads for the car to go to once it reaches the end of this road
 	private List<Integer> linkedRoadsID;
+	private List<Road> intersectionRoads;
+	private List<Integer> intersectionRoadsID;
 	private List<Car> cars; 
 	private List<Integer> goals; //the index of the cars and goals arrays should match
 	//on average how many cars are spawned at the start of the road per real minute
@@ -42,6 +44,8 @@ public class Road implements Serializable {
 		this.goals = new ArrayList<Integer>();
 		this.linkedRoads = new ArrayList<Road>();
 		this.linkedRoadsID = new ArrayList<Integer>();
+		this.intersectionRoads = new ArrayList<Road>();
+		this.intersectionRoadsID = new ArrayList<Integer>();
 		
 		resetWait();
 	}
@@ -69,6 +73,18 @@ public class Road implements Serializable {
 	
 	public List<Integer> getLinkedIDs() {
 		return this.linkedRoadsID;
+	}
+	
+	public void intersectRoad(Road road) {
+		this.intersectionRoads.add(road);
+	}
+	
+	public void intersectRoad(Integer id) {
+		this.intersectionRoadsID.add(id);
+	}
+	
+	public List<Integer> getIntersectionIDs() {
+		return this.intersectionRoadsID;
 	}
 	
 	public int getID() {
@@ -101,33 +117,54 @@ public class Road implements Serializable {
 				continue;
 			}
 			int goalIndex = goals.get(i);
-			Vector2 goal = this.points.get(goalIndex);
-			//set the cars trajectory to be towards the goal
-			float angleToGoal = (float)MathUtils.getAngle(car.center(), goal);
-			car.setRotation(angleToGoal);
-			float currentSpeed = car.getVelocity().getLength();
-			//if that currentSpeed is below our speed limit we want to accelerate the car
-			if (currentSpeed < this.speedLimit) {
-				car.accelerate(dt);
-			} else if (currentSpeed > this.speedLimit) { //slow down if we are above the speed limit (we are law abiding citizens here)
-				car.accelerate(-dt);
-			}
-			//if the car has reached the goal within some threshold, then move on to the next
-			if (MathUtils.distance(car.center(), goal) < 0.25) {
-				goals.set(i,goals.get(i)+1);
+			if (goalIndex < this.points.size()) {
+				Vector2 goal = this.points.get(goalIndex);
+				//set the cars trajectory to be towards the goal
+				float angleToGoal = (float)MathUtils.getAngle(car.center(), goal);
+				car.setRotation(angleToGoal);
+				float distanceToGoal = MathUtils.distance(car.center(), goal); 
+				float currentSpeed = car.getVelocity().getLength();
+				boolean accelerate = true;
+				if (this.hasStopSign() && goalIndex == this.points.size()-1) {
+					//if we are approaching the last point
+					if (distanceToGoal < speedLimit * 1) {
+						if (car.getVelocity().getLength() > 0.75)
+							car.brake(dt);
+						accelerate = false;
+						if (car.getVelocity().getLength() < 0.75)
+							accelerate = true;
+					}
+				}
+				if (accelerate) {
+					//if that currentSpeed is below our speed limit we want to accelerate the car
+					if (currentSpeed < this.speedLimit) {
+						car.accelerate(dt);
+					} else if (currentSpeed > this.speedLimit) { //slow down if we are above the speed limit (we are law abiding citizens here)
+						car.accelerate(-dt);
+					}
+				}
+				//if the car has reached the goal within some threshold, then move on to the next
+				
+				if (distanceToGoal < 0.25) {
+					goals.set(i,goals.get(i)+1);
+				}
 			}
 			goalIndex = goals.get(i);
 			if (goalIndex >= this.points.size()) {
-				//we finished the road so determine the next action for the car
-				if (this.linkedRoads.size() > 0) {
-					//choose a road at random for it to go to
-					Road other = this.linkedRoads.get(MathUtils.random(this.linkedRoads.size()));
-					other.addCar(car);
+				if (this.hasStopSign()) {
+					car.brake(dt * 3);
 				} else {
-					car.destroy();
-					i--; //do this because removing a car will adjust the cars list size	
+					//we finished the road so determine the next action for the car
+					if (this.linkedRoads.size() > 0) {
+						//choose a road at random for it to go to
+						Road other = this.linkedRoads.get(MathUtils.random(this.linkedRoads.size()));
+						other.addCar(car);
+					} else {
+						car.destroy();
+						i--; //do this because removing a car will adjust the cars list size	
+					}
+					removeCar(car);	
 				}
-				removeCar(car);
 			}
 		}
 	}
@@ -147,6 +184,10 @@ public class Road implements Serializable {
 	
 	public void setSpeedLimit(float speedLimit) {
 		this.speedLimit = speedLimit;
+	}
+	
+	public boolean hasStopSign() {
+		return (this.intersectionRoads.size() > 0);
 	}
 	
 	private void resetWait() {

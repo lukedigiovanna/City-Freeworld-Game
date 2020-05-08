@@ -156,13 +156,13 @@ public class GameDrawer {
 			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
 			g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);
 				
-			//g.setColor(Color.GREEN);
-			//g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), 20);
-			this.drawSplicedImage(g, BORDER, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0.4f, 0);
+
+			this.drawSplicedImage(g, BORDER, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0f, 0f);
 			this.drawSplicedImage(g, GREEN_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0, 1-player.getHealth().getPercent());
 			this.drawSplicedImage(g, RED_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0, 1-player.getHealth().getDisplayPercent());
-			this.drawSplicedImage(g, YELLOW_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth -ppS - pixelPadding * 2), 20, player.getHealth().getPercent(), 0);
-			//this.drawSplicedImage(g, YELLOW_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, player.getHealth().getPercent());
+			//this.drawSplicedImage(g, YELLOW_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth -ppS - pixelPadding * 2), 20, player.getHealth().getPercent(), 1 - player.getHealth().getDisplayPercent());
+//			g.setColor(Color.GREEN);
+//			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), 20);
 //			g.setColor(Color.RED);
 //			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getDisplayPercent()), 20);
 //			g.setColor(Color.YELLOW);
@@ -233,7 +233,7 @@ public class GameDrawer {
 		rightPercent = MathUtils.clip(0, 1, rightPercent);
 		BufferedImage newImg = ImageTools.spliceHorizontal(image, leftPercent, rightPercent);
 		float widthPercent = (float)newImg.getWidth()/image.getWidth();
-		int margin = (int)(leftPercent*width);
+		int margin = (int)(1f/image.getWidth()*width*(int)((image.getWidth() * leftPercent)));
 		g.drawImage(newImg, x + margin, y, (int)(width * widthPercent), height, null);
 	}
 	
