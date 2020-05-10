@@ -6,6 +6,7 @@ import java.util.List;
 import entities.Entity;
 import misc.ImageTools;
 import world.Camera;
+import world.regions.Road;
 
 public class Car extends Vehicle {
 	private static final long serialVersionUID = 1L;
@@ -45,12 +46,26 @@ public class Car extends Vehicle {
 			for (Entity e : others) {
 				if (this == e)
 					continue; //dont check ourselves -- will always be true
-				if (this.canSee_IgnoreWalls(e) && this.squaredDistanceTo(e) < 16) {
+				if (this.isSafetyOn && this.canSee_IgnoreWalls(e) && this.squaredDistanceTo(e) < 16) {
 					this.brake(dt);
 					break;
 				}
 			}
 		}
+	}
+	
+	private Road road;
+	public void setRoad(Road road) {
+		this.road = road;
+	}
+	
+	public Road getRoad() {
+		return this.road;
+	}
+	
+	private boolean isSafetyOn = true;
+	public void setSafety(boolean boo) {
+		this.isSafetyOn = boo;
 	}
 	
 	@Override

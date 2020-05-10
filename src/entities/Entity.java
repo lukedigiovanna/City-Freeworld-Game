@@ -88,6 +88,10 @@ public abstract class Entity extends WorldObject {
 		return paths.size() > 0;
 	}
 	
+	public Path getCurrentPath() {
+		return isFollowingPath() ? paths.get(0) : null;
+	}
+	
 	/**
 	 * Clears the path queue
 	 */

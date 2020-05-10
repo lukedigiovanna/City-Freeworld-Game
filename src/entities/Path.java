@@ -6,6 +6,7 @@ import java.util.List;
 
 import misc.MathUtils;
 import misc.Vector2;
+import world.Camera;
 
 /**
  * Defines a path for an Entity to follow
@@ -60,10 +61,10 @@ public class Path implements Serializable {
 			return;
 		Vector2 goal = this.points.get(position);
 		//set the velocity to that point
-		double angle = MathUtils.getAngle(entity.getPosition(),goal);
+		double angle = MathUtils.getAngle(entity.center(),goal);
 		entity.setRotation((float)angle);
 		entity.setVelocity(speed*(float)Math.cos(angle),speed*(float)Math.sin(angle));
-		if (MathUtils.distance(entity.getPosition(),goal) < 0.1)
+		if (MathUtils.distance(entity.center(),goal) < 0.1)
 			position++;
 		
 		Vector2 pastPos = entity.getPositionHistory().getPosition(1);
@@ -74,6 +75,16 @@ public class Path implements Serializable {
 			stallTime+=dt;
 		else
 			stallTime = 0;
+	}
+	
+	public void draw(Camera c) {
+		if (this.points.size() <= 1)
+			return;
+		
+		c.setColor(java.awt.Color.WHITE);
+		for (int i = 0; i < this.points.size()-1; i++) {
+			c.drawLine(points.get(i).x, points.get(i).y, points.get(i+1).x, points.get(i+1).y);
+		}
 	}
 	
 	private boolean stalled = false;
