@@ -115,6 +115,9 @@ public class GameDrawer {
 					b.draw(g);
 				}
 			}
+		} else if (game.isGameOver()) {
+			g.setColor(Color.RED);
+			g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
 		} else {
 			pauseTimer = 0;
 			
@@ -171,6 +174,10 @@ public class GameDrawer {
 			g.setColor(Color.WHITE);
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,20));
 			g.drawString(player.getMoneyDisplay(),ppX+ppS+pixelPadding, ppY+ppS-40);
+			g.setColor(Color.BLUE);
+			g.drawString("LEVEL: "+player.getXPLevel(),ppX+ppS+pixelPadding, ppY+ppS-65);
+			g.setColor(Color.RED);
+			g.drawString("HEAT: "+player.getHeat(), ppX+ppS+pixelPadding, ppY+ppS-90);
 			
 			int weaponSpace = 180;
 			Weapon selected = player.getSelectedWeapon();

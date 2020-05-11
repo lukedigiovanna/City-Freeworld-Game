@@ -25,6 +25,10 @@ public class Player extends Human {
 	
 	private WeaponManager weaponManager;
 	
+	private float policeHeat; //measures how wanted the player is 0 means none, up to 5 which is very heavy
+	
+	private int xpPoints; //how many raw XP points the player has, NOT their level
+	
 	public Player(float x, float y) {
 		super(x,y,HumanAnimationPack.CHARACTER_0);
 		this.bankAct = new BankAccount(this);
@@ -46,6 +50,18 @@ public class Player extends Human {
 		this.bankAct.addMoney(amount);
 	}
 	
+	public int getXPLevel() {
+		return MathUtils.max(0, (int)Math.log10(this.xpPoints));
+	}
+	
+	public void addXP(int points) {
+		this.xpPoints+=points;
+	}
+	
+	public int getHeat() {
+		return (int)this.policeHeat;
+	}
+	
 	public String getMoneyDisplay() {
 		double money = MathUtils.round(bankAct.getMoney(), 0.01);
 		String monStr = money+"";
@@ -54,6 +70,14 @@ public class Player extends Human {
 		if (money % 1.0 == 0 && money > 0)
 			monStr+="0";
 		return "$"+monStr;
+	}
+	
+	public float getPoliceHeat() {
+		return this.policeHeat;
+	}
+	
+	public boolean isCaught() {
+		return false;
 	}
 
 	public void draw(Camera c) {
@@ -97,6 +121,8 @@ public class Player extends Human {
 			p.add(getX(),getY());
 			this.queuePath(p);
 		}
+		
+		this.addXP(1);
 		
 		if (Program.keyboard.keyPressed(KeyEvent.VK_SPACE)) {
 			Grenade g = new Grenade(this,getX(),getY(),getRotation());

@@ -38,6 +38,11 @@ public class Path implements Serializable {
 		System.out.println("goal: "+position);
 	}
 	
+	private boolean forceSpeed = true;
+	public void forceSpeed(boolean value) {
+		this.forceSpeed = value;
+	}
+	
 	public void setEntity(Entity e) {
 		this.entity = e;
 	}
@@ -57,12 +62,17 @@ public class Path implements Serializable {
 	}
 	
 	public void follow(float dt) {
-		if (completed()) 
+		if (completed()) {
+			if (forceSpeed)
+				this.entity.getVelocity().zero();
 			return;
+		}
 		Vector2 goal = this.points.get(position);
 		//set the velocity to that point
 		double angle = MathUtils.getAngle(entity.center(),goal);
 		entity.setRotation((float)angle);
+		if (!forceSpeed)
+			speed = entity.getVelocity().getLength(); //use the current speed of the entity.
 		entity.setVelocity(speed*(float)Math.cos(angle),speed*(float)Math.sin(angle));
 		if (MathUtils.distance(entity.center(),goal) < 0.1)
 			position++;

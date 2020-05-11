@@ -132,10 +132,10 @@ public class Road implements Serializable {
 				if (this.hasStopSign() && goalIndex == this.points.size()-1) {
 					//if we are approaching the last point
 					if (distanceToGoal < speedLimit * 1) {
-						if (car.getVelocity().getLength() > 0.75)
+						if (currentSpeed > 0.75)
 							car.brake(dt);
 						accelerate = false;
-						if (car.getVelocity().getLength() < 0.75)
+						if (currentSpeed < 0.75)
 							accelerate = true;
 					}
 				}
@@ -160,51 +160,24 @@ public class Road implements Serializable {
 					if (!this.isCarAtStopSign)
 						this.carWaitTimer = 0f;
 					this.isCarAtStopSign = true;
-					if (!this.canCarCross()) {
+					if (!this.canCarCross()) { 
 						this.carWaitTimer = 0f;
 					} else if (this.carWaitTimer > 1.5f) {
 						Road other = this.linkedRoads.get(MathUtils.random(this.linkedRoads.size()));
 						other.addCar(car);
 						this.carInIntersection = car;
 						this.carInIntersection.setSafety(false);
-						//Queue a path for the car to follow to the next road
-						Vector2 ep2 = other.points.get(0);
-						Vector2 ep1 = this.points.get(this.points.size()-1);
-						Path path = new Path(car);
-						int numOfPoints = 25;
-						float theta = (float)MathUtils.getAngle(this.points.get(this.points.size()-2), this.points.get((this.points.size()-1)));
-						float beta = (float)MathUtils.getAngle(ep1, ep2);
-						float gamma = theta - beta;
-						float sigma = (float)Math.PI/2-gamma;
-						float d = MathUtils.distance(ep1, ep2);
-						float A = (float)Math.cos(sigma) * d, B = (float)Math.sin(sigma) * d;
-						float alpha = -(float)(Math.PI/2 - theta);
-						Vector2 reference = new Vector2(ep1.x + (float)Math.cos(alpha)*A, ep1.y + (float)Math.sin(alpha) * A);
-						float startAngle = (float)MathUtils.getAngle(reference,ep1), endAngle = (float)MathUtils.getAngle(reference, ep2);
-						float aSquared = A * A, bSquared = B * B;
-						float eAngle = 0, eInc = (float)Math.PI/2/numOfPoints;
-						path.add(ep1);
-						if (reference.getDistanceSquared(ep1) > 0.25*0.25) {
-							for (float t = startAngle; !MathUtils.equals(t, endAngle); t+=(endAngle-startAngle)/numOfPoints) {
-								float cos = (float)Math.cos(eAngle), sin = (float)Math.sin(eAngle);
-								float distance = (float)Math.sqrt(cos*cos*aSquared+sin*sin*bSquared);
-								Vector2 point = new Vector2(reference.x + distance * (float)Math.cos(t), reference.y + distance * (float)Math.sin(t));
-								path.add(point);
-								eAngle+=eInc;
-							}
-						}
-						//this.region.addParticles(Particle.Type.SPARKLES, Color.MAGENTA, 20, 0.01f, reference.x, reference.y, 0.1f, 0.1f);
-						path.add(ep2);
-						car.queuePath(path);
+						sendCar(car,other);
 						removeCar(car);
 						this.isCarAtStopSign = false;
 					}
 				} else {
-					//we finished the road so determine the next action for the car
+					//we finished the road so determine the next action for the car and there are no stop sign
 					if (this.linkedRoads.size() > 0) {
 						//choose a road at random for it to go to
 						Road other = this.linkedRoads.get(MathUtils.random(this.linkedRoads.size()));
 						other.addCar(car);
+						sendCar(car,other);
 					} else {
 						car.destroy();
 						i--; //do this because removing a car will adjust the cars list size	
@@ -218,11 +191,45 @@ public class Road implements Serializable {
 		}
 		//check the car in intersection
 		if (this.carInIntersection != null) {
+			this.carInIntersection.accelerate(dt);
 			if (this.carInIntersection.getRoad().getGoal(this.carInIntersection) > 0) {
 				this.carInIntersection.setSafety(true);
 				this.carInIntersection = null; //we are no longer in the intersection then
 			}
 		}
+	}
+	
+	private void sendCar(Car car, Road other) {
+		//Queue a path for the car to follow to the next road
+		Vector2 ep2 = other.points.get(0);
+		Vector2 ep1 = this.points.get(this.points.size()-1);
+		Path path = new Path(car);
+		int numOfPoints = 25;
+		float roadAngle = (float)MathUtils.getAngle(this.points.get(this.points.size()-2), this.points.get((this.points.size()-1)));
+		float angleToGoal = (float)MathUtils.getAngle(ep1, ep2);
+		float gamma = roadAngle - angleToGoal;
+		float sigma = (float)Math.PI/2-gamma;
+		float d = MathUtils.distance(ep1, ep2);
+		float A = (float)Math.cos(sigma) * d, B = (float)Math.sin(sigma) * d;
+		float alpha = -(float)(Math.PI/2 - roadAngle);
+		Vector2 reference = new Vector2(ep1.x + (float)Math.cos(alpha)*A, ep1.y + (float)Math.sin(alpha) * A);
+		float startAngle = (float)MathUtils.getAngle(reference,ep1), endAngle = (float)MathUtils.getAngle(reference, ep2);
+		float aSquared = A * A, bSquared = B * B;
+		float eAngle = 0, eInc = (float)Math.PI/2/numOfPoints;
+		path.add(ep1);
+		if (reference.getDistanceSquared(ep1) > 0.25*0.25) {
+			for (float t = startAngle; !MathUtils.equals(t, endAngle); t+=(endAngle-startAngle)/numOfPoints) {
+				float cos = (float)Math.cos(eAngle), sin = (float)Math.sin(eAngle);
+				float distance = (float)Math.sqrt(cos*cos*aSquared+sin*sin*bSquared);
+				Vector2 point = new Vector2(reference.x + distance * (float)Math.cos(t), reference.y + distance * (float)Math.sin(t));
+				path.add(point);
+				eAngle+=eInc;
+			}
+		}
+		//this.region.addParticles(Particle.Type.SPARKLES, Color.MAGENTA, 20, 0.01f, reference.x, reference.y, 0.1f, 0.1f);
+		path.add(ep2);
+		path.forceSpeed(false);
+		car.queuePath(path);
 	}
 	
 	public void addCar(Car car) {

@@ -15,7 +15,8 @@ public class Car extends Vehicle {
 		RED_RACECAR("red_racecar.png",19.0f/16.0f,14.0f/16.0f),
 		BLUE_RACECAR("blue_racecar.png",19.0f/16.0f,14.0f/16.0f),
 		WHITE_RACECAR("white_racecar.png",19.0f/16.0f,14.0f/16.0f),
-		SCIFI_RACECAR("scifi_racecar.png",19.0f/16.0f,14.0f/16.0f);
+		SCIFI_RACECAR("scifi_racecar.png",19.0f/16.0f,14.0f/16.0f),
+		COP_CAR("copcar.png",19f/16f,14f/16f);
 		
 		public float width, height;
 		String path;
@@ -46,7 +47,8 @@ public class Car extends Vehicle {
 			for (Entity e : others) {
 				if (this == e)
 					continue; //dont check ourselves -- will always be true
-				if (this.isSafetyOn && this.canSee_IgnoreWalls(e) && this.squaredDistanceTo(e) < 16) {
+				float alertDistance = this.getVelocity().getLength()+2;
+				if (this.isSafetyOn && this.canSee_IgnoreWalls(e) && this.squaredDistanceTo(e) < alertDistance*alertDistance) {
 					this.brake(dt);
 					break;
 				}

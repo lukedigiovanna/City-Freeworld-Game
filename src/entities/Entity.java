@@ -45,7 +45,6 @@ public abstract class Entity extends WorldObject {
 			paths.get(0).follow(dt);
 			if (paths.get(0).completed() || paths.get(0).stalled()) {
 				paths.remove(0);
-				this.getVelocity().zero();
 			}
 		}
 		this.health.update(dt);

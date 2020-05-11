@@ -24,9 +24,10 @@ public class UpdateNotesDisplay extends Display {
 		"    Camera zooms in on the player at the beginning of a new scene",
 		"Vehicle modifcations",
 		"    Cars travel down the roads now",
+		"    Stop and turn at intersections",
 		"    Vehicle movement now responds to the tile it drives across",
 		"    Vehicles controlled by AI will no longer ram into each other",
-		"        Allows the player to steal vehicles when they stop",
+		"        Allows the player to steal vehicles when they stop by pressing F",
 		"Added saving/loading game saves"
 	};
 	

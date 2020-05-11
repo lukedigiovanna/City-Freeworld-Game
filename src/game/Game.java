@@ -3,6 +3,7 @@ package game;
 import java.awt.event.KeyEvent;
 
 import display.*;
+import entities.player.Player;
 import main.*;
 import misc.*;
 import world.*;
@@ -126,10 +127,16 @@ public class Game {
 			elapsedSinceLastCapture = 0;
 		}
 		
+		Player player = this.getWorld().getPlayers().get(0);
+		if (!gameOver && (player.getHealth().isDead() || player.isCaught()))
+			gameOver = true; 
+		
 		elapsedTime+=dt;
 	}
 	
+	private boolean gameOver = false;
+	
 	public boolean isGameOver() {
-		return false;
+		return gameOver;
 	}
 }
