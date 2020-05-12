@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import display.Bars;
 import display.Display;
 import entities.Entity;
 import entities.player.Player;
@@ -158,26 +159,45 @@ public class GameDrawer {
 			g.setColor(Color.GRAY);
 			g.fillRect(ppX-2, ppY-2, ppS+4, ppS+4);
 			g.drawImage(player.getProfilePicture(), ppX, ppY, ppS, ppS, null);
-				
-
-			this.drawSplicedImage(g, BORDER, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0f, 0f);
-			this.drawSplicedImage(g, GREEN_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0, 1-player.getHealth().getPercent());
-			this.drawSplicedImage(g, RED_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth - ppS - pixelPadding * 2), 20, 0, 1-player.getHealth().getDisplayPercent());
-			//this.drawSplicedImage(g, YELLOW_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth -ppS - pixelPadding * 2), 20, player.getHealth().getPercent(), 1 - player.getHealth().getDisplayPercent());
-//			g.setColor(Color.GREEN);
-//			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), 20);
-//			g.setColor(Color.RED);
-//			g.fillRect(ppX+ppS+pixelPadding, ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getDisplayPercent()), 20);
-//			g.setColor(Color.YELLOW);
-//			g.fillRect(ppX+ppS+pixelPadding+(int)((barWidth - ppS - pixelPadding * 2) * player.getHealth().getPercent()), ppY+ppS-20, (int)((barWidth - ppS - pixelPadding * 2) * (player.getHealth().getDisplayPercent() - player.getHealth().getPercent())), 20);
 			
-			g.setColor(Color.WHITE);
-			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,20));
-			g.drawString(player.getMoneyDisplay(),ppX+ppS+pixelPadding, ppY+ppS-40);
-			g.setColor(Color.BLUE);
-			g.drawString("LEVEL: "+player.getXPLevel(),ppX+ppS+pixelPadding, ppY+ppS-65);
+			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,16));	
+			int x = ppX+ppS+pixelPadding, y = ppY+ppS-20;
+			int width = (int)(barWidth - ppS - pixelPadding * 2), height = 20;
+			//health bar
+			this.drawSplicedImage(g, Bars.BORDER, x, y, width, height, 0f, 0f);
+			this.drawSplicedImage(g, Bars.GREEN_BAR, x, y, width, height, 0, 1-player.getHealth().getPercent());
+			this.drawSplicedImage(g, Bars.RED_BAR, x, y, width, height, 0, 1-player.getHealth().getDisplayPercent());
+			//this.drawSplicedImage(g, YELLOW_BAR, ppX+ppS+pixelPadding, ppY+ppS-20, (int)(barWidth -ppS - pixelPadding * 2), 20, player.getHealth().getPercent(), 1 - player.getHealth().getDisplayPercent());
+			//draw the text
+			String s = (int)player.getHealth().getValue()+"/"+(int)player.getHealth().getMaxValue();
 			g.setColor(Color.RED);
-			g.drawString("HEAT: "+player.getHeat(), ppX+ppS+pixelPadding, ppY+ppS-90);
+			g.drawString(s,x+width+10,y+height/2+g.getFontMetrics().getAscent()/2);
+			y-=25;
+			//XP bar
+			this.drawSplicedImage(g, Bars.BORDER, x, y, width, height, 0f, 0f);
+			float xpPercent = 1-player.getPercentToNextLevel();
+			if (player.getXPLevel() % 2 == 0) {
+				this.drawSplicedImage(g, Bars.CYAN_BAR, x, y, width, height, 0f, 0f);
+				this.drawSplicedImage(g, Bars.BLUE_BAR, x, y, width, height, 0f, xpPercent);
+			} else {
+				this.drawSplicedImage(g, Bars.BLUE_BAR, x, y, width, height, 0f, 0f);
+				this.drawSplicedImage(g, Bars.CYAN_BAR, x, y, width, height, 0f, xpPercent);
+			}
+			s = "LVL: "+player.getXPLevel();
+			g.setColor(Color.GREEN);
+			g.drawString(s,x+width+10,y+height/2+g.getFontMetrics().getAscent()/2);
+			y-=25;
+			//Heat bar
+			this.drawSplicedImage(g, Bars.BORDER, x, y, width, height, 0f, 0f);
+			this.drawSplicedImage(g, Bars.WHITE_BAR, x, y, width, height, 0f, 0f);
+			this.drawSplicedImage(g, Bars.HEAT_BAR, x, y, width, height, 0f, 1-player.getPoliceHeat()/5f);
+			g.setColor(Color.WHITE);
+			s = player.getHeatString();
+			g.drawString(s, x+width+10, y+height/2+g.getFontMetrics().getAscent()/2);
+			y-=25;
+			//Money
+			g.setColor(Color.GREEN.darker());
+			g.drawString(player.getMoneyDisplay(),x,y);
 			
 			int weaponSpace = 180;
 			Weapon selected = player.getSelectedWeapon();
@@ -230,11 +250,6 @@ public class GameDrawer {
 		}
 	}
 	
-	private static final BufferedImage 
-		BORDER = ImageTools.getImage("health_bar/border.png"),
-		RED_BAR = ImageTools.getImage("health_bar/red_bar.png"),
-		GREEN_BAR = ImageTools.getImage("health_bar/green_bar.png"),
-		YELLOW_BAR = ImageTools.getImage("health_bar/yellow_bar.png");
 	private void drawSplicedImage(Graphics2D g, BufferedImage image, int x, int y, int width, int height, float leftPercent, float rightPercent) {
 		leftPercent = MathUtils.clip(0, 1, leftPercent);
 		rightPercent = MathUtils.clip(0, 1, rightPercent);

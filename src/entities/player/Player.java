@@ -28,6 +28,7 @@ public class Player extends Human {
 	private float policeHeat; //measures how wanted the player is 0 means none, up to 5 which is very heavy
 	
 	private int xpPoints; //how many raw XP points the player has, NOT their level
+	private int xpLevel;
 	
 	public Player(float x, float y) {
 		super(x,y,HumanAnimationPack.CHARACTER_0);
@@ -51,15 +52,42 @@ public class Player extends Human {
 	}
 	
 	public int getXPLevel() {
-		return MathUtils.max(0, (int)Math.log10(this.xpPoints));
+		return this.xpLevel;
 	}
 	
+	private int xpForNextLevel = 10; //a1
+	private float rFactor = 1.5f; //r for geometric series
+	private int xpToNextLevel = 0;
 	public void addXP(int points) {
 		this.xpPoints+=points;
+		this.xpToNextLevel+=points;
+		updateXPLevel();
 	}
 	
-	public int getHeat() {
-		return (int)this.policeHeat;
+	private void updateXPLevel() {
+		if (this.xpToNextLevel >= this.xpForNextLevel) {
+			this.xpToNextLevel -= this.xpForNextLevel; //remove the xp for this level
+			this.xpLevel++; //add the level
+			this.xpForNextLevel*=rFactor; //increase the amount of xp necessary for next level
+			updateXPLevel(); //call again for carry over XP
+		}
+	}
+	
+	public float getPercentToNextLevel() {
+		return (float)this.xpToNextLevel/this.xpForNextLevel;
+	}
+	
+	public String getHeatString() {
+		if (this.policeHeat > 4)
+			return "KILL!";
+		else if (this.policeHeat > 3)
+			return "RUN!";
+		else if (this.policeHeat > 2)
+			return "HIDE!";
+		else if (this.policeHeat > 1)
+			return "WATCH!";
+		else
+			return "OK!";
 	}
 	
 	public String getMoneyDisplay() {
@@ -107,7 +135,7 @@ public class Player extends Human {
 	@Override
 	public void update(float dt) {
 		super.update(dt);
-		
+	
 		char up = ((String)Settings.getSetting("move_up")).charAt(0);
 		char down = ((String)Settings.getSetting("move_down")).charAt(0);
 		char left = ((String)Settings.getSetting("move_left")).charAt(0);
@@ -121,8 +149,6 @@ public class Player extends Human {
 			p.add(getX(),getY());
 			this.queuePath(p);
 		}
-		
-		this.addXP(1);
 		
 		if (Program.keyboard.keyPressed(KeyEvent.VK_SPACE)) {
 			Grenade g = new Grenade(this,getX(),getY(),getRotation());

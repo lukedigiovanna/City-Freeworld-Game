@@ -209,6 +209,8 @@ public class World implements Serializable {
 		List<Player> players = new ArrayList<Player>();
 		for (Entity e : entities)
 			players.add((Player)e);
+		if (players.size() == 0)
+			players.add(null);
 		return players;
 	}
 	

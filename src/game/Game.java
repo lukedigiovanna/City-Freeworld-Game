@@ -128,7 +128,7 @@ public class Game {
 		}
 		
 		Player player = this.getWorld().getPlayers().get(0);
-		if (!gameOver && (player.getHealth().isDead() || player.isCaught()))
+		if (player != null && !gameOver && (player.getHealth().isDead() || player.isCaught()))
 			gameOver = true; 
 		
 		elapsedTime+=dt;

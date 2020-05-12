@@ -191,10 +191,14 @@ public class Road implements Serializable {
 		}
 		//check the car in intersection
 		if (this.carInIntersection != null) {
-			this.carInIntersection.accelerate(dt);
-			if (this.carInIntersection.getRoad().getGoal(this.carInIntersection) > 0) {
-				this.carInIntersection.setSafety(true);
-				this.carInIntersection = null; //we are no longer in the intersection then
+			if (!this.carInIntersection.isAIControlled())
+				this.carInIntersection = null;
+			else {
+				this.carInIntersection.accelerate(dt);
+				if (this.carInIntersection.getRoad().getGoal(this.carInIntersection) > 0) {
+					this.carInIntersection.setSafety(true);
+					this.carInIntersection = null; //we are no longer in the intersection then
+				}
 			}
 		}
 	}

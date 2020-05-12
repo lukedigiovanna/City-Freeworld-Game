@@ -87,6 +87,7 @@ public class NPC extends Human {
 			}
 			if (robTimer > 5.0f) {
 				robber.addMoney(this.moneyOnHand);
+				robber.addXP(15);
 				this.moneyOnHand = 0.0f;
 				this.state = State.SCARED;
 				this.beingRobbed = false;
@@ -142,6 +143,6 @@ public class NPC extends Human {
 			if (this.moneyOnHand > 0)
 				this.getRegion().add(new CashPickup(this.getX(),this.getY(),this.moneyOnHand));
 		}
-		super.destroy();
+		super.destroy();                                              
 	}
 }

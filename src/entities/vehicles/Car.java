@@ -16,7 +16,7 @@ public class Car extends Vehicle {
 		BLUE_RACECAR("blue_racecar.png",19.0f/16.0f,14.0f/16.0f),
 		WHITE_RACECAR("white_racecar.png",19.0f/16.0f,14.0f/16.0f),
 		SCIFI_RACECAR("scifi_racecar.png",19.0f/16.0f,14.0f/16.0f),
-		COP_CAR("copcar.png",19f/16f,14f/16f);
+		COP_CAR("cop_car.png",20f/16f,12f/16f);
 		
 		public float width, height;
 		String path;

@@ -80,6 +80,10 @@ public class Health implements Serializable {
 		return this.health;
 	}
 	
+	public float getMaxValue() {
+		return this.maxHealth;
+	}
+	
 	public float getPercent() {
 		return this.health/this.maxHealth;
 	}
