@@ -15,6 +15,7 @@ public class Portal extends Entity {
 		super(x, y, width, height);
 		this.destination = destination;
 		setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 	}
 
 	@Override

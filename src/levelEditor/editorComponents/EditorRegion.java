@@ -120,6 +120,7 @@ public class EditorRegion {
 			}
 			
 			int numOfRoads = in.read();
+			System.out.println(numOfRoads);
 			for (int i = 0; i < numOfRoads; i++) {
 				EditorRoad r = new EditorRoad();
 				r.read(in);

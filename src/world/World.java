@@ -137,9 +137,13 @@ public class World implements Serializable {
 		regions = new ArrayList<Region>();
 		//add in all the regions
 		Region next;
-		while ((next = Region.generateWorldRegion(this,worldName,regions.size())) != null)
+		while ((next = Region.generateWorldRegion(this,worldName,regions.size())) != null) {
+			float dt = 0.2f;
+			for (float t = 0; t < 30f; t+=dt) {
+				next.update(dt); //time warp the region 30 seconds to make it seem as the world has existed before
+			}
 			regions.add(next);
-		
+		}
 		addPlayer();
 		
 		this.soundEngine = new SoundEngine(this.getPlayers().get(0));

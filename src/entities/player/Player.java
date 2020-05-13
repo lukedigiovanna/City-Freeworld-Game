@@ -37,7 +37,6 @@ public class Player extends Human {
 		this.weaponManager = new WeaponManager(this);
 		this.health = new Health(this,50);
 		this.health.setRegenerationRate(2.0f);
-		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 		addTag("player");
 	}
 	

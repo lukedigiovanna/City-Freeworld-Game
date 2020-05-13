@@ -235,6 +235,7 @@ public class EditorPanel extends JPanel {
 	private int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
 	
 	private int rotation = 0;
+	private float objRotation = 0;
 	
 	private Vector2 wallP1 = null;
 	private EditorRoad curRoad = null;
@@ -450,6 +451,7 @@ public class EditorPanel extends JPanel {
 					o.id = curObject;
 					o.x = mp.x;
 					o.y = mp.y;
+					o.rotation = objRotation;
 					region.addComponent(o);
 					break;
 				case DELETE:
@@ -596,13 +598,17 @@ public class EditorPanel extends JPanel {
 				BufferedImage img = texture.getAnimation().getCurrentFrame();
 				if (curTool == Tool.DELETE && mp.x > o.x && mp.x < o.x + texture.getWidth() && mp.y > o.y && mp.y < o.y + texture.getHeight())
 					img = ImageTools.colorscale(img, Color.RED);
+				gw.rotate(o.rotation, px+pw/2, py+ph/2);
 				gw.drawImage(img, px, py, pw, ph, null);
+				gw.rotate(-o.rotation, px+pw/2, py+ph/2);
 			}
 			if (curTool == Tool.OBJECT) {
 				int px = offX + (int)(mp.x * size), py = offY + (int)(mp.y * size);
 				Texture texture = objects.get(curObject);
 				int pw = (int)(texture.getWidth() * size), ph = (int)(texture.getHeight() * size);
+				gw.rotate(objRotation,px+pw/2,py+ph/2);
 				gw.drawImage(ImageTools.setTransparency(texture.getAnimation().getCurrentFrame(), 160), px, py, pw, ph, null);
+				gw.rotate(-objRotation,px+pw/2,py+ph/2);
 			}
 		}
 		if (wallP1 != null) {
@@ -678,6 +684,16 @@ public class EditorPanel extends JPanel {
 			break;
 		default:
 			break;
+		}
+		
+		if (this.curTool == Tool.OBJECT) {
+			double speed = Math.PI/50;
+			if (this.keyboard.keyDown(KeyEvent.VK_LEFT)) {
+				this.objRotation+=speed;
+			} 
+			if (this.keyboard.keyDown(KeyEvent.VK_RIGHT)) {
+				this.objRotation-=speed;
+			}
 		}
 		
 		if (curTool == Tool.OBJECT)

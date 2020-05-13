@@ -41,6 +41,7 @@ public abstract class Human extends Entity {
 		
 		this.setMass(60);
 		
+		this.setProperty(Properties.KEY_HAS_SQUISHY_BODY, Properties.VALUE_HAS_SQUISHY_BODY_TRUE);
 		this.setProperty(Properties.KEY_HITBOX_HAS_ROTATION, Properties.VALUE_HITBOX_HAS_ROTATION_FALSE);
 	}
 	

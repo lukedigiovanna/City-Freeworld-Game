@@ -17,8 +17,9 @@ public class EntityObject extends Entity {
 	
 	private int id;
 	
-	public EntityObject(int id, float x, float y) {
+	public EntityObject(int id, float x, float y, float r) {
 		super(x,y);
+		this.setRotation(r);
 		this.id = id;
 		this.texture = TexturePack.current().getObjectTexture(id);
 		this.animation = this.texture.getAnimation().copy();

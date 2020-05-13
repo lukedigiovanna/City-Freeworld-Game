@@ -78,6 +78,8 @@ public abstract class Vehicle extends Entity {
 	 * @return
 	 */
 	private float getDrivability() {
+		if (this.getRegion() == null)
+			return 1;
 		Cell cell = this.getRegion().getGrid().get((int)this.centerX(),(int)this.centerY());
 		if (cell == null)
 			return 1;

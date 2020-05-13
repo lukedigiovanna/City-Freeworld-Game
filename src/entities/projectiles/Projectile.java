@@ -24,7 +24,6 @@ public abstract class Projectile extends Entity {
 		this.setRotation(vi.getAngle());
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.setProperty(Properties.KEY_DESTROY_ON_COLLISION, Properties.VALUE_DESTROY_ON_COLLISION_TRUE);
-		this.setProperty(Properties.KEY_HAS_RIGID_BODY, Properties.VALUE_HAS_RIGID_BODY_TRUE);
 		
 		this.setVerticalHeight(7.5f);
 	}  

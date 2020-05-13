@@ -35,7 +35,7 @@ public class Minimap {
 		
 		Graphics2D g = image.createGraphics();
 		//fill in the background
-		g.setColor(Color.DARK_GRAY);
+		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, PIXEL_SIZE, PIXEL_SIZE);
 		float pps = PIXEL_SIZE/size; //pixels per unit
 		//draw in the tiles
@@ -54,6 +54,10 @@ public class Minimap {
 				}
 			}
 		}
+		
+		//gray scale the image
+		this.image = ImageTools.grayscale(this.image);
+		g = this.image.createGraphics();
 		
 		//draw the focused player as a yellow dot with an arrow in the direction of movement
 		int px = (int)((fx-lx)*pps),
@@ -82,11 +86,9 @@ public class Minimap {
 		//draw the border
 		int pm = (int)(margin * PIXEL_SIZE);
 		g.setStroke(new BasicStroke(pm));
-		g.setColor(Color.BLACK);
+		g.setColor(Color.DARK_GRAY);
 		g.drawOval(pm/2, pm/2, PIXEL_SIZE-pm, PIXEL_SIZE-pm);
-		
-		//now gray scale the image
-		this.image = ImageTools.grayscale(this.image);
+	
 	}
 	
 	public BufferedImage getImage() {

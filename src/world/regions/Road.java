@@ -109,6 +109,8 @@ public class Road implements Serializable {
 			Car.Model model = models[MathUtils.random(models.length)];
 			Vector2 startPoint = this.points.get(0);
 			Car car = new Car(model,startPoint.x-model.width/2,startPoint.y-model.height/2);
+			while (car.getVelocity().getLength() < this.speedLimit)
+				car.accelerate(0.2f); //accelerate 200 ms worth until we reach the speed limit
 			addCar(car);
 		}
 		
@@ -162,7 +164,7 @@ public class Road implements Serializable {
 					this.isCarAtStopSign = true;
 					if (!this.canCarCross()) { 
 						this.carWaitTimer = 0f;
-					} else if (this.carWaitTimer > 1.5f) {
+					} else if (this.carWaitTimer > 1.0f) {
 						Road other = this.linkedRoads.get(MathUtils.random(this.linkedRoads.size()));
 						other.addCar(car);
 						this.carInIntersection = car;

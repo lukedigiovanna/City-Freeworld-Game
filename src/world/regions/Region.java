@@ -90,7 +90,8 @@ public class Region implements Serializable {
 				int id = in.read();
 				float x = in.read() + in.read()/255.0f;
 				float y = in.read() + in.read()/255.0f;
-				EntityObject o = new EntityObject(id,x,y);
+				float r = in.read() + in.read()/255.0f;
+				EntityObject o = new EntityObject(id,x,y,r);
 				this.add(o);
 			}
 			int numOfRoads = in.read();
