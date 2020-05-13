@@ -131,7 +131,7 @@ public class Weapon implements Serializable {
 		
 		//for making the click sound when the player tries to shoot with no ammo
 		if (this.triggerPulled && this.getLoadedAmmo() == 0 && shotsFiredStreak == 0) {
-			SoundManager.play("gun_click");
+			owner.playSound("gun_click");
 			shotsFiredStreak++;
 		}
 		
@@ -159,8 +159,8 @@ public class Weapon implements Serializable {
 	private void shoot() {
 		float inaccuracyOffset = MathUtils.random(-inAccuracyRange, inAccuracyRange);
 		float angle = owner.getRotation() + inaccuracyOffset;
-		float dx = (float) ((owner.getWidth()/2+0.2f)*Math.cos(angle)),
-			  dy = (float) ((owner.getHeight()/2+0.2f)*Math.sin(angle));
+		float dx = (float) ((owner.getWidth()/2+0.25f)*Math.cos(angle)),
+			  dy = (float) ((owner.getHeight()/2+0.25f)*Math.sin(angle));
 		float x = owner.centerX() + dx, y = owner.centerY() + dy;
 		Projectile p = new Bullet(owner, x,y,angle);
 		p.setDamage(type.firePower);
@@ -168,7 +168,7 @@ public class Weapon implements Serializable {
 		owner.getRegion().add(p);
 		this.loadedInMag--;
 		this.fireTime%=(1/type.fireRate);
-		SoundManager.play("gun_shot");
+		owner.playSound("gun_shot");
 	}
 	
 	private boolean reload = false;

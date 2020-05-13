@@ -55,6 +55,10 @@ public class Player extends Human {
 		return this.xpLevel;
 	}
 	
+	public int getXPPoints() {
+		return this.xpPoints;
+	}
+	
 	private int xpForNextLevel = 10; //a1
 	private float rFactor = 1.5f; //r for geometric series
 	private int xpToNextLevel = 0;
@@ -129,12 +133,22 @@ public class Player extends Human {
 	public String getReputation() {
 		return "None";
 	}
+	
+	public BankAccount getBankAccount() {
+		return this.bankAct;
+	}
 
 	private float speed = 2.0f;
 	private float rotationalSpeed = (float)Math.PI*1.2f;
 	@Override
 	public void update(float dt) {
 		super.update(dt);
+		
+		if (this.health.isDead()) {
+			this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
+			this.health.setRegenerationRate(0); //no regen.
+			return; //don't try any other stuff.. were dead.
+		}
 	
 		char up = ((String)Settings.getSetting("move_up")).charAt(0);
 		char down = ((String)Settings.getSetting("move_down")).charAt(0);

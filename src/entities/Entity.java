@@ -127,12 +127,36 @@ public abstract class Entity extends WorldObject {
 	 * Deals damage to the entity if it is not invulnerable
 	 * @param amount
 	 */
-	public void hurt(float amount) {
+	public boolean hurt(float amount) {
 		//only if we aren't invulnerable
 		if (this.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE) {
-			this.health.hurt(amount);
-			this.popTextParticle("-"+amount, Color.RED);
+			if (this.health.hurt(amount)) {
+				this.popTextParticle("-"+amount, Color.RED);
+				this.lastHitBy = null; //set this to null, will be set not to null later if an entity did the damage
+				return true;
+			} 
 		}
+		return false;
+	}
+	
+	private Entity lastHitBy = null;
+	/**
+	 * Deals damage to the entity and records who dealt the damage
+	 * @param amount
+	 * @param dealer
+	 */
+	public void hurt(float amount, Entity dealer) {
+		if (this.hurt(amount)) {
+			this.lastHitBy = dealer;
+		}
+	}
+	
+	/**
+	 * Returns the killer, if there is any (null if there is not)
+	 * @return
+	 */
+	public Entity getKiller() {
+		return this.lastHitBy;
 	}
 	
 	/**

@@ -18,7 +18,7 @@ public class UpdateNotesDisplay extends Display {
 		"    NPC may turn hostile and try to kill the player when mugged",
 		"    NPCs drop their money, if any, when killed",
 		"Some more visual updates:",
-		"    Updated the player GUI, better health display and shows money",
+		"    Updated the player GUI, better health display and shows money/xp/heat",
 		"    Pause screen now fades the gameplay",
 		"    Loading screen until the scene loads",
 		"    Camera zooms in on the player at the beginning of a new scene",
@@ -28,11 +28,13 @@ public class UpdateNotesDisplay extends Display {
 		"    Vehicle movement now responds to the tile it drives across",
 		"    Vehicles controlled by AI will no longer ram into each other",
 		"        Allows the player to steal vehicles when they stop by pressing F",
+		"Implemented money and XP",
 		"Added end screen when the player dies",
 		"Added saving/loading game saves (not currently implemented)",
 		"Many bug fixes that make the game run much smoother",
 		"    No camera flickering anymore - allows higher FPS",
 		"    Hitboxes stay fixed to objects and function correctly",
+		"Other minor tweaks and features"
 	};
 	
 	private Button backButton = new BackButton(0.025f,0.025f);

@@ -9,6 +9,7 @@ import entities.player.Player;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
+import soundEngine.Sound;
 import world.event.*;
 import world.regions.Cell;
 import world.regions.Region;
@@ -777,7 +778,7 @@ public abstract class WorldObject implements Serializable {
 	}
 	
 	public Region getRegion() {
-		return region;
+		return region; 
 	}
 	
 	public Properties.Value getProperty(Properties.Key key) {
@@ -786,6 +787,24 @@ public abstract class WorldObject implements Serializable {
 	
 	public PositionHistory getPositionHistory() {
 		return this.positionHistory;
+	}
+	
+	/**
+	 * Forces the position of an object regardless of collision
+	 * @param x
+	 * @param y
+	 */
+	public void forcePosition(float x, float y) {
+		this.position.x = x;
+		this.position.y = y;
+	}
+	
+	public void playSound(String soundName) {
+		this.getWorld().getSoundEngine().playSound(soundName, this);
+	}
+	
+	public void playSound(Sound sound) {
+		this.getWorld().getSoundEngine().playSound(sound, this);
 	}
 	
 	/**

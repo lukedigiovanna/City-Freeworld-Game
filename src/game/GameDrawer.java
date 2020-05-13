@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import display.Bars;
 import display.Display;
+import display.DisplayController;
 import entities.Entity;
 import entities.player.Player;
 import main.Keyboard;
@@ -108,17 +109,17 @@ public class GameDrawer {
 				pauseBackground = ImageTools.darken(pauseScreenBackgroundStill, 1-pauseTimer/1.0f);
 			g.drawImage(pauseBackground, 0, 0, CAMERA_PIXEL_WIDTH, CAMERA_PIXEL_HEIGHT, null);
 			if (pauseTimer > 0.75) {
-				g.setColor(Color.RED);
-				g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
-				Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
-				for (PauseButton b : pButs) {
-					b.check();
-					b.draw(g);
+				if (game.isPaused()) {
+					//draw the pause info
+					g.setColor(Color.RED);
+					g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/10));
+					Display.drawText(g, "PAUSED", 0.5f, 0.4f, Display.CENTER_ALIGN);
+					for (PauseButton b : pButs) {
+						b.check();
+						b.draw(g);
+					}
 				}
 			}
-		} else if (game.isGameOver()) {
-			g.setColor(Color.RED);
-			g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
 		} else {
 			pauseTimer = 0;
 			
@@ -197,7 +198,7 @@ public class GameDrawer {
 			y-=25;
 			//Money
 			g.setColor(Color.GREEN.darker());
-			g.drawString(player.getMoneyDisplay(),x,y);
+			g.drawString(player.getMoneyDisplay(),x,y+height/2+g.getFontMetrics().getAscent()/2);
 			
 			int weaponSpace = 180;
 			Weapon selected = player.getSelectedWeapon();
@@ -231,6 +232,31 @@ public class GameDrawer {
 			g.drawString(time, 125-g.getFontMetrics().stringWidth(time)/2, 270);
 			
 			player.getWeaponManager().draw(g);
+			
+			if (this.game.isOver()) {
+				g.setColor(new Color(0,0,0,(int)(MathUtils.clip(0, 1f, this.game.getTimeGameOver())/1f*160)));
+				g.fillRect(0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT);
+				//draw the game over info
+				g.setColor(Color.RED);
+				g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,Program.DISPLAY_HEIGHT/8));
+				Display.drawText(g, "GAME OVER!", 0.5f, 0.4f, Display.CENTER_ALIGN);
+				g.setColor(Color.GRAY);
+				g.setFont(new Font(Program.FONT_FAMILY,Font.ITALIC | Font.BOLD, 30));
+				Display.drawText(g, game.getCauseOfEnd(), 0.5f, 0.45f, Display.CENTER_ALIGN);
+				g.setColor(Color.YELLOW);
+				g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,30));
+				String[] endNotes = new String[] {
+						"Total Income: $"+MathUtils.pad(player.getBankAccount().getTotalIncome(),0,2),
+						"Score: "+MathUtils.pad(player.getXPPoints(),6,0)
+				};
+				for (int i = 0; i < endNotes.length; i++) {
+					g.drawString(endNotes[i], Program.DISPLAY_WIDTH/2-g.getFontMetrics().stringWidth(endNotes[i])/2, Program.DISPLAY_HEIGHT/2+i*34+34);
+				}
+				for (PauseButton b : goButs) {
+					b.draw(g);
+					b.check();
+				}
+			}
 		}
 		
 		sg.drawImage(gameScreen, 0, 0, Program.DISPLAY_WIDTH, Program.DISPLAY_HEIGHT, null);
@@ -282,6 +308,21 @@ public class GameDrawer {
 		@Override
 		public void onMouseOut() { c = Color.cyan; }
 	}
+	
+	private PauseButton[] goButs = {
+			new PauseButton("REPLAY",Program.DISPLAY_HEIGHT/2+100) {
+				public void onMouseUp() {
+					game.quit(); //quits the current game (gets rid of its processes)
+					DisplayController.setScreen(DisplayController.Screen.NEW_GAME);
+				}
+			},
+			new PauseButton("QUIT",Program.DISPLAY_HEIGHT/2+130) {
+				public void onMouseUp() {
+					game.quit();
+					DisplayController.setScreen(DisplayController.Screen.MAIN);
+				}
+			}
+	};
 	
 	private PauseButton[] pButs = { new PauseButton("RESUME",Program.DISPLAY_HEIGHT/2) {
 		public void onMouseUp() {

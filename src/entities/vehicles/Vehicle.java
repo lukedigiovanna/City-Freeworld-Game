@@ -62,7 +62,7 @@ public abstract class Vehicle extends Entity {
 	}
 	
 	private float acceleration = 1.0f;
-	private float maxSpeed = 50.0f;
+	private float maxSpeed = 5.0f;
 	
 	public void accelerate(float dt) {
 		if (this.timeSinceLastBrake < 1f) //min wait of 1 second before the car can start accelerating again.

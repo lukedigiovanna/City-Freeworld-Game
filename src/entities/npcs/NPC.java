@@ -142,6 +142,10 @@ public class NPC extends Human {
 			//summon our cash
 			if (this.moneyOnHand > 0)
 				this.getRegion().add(new CashPickup(this.getX(),this.getY(),this.moneyOnHand));
+			Entity killer = this.getKiller();
+			if (killer != null && killer instanceof Player) {
+				((Player)killer).addXP(20);
+			}
 		}
 		super.destroy();                                              
 	}

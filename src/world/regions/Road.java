@@ -203,6 +203,12 @@ public class Road implements Serializable {
 		}
 	}
 	
+	/**
+	 * Does some math to draw a curve for the car to drive across to 
+	 * get onto the next road.
+	 * @param car
+	 * @param other
+	 */
 	private void sendCar(Car car, Road other) {
 		//Queue a path for the car to follow to the next road
 		Vector2 ep2 = other.points.get(0);
@@ -218,11 +224,19 @@ public class Road implements Serializable {
 		float alpha = -(float)(Math.PI/2 - roadAngle);
 		Vector2 reference = new Vector2(ep1.x + (float)Math.cos(alpha)*A, ep1.y + (float)Math.sin(alpha) * A);
 		float startAngle = (float)MathUtils.getAngle(reference,ep1), endAngle = (float)MathUtils.getAngle(reference, ep2);
+		float difference = endAngle - startAngle;
+		if (Math.abs(difference) > Math.PI/2+0.1) {
+			difference = -MathUtils.sign(difference)*((float)Math.PI * 2 - Math.abs(difference));
+			if (endAngle > startAngle)
+				endAngle -= Math.PI * 2;
+			else
+				endAngle += Math.PI * 2;
+		}
 		float aSquared = A * A, bSquared = B * B;
 		float eAngle = 0, eInc = (float)Math.PI/2/numOfPoints;
 		path.add(ep1);
 		if (reference.getDistanceSquared(ep1) > 0.25*0.25) {
-			for (float t = startAngle; !MathUtils.equals(t, endAngle); t+=(endAngle-startAngle)/numOfPoints) {
+			for (float t = startAngle; !MathUtils.equals(t, endAngle); t+=(difference)/numOfPoints) {
 				float cos = (float)Math.cos(eAngle), sin = (float)Math.sin(eAngle);
 				float distance = (float)Math.sqrt(cos*cos*aSquared+sin*sin*bSquared);
 				Vector2 point = new Vector2(reference.x + distance * (float)Math.cos(t), reference.y + distance * (float)Math.sin(t));

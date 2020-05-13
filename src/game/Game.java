@@ -114,10 +114,20 @@ public class Game {
 		//across varying operating system performances
 		float dt = ft.mark();
 		
+		if (gameOver)
+			paused = false;
 		if (paused)
 			return;
 		
-		world.update(dt);
+		if (this.gameOver) {
+			this.gameOverTimer+=dt;
+			this.world.getSoundEngine().mute();
+			if (this.gameOverTimer < 30f) {
+				world.update(dt * 0.25f);
+			}
+		}
+		else
+			world.update(dt);
 		
 		captures++;
 		elapsedSinceLastCapture+=dt;
@@ -128,15 +138,30 @@ public class Game {
 		}
 		
 		Player player = this.getWorld().getPlayers().get(0);
-		if (player != null && !gameOver && (player.getHealth().isDead() || player.isCaught()))
+		if (player != null && !gameOver && (player.getHealth().isDead() || player.isCaught())) {
+			if (player.getHealth().isDead())
+				causeOfEnd = "You died!";
+			else if (player.isCaught())
+				causeOfEnd = "Busted!";
 			gameOver = true; 
+		}
 		
 		elapsedTime+=dt;
 	}
 	
 	private boolean gameOver = false;
+	private float gameOverTimer = 0.0f;
 	
-	public boolean isGameOver() {
+	public boolean isOver() {
 		return gameOver;
+	}
+	
+	public float getTimeGameOver() {
+		return this.gameOverTimer;
+	}
+	
+	private String causeOfEnd = "Not over yet :)";
+	public String getCauseOfEnd() {
+		return this.causeOfEnd;
 	}
 }

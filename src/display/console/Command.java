@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import display.DisplayController;
+import game.GameController;
 import main.Program;
 
 public abstract class Command {
@@ -31,6 +32,9 @@ public abstract class Command {
 					case "settings":
 						DisplayController.setScreen(DisplayController.Screen.SETTINGS);
 						break;
+					case "new_game":
+						DisplayController.setScreen(DisplayController.Screen.NEW_GAME);
+						break;
 					case "game":
 						DisplayController.setScreen(DisplayController.Screen.GAME);
 						break;
@@ -40,6 +44,50 @@ public abstract class Command {
 					case "quit":
 						Program.exit();
 						break;
+					}
+				}
+			}
+		};
+		
+		new Command("tp","teleports the player to a specified coordinate") {
+			public void parse(Console console, String ... tokens) {
+				if (tokens.length < 2)
+					console.err("Must enter two values: x, y");
+				else if (tokens.length > 2)
+					console.err("Too many arguments for this command");
+				else {
+					try {
+						Float x = Float.parseFloat(tokens[0]);
+						Float y = Float.parseFloat(tokens[1]);
+						GameController.getGame().getWorld().getPlayers().get(0).forcePosition(x, y);
+					} catch (NullPointerException e) {
+						console.err("Only use this command in game");
+					} catch (NumberFormatException e) {
+						console.err("Only enter float values");
+					}
+				}
+			}
+		};
+		
+		new Command("health", "use add to heal and remove to hurt the player") {
+			public void parse(Console console, String ... tokens) {
+				if (tokens.length < 1)
+					console.err("Enter add or remove");
+				else if (tokens.length < 2)
+					console.err("Enter a value to "+tokens[1]);
+				else if (tokens.length > 2)
+					console.err("Too many arguments for this command");
+				else {
+					try {
+						Float val = Float.parseFloat(tokens[1]);
+						if (tokens[0].contentEquals("add"))
+							GameController.getGame().getWorld().getPlayers().get(0).getHealth().heal(val);
+						else if (tokens[0].contentEquals("remove"))
+							GameController.getGame().getWorld().getPlayers().get(0).getHealth().hurt(val);
+					} catch (NullPointerException e) {
+						console.err("Only use this command in game");
+					} catch (NumberFormatException e) {
+						console.err("Only enter float values");
 					}
 				}
 			}

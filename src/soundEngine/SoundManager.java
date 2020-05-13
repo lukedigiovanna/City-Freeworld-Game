@@ -17,8 +17,15 @@ public class SoundManager {
 		sounds = new ArrayList<Sound>();
 	}
 	
+	private static int playVolume = 50; //on a scale of 0 to 50 (50 is the loudest)
+	public static void setPlayVolume(int volume) {
+		playVolume = volume;
+	}
+	
 	public static void play(Sound sound) {
 		if ((boolean)Settings.getSetting("muted"))
+			return;
+		if (sound == null)
 			return;
 		sound = sound.copy();
 		sound.play();
@@ -40,11 +47,12 @@ public class SoundManager {
 	}
 	
 	public static void update() {
-		for (int i = 0; i < sounds.size(); i++)
+		for (int i = 0; i < sounds.size(); i++) {
 			if (sounds.get(i).dead()) {
 				sounds.remove(i);
 				i--;
 			}
+		}
 	}
 	
 	public static void muteAll() {

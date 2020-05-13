@@ -56,11 +56,12 @@ public class Health implements Serializable {
 		return health <= 0;
 	}
 	
-	public void hurt(float amount) {
-		if (amount <= 0)
-			return;
+	public boolean hurt(float amount) {
+		if (amount <= 0 || this.isDead()) //dont add insult to injury
+			return false;
 		this.setHealth(this.health - amount);
 		this.timeSinceDamage = 0.0f; //reset this timer
+		return true;
 	}
 	
 	public void heal(float amount) {

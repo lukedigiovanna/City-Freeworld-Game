@@ -24,11 +24,14 @@ public class Console {
 	
 	private int width, height;
 	
+	private Keyboard keyboard;
+	
 	public Console() {
 		width = (int)(0.5 * Program.DISPLAY_WIDTH);
 		height = (int)(0.5 * Program.DISPLAY_HEIGHT);
 		messages = new ArrayList<ConsoleMessage>();
 		currentMessage = "";
+		this.keyboard = new Keyboard(Program.panel);
 	}
 	
 	private static int[] untypableKeys = {KeyEvent.VK_SHIFT,KeyEvent.VK_CAPS_LOCK,KeyEvent.VK_CONTROL,KeyEvent.VK_ALT,KeyEvent.VK_TAB};
@@ -38,13 +41,13 @@ public class Console {
 	 * inputs to write to the current message;
 	 */
 	public void listen() {
-		if (Program.keyboard.keyPressed(KeyEvent.VK_BACK_QUOTE)) {
+		if (keyboard.keyPressed(KeyEvent.VK_BACK_QUOTE)) {
 			this.active = !active;
 			if (!active)
 				this.currentMessage = "";
 		}
 		if (this.active) {
-			Keyboard.Key key = Program.keyboard.getNextKey();
+			Keyboard.Key key = keyboard.getNextKey();
 			if (key == null)
 				return;
 			else if (key.keycode() == KeyEvent.VK_ESCAPE) { 

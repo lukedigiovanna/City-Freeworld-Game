@@ -19,6 +19,7 @@ import entities.player.Player;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
+import soundEngine.SoundEngine;
 import world.regions.Region;
 import world.regions.Road;
 
@@ -99,6 +100,8 @@ public class World implements Serializable {
 	private float timeOfDay = 12.0f; //up to hour 23, at 24 it resets to 0.
 	private int elapsedDays = 0;
 	
+	private SoundEngine soundEngine;
+	
 	public static World loadWorld(String saveName) {
 		try {
 			FileInputStream fis = new FileInputStream("assets/saves/"+saveName+".world");
@@ -138,6 +141,8 @@ public class World implements Serializable {
 			regions.add(next);
 		
 		addPlayer();
+		
+		this.soundEngine = new SoundEngine(this.getPlayers().get(0));
 		
 		Region reg0 = regions.get(0);
 		
@@ -251,5 +256,9 @@ public class World implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public SoundEngine getSoundEngine() {
+		return this.soundEngine;
 	}
 }

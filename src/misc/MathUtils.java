@@ -84,6 +84,28 @@ public class MathUtils {
 		return Math.round(val)/scale;
 	}
 	
+	/**
+	 * Pads the number with zeros or rounds the number to match the specified 
+	 * numeral counts
+	 * @param number
+	 * @param headNumberCount
+	 * @param trailingNumberCount
+	 * @return
+	 */
+	public static String pad(double number, int headNumberCount, int trailingNumberCount) {
+		number = MathUtils.round(number, 1/Math.pow(10, trailingNumberCount));
+		String num = ""+number;
+		if (trailingNumberCount < 1)
+			num = ""+(int)number;
+		for (int order = 1; order < headNumberCount; order++) 
+			if (number < Math.pow(10, order)) 
+				num = 0+num;
+		for (int order = 1; order < trailingNumberCount; order++) 
+			if (number % Math.pow(10, -order) == 0)
+				num+="0";
+		return num;
+	}
+	
 	//they are considered equal if they are within +/-0.001 of each other
 	public static boolean equals(float val1, float val2) {
 		return Math.abs(val1-val2) < 0.001f;

@@ -395,6 +395,10 @@ public class EditorPanel extends JPanel {
 				case WALL:
 					if (wallP1 == null) {
 						wallP1 = mp.copy();
+						if (this.keyboard.keyDown(KeyEvent.VK_SHIFT)) {
+							wallP1.x = Math.round(wallP1.x);
+							wallP1.y = Math.round(wallP1.y);
+						}
 					} else {
 						Vector2 wallP2 = mp.copy();
 						//for straight line correction
@@ -402,6 +406,10 @@ public class EditorPanel extends JPanel {
 							wallP2.x = wallP1.x;
 						if (Math.abs(wallP2.y-wallP1.y)<0.15)
 							wallP2.y = wallP1.y;
+						if (this.keyboard.keyDown(KeyEvent.VK_SHIFT)) {
+							wallP2.x = Math.round(wallP2.x);
+							wallP2.y = Math.round(wallP2.y);
+						}
 						EditorWall e = new EditorWall(wallP1.x,wallP1.y,wallP2.x,wallP2.y);
 						region.addComponent(e);
 						wallP1 = null;
@@ -606,6 +614,10 @@ public class EditorPanel extends JPanel {
 				p2.x = wallP1.x;
 			if (Math.abs(p2.y - wallP1.y) < 0.15)
 				p2.y = wallP1.y;
+			if (this.keyboard.keyDown(KeyEvent.VK_SHIFT)) {
+				p2.x = Math.round(p2.x);
+				p2.y = Math.round(p2.y);
+			}
 			int px2 = (int)(p2.x * size + offX),
 				py2 = (int)(p2.y * size + offY);
 			gw.setStroke(new BasicStroke((int)(size * 0.1)));
