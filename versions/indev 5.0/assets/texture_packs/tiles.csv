@@ -1,0 +1,30 @@
+string id,frame rate,display name,drivability
+grass,0,Grass,0.6
+dirt,0,Dirt,0.6
+sand,0,Sand,0.4
+water,0,Water,0.05
+planks,0,Planks 1,0.8
+planks1,0,Planks 2,0.8
+black_and_white_tile,0,Black and White Tile,1
+mossy_stone,0,Mossy Stone,0.8
+stone,0,Stone,0.8
+path,0,Path,0.7
+bricks,0,Bricks,0.9
+sand_sidewalk,0,Sand Sidewalk,0.8
+concrete_sidewalk,0,Concrete Sidewalk,0.8
+street,0,Black Street,1
+side_of_street,0,Black Street Edge,1
+corner_of_street,0,Black Street Corner,1
+turn_of_street,0,Turn of Street,1
+street_same_way_crossing,0,Black Street White Dashed Lines,1
+street_same_way_no_crossing,0,Black Street White Solid Lines,1
+street_two_way_crossing,0,Black Street Yellow Dashed Lines,1
+street_two_way_no_crossing,0,Black Street Yellow Solid Lines,1
+street_two_way_double_yellow,0,Black Street Yellow Double Solid Lines,1
+street_stop_line,0,Black Street Stop Line,1
+rainbow,6,Rainbow,5
+roof1_corner,0,Roof 1 Corner,0.8
+roof1_edge,0,Roof 1 Edge,0.8
+roof1_side_corner,0, Roof 1 Side Corner, 0.8
+roof1_side_edge,0,Roof 1 Side Edge, 0.8,
+void,0,Void,1
