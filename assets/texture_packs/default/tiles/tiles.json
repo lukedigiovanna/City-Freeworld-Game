@@ -18,7 +18,7 @@
 }],
 "id":1.0,
 "frame_rate":999.0,
-"string_id":"Dirt",
+"string_id":"Stale Grass",
 }, {
 "frames":[{
 "w":16.0,
@@ -28,7 +28,7 @@
 }],
 "id":2.0,
 "frame_rate":999.0,
-"string_id":"Sand",
+"string_id":"Dirt",
 }, {
 "frames":[{
 "w":16.0,
@@ -38,7 +38,7 @@
 }],
 "id":3.0,
 "frame_rate":999.0,
-"string_id":"Water",
+"string_id":"Sand",
 }, {
 "frames":[{
 "w":16.0,
@@ -48,7 +48,7 @@
 }],
 "id":4.0,
 "frame_rate":999.0,
-"string_id":"Planks 1",
+"string_id":"Gravel",
 }, {
 "frames":[{
 "w":16.0,
@@ -58,6 +58,26 @@
 }],
 "id":5.0,
 "frame_rate":999.0,
+"string_id":"Water",
+}, {
+"frames":[{
+"w":16.0,
+"x":96.0,
+"h":16.0,
+"y":0.0,
+}],
+"id":6.0,
+"frame_rate":999.0,
+"string_id":"Planks 1",
+}, {
+"frames":[{
+"w":16.0,
+"x":112.0,
+"h":16.0,
+"y":0.0,
+}],
+"id":7.0,
+"frame_rate":999.0,
 "string_id":"Planks 2",
 }, {
 "frames":[{
@@ -66,49 +86,49 @@
 "h":16.0,
 "y":16.0,
 }],
-"id":6.0,
+"id":8.0,
 "frame_rate":999.0,
-"string_id":"Black and White Tile",
+"string_id":"Planks 3",
 }, {
 "frames":[{
 "w":16.0,
 "x":16.0,
-"h":16.0,
-"y":16.0,
-}],
-"id":7.0,
-"frame_rate":999.0,
-"string_id":"Mossy Stone",
-}, {
-"frames":[{
-"w":16.0,
-"x":32.0,
-"h":16.0,
-"y":16.0,
-}],
-"id":8.0,
-"frame_rate":999.0,
-"string_id":"Stone",
-}, {
-"frames":[{
-"w":16.0,
-"x":48.0,
 "h":16.0,
 "y":16.0,
 }],
 "id":9.0,
 "frame_rate":999.0,
-"string_id":"Path",
+"string_id":"Planks 4",
 }, {
 "frames":[{
 "w":16.0,
-"x":64.0,
+"x":32.0,
 "h":16.0,
 "y":16.0,
 }],
 "id":10.0,
 "frame_rate":999.0,
-"string_id":"Bricks",
+"string_id":"Black and White Tile",
+}, {
+"frames":[{
+"w":16.0,
+"x":48.0,
+"h":16.0,
+"y":16.0,
+}],
+"id":11.0,
+"frame_rate":999.0,
+"string_id":"Mossy Stone",
+}, {
+"frames":[{
+"w":16.0,
+"x":64.0,
+"h":16.0,
+"y":16.0,
+}],
+"id":12.0,
+"frame_rate":999.0,
+"string_id":"Stone",
 }, {
 "frames":[{
 "w":16.0,
@@ -116,59 +136,79 @@
 "h":16.0,
 "y":16.0,
 }],
-"id":11.0,
+"id":13.0,
 "frame_rate":999.0,
-"string_id":"Sand Sidewalk",
+"string_id":"Path",
+}, {
+"frames":[{
+"w":16.0,
+"x":96.0,
+"h":16.0,
+"y":16.0,
+}],
+"id":14.0,
+"frame_rate":999.0,
+"string_id":"Bricks",
+}, {
+"frames":[{
+"w":16.0,
+"x":112.0,
+"h":16.0,
+"y":16.0,
+}],
+"id":15.0,
+"frame_rate":999.0,
+"string_id":"Bricks 2",
 }, {
 "frames":[{
 "w":16.0,
 "x":0.0,
-"h":16.0,
-"y":32.0,
-}],
-"id":12.0,
-"frame_rate":999.0,
-"string_id":"Concrete Sidewalk",
-}, {
-"frames":[{
-"w":16.0,
-"x":16.0,
-"h":16.0,
-"y":32.0,
-}],
-"id":13.0,
-"frame_rate":999.0,
-"string_id":"Black Street",
-}, {
-"frames":[{
-"w":16.0,
-"x":32.0,
-"h":16.0,
-"y":32.0,
-}],
-"id":14.0,
-"frame_rate":999.0,
-"string_id":"Black Street Edge",
-}, {
-"frames":[{
-"w":16.0,
-"x":48.0,
-"h":16.0,
-"y":32.0,
-}],
-"id":15.0,
-"frame_rate":999.0,
-"string_id":"Black Street Corner",
-}, {
-"frames":[{
-"w":16.0,
-"x":64.0,
 "h":16.0,
 "y":32.0,
 }],
 "id":16.0,
 "frame_rate":999.0,
-"string_id":"Turn of Street",
+"string_id":"Sand Sidewalk",
+}, {
+"frames":[{
+"w":16.0,
+"x":16.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":17.0,
+"frame_rate":999.0,
+"string_id":"Concrete Sidewalk",
+}, {
+"frames":[{
+"w":16.0,
+"x":32.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":18.0,
+"frame_rate":999.0,
+"string_id":"Concrete Sidewalk 2",
+}, {
+"frames":[{
+"w":16.0,
+"x":48.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":19.0,
+"frame_rate":999.0,
+"string_id":"Concrete Sidewalk Turn",
+}, {
+"frames":[{
+"w":16.0,
+"x":64.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":20.0,
+"frame_rate":999.0,
+"string_id":"Black Street",
 }, {
 "frames":[{
 "w":16.0,
@@ -176,134 +216,194 @@
 "h":16.0,
 "y":32.0,
 }],
-"id":17.0,
+"id":21.0,
+"frame_rate":999.0,
+"string_id":"Black Street Edge",
+}, {
+"frames":[{
+"w":16.0,
+"x":96.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":22.0,
+"frame_rate":999.0,
+"string_id":"Black Street Corner",
+}, {
+"frames":[{
+"w":16.0,
+"x":112.0,
+"h":16.0,
+"y":32.0,
+}],
+"id":23.0,
+"frame_rate":999.0,
+"string_id":"Turn of Street",
+}, {
+"frames":[{
+"w":16.0,
+"x":0.0,
+"h":16.0,
+"y":48.0,
+}],
+"id":24.0,
+"frame_rate":999.0,
+"string_id":"Black Street Edge Stale",
+}, {
+"frames":[{
+"w":16.0,
+"x":16.0,
+"h":16.0,
+"y":48.0,
+}],
+"id":25.0,
+"frame_rate":999.0,
+"string_id":"Black Street Corner Stale",
+}, {
+"frames":[{
+"w":16.0,
+"x":32.0,
+"h":16.0,
+"y":48.0,
+}],
+"id":26.0,
+"frame_rate":999.0,
+"string_id":"Turn of Street Stale",
+}, {
+"frames":[{
+"w":16.0,
+"x":48.0,
+"h":16.0,
+"y":48.0,
+}],
+"id":27.0,
 "frame_rate":999.0,
 "string_id":"Black Street White Dashed Lines",
 }, {
 "frames":[{
 "w":16.0,
-"x":0.0,
+"x":64.0,
 "h":16.0,
 "y":48.0,
 }],
-"id":18.0,
+"id":28.0,
 "frame_rate":999.0,
 "string_id":"Black Street White Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
-"x":16.0,
+"x":80.0,
 "h":16.0,
 "y":48.0,
 }],
-"id":19.0,
+"id":29.0,
 "frame_rate":999.0,
 "string_id":"Black Street Yellow Dashed Lines",
 }, {
 "frames":[{
 "w":16.0,
-"x":32.0,
+"x":96.0,
 "h":16.0,
 "y":48.0,
 }],
-"id":20.0,
+"id":30.0,
 "frame_rate":999.0,
 "string_id":"Black Street Yellow Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
-"x":48.0,
+"x":112.0,
 "h":16.0,
 "y":48.0,
 }],
-"id":21.0,
+"id":31.0,
 "frame_rate":999.0,
 "string_id":"Black Street Yellow Double Solid Lines",
 }, {
 "frames":[{
 "w":16.0,
-"x":64.0,
+"x":0.0,
 "h":16.0,
-"y":48.0,
+"y":64.0,
 }],
-"id":22.0,
+"id":32.0,
 "frame_rate":999.0,
 "string_id":"Black Street Stop Line",
 }, {
 "frames":[{
 "w":16.0,
-"x":80.0,
-"h":16.0,
-"y":48.0,
-}, {
-"w":16.0,
-"x":0.0,
-"h":16.0,
-"y":64.0,
-}, {
-"w":16.0,
 "x":16.0,
 "h":16.0,
 "y":64.0,
+}],
+"id":33.0,
+"frame_rate":999.0,
+"string_id":"Side of Stop Line",
 }, {
+"frames":[{
 "w":16.0,
 "x":32.0,
 "h":16.0,
 "y":64.0,
+}],
+"id":34.0,
+"frame_rate":999.0,
+"string_id":"Side of Stop Line Stale",
 }, {
+"frames":[{
 "w":16.0,
 "x":48.0,
 "h":16.0,
 "y":64.0,
+}],
+"id":35.0,
+"frame_rate":999.0,
+"string_id":"Black Street Yellow Double Solid Stop",
 }, {
+"frames":[{
 "w":16.0,
 "x":64.0,
 "h":16.0,
 "y":64.0,
 }],
-"id":23.0,
-"frame_rate":6.0,
-"string_id":"Rainbow",
+"id":36.0,
+"frame_rate":999.0,
+"string_id":"Black Street Yellow Solid Stop",
 }, {
 "frames":[{
 "w":16.0,
 "x":80.0,
 "h":16.0,
 "y":64.0,
-}],
-"id":24.0,
-"frame_rate":999.0,
-"string_id":"Roof 1 Corner",
 }, {
-"frames":[{
+"w":16.0,
+"x":96.0,
+"h":16.0,
+"y":64.0,
+}, {
+"w":16.0,
+"x":112.0,
+"h":16.0,
+"y":64.0,
+}, {
 "w":16.0,
 "x":0.0,
 "h":16.0,
 "y":80.0,
-}],
-"id":25.0,
-"frame_rate":999.0,
-"string_id":"Roof 1 Edge",
 }, {
-"frames":[{
 "w":16.0,
 "x":16.0,
 "h":16.0,
 "y":80.0,
-}],
-"id":26.0,
-"frame_rate":999.0,
-"string_id":" Roof 1 Side Corner",
 }, {
-"frames":[{
 "w":16.0,
 "x":32.0,
 "h":16.0,
 "y":80.0,
 }],
-"id":27.0,
-"frame_rate":999.0,
-"string_id":"Roof 1 Side Edge",
+"id":37.0,
+"frame_rate":6.0,
+"string_id":"Rainbow",
 }, {
 "frames":[{
 "w":16.0,
@@ -311,7 +411,87 @@
 "h":16.0,
 "y":80.0,
 }],
-"id":28.0,
+"id":38.0,
+"frame_rate":999.0,
+"string_id":"Roof 1 Corner",
+}, {
+"frames":[{
+"w":16.0,
+"x":64.0,
+"h":16.0,
+"y":80.0,
+}],
+"id":39.0,
+"frame_rate":999.0,
+"string_id":"Roof 1 Edge",
+}, {
+"frames":[{
+"w":16.0,
+"x":80.0,
+"h":16.0,
+"y":80.0,
+}],
+"id":40.0,
+"frame_rate":999.0,
+"string_id":" Roof 1 Side Corner",
+}, {
+"frames":[{
+"w":16.0,
+"x":96.0,
+"h":16.0,
+"y":80.0,
+}],
+"id":41.0,
+"frame_rate":999.0,
+"string_id":"Roof 1 Side Edge",
+}, {
+"frames":[{
+"w":16.0,
+"x":112.0,
+"h":16.0,
+"y":80.0,
+}],
+"id":42.0,
+"frame_rate":999.0,
+"string_id":"Roof 2 Corner",
+}, {
+"frames":[{
+"w":16.0,
+"x":0.0,
+"h":16.0,
+"y":96.0,
+}],
+"id":43.0,
+"frame_rate":999.0,
+"string_id":"Roof 2 Edge",
+}, {
+"frames":[{
+"w":16.0,
+"x":16.0,
+"h":16.0,
+"y":96.0,
+}],
+"id":44.0,
+"frame_rate":999.0,
+"string_id":" Roof 2 Side Corner",
+}, {
+"frames":[{
+"w":16.0,
+"x":32.0,
+"h":16.0,
+"y":96.0,
+}],
+"id":45.0,
+"frame_rate":999.0,
+"string_id":"Roof 2 Side Edge",
+}, {
+"frames":[{
+"w":16.0,
+"x":48.0,
+"h":16.0,
+"y":96.0,
+}],
+"id":46.0,
 "frame_rate":999.0,
 "string_id":"Void",
 }],
