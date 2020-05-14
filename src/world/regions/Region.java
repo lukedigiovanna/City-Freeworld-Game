@@ -66,31 +66,31 @@ public class Region implements Serializable {
 			int numOfPortals = in.read();
 			for (int i = 0; i < numOfPortals; i++) {
 				int destRegion = in.read();
-				float x = in.read() + in.read()/255.0f;
-				float y = in.read() + in.read()/255.0f;
-				float width = in.read() + in.read()/255.0f;
-				float height = in.read() + in.read()/255.0f;
-				float destX = in.read() + in.read()/255.0f;
-				float destY = in.read() + in.read()/255.0f;
+				float x = in.read() + in.read()/256.0f;
+				float y = in.read() + in.read()/256.0f;
+				float width = in.read() + in.read()/256.0f;
+				float height = in.read() + in.read()/256.0f;
+				float destX = in.read() + in.read()/256.0f;
+				float destY = in.read() + in.read()/256.0f;
 				
 				Portal p = new Portal(new Portal.Destination(destRegion, destX, destY), x, y, width, height);
 				this.add(p);
 			}
 			int numOfWalls = in.read();
 			for (int i = 0; i < numOfWalls; i++) {
-				float x1 = in.read() + in.read()/255.0f;
-				float y1 = in.read() + in.read()/255.0f;
-				float x2 = in.read() + in.read()/255.0f;
-				float y2 = in.read() + in.read()/255.0f;
+				float x1 = in.read() + in.read()/256.0f;
+				float y1 = in.read() + in.read()/256.0f;
+				float x2 = in.read() + in.read()/256.0f;
+				float y2 = in.read() + in.read()/256.0f;
 				Line w = new Line(new Vector2(x1,y1), new Vector2(x2,y2));
 				this.addWall(w);
 			}
 			int numOfObjects = in.read();
 			for (int i = 0; i < numOfObjects; i++) {
 				int id = in.read();
-				float x = in.read() + in.read()/255.0f;
-				float y = in.read() + in.read()/255.0f;
-				float r = in.read() + in.read()/255.0f;
+				float x = in.read() + in.read()/256.0f;
+				float y = in.read() + in.read()/256.0f;
+				float r = in.read() + in.read()/256.0f;
 				EntityObject o = new EntityObject(id,x,y,r);
 				this.add(o);
 			}
@@ -99,7 +99,6 @@ public class Region implements Serializable {
 				int id = in.read();
 				Road road = new Road(this,id);
 				int numOfPoints = in.read();
-				System.out.println(numOfPoints);
 				for (int j = 0; j < numOfPoints; j++) {
 					Vector2 point = new Vector2(in.read() + in.read()/256.0f, in.read() + in.read()/256.0f);
 					road.addPoint(point);
@@ -118,6 +117,18 @@ public class Region implements Serializable {
 			}
 			this.roadMap.linkRoads();
 			this.roadMap.intersectRoads();
+			int numOfTags = in.read();
+			for (int i = 0; i < numOfTags; i++) {
+				int textLength = in.read();
+				String text = "";
+				for (int j = 0; j < textLength; j++) {
+					text += in.readChar();
+				}
+				float x = in.read() + in.read()/256.0f;
+				float y = in.read() + in.read()/256.0f;
+				Tag tag = new Tag(text,Color.WHITE,Color.BLACK,x,y);
+				this.add(tag);
+			}
 			
 			this.localLightValue = in.read()/256.0f;
 			

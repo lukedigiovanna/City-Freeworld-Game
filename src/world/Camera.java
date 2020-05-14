@@ -356,8 +356,18 @@ public class Camera {
 		g.setFont(new Font(fontFamily,style,toPH(size)));
 	}
 	
+	public float stringWidth(String s) {
+		//do the reverse of converting world size to pixel size
+		float pw = g.getFontMetrics().stringWidth(s);
+		return (pw - 1) * this.drawDim.x / pixelWidth;
+	}
+	
 	public void drawString(String s, float x, float y) {
 		g.drawString(s, toPX(x), toPY(y));
+	}
+	
+	public void drawStringCentered(String s, float cx, float cy) {
+		g.drawString(s, toPX(cx)-g.getFontMetrics().stringWidth(s)/2, toPY(cy));
 	}
 	
 	public void rotate(float theta, float rx, float ry) {

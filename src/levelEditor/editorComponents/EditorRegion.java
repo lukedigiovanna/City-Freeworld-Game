@@ -29,7 +29,7 @@ public class EditorRegion {
 	private int width, height;
 	private ArrayList<ArrayList<EditorCell>> grid; // a value of -1 indicates that no tile has been defined
 	
-	private static final String[] TYPES = {"portal","wall","object","road"};
+	private static final String[] TYPES = {"portal","wall","object","road","tag"};
 	private List<EditorComponent> components; //all other float position components of the game board
 	
 	private float localLightValue = 0.0f;
@@ -120,11 +120,17 @@ public class EditorRegion {
 			}
 			
 			int numOfRoads = in.read();
-			System.out.println(numOfRoads);
 			for (int i = 0; i < numOfRoads; i++) {
 				EditorRoad r = new EditorRoad();
 				r.read(in);
 				this.components.add(r);
+			}
+			
+			int numOfTags = in.read();
+			for (int i = 0; i < numOfTags; i++) {
+				EditorTag t = new EditorTag();
+				t.read(in);
+				this.components.add(t);
 			}
 			
 			//set the local light value

@@ -27,17 +27,17 @@ public class EditorPortal implements EditorComponent {
 	public void write(DataOutputStream out) throws IOException {
 		out.write(destinationNumber);       //destination
 		out.write((int)(x));                //x-coord whole number
-		out.write((int)((x%1.0f)*255));     //x-coord decimal
+		out.write((int)((x%1.0f)*256));     //x-coord decimal
 		out.write((int)(y));                //y coord whole number
-		out.write((int)((y%1.0f)*255));     //y coord decimal
+		out.write((int)((y%1.0f)*256));     //y coord decimal
 		out.write((int)(width));            //width whole number
-		out.write((int)((width%1.0f)*255)); //width decimal
+		out.write((int)((width%1.0f)*256)); //width decimal
 		out.write((int)(height));           //height whole number
-		out.write((int)((height%1.0f)*255));//height decimal
+		out.write((int)((height%1.0f)*256));//height decimal
 		out.write((int)(destX));            //dest x-coord whole number
-		out.write((int)((destX%1.0f)*255)); //dest x-coord decimal
+		out.write((int)((destX%1.0f)*256)); //dest x-coord decimal
 		out.write((int)(destY));            //dest y-coord whole number
-		out.write((int)((destY%1.0f)*255)); //dest y-coord decimal
+		out.write((int)((destY%1.0f)*256)); //dest y-coord decimal
 	}
 	
 	public void read(DataInputStream in) throws IOException {

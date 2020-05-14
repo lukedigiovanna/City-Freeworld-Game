@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 import entities.*;
+import entities.misc.Tag;
 import entities.npcs.NPC;
 import entities.projectiles.Grenade;
 import entities.vehicles.Vehicle;
@@ -153,6 +154,10 @@ public class Player extends Human {
 		char down = ((String)Settings.getSetting("move_down")).charAt(0);
 		char left = ((String)Settings.getSetting("move_left")).charAt(0);
 		char right = ((String)Settings.getSetting("move_right")).charAt(0);
+		
+		if (Program.keyboard.keyPressed(' ')) {
+			this.getRegion().add(new Tag(ImageTools.getImage("texture_packs/default/tiles/grass.png"),"LMAO",Color.CYAN,this.getX(),this.getY()));
+		}
 		
 		if (Program.keyboard.keyPressed('p')) {
 			Path p = new Path();

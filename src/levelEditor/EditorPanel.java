@@ -444,7 +444,6 @@ public class EditorPanel extends JPanel {
 							roadP2.y = roadP1.y;
 						curRoad.add(roadP2);
 					}
-					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 					break;
 				case OBJECT:
 					EditorObject o = new EditorObject();
@@ -485,7 +484,6 @@ public class EditorPanel extends JPanel {
 							else
 								this.linkingRoad.intersect(linkerClosest);
 							this.linkingRoad = null;
-							mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 						} else {
 							this.linkingRoad = linkerClosest;
 						}
@@ -498,14 +496,22 @@ public class EditorPanel extends JPanel {
 						float speedLimit = Float.parseFloat(JOptionPane.showInputDialog(this,"Enter the speed limit",linkerClosest.getSpeedLimit()+""));
 						linkerClosest.setCarRate(carRate);
 						linkerClosest.setSpeedLimit(speedLimit);
-						mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
 					}
+					break;
+				case TAG:
+					String text = JOptionPane.showInputDialog(this, "What should it say?");
+					EditorTag tag = new EditorTag(text,mp.x,mp.y);
+					this.region.addComponent(tag);
 					break;
 				default:
 					break;
 				}
-				if (curTool == Tool.PORTAL || curTool == Tool.OBJECT || curTool == Tool.WALL || curTool == Tool.DELETE)
-					mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+				Tool[] tests = {Tool.TAG,Tool.ROAD,Tool.ROAD_ATTRIB,Tool.ROAD_LINKER,Tool.ROAD_STOP,Tool.PORTAL,Tool.OBJECT,Tool.WALL,Tool.DELETE};
+				for (Tool tool : tests)
+					if (curTool == tool) {
+						mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
+						break;
+					}
 			}
 			for (EditorComponent c : region.getType("portal")) {
 				EditorPortal p = (EditorPortal)c;
@@ -601,6 +607,13 @@ public class EditorPanel extends JPanel {
 				gw.rotate(o.rotation, px+pw/2, py+ph/2);
 				gw.drawImage(img, px, py, pw, ph, null);
 				gw.rotate(-o.rotation, px+pw/2, py+ph/2);
+			}
+			for (EditorComponent c : region.getType("tag")) {
+				EditorTag t = (EditorTag)c;
+				int px = offX + (int)(t.x * size), py = offY + (int)(t.y * size);
+				gw.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,(int)size));
+				gw.setColor(Color.WHITE);
+				gw.drawString(t.text, px-gw.getFontMetrics().stringWidth(t.text)/2, py);
 			}
 			if (curTool == Tool.OBJECT) {
 				int px = offX + (int)(mp.x * size), py = offY + (int)(mp.y * size);

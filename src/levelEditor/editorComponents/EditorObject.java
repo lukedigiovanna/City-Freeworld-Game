@@ -26,11 +26,11 @@ public class EditorObject implements EditorComponent {
 	public void write(DataOutputStream out) throws IOException {
 		out.write(id);
 		out.write((int)x);
-		out.write((int)(x%1.0f*255));
+		out.write((int)(x%1.0f*256));
 		out.write((int)y);
-		out.write((int)(y%1.0f*255));
+		out.write((int)(y%1.0f*256));
 		out.write((int)rotation);
-		out.write((int)(rotation%1.0f*255));
+		out.write((int)(rotation%1.0f*256));
 	}
 	
 	public void read(DataInputStream in) throws IOException {

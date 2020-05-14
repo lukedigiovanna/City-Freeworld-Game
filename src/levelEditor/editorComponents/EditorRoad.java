@@ -37,9 +37,9 @@ public class EditorRoad implements EditorComponent {
 		out.write(points.size());
 		for (Vector2 point : points) {
 			out.write((int)point.x);
-			out.write((int)((point.x%1.0f)*255));
+			out.write((int)((point.x%1.0f)*256));
 			out.write((int)point.y);
-			out.write((int)((point.y%1.0f)*255));
+			out.write((int)((point.y%1.0f)*256));
 		}
 		//now write the linked roads
 		out.write(linkedRoads.size());
@@ -50,9 +50,9 @@ public class EditorRoad implements EditorComponent {
 			out.write(i);
 		//now write the attributes
 		out.write((int)carRate);
-		out.write((int)((carRate%1.0f)*255));
+		out.write((int)((carRate%1.0f)*256));
 		out.write((int)speedLimit);
-		out.write((int)((speedLimit%1.0f)*255));
+		out.write((int)((speedLimit%1.0f)*256));
 	}
 
 	@Override
