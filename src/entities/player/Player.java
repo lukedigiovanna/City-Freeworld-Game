@@ -156,7 +156,7 @@ public class Player extends Human {
 		char right = ((String)Settings.getSetting("move_right")).charAt(0);
 		
 		if (Program.keyboard.keyPressed(' ')) {
-			this.getRegion().add(new Tag(ImageTools.getImage("texture_packs/default/tiles/grass.png"),"LMAO",Color.CYAN,this.getX(),this.getY()));
+			this.getRegion().add(new Tag(ImageTools.getImage("assets/texture_packs/default/tiles/grass.png"),"LMAO",Color.CYAN,this.getX(),this.getY()));
 		}
 		
 		if (Program.keyboard.keyPressed('p')) {

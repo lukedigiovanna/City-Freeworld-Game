@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import entities.Entity;
 import entities.misc.Particle;
+import misc.MathUtils;
 import world.Camera;
 import world.event.CollisionEvent;
 
@@ -11,14 +12,16 @@ public class Grenade extends Projectile {
 
 	public Grenade(Entity owner, float x, float y, float angle) {
 		super(owner, x, y, 0.15f, 0.15f, angle, 3); 
-		this.setDamage(15f);
-
-		this.addCollisionEvent(CollisionEvent.BOUNCE);
+		
+		this.dontDestroyOnHit();
+		
 		this.removeCollisionEvent(CollisionEvent.STOP);
 	}
 	
 	public void destroy() {
-		this.getRegion().addParticles(Particle.Type.SPARKLES, Color.RED, 5, 0.4f, getX(), getY(), getWidth(), getHeight());
+		for (int i = 0; i < 30; i++) {
+			this.getRegion().add(new Shard(this.getOwner(),this.centerX(),this.centerY(),MathUtils.random((float)Math.PI*2)));
+		}
 		super.destroy();
 	}
 	

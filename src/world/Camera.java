@@ -315,6 +315,8 @@ public class Camera {
 	}
 	
 	private void setLightnessColor() {
+		if (this.color == null)
+			return;
 		Color c = new Color((int)(lightValue * this.color.getRed()),(int)(lightValue * this.color.getGreen()),(int)(lightValue * this.color.getBlue()),this.color.getAlpha());
 		g.setColor(c);
 	}

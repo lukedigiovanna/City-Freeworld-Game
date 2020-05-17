@@ -32,8 +32,17 @@ public class EditorPanel extends JPanel {
 	
 	private float timer = 0.0f;
 	
-	public EditorPanel() {
+	public EditorPanel(EditorWorld world, int number) {
 		this.setFocusable(true);
+		
+		if (number < 0) {
+			String dim = JOptionPane.showInputDialog(EditorPanel.this, "What dimensions?", "Create Region", JOptionPane.QUESTION_MESSAGE);
+			String[] vals = dim.split(" ");
+			int w = Integer.parseInt(vals[0]);
+			int h = Integer.parseInt(vals[1]);
+			region = new EditorRegion(world.getName(),world.getNumberOfRegions(),w,h);
+		} else
+			region = new EditorRegion(world.getName(),number);
 		
 		//screen bi
 		screen = new BufferedImage(Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT,BufferedImage.TYPE_INT_ARGB);
@@ -44,32 +53,6 @@ public class EditorPanel extends JPanel {
 		
 		//menu bar
 		menuButtons = new ArrayList<MenuButton>();
-		addMenuButton("Load Region", new Runnable() {
-			public void run() {
-				try {
-					String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Load Region", JOptionPane.QUESTION_MESSAGE);
-					int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Load Region", JOptionPane.QUESTION_MESSAGE));
-					region = new EditorRegion(worldName, regNum);
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(EditorPanel.this, "Invalid format occurred!\nTry again", "Invalid Format", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
-		addMenuButton("New Region",new Runnable() {
-			public void run() {
-				try {
-					String worldName = JOptionPane.showInputDialog(EditorPanel.this, "World Name?", "Create Region", JOptionPane.QUESTION_MESSAGE);
-					int regNum = Integer.parseInt(JOptionPane.showInputDialog(EditorPanel.this, "Region Number?", "Create Region", JOptionPane.QUESTION_MESSAGE));
-					String dim = JOptionPane.showInputDialog(EditorPanel.this, "What dimensions?", "Create Region", JOptionPane.QUESTION_MESSAGE);
-					String[] vals = dim.split(" ");
-					int w = Integer.parseInt(vals[0]);
-					int h = Integer.parseInt(vals[1]);
-					region = new EditorRegion(worldName, regNum, w, h);
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(EditorPanel.this, "Invalid format occured!\nTry again", "Invalid Format", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
 		addMenuButton("Save", new Runnable() {
 			public void run() {
 				if (region == null) {
@@ -77,7 +60,6 @@ public class EditorPanel extends JPanel {
 					return;
 				}
 				region.save();
-				region.printGrid();
 				JOptionPane.showMessageDialog(EditorPanel.this, "Succesfully saved region "
 						+ "\n"+region.getFilePath(), "Region Save", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -240,6 +222,8 @@ public class EditorPanel extends JPanel {
 	private Vector2 wallP1 = null;
 	private EditorRoad curRoad = null;
 	private EditorRoad linkingRoad = null;
+	private EditorRegion portalRegion = null; //represents the region of the portal when placing the portal down
+	private EditorPortal portal = null; //when not null - the portal is being placed
 	
 	public void redraw() throws Exception {
 		Graphics2D g = screen.createGraphics();
@@ -378,19 +362,29 @@ public class EditorPanel extends JPanel {
 			if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL) && mouse.getX() > vx && mouse.getX() < vx + vw && mouse.getY() > vy && mouse.getY() < vy + vh) {
 				switch (curTool) {
 				case PORTAL:
-					try {
-						EditorPortal p = new EditorPortal();
-						p.x = mp.x;
-						p.y = mp.y;
-						p.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
-						p.width = 0.5f;
-						p.height = 0.5f;
-						String[] vals = JOptionPane.showInputDialog(this,"Enter portal destination coords","Add Portal",JOptionPane.QUESTION_MESSAGE).split(" ");
-						p.destX = Float.parseFloat(vals[0]);
-						p.destY = Float.parseFloat(vals[1]);
-						this.region.addComponent(p);
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(this, "Invalid entry", "Invalid Format", JOptionPane.ERROR_MESSAGE);
+					if (this.portal == null) {
+						try {
+							portal = new EditorPortal();
+							portal.x = mp.x;
+							portal.y = mp.y;
+							portal.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
+							portal.width = 0.5f;
+							portal.height = 0.5f;
+							this.portalRegion = this.region;
+							this.region = new EditorRegion(this.region.getWorldName(),portal.destinationNumber);
+							this.disableToolButtons();
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(this, "Invalid entry", "Invalid Format", JOptionPane.ERROR_MESSAGE);
+						}
+					} else {
+						//then we should be in the other region
+						this.enableToolButtons();
+						this.region = this.portalRegion;
+						portal.destX = mp.x;
+						portal.destY = mp.y;
+						this.region.addComponent(portal);
+						this.portal = null;
+						this.portalRegion = null;
 					}
 					break;
 				case WALL:
@@ -611,12 +605,12 @@ public class EditorPanel extends JPanel {
 			for (EditorComponent c : region.getType("tag")) {
 				EditorTag t = (EditorTag)c;
 				int px = offX + (int)(t.x * size), py = offY + (int)(t.y * size);
-				gw.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,(int)size));
+				gw.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,(int)size/2));
 				gw.setColor(Color.WHITE);
 				gw.drawString(t.text, px-gw.getFontMetrics().stringWidth(t.text)/2, py);
 			}
 			if (curTool == Tool.OBJECT) {
-				int px = offX + (int)(mp.x * size), py = offY + (int)(mp.y * size);
+				int px = offX  + (int)(mp.x * size), py = offY + (int)(mp.y * size);
 				Texture texture = objects.get(curObject);
 				int pw = (int)(texture.getWidth() * size), ph = (int)(texture.getHeight() * size);
 				gw.rotate(objRotation,px+pw/2,py+ph/2);
@@ -727,9 +721,23 @@ public class EditorPanel extends JPanel {
 		g.drawLine((int)(offX + x1 * size), (int)(offY + y1 * size), (int)(offX + x2 * size), (int)(offY + y2 * size));
 	}
 	
+	private boolean toolButtonsEnabled = true;
+	private void enableToolButtons() {
+		for (ToolButton b : toolButtons)
+			b.enable();
+		this.toolButtonsEnabled = true;
+	}
+	
+	private void disableToolButtons() {
+		for (ToolButton b : toolButtons)
+			b.disable();
+		this.toolButtonsEnabled = false;
+	}
+	
 	private void drawButtons(Graphics2D g) {
 		for (ToolButton t : toolButtons) {
-			t.check(mouse);
+			if (toolButtonsEnabled)
+				t.check(mouse);
 			t.draw(g);
 		}
 		for (MenuButton b : menuButtons) {

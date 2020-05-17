@@ -9,6 +9,8 @@ public class ToolButton extends Button {
 	
 	private EditorPanel panel;
 	
+	private boolean enabled = true;
+	
 	public ToolButton(Tool tool, int x, int y, EditorPanel panel) {
 		super("",x,y,50,50);
 		this.tool = tool;
@@ -19,13 +21,28 @@ public class ToolButton extends Button {
 	
 	private int timer = 0;
 	
+	public void enable() {
+		this.enabled = true;
+	}
+	
+	public void disable() {
+		this.enabled = false;
+	}
+	
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+	
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(color);
 		if (panel.getTool() == tool) 
 			g.setColor(Color.CYAN);
 		g.fillRoundRect(x, y, width, height,5,5);
-		g.setColor(Color.GRAY);
+		if (enabled)
+			g.setColor(Color.GRAY);
+		else
+			g.setColor(Color.DARK_GRAY);
 		g.fillRect(x+4,y+4,width-8,height-8);
 		g.drawImage(tool.img, x+4, y+4, width-8, height-8, null);
 		g.setColor(Color.BLACK);

@@ -60,7 +60,7 @@ public abstract class Entity extends WorldObject {
 		this.getRegion().remove(this);
 		this.setRegion(region);
 		region.add(this);
-		this.setPosition(x, y);
+		this.setPosition(x-this.getWidth()/2, y-this.getHeight()/2); //tp so destination is the center coordinate of the entity
 		if (this.hasTag("player")) {
 			this.getRegion().getWorld().setCurrentRegion(this.getRegion());
 		}

@@ -32,6 +32,10 @@ public abstract class Projectile extends Entity {
 		this(owner,x,y,width,height,new Vector2(speed*(float)Math.cos(angle),speed*(float)Math.sin(angle)));
 	}
 	
+	public Entity getOwner() {
+		return this.owner;
+	}
+	
 	public void dontDestroyOnHit() {
 		destroyOnHit = false;
 	}

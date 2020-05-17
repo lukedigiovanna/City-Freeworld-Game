@@ -65,16 +65,18 @@ public class Tag extends Entity {
 	
 	public void draw(Camera c) {
 		c.setFont(Program.FONT_FAMILY, Font.BOLD, 0.5f);
-		c.setColor(this.borderColor);
-		float d = 0.03f;
-		c.drawStringCentered(this.text, this.getX()-d, this.getY()-d);
-		c.drawStringCentered(this.text, this.getX()+d, this.getY()-d);
-		c.drawStringCentered(this.text, this.getX()-d, this.getY()+d);
-		c.drawStringCentered(this.text, this.getX()+d, this.getY()+d);
+		if (this.borderColor != null) {
+			c.setColor(this.borderColor);
+			float d = 0.03f;
+			c.drawStringCentered(this.text, this.getX()-d, this.getY()-d);
+			c.drawStringCentered(this.text, this.getX()+d, this.getY()-d);
+			c.drawStringCentered(this.text, this.getX()-d, this.getY()+d);
+			c.drawStringCentered(this.text, this.getX()+d, this.getY()+d);
+		}
 		c.setColor(this.color);
 		c.drawStringCentered(this.text, this.getX(), this.getY());
 		if (this.icon != null) {
-			c.drawImage(icon, this.getX() - c.stringWidth(this.text)/2-0.5f, this.getY(), 0.5f, 0.5f);
+			c.drawImage(icon, this.getX() - c.stringWidth(this.text)/2-0.55f, this.getY(), 0.5f, 0.5f);
 		}
 		//draw the marker
 		c.drawImage(marker, this.getX()-0.2f, this.getY()+0.1f, 0.4f, 0.4f);
