@@ -341,6 +341,15 @@ public class EditorPanel extends JPanel {
 						}
 					}
 				}
+				for (EditorComponent c : region.getType("tag")) {
+					EditorTag t = (EditorTag)c;
+					Vector2 p = new Vector2(t.x+0.25f,t.y+0.25f);
+					float indDist = p.getDistanceSquared(mp);
+					if (indDist < dist) {
+						dist = indDist;
+						closest = t;
+					}
+				}
 			}
 			EditorRoad linkerClosest = null;
 			dist = 0.25f;
@@ -607,6 +616,8 @@ public class EditorPanel extends JPanel {
 				int px = offX + (int)(t.x * size), py = offY + (int)(t.y * size);
 				gw.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,(int)size/2));
 				gw.setColor(Color.WHITE);
+				if (c == closest)
+					gw.setColor(Color.RED);
 				gw.drawString(t.text, px-gw.getFontMetrics().stringWidth(t.text)/2, py);
 			}
 			if (curTool == Tool.OBJECT) {

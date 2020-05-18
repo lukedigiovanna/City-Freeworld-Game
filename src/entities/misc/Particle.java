@@ -51,6 +51,7 @@ public class Particle extends Entity {
 		//setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		setProperty(Properties.KEY_REGENERATE_HITBOX, Properties.VALUE_REGENERATE_HITBOX_FALSE);
 		setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		
 		this.addCollisionEvent(CollisionEvent.BOUNCE);
 		this.removeCollisionEvent(CollisionEvent.STOP);

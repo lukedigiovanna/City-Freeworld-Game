@@ -20,7 +20,7 @@ public class Grenade extends Projectile {
 	
 	public void destroy() {
 		for (int i = 0; i < 30; i++) {
-			this.getRegion().add(new Shard(this.getOwner(),this.centerX(),this.centerY(),MathUtils.random((float)Math.PI*2)));
+			this.getRegion().add(new Shard(this.getOwner(),this.centerX()+MathUtils.random(-0.15f, 0.15f),this.centerY()+MathUtils.random(-0.15f, 0.15f),MathUtils.random((float)Math.PI*2)));
 		}
 		super.destroy();
 	}

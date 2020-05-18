@@ -17,6 +17,7 @@ public abstract class Pickupable extends Entity {
 		super(x, y, width, height);	
 		animation = new Animation(ImageTools.getImage(iconName+".png"));
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
+		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		this.addTag("pickupable");
 	}
 	
