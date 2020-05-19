@@ -304,6 +304,19 @@ public class Road implements Serializable {
 		}
 		
 		wait = MIN_WAIT + (60-MIN_WAIT) / carRate + MathUtils.random(-4,4);
+		//factor in the time of day
+//		float timeOfDay = this.region.getWorld().getTimeOfDay();
+//		if (timeOfDay > 21 || timeOfDay < 6) { //less cars from 9pm to 6am
+//			//value of sin from 0 to pi
+//			float time = 0;
+//			if (timeOfDay > 21)
+//				time = timeOfDay - 21;
+//			else if (timeOfDay < 6)
+//				time = 3 + timeOfDay;
+//			double theta = time/9 * Math.PI;
+//			double sin = Math.sin(theta);
+//			time += 30 * sin; //additional 30 real seconds at the darkest time of night
+//		}
 		wait = MathUtils.max(MIN_WAIT,wait);
 	}
 	

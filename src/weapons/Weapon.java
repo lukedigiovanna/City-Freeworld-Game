@@ -30,7 +30,7 @@ public class Weapon implements Serializable {
 	public static enum Type {
 		GLOCK_21("Glock 21","glock21",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,17,8.0f,0.025f),
 		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,10.0f,0.15f),
-		REVOLOVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f,0.125f),
+		REVOLVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f,0.125f),
 		
 		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,10.0f,2.0f,30,4.0f,0.3f);
 		
@@ -135,23 +135,27 @@ public class Weapon implements Serializable {
 			shotsFiredStreak++;
 		}
 		
-		if (this.triggerPulled && this.getLoadedAmmo() > 0 && fireTime >= 1/type.fireRate && this.reloadTimer == 0.0f) {
-			switch (this.type.fireStyle) {
-			case FIRE_STYLE_ONE:
-				if (shotsFiredStreak == 0) {
+		if (this.triggerPulled && fireTime >= 1/type.fireRate && this.reloadTimer == 0.0f) {
+			if (this.getLoadedAmmo() > 0) {
+				switch (this.type.fireStyle) {
+				case FIRE_STYLE_ONE:
+					if (shotsFiredStreak == 0) {
+						shoot();
+						shotsFiredStreak++;
+					}
+					break;
+				case FIRE_STYLE_BURST:
+					if (shotsFiredStreak < maxBurst) {
+						shoot();
+						shotsFiredStreak++;
+					}
+					break;
+				case FIRE_STYLE_CONSTANT:
 					shoot();
 					shotsFiredStreak++;
 				}
-				break;
-			case FIRE_STYLE_BURST:
-				if (shotsFiredStreak < maxBurst) {
-					shoot();
-					shotsFiredStreak++;
-				}
-				break;
-			case FIRE_STYLE_CONSTANT:
-				shoot();
-				shotsFiredStreak++;
+			} else {
+				reload();
 			}
 		}
 	}

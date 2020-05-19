@@ -31,9 +31,9 @@ public class WeaponManager implements Serializable {
 		weapons[0] = new Weapon(player,Weapon.Type.AK_47);
 		weapons[1] = new Weapon(player,Weapon.Type.GLOCK_21);
 		weapons[2] = new Weapon(player,Weapon.Type.DESERT_EAGLE);
-		weapons[3] = new Weapon(player,Weapon.Type.REVOLOVER);
-		weapons[4] = new Weapon(player,Weapon.Type.AK_47);
-		weapons[5] = new Weapon(player,Weapon.Type.GLOCK_21);
+		weapons[3] = new Weapon(player,Weapon.Type.REVOLVER);
+//		weapons[4] = new Weapon(player,Weapon.Type.AK_47);
+//		weapons[5] = new Weapon(player,Weapon.Type.GLOCK_21);
 	}
 	
 	public Weapon getSelectedWeapon() {

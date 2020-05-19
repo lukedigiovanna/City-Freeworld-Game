@@ -227,6 +227,14 @@ public class World implements Serializable {
 		return elapsedTime;
 	}
 	
+	/**
+	 * Returns how many hours into the day it is (military time)
+	 * @return
+	 */
+	public float getTimeOfDay() {
+		return this.timeOfDay;
+	}
+	
 	public String getStringTime() {
 		int hour = (int)this.timeOfDay;
 		int minute = (int)(this.timeOfDay%1.0f*60);
