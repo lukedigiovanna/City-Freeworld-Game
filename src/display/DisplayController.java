@@ -7,7 +7,6 @@ import display.console.ConsoleMessage;
 import display.ui.UIController;
 import game.FrameTimer;
 import main.Program;
-import soundEngine.SoundManager;
 
 /*
  * static class to handle drawing to the screen
@@ -44,8 +43,6 @@ public class DisplayController {
 		
 		console.listen();
 		console.draw(g);
-		
-		SoundManager.update();
 		
 		//get the time it took to draw this frame
 		dt += frameTimer.mark();

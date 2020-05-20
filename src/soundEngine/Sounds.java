@@ -14,8 +14,9 @@ public class Sounds {
 	 */
 	public static void initialize() {
 		sounds = new HashMap<String,Sound>();
-		sounds.put("gun_shot", new Sound("assets/sounds/gunfire.wav",50));
-		sounds.put("gun_click", new Sound("assets/sounds/gunclick.wav",30));
+		sounds.put("gun_shot", new Sound("assets/sounds/gunfire.wav",100));
+		sounds.put("gun_click", new Sound("assets/sounds/gunclick.wav",60));
+		sounds.put("coffin", new Sound("assets/sounds/coffin.wav",100));
 		for (Sound sound : sounds.values()) {
 			sound.mute();
 			sound.play();

@@ -9,6 +9,7 @@ import entities.misc.Particle.Type;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
+import soundEngine.SoundEngine;
 import world.World;
 
 public class Region implements Serializable {
@@ -29,6 +30,8 @@ public class Region implements Serializable {
 	private RoadMap roadMap;
 	private int width, height;
 	
+	private SoundEngine soundEngine;
+	
 	//0 means its dictated fully by the time, 1 means the time plays no role in light level
 	private float localLightValue = 0.0f; 
 	
@@ -41,6 +44,7 @@ public class Region implements Serializable {
 		entities = new EntityList(this);
 		walls = new Walls();
 		this.world = world;
+		this.soundEngine = new SoundEngine();
 		this.addBoundingWalls();
 	}
 	
@@ -137,6 +141,11 @@ public class Region implements Serializable {
 			exists = false; //the file does not exist
 		}
 		this.world = world;
+		this.soundEngine = new SoundEngine();
+	}
+	
+	public SoundEngine getSoundEngine() {
+		return this.soundEngine;
 	}
 	
 	/**
@@ -213,5 +222,6 @@ public class Region implements Serializable {
 		entities.update(dt);
 		cellGrid.update(dt);
 		roadMap.update(dt);
+		this.soundEngine.update();
 	}
 }

@@ -1,16 +1,20 @@
 package soundEngine;
 
 import javax.sound.sampled.*;
+
+import misc.MathUtils;
+
 import java.io.*;
 
 public class Sound {
 	
 	//any sound lower than MIN_VOLUME should completely mute the sound.
-	public static final float MIN_VOLUME = -50.0f, MAX_VOLUME = 0.0f;
+	public static final float MIN_VOLUME_REAL = -50.0f, MAX_VOLUME_REAL = 0f;
+	public static final float MIN_VOLUME_SCALED = 0f, MAX_VOLUME_SCALED = 100f;
 	
 	private File audioFile;
 	private Clip clip;
-	private float volume;
+	private FloatControl gainControl;
 	private float relativeVolume; //how loudly the sound should be played relative to other sounds
 	// this is useful for determining the strength of a sound based on distance
 	// is on a scale from 0 to 50, where 50 is a very loud sound
@@ -37,6 +41,7 @@ public class Sound {
 							);
 			clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
+			gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 		} catch (Exception e) {
 			
 		}
@@ -65,12 +70,15 @@ public class Sound {
 			play();
 	}
 	
+	private float lastVolume; 
 	public void mute() {
 		this.mute = true;
+		gainControl.setValue(-999999); //just set it to a very low value
 	}
 	
 	public void unmute() {
 		this.mute = false;
+		setVolume(lastVolume);
 	}
 	
 	public void loop() {
@@ -79,14 +87,24 @@ public class Sound {
 	
 	/**
 	 * Sets the actual volume that this sound will be played at.
-	 * @param value
+	 * @param value on the scaled range (not the actual range)
 	 */
 	public void setVolume(float value) {
-		if (value < MIN_VOLUME)
-			value = -1000.0f;
-		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(value); 
-		this.volume = value;
+		if (mute)
+			return;
+		lastVolume = value;
+		value = MathUtils.clip(MIN_VOLUME_SCALED, MAX_VOLUME_SCALED, value);
+		float percent = (value-MIN_VOLUME_SCALED)/(MAX_VOLUME_SCALED-MIN_VOLUME_SCALED);
+		float realVolume = percent * (MAX_VOLUME_REAL-MIN_VOLUME_REAL)+MIN_VOLUME_REAL;
+		gainControl.setValue(realVolume); 
+	}
+	
+	/**
+	 * Should be a value from 0 to 1
+	 * @param strength
+	 */
+	public void setStrength(float strength) {
+		this.setVolume(strength * this.relativeVolume);
 	}
 	
 	public boolean dead() {

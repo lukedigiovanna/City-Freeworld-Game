@@ -105,21 +105,7 @@ public abstract class Human extends Entity {
 	 * If there is a car close enough then it will get in
 	 */
 	public void findVehicle() {
-		List<Entity> vehicles = this.getRegion().getEntities().get("vehicle");
-		Entity closest = null;
-		float maxDistance = 3.0f; //maximum distance the car can be away
-		float distanceToVehicle = 99999.0f; //start the distance high
-		for (Entity vehicle : vehicles) {
-			//can't enter a vehicle that is moving -- that makes no sense
-			if (vehicle.getVelocity().getLength() != 0)
-				continue;
-			//get the distance
-			float distance = this.squaredDistanceTo(vehicle);
-			if (distance < maxDistance * maxDistance && distance < distanceToVehicle * distanceToVehicle) {
-				distanceToVehicle = distance;
-				closest = vehicle;
-			}
-		}
+		Entity closest = this.findClosest(3, "vehicle");
 		//if the vehicle is found then enter the vehicle
 		if (closest != null) {
 			enterVehicle((Vehicle)closest);

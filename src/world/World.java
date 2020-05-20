@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
-import entities.misc.InteractableObject;
+import entities.misc.interactables.InteractableObject;
+import entities.misc.interactables.InteractableShopObject;
 import entities.npcs.NPC;
 import entities.player.Player;
 import misc.Line;
@@ -155,14 +156,12 @@ public class World implements Serializable {
 			}
 		}
 		
-		this.soundEngine = new SoundEngine(this.player);
-		
 		Region reg0 = regions.get(0);
 		
 		for (int i = 0; i < 5; i++)
 			reg0.add(new NPC(15+MathUtils.random(-4,4),15+MathUtils.random(-4,4)));
 		
-		reg0.add(new InteractableObject(Shop.Type.WEAPONS_SHOP,15,15));
+		reg0.add(new InteractableShopObject(Shop.Type.WEAPONS_SHOP,15,15));
 		
 		//initialize starting region
 		getCurrentRegion().update(0);
@@ -187,7 +186,9 @@ public class World implements Serializable {
 	}
 	
 	public void setCurrentRegion(Region region) {
+		this.getCurrentRegion().getSoundEngine().mute();
 		currentRegion = regions.indexOf(region);
+		this.getCurrentRegion().getSoundEngine().unmute();
 	}
 	
 	/**
@@ -258,6 +259,15 @@ public class World implements Serializable {
 		return time;
 	}
 	
+	/**
+	 * Ends certain external processes associated with the world
+	 */
+	public void close() {
+		for (Region region : regions) {
+			region.getSoundEngine().pause();
+		}
+	}
+	
 	public void save() {
 		try {
 //			FileOutputStream fos = new FileOutputStream("assets/saves/"+saveName+".world");
@@ -271,9 +281,5 @@ public class World implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public SoundEngine getSoundEngine() {
-		return this.soundEngine;
 	}
 }

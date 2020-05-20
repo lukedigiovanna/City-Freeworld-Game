@@ -8,7 +8,6 @@ import display.textures.TexturePack;
 import display.ui.UIController;
 import game.Game;
 import misc.ImageTools;
-import soundEngine.SoundManager;
 import soundEngine.Sounds;
 import world.World;
 
@@ -65,7 +64,6 @@ public class Program {
 		mouse = new Mouse(panel,Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT);
 		keyboard = new Keyboard(panel);
 		DisplayController.initialize();
-		SoundManager.initialize();
 		Sounds.initialize();
 		
 		World.loadWorldsList();

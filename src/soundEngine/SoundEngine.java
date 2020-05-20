@@ -1,5 +1,8 @@
 package soundEngine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entities.player.Player;
 import world.World;
 import world.WorldObject;
@@ -10,31 +13,59 @@ import world.WorldObject;
  *
  */
 public class SoundEngine {
-	private Player player; //where the sound is being perceived.
 	
 	private boolean muted = false;
 	
-	public SoundEngine(Player player) {
-		this.player = player;
+	private List<WorldSound> sounds;
+	
+	public SoundEngine() {
+		sounds = new ArrayList<WorldSound>();
 	}
 	
 	public void playSound(Sound sound, WorldObject pointOfOrigin) {
 		if (muted)
 			return;
-		SoundManager.play(sound);
+		sound = sound.copy(); //make sure we create another sound object
+		sound.play();
+		sounds.add(new WorldSound(sound,pointOfOrigin));
 	}
 	
 	public void playSound(String sound, WorldObject pointOfOrigin) {
-		if (muted)
-			return;
-		SoundManager.play(sound);
+		this.playSound(Sounds.get(sound), pointOfOrigin);
 	}
 	
+	public void update() {
+		for (WorldSound sound : sounds) {
+			sound.update(); //updates the volume based on object movements
+		}
+	}
+	
+	/*
+	 * These methods stop the clip and it can be resumed later
+	 */
+	public void pause() {
+		for (WorldSound sound : sounds) {
+			sound.getSound().pause();
+		}
+	}
+	
+	public void unpause() {
+		for (WorldSound sound : sounds) {
+			sound.getSound().play();
+		}
+	}
+	
+	/*
+	 * These methods only affect the volume of the sound
+	 * and allows the clip to continue playing
+	 */
 	public void mute() {
-		this.muted = true;
+		for (WorldSound sound : sounds)
+			sound.getSound().mute();
 	}
 	
 	public void unmute() {
-		this.muted = false;
+		for (WorldSound sound : sounds) 
+			sound.getSound().unmute();
 	}
 }

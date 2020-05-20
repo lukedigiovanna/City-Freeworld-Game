@@ -151,22 +151,11 @@ public class Player extends Human {
 			this.health.setRegenerationRate(0); //no regen.
 			return; //don't try any other stuff.. were dead.
 		}
+		
+		char up = Settings.getChar("move_up"), down = Settings.getChar("move_down"), left = Settings.getChar("move_left"), right = Settings.getChar("move_right");
+		
 	
-		char up = ((String)Settings.getSetting("move_up")).charAt(0);
-		char down = ((String)Settings.getSetting("move_down")).charAt(0);
-		char left = ((String)Settings.getSetting("move_left")).charAt(0);
-		char right = ((String)Settings.getSetting("move_right")).charAt(0);
-		
 		UI input = Game.getInput();
-		
-		if (input.keyPressed('p')) {
-			Path p = new Path();
-			p.add(getX(),getY());
-			p.add(getX()-3.0f,getY());
-			p.add(getX(),getY()-3.0f);
-			p.add(getX(),getY());
-			this.queuePath(p);
-		}
 		
 		if (input.keyPressed(KeyEvent.VK_SPACE)) {
 			Grenade g = new Grenade(this,getX(),getY(),getRotation());
@@ -266,18 +255,7 @@ public class Player extends Human {
 	}
 	
 	public void attemptRobbery() {
-		List<Entity> npcs = this.getRegion().getEntities().get("npc");
-		Entity closest = null;
-		float maxDistance = 3.0f; //maximum distance the NPC can be away
-		float distanceToNPC = 99999.0f; //start the distance high
-		for (Entity npc : npcs) {
-			//get the distance
-			float distance = this.squaredDistanceTo(npc);
-			if (distance < maxDistance * maxDistance && distance < distanceToNPC * distanceToNPC) {
-				distanceToNPC = distance;
-				closest = npc;
-			}
-		}
+		Entity closest = this.findClosest(3, "npc");
 		//if the NPC is found then try to rob it
 		if (closest != null) {
 			NPC npc = (NPC)closest;

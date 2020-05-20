@@ -767,6 +767,11 @@ public abstract class WorldObject implements Serializable {
 		return MathUtils.distance(centerX(),centerY(),other.centerX(),other.centerY());
 	}
 	
+	/**
+	 * Gets the distance between the centers of two objectss
+	 * @param other
+	 * @return
+	 */
 	public float squaredDistanceTo(WorldObject other) {
 		if (other == null)
 			return MathUtils.INFINITY;
@@ -800,11 +805,11 @@ public abstract class WorldObject implements Serializable {
 	}
 	
 	public void playSound(String soundName) {
-		this.getWorld().getSoundEngine().playSound(soundName, this);
+		this.getRegion().getSoundEngine().playSound(soundName, this);
 	}
 	
 	public void playSound(Sound sound) {
-		this.getWorld().getSoundEngine().playSound(sound, this);
+		this.getRegion().getSoundEngine().playSound(sound, this);
 	}
 	
 	/**

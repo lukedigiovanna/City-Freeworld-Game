@@ -79,15 +79,18 @@ public class Game {
 	 * Stops the update loop
 	 */
 	public void quit() {
+		world.close();
 		gameActive = false;
 	}
 	
 	public void pause() {
 		paused = true;
+		this.world.getCurrentRegion().getSoundEngine().pause();
 	}
 	
 	public void unpause() {
 		paused = false;
+		this.world.getCurrentRegion().getSoundEngine().unpause();
 	}
 	
 	public void togglePause() {
@@ -131,12 +134,12 @@ public class Game {
 		
 		if (gameOver)
 			paused = false;
-		if (paused)
+		if (paused) 
 			return;
 		
 		if (this.gameOver) {
 			this.gameOverTimer+=dt;
-			this.world.getSoundEngine().mute();
+			this.world.getCurrentRegion().getSoundEngine().pause();
 			if (this.gameOverTimer < 30f) {
 				world.update(dt * 0.25f);
 			}

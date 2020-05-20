@@ -9,7 +9,6 @@ import entities.projectiles.Bullet;
 import entities.projectiles.Projectile;
 import misc.ImageTools;
 import misc.MathUtils;
-import soundEngine.SoundManager;
 
 /**
  * Includes all firearms such as pistols that fire bullets

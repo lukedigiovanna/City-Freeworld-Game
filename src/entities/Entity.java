@@ -188,6 +188,29 @@ public abstract class Entity extends WorldObject {
 	}
 	
 	/**
+	 * Gets the closest object of the ones that contain at least one of
+	 * the specified tags
+	 * If no objects are closer than the maxDistance then this method returns null
+	 * @param maxDistance
+	 * @param tags
+	 * @return
+	 */
+	public Entity findClosest(float maxDistance, String ... tags) {
+		List<Entity> entities = this.getRegion().getEntities().get(tags);
+		Entity closest = null;
+		float distanceToNPC = 99999.0f; //start the distance high
+		for (Entity e : entities) {
+			//get the distance
+			float distance = this.squaredDistanceTo(e);
+			if (distance < maxDistance * maxDistance && distance < distanceToNPC * distanceToNPC) {
+				distanceToNPC = distance;
+				closest = e;
+			}
+		}
+		return closest;
+	}
+	
+	/**
 	 * Called by the game loop to run entity type specific logic
 	 * Doesn't handle general logic like updating movement and collision checking
 	 * @param dt - The amount of time passed in seconds since the last call of the method.

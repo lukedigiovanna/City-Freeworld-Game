@@ -18,6 +18,22 @@ public class Settings {
 		return json.get(settingName);
 	}
 	
+	public static String getString(String settingName) {
+		return (String)getSetting(settingName);
+	}
+	
+	public static char getChar(String settingName) {
+		return getString(settingName).charAt(0);
+	}
+	
+	public static float getFloat(String settingName) {
+		return Float.parseFloat(getString(settingName));
+	}
+	
+	public static boolean getBoolean(String settingName) {
+		return Boolean.parseBoolean(getString(settingName));
+	}
+	
 	/**
 	 * Sets the runtime setting of a thing
 	 * @param settingName the name of the setting
