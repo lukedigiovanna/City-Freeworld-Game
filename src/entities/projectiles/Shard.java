@@ -12,9 +12,8 @@ public class Shard extends Projectile {
 		super(owner,x,y,MathUtils.random(0.025f, 0.075f),MathUtils.random(0.05f, 0.1f),angle,MathUtils.random(3, 7f));
 		
 		this.setDamage(MathUtils.random(4, 10));
-		
+		this.setHasFriendlyFire(true);
 		this.getVelocity().r = MathUtils.random(4f,10f);
-	
 	}
 
 	@Override

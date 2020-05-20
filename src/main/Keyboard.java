@@ -44,6 +44,15 @@ public class Keyboard {
 		});
 	}
 	
+	/*
+	 * METHODS:
+	 * 	keyDown(int keycode); returns true if the specified VK keycode is held down
+	 * 	keyDown(char c); returns true if the specified character is held down
+	 *  keyPressed(int keycode); returns true once if the specified VK keycode is pressed
+	 *  keyPressed(int ... keycodes); returns true if all the keys are pressed
+	 *  keyPressed(char c); returns true if the character is pressed
+	 */
+	
 	public boolean keyDown(int keycode) {
 		for (Key k : keys)
 			if (k.keycode() == keycode)

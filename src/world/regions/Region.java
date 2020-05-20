@@ -137,7 +137,6 @@ public class Region implements Serializable {
 			exists = false; //the file does not exist
 		}
 		this.world = world;
-		//this.addBoundingWalls();
 	}
 	
 	/**

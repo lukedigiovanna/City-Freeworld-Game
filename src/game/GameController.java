@@ -17,7 +17,7 @@ public class GameController {
 	}
 	
 	private static void loadGameDrawer() {
-		Player p = game.getWorld().getPlayers().get(0);
+		Player p = game.getWorld().getPlayer();
 		gameDrawer = new GameDrawer(game,p);
 		game.unpause();
 	}

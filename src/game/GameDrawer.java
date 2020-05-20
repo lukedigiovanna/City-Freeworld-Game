@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import display.Bars;
 import display.Display;
 import display.DisplayController;
+import display.ui.UI;
 import entities.Entity;
 import entities.player.Player;
 import main.Keyboard;
@@ -61,25 +62,22 @@ public class GameDrawer {
 		}
 	}
 	
-	private Keyboard kbd;
-	
 	private void checkKeys() {
-		if (kbd == null)
-			kbd = new Keyboard(Program.panel);
-		if (kbd.keyDown(KeyEvent.VK_CONTROL)) {
-			if (kbd.keyPressed(KeyEvent.VK_H))
+		UI input = Game.getInput();
+		if (input.keyDown(KeyEvent.VK_CONTROL)) {
+			if (input.keyPressed(KeyEvent.VK_H))
 				camera.toggleHitboxes();
-			if (kbd.keyPressed(KeyEvent.VK_W))
+			if (input.keyPressed(KeyEvent.VK_W))
 				camera.toggleWalls();
-			if (kbd.keyPressed(KeyEvent.VK_F))
+			if (input.keyPressed(KeyEvent.VK_F))
 				camera.toggleFieldOfView();
-			if (kbd.keyPressed(KeyEvent.VK_R))
+			if (input.keyPressed(KeyEvent.VK_R))
 				camera.toggleRoads();
 		}
 		
-		if (kbd.keyDown('c'))
+		if (input.keyDown('c'))
 			camera.zoom(0.01f);
-		if (kbd.keyDown('x'))
+		if (input.keyDown('x'))
 			camera.zoom(-0.01f);
 	}
 	

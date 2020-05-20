@@ -3,6 +3,8 @@ package game;
 import java.awt.event.KeyEvent;
 
 import display.*;
+import display.ui.UI;
+import display.ui.UICodex;
 import entities.player.Player;
 import main.*;
 import misc.*;
@@ -38,6 +40,15 @@ public class Game {
 		world = World.loadWorld(saveName);
 	}
 	
+	private static UI gameUI;
+	public static UI getInput() {
+		return gameUI;
+	}
+	
+	public static void initialize() {
+		gameUI = UICodex.get("game");
+	}
+	
 	private void startUpdateLoop() {
 		updateLoop = new Thread(new Runnable() {
 			public void run() {
@@ -58,6 +69,10 @@ public class Game {
 			}
 		});
 		updateLoop.start();
+	}
+	
+	public Player getPlayer() {
+		return this.world.getPlayer();
 	}
 	
 	/**
@@ -107,7 +122,7 @@ public class Game {
 			return;
 		
 		//lets check for pausing
-		if (Program.keyboard.keyPressed(KeyEvent.VK_ESCAPE))
+		if (gameUI.keyPressed(KeyEvent.VK_ESCAPE))
 			togglePause();
 		
 		//elapsed time since last loop call.. for regulating game operation speeds
@@ -137,7 +152,7 @@ public class Game {
 			elapsedSinceLastCapture = 0;
 		}
 		
-		Player player = this.getWorld().getPlayers().get(0);
+		Player player = this.getPlayer();
 		if (player != null && !gameOver && (player.getHealth().isDead() || player.isCaught())) {
 			if (player.getHealth().isDead())
 				causeOfEnd = "You died!";

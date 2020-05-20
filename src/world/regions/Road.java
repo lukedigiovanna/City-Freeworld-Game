@@ -48,7 +48,7 @@ public class Road implements Serializable {
 		this.intersectionRoads = new ArrayList<Road>();
 		this.intersectionRoadsID = new ArrayList<Integer>();
 		
-		resetWait();
+		initiateWait();
 	}
 	
 	public void draw(Camera c) {
@@ -94,7 +94,7 @@ public class Road implements Serializable {
 	
 	public void setCarRate(float rate) {
 		this.carRate = rate;
-		resetWait();
+		initiateWait();
 	}
 	
 	private float carWaitTimer = 0f;
@@ -297,26 +297,31 @@ public class Road implements Serializable {
 		return true;
 	}
 	
-	private void resetWait() {
+	private void initiateWait() {
 		if (carRate == 0) {
 			wait = MathUtils.INFINITY;
 			return;
 		}
 		
 		wait = MIN_WAIT + (60-MIN_WAIT) / carRate + MathUtils.random(-4,4);
+	}
+	
+	private void resetWait() {
+		initiateWait();
 		//factor in the time of day
-//		float timeOfDay = this.region.getWorld().getTimeOfDay();
-//		if (timeOfDay > 21 || timeOfDay < 6) { //less cars from 9pm to 6am
-//			//value of sin from 0 to pi
-//			float time = 0;
-//			if (timeOfDay > 21)
-//				time = timeOfDay - 21;
-//			else if (timeOfDay < 6)
-//				time = 3 + timeOfDay;
-//			double theta = time/9 * Math.PI;
-//			double sin = Math.sin(theta);
-//			time += 30 * sin; //additional 30 real seconds at the darkest time of night
-//		}
+		System.out.println("stil being called somewher");
+		float timeOfDay = this.region.getWorld().getTimeOfDay();
+		if (timeOfDay > 21 || timeOfDay < 6) { //less cars from 9pm to 6am
+			//value of sin from 0 to pi
+			float time = 0;
+			if (timeOfDay > 21)
+				time = timeOfDay - 21;
+			else if (timeOfDay < 6)
+				time = 3 + timeOfDay;
+			double theta = time/9 * Math.PI;
+			double sin = Math.sin(theta);
+			time += 30 * sin; //additional 30 real seconds at the darkest time of night
+		}
 		wait = MathUtils.max(MIN_WAIT,wait);
 	}
 	

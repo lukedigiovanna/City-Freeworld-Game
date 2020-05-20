@@ -5,11 +5,13 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+import display.ui.UI;
 import entities.*;
 import entities.misc.Tag;
 import entities.npcs.NPC;
 import entities.projectiles.Grenade;
 import entities.vehicles.Vehicle;
+import game.Game;
 import weapons.Weapon;
 import weapons.WeaponManager;
 import main.Program;
@@ -155,7 +157,9 @@ public class Player extends Human {
 		char left = ((String)Settings.getSetting("move_left")).charAt(0);
 		char right = ((String)Settings.getSetting("move_right")).charAt(0);
 		
-		if (Program.keyboard.keyPressed('p')) {
+		UI input = Game.getInput();
+		
+		if (input.keyPressed('p')) {
 			Path p = new Path();
 			p.add(getX(),getY());
 			p.add(getX()-3.0f,getY());
@@ -164,7 +168,7 @@ public class Player extends Human {
 			this.queuePath(p);
 		}
 		
-		if (Program.keyboard.keyPressed(KeyEvent.VK_SPACE)) {
+		if (input.keyPressed(KeyEvent.VK_SPACE)) {
 			Grenade g = new Grenade(this,getX(),getY(),getRotation());
 			this.getRegion().add(g);
 		}
@@ -178,16 +182,16 @@ public class Player extends Human {
 				float r = 0.0f;
 				
 				speed = 2;
-				if (Program.keyboard.keyDown(KeyEvent.VK_SHIFT))
+				if (input.keyDown(KeyEvent.VK_SHIFT))
 					speed = 4;
 				
-				if (Program.keyboard.keyDown(up))
+				if (input.keyDown(up))
 					mag += speed;
-				if (Program.keyboard.keyDown(down))
+				if (input.keyDown(down))
 					mag -= speed/2;
-				if (Program.keyboard.keyDown(left))
+				if (input.keyDown(left))
 					r -= rotationalSpeed;
-				if (Program.keyboard.keyDown(right))
+				if (input.keyDown(right))
 					r += rotationalSpeed;
 				
 				this.getVelocity().r = r;
@@ -198,16 +202,16 @@ public class Player extends Human {
 			} else { //then we are in a car
 				this.disableHitbox();
 				
-				if (Program.keyboard.keyDown(up))
+				if (input.keyDown(up))
 					this.getRiding().accelerate(dt);
 				
-				if (Program.keyboard.keyDown(down))
+				if (input.keyDown(down))
 					this.getRiding().brake(dt);
 				
-				if (Program.keyboard.keyDown(left))
+				if (input.keyDown(left))
 					this.getRiding().turnLeft(dt);
 				
-				if (Program.keyboard.keyDown(right))
+				if (input.keyDown(right))
 					this.getRiding().turnRight(dt);
 				
 				this.setPosition(getRiding().centerX()-this.getWidth()/2, getRiding().centerY()-this.getHeight()/2);
@@ -233,26 +237,26 @@ public class Player extends Human {
 				}
 			}
 			
-			if (Program.keyboard.keyPressed(KeyEvent.VK_F)) {
+			if (input.keyPressed(KeyEvent.VK_F)) {
 				if (getRiding() == null)
 					findVehicle();
 				else
 					exitVehicle();
 			}	
 			
-			if (Program.keyboard.keyPressed(KeyEvent.VK_E)) {
+			if (input.keyPressed(KeyEvent.VK_E)) {
 				attemptRobbery();
 			}
 		}
 		
 		Weapon selected = this.getSelectedWeapon();
 		if (selected != null) {
-			if (Program.keyboard.keyDown(KeyEvent.VK_UP) && getRiding() == null) 
+			if (input.keyDown(KeyEvent.VK_UP) && getRiding() == null) 
 				selected.pullTrigger();
 			else
 				selected.releaseTrigger();
 			
-			if (Program.keyboard.keyPressed(KeyEvent.VK_R)) {
+			if (input.keyPressed(KeyEvent.VK_R)) {
 				selected.reload();
 			}
 		}

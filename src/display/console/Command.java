@@ -59,7 +59,7 @@ public abstract class Command {
 					try {
 						Float x = Float.parseFloat(tokens[0]);
 						Float y = Float.parseFloat(tokens[1]);
-						GameController.getGame().getWorld().getPlayers().get(0).forcePosition(x, y);
+						GameController.getGame().getWorld().getPlayer().forcePosition(x, y);
 					} catch (NullPointerException e) {
 						console.err("Only use this command in game");
 					} catch (NumberFormatException e) {
@@ -81,9 +81,9 @@ public abstract class Command {
 					try {
 						Float val = Float.parseFloat(tokens[1]);
 						if (tokens[0].contentEquals("add"))
-							GameController.getGame().getWorld().getPlayers().get(0).getHealth().heal(val);
+							GameController.getGame().getWorld().getPlayer().getHealth().heal(val);
 						else if (tokens[0].contentEquals("remove"))
-							GameController.getGame().getWorld().getPlayers().get(0).getHealth().hurt(val);
+							GameController.getGame().getWorld().getPlayer().getHealth().hurt(val);
 					} catch (NullPointerException e) {
 						console.err("Only use this command in game");
 					} catch (NumberFormatException e) {

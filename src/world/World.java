@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entities.Entity;
+import entities.misc.InteractableObject;
 import entities.npcs.NPC;
 import entities.player.Player;
 import misc.Line;
@@ -22,6 +23,7 @@ import misc.Vector2;
 import soundEngine.SoundEngine;
 import world.regions.Region;
 import world.regions.Road;
+import shops.Shop;
 
 public class World implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -102,6 +104,8 @@ public class World implements Serializable {
 	
 	private SoundEngine soundEngine;
 	
+	private Player player; //the main player of the game
+	
 	public static World loadWorld(String saveName) {
 		try {
 			FileInputStream fis = new FileInputStream("assets/saves/"+saveName+".world");
@@ -138,31 +142,36 @@ public class World implements Serializable {
 		//add in all the regions
 		Region next;
 		while ((next = Region.generateWorldRegion(this,worldName,regions.size())) != null) {
-			float dt = 0.2f;
-			for (float t = 0; t < 30f; t+=dt) {
-				next.update(dt); //time warp the region 30 seconds to make it seem as the world has existed before
-			}
 			regions.add(next);
 		}
-		addPlayer();
 		
-		this.soundEngine = new SoundEngine(this.getPlayers().get(0));
+		setPlayer();
+		
+		//now update the regions
+		for (Region reg : this.regions) {
+			float dt = 0.25f;
+			for (float t = 0; t < 15; t+=dt) { //update each region for 15 seconds
+				reg.update(dt); 
+			}
+		}
+		
+		this.soundEngine = new SoundEngine(this.player);
 		
 		Region reg0 = regions.get(0);
 		
 		for (int i = 0; i < 5; i++)
 			reg0.add(new NPC(15+MathUtils.random(-4,4),15+MathUtils.random(-4,4)));
 		
+		reg0.add(new InteractableObject(Shop.Type.WEAPONS_SHOP,15,15));
 		
 		//initialize starting region
 		getCurrentRegion().update(0);
 	}
 	
-	public Player addPlayer() {
+	public void setPlayer() {
 		Region reg0 = this.getRegion(0);
-		Player p = new Player(reg0.getWidth()/2-6,reg0.getHeight()/2);
-		reg0.add(p);
-		return p;
+		this.player = new Player(reg0.getWidth()/2-6,reg0.getHeight()/2);
+		reg0.add(player);
 	}
 	
 	public List<Region> getRegions() {
@@ -213,14 +222,8 @@ public class World implements Serializable {
 		return this.elapsedDays;
 	}
 	
-	public List<Player> getPlayers() {
-		List<Entity> entities = getCurrentRegion().getEntities().get("player");
-		List<Player> players = new ArrayList<Player>();
-		for (Entity e : entities)
-			players.add((Player)e);
-		if (players.size() == 0)
-			players.add(null);
-		return players;
+	public Player getPlayer() {
+		return this.player;
 	}
 	
 	public float getElapsedTime() {

@@ -5,6 +5,8 @@ import java.awt.*;
 import display.DisplayController;
 import display.console.Command;
 import display.textures.TexturePack;
+import display.ui.UIController;
+import game.Game;
 import misc.ImageTools;
 import soundEngine.SoundManager;
 import soundEngine.Sounds;
@@ -57,6 +59,8 @@ public class Program {
 		TexturePack.initialize();
 		Command.initialize();
 		Settings.initialize();
+		UIController.initialize();
+		Game.initialize();
 		initFrame(); //opens up the window and creates a game panel object
 		mouse = new Mouse(panel,Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT);
 		keyboard = new Keyboard(panel);

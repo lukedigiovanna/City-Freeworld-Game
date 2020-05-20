@@ -752,8 +752,8 @@ public abstract class WorldObject implements Serializable {
 	 * Gets the active player of the game
 	 * @return the player
 	 */
-	public List<Player> getPlayers() {
-		return region.getWorld().getPlayers();
+	public Player getPlayer() {
+		return region.getWorld().getPlayer();
 	}
 	
 	/**

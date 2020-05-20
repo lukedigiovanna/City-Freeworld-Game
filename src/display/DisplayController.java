@@ -4,6 +4,7 @@ import java.awt.*;
 
 import display.console.Console;
 import display.console.ConsoleMessage;
+import display.ui.UIController;
 import game.FrameTimer;
 import main.Program;
 import soundEngine.SoundManager;
@@ -69,6 +70,7 @@ public class DisplayController {
 	public static void setScreen(Screen screen) {
 		currentScreen = screen;
 		currentScreen.display.set();
+		UIController.setDefault();
 	}
 	
 	public static Screen getCurrentScreen() {

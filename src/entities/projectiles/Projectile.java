@@ -14,6 +14,7 @@ public abstract class Projectile extends Entity {
 	private Entity owner; //the entity that is responsible for releasing the bullet
 	
 	protected boolean destroyOnHit = true;
+	private boolean hasFriendlyFire = false;
 	private float damage = 1;
 	private float lifeSpan = 5.0f; //5 seconds by default; can dictate like when a grenade goes off
 	
@@ -30,6 +31,10 @@ public abstract class Projectile extends Entity {
 	
 	public Projectile(Entity owner, float x, float y, float width, float height, float angle, float speed) {
 		this(owner,x,y,width,height,new Vector2(speed*(float)Math.cos(angle),speed*(float)Math.sin(angle)));
+	}
+	
+	public void setHasFriendlyFire(boolean value) {
+		this.hasFriendlyFire = value;
 	}
 	
 	public Entity getOwner() {
@@ -66,7 +71,7 @@ public abstract class Projectile extends Entity {
 			if (i > others.size()-1)
 				break; //avoid out of bounds (concurrency)
 			Entity e = others.get(i);
-			if (e == owner || e == this)
+			if ((e == owner || e == this) && !this.hasFriendlyFire)
 				continue; //dont hurt the entity that shot the projectile
 			//check if the entity is kill able
 			if (e.getProperty(Properties.KEY_INVULNERABLE) == Properties.VALUE_INVULNERABLE_FALSE && !e.isDestroyed()) {
