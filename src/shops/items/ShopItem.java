@@ -14,14 +14,18 @@ public abstract class ShopItem {
 	private String id;
 	private BufferedImage icon;
 	
-	public ShopItem(String id, String displayName, float price) {
+	public ShopItem(BufferedImage icon, String id, String displayName, float price) {
 		this.id = id;
 		this.name = displayName;
 		this.price = price;
 		
-		this.icon = ImageTools.getImage("items/"+id+".png");
+		this.icon = icon;
 		
 		items.put(id, this);
+	}
+	
+	public ShopItem(String id, String displayName, float price) {
+		this(ImageTools.getImage("items/"+id+".png"),id,displayName,price);
 	}
 	
 	public String getName() {
@@ -36,9 +40,18 @@ public abstract class ShopItem {
 		return this.icon;
 	}
 	
-	public void attemptPurchase(Player player) {
-		if (player.getBankAccount().useMoney(this.price)) //only returns true if there was enough money in the acct
+	/**
+	 * Returns true if the transaction was successful
+	 * @param player
+	 * @return
+	 */
+	public boolean attemptPurchase(Player player) {
+		if (player.getBankAccount().useMoney(this.price)) { //only returns true if there was enough money in the acct
 			purchase(player); //then complete the purchase
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public abstract void purchase(Player player);
@@ -52,6 +65,9 @@ public abstract class ShopItem {
 		new WeaponShopItem(Weapon.Type.DESERT_EAGLE,700);
 		new WeaponShopItem(Weapon.Type.REVOLVER,800);
 		new WeaponShopItem(Weapon.Type.AK_47,2500);
+		new WeaponShopItem(Weapon.Type.M4,2800);
+		new WeaponShopItem(Weapon.Type.SAWED_OFF,1100);
+		new WeaponShopItem(Weapon.Type.PUMP_ACTION,1400);
 	}
 	
 	public static ShopItem get(String id) {

@@ -31,7 +31,11 @@ public class Weapon implements Serializable {
 		DESERT_EAGLE("Desert Eagle","desert_eagle",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,1.5f,7,10.0f,0.15f),
 		REVOLVER("Revolver","revolver",CATEGORY_HAND_GUN,FIRE_STYLE_ONE,5.0f,2.0f,6,12.5f,0.125f),
 		
-		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,10.0f,2.0f,30,4.0f,0.3f);
+		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,10.0f,2.0f,30,5.0f,0.3f),
+		M4("M4","m4",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,8f,2f,25,4.0f,0.2f),
+		
+		SAWED_OFF("Sawed Off","sawed_off",CATEGORY_SHOT_GUN,FIRE_STYLE_BURST,1f,2.0f,6,20,0.4f),
+		PUMP_ACTION("Pump Action","pump_action",CATEGORY_SHOT_GUN,FIRE_STYLE_BURST,1.2f,2.5f,8,25,0.35f);
 		
 		public float fireRate,
 			  reloadTime,

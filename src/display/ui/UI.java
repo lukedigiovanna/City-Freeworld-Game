@@ -84,6 +84,20 @@ public class UI {
 			return false;
 	}
 	
+	public boolean isMousePressed(int button) {
+		if (isActive())
+			return Program.mouse.isMousePressed(button);
+		else
+			return false;
+	}
+	
+	public boolean isMousePressed() {
+		if (isActive())
+			return Program.mouse.isMousePressed();
+		else
+			return false;
+	}
+	
 	public boolean isActive() {
 		return UIController.getActiveUI() == this;
 	}

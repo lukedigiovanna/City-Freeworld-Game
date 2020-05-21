@@ -8,7 +8,7 @@ public class WeaponShopItem extends ShopItem {
 	private Weapon.Type weaponType;
 	
 	public WeaponShopItem(Weapon.Type weaponType, float price) {
-		super(weaponType.id, weaponType.name, price);
+		super(weaponType.icon,weaponType.id, weaponType.name, price);
 		this.weaponType = weaponType;
 	}
 	

@@ -66,8 +66,32 @@ public class Mouse {
 		return (int)((double)lastMouse.getY()/panel.getHeight()*screenHeight);
 	}
 	
+	/**
+	 * Continuously returns true
+	 * @return
+	 */
 	public boolean isMouseDown() {
 		return this.mouseDown;
+	}
+	
+	/** 
+	 * Only returns true once
+	 * @retrun 
+	 */
+	public boolean isMousePressed() {
+		if (isMouseDown()) {
+			setIsMouseDown(false);
+			return true;
+		} else 
+			return false;
+	}
+	
+	public boolean isMousePressed(int button) {
+		if (isMouseDown(button)) {
+			setIsMouseDown(button,false);
+			return true;
+		} else
+			return false;
 	}
 	
 	public void setIsMouseDown(boolean boo) {

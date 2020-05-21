@@ -29,8 +29,6 @@ public class Shop {
 		this.name = name;
 	}
 	
-	private int selectedIndex = 0;
-	
 	private static int itemsPerRow = 5;
 	public void draw(Graphics2D g) {
 		g.setColor(Color.LIGHT_GRAY);
@@ -49,8 +47,8 @@ public class Shop {
 		String s = "Balance: $"+MathUtils.pad(player.getBankAccount().getMoney(),0,2);
 		g.drawString(s, Program.DISPLAY_WIDTH/2-g.getFontMetrics().stringWidth(s)/2, y);
 		y+=26;
+		UI input = UICodex.get("shop");
 		int width = (Program.DISPLAY_WIDTH-margins*2-150)/itemsPerRow-10, height = 100;
-		int index = 0;
 		for (int i = 0; i < this.sections.size(); i++) {
 			g.setColor(Color.BLACK);
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,18));
@@ -62,12 +60,19 @@ public class Shop {
 			int count = 0;
 			g.setFont(new Font(Program.FONT_FAMILY,Font.BOLD,10));
 			for (int j = 0; j < section.getItems().size(); j++) {
+				ShopItem item = section.getItems().get(j);
 				g.setColor(Color.BLACK);
-				if (index == this.selectedIndex)
-					g.setColor(Color.CYAN);
+				if (Program.mouse.getX() > x && Program.mouse.getX() < x + width && Program.mouse.getY() > y && Program.mouse.getY() < y + height) {
+					g.setColor(Color.GRAY);
+					if (input.isMousePressed()) {
+						if (item.attemptPurchase(player))
+							g.setColor(Color.GREEN);
+						else
+							g.setColor(Color.RED);
+					}
+				}
 				g.setStroke(new BasicStroke(6));
 				g.drawRoundRect(x, y, width, height,6,6);
-				ShopItem item = section.getItems().get(j);
 				g.drawImage(item.getIcon(),x+10,y+10,width-20,height-35,null);
 				s = item.getName()+" / $"+item.getPrice();
 				g.setColor(Color.DARK_GRAY);
@@ -80,7 +85,6 @@ public class Shop {
 					x = margins + 75;
 					y+=height+10;
 				}
-				index++;
 			}
 			y+=height;
 			y+=26;
@@ -95,16 +99,8 @@ public class Shop {
 		return count;
 	}
 	
-	public ShopItem getSelectedItem() {
-		int index = this.selectedIndex;
-		for (ShopSection section : sections) {
-			if (index < section.getItems().size())
-				return section.getItems().get(index);
-			else {
-				index -= section.getItems().size();
-			}
-		}
-		return null;
+	public void add(ShopSection section) {
+		this.sections.add(section);
 	}
 	
 	private static Map<String,Shop> shops;
@@ -121,24 +117,7 @@ public class Shop {
 		 * Set up the weapons shop
 		 */
 		
-		Shop weaponShop = new Shop("Guns 'n Stuff");
-		ShopSection pistols = new ShopSection("Handguns");
-		pistols.add(ShopItem.get("glock21"));
-		pistols.add(ShopItem.get("desert_eagle"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		pistols.add(ShopItem.get("revolver"));
-		weaponShop.sections.add(pistols);
-		ShopSection rifles = new ShopSection("Rifles");
-		rifles.add(ShopItem.get("ak47"));
-		weaponShop.sections.add(rifles);
-		
+		Shop weaponShop = new WeaponShop();
 		shops.put("weapon_shop", weaponShop);
 	}
 	
@@ -151,7 +130,6 @@ public class Shop {
 	}
 	
 	public static void closeShop() {
-		currentShop.selectedIndex = 0;
 		currentShop = null;
 		UIController.setDefault();
 	}
@@ -172,25 +150,6 @@ public class Shop {
 			if (input.keyPressed(KeyEvent.VK_ESCAPE)) {
 				closeShop();
 				return;
-			}
-			if (input.keyPressed(KeyEvent.VK_LEFT)) {
-				currentShop.selectedIndex--;
-			}
-			if (input.keyPressed(KeyEvent.VK_RIGHT)) {
-				currentShop.selectedIndex++;
-			}
-			//this is broken... wont work with sections of differing sizes
-//			if (input.keyPressed(KeyEvent.VK_UP)) {
-//				if (currentShop.selectedIndex-itemsPerRow >= 0)
-//					currentShop.selectedIndex-=itemsPerRow;
-//			}
-//			if (input.keyPressed(KeyEvent.VK_DOWN)) {
-//				if (currentShop.selectedIndex+itemsPerRow < currentShop.getNumberOfItems()-1)
-//					currentShop.selectedIndex+=itemsPerRow;
-//			}
-			currentShop.selectedIndex = MathUtils.clip(0, currentShop.getNumberOfItems()-1, currentShop.selectedIndex);
-			if (input.keyPressed(KeyEvent.VK_ENTER)) {
-				currentShop.getSelectedItem().attemptPurchase(player);
 			}
 		}
 	}

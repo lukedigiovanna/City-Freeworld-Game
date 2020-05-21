@@ -41,8 +41,10 @@ public class WeaponScroll implements Serializable {
 	
 	public void addWeapon(Weapon weapon) {
 		for (int i = 0; i < this.weapons.length; i++)
-			if (weapons[i] == null)
+			if (weapons[i] == null) {
 				weapons[i] = weapon;
+				break;
+			}
 	}
 	
 	public void addPosition() {
