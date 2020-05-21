@@ -10,6 +10,7 @@ import java.util.*;
 
 import misc.MathUtils;
 import misc.Vector2;
+import soundEngine.Sound;
 import world.*;
 import world.Properties;
 import world.event.ObjectCollisionEvent;
@@ -208,6 +209,14 @@ public abstract class Entity extends WorldObject {
 			}
 		}
 		return closest;
+	}
+	
+	public void playSound(String soundName) {
+		this.getRegion().getSoundEngine().playSound(soundName, this);
+	}
+	
+	public void playSound(Sound sound) {
+		this.getRegion().getSoundEngine().playSound(sound, this);
 	}
 	
 	/**

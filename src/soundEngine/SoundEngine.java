@@ -3,6 +3,7 @@ package soundEngine;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.Entity;
 import entities.player.Player;
 import world.World;
 import world.WorldObject;
@@ -22,7 +23,7 @@ public class SoundEngine {
 		sounds = new ArrayList<WorldSound>();
 	}
 	
-	public void playSound(Sound sound, WorldObject pointOfOrigin) {
+	public void playSound(Sound sound, Entity pointOfOrigin) {
 		if (muted)
 			return;
 		sound = sound.copy(); //make sure we create another sound object
@@ -30,13 +31,19 @@ public class SoundEngine {
 		sounds.add(new WorldSound(sound,pointOfOrigin));
 	}
 	
-	public void playSound(String sound, WorldObject pointOfOrigin) {
+	public void playSound(String sound, Entity pointOfOrigin) {
 		this.playSound(Sounds.get(sound), pointOfOrigin);
 	}
 	
 	public void update() {
-		for (WorldSound sound : sounds) {
+		for (int i = 0; i < this.sounds.size(); i++) {
+			WorldSound sound = sounds.get(i);
 			sound.update(); //updates the volume based on object movements
+			if (sound.isDead()) {
+				sound.getSound().pause();
+				this.sounds.remove(sound);
+				i--;
+			}
 		}
 	}
 	

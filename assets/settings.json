@@ -9,5 +9,9 @@
 "move_right":"d",
 "vsync_enabled":true,
 "muted":false,
-"move_left":"a",
+  "move_left": "a",
+  "find_car": "f",
+  "attempt_robery": "e",
+  "throw_utility": " ",
+  "interact": "q"
 }

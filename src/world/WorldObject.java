@@ -804,14 +804,6 @@ public abstract class WorldObject implements Serializable {
 		this.position.y = y;
 	}
 	
-	public void playSound(String soundName) {
-		this.getRegion().getSoundEngine().playSound(soundName, this);
-	}
-	
-	public void playSound(Sound sound) {
-		this.getRegion().getSoundEngine().playSound(sound, this);
-	}
-	
 	/**
 	 * This method can optionally be implemented in subclasses
 	 * that use animations or buffered images or other data types

@@ -8,6 +8,7 @@ import entities.misc.TextParticle;
 import entities.misc.pickups.CashPickup;
 import entities.player.Player;
 import misc.MathUtils;
+import soundEngine.Sounds;
 import weapons.Weapon;
 import world.Properties;
 
@@ -50,11 +51,12 @@ public class NPC extends Human {
 		if (this.canSee(focusedAt)) {
 			float angle = this.angleTo(focusedAt);
 			if (this.state == State.ANGRY) {
+				this.attackWait+=dt;
 				this.setRotation(angle);
 				if (this.distanceTo(focusedAt) > 3) {
 					float speed = 1.0f;
 					this.walkForward(speed);
-				} else {
+				} else if (attackWait > 1.5f){
 					this.setVelocity(0,0);
 					this.getSelectedWeapon().pullTrigger();
 				}
@@ -103,6 +105,7 @@ public class NPC extends Human {
 	private float robTimer = 0.0f;
 	private float particleTimer = 0.0f;
 	private Player robber;
+	private float attackWait = 0;
 	public void rob(Player robber) {
 		if (beingRobbed)
 			return;
@@ -113,6 +116,7 @@ public class NPC extends Human {
 		} else {
 			//fight the robber	
 			this.state = State.ANGRY;
+			this.playSound(Sounds.get("not_today"));
 		}
 		this.focusedAt = robber;
 	}

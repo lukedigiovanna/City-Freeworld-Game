@@ -17,6 +17,7 @@ public class Sounds {
 		sounds.put("gun_shot", new Sound("assets/sounds/gunfire.wav",100));
 		sounds.put("gun_click", new Sound("assets/sounds/gunclick.wav",60));
 		sounds.put("coffin", new Sound("assets/sounds/coffin.wav",100));
+		sounds.put("not_today", new Sound("assets/sounds/not_today.wav",100));
 		for (Sound sound : sounds.values()) {
 			sound.mute();
 			sound.play();

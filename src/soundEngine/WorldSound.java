@@ -1,8 +1,8 @@
 package soundEngine;
 
+import entities.Entity;
 import entities.player.Player;
 import misc.MathUtils;
-import world.WorldObject;
 
 /**
  * Contains a reference to the source of the sound and can be updated
@@ -11,9 +11,9 @@ import world.WorldObject;
 public class WorldSound {
 	private Sound sound; //reference to the sound file to be played
 	
-	private WorldObject source;
+	private Entity source;
 	
-	public WorldSound(Sound sound, WorldObject source) {
+	public WorldSound(Sound sound, Entity source) {
 		this.sound = sound;
 		this.source = source;
 	}
@@ -22,14 +22,23 @@ public class WorldSound {
 		return this.sound;
 	}
 	
-	public WorldObject getSource() {
+	public Entity getSource() {
 		return this.source;
+	}
+	
+	private boolean dead = false;
+	public boolean isDead() {
+		return this.dead;
 	}
 	
 	/**
 	 * Updates the volume of the sound based on the distance to the games player
 	 */
 	public void update() {
+		if (this.source.isDestroyed()) {
+			this.dead = true;
+			return;
+		}
 		Player player = source.getPlayer();
 		float distanceSquared = player.squaredDistanceTo(source);
 		distanceSquared = (float)Math.sqrt(distanceSquared);
