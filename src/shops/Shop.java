@@ -118,7 +118,7 @@ public class Shop {
 		 */
 		
 		Shop weaponShop = new WeaponShop();
-		shops.put("weapon_shop", weaponShop);
+		shops.put("weapons_shop", weaponShop);
 	}
 	
 	private static Player player;

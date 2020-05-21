@@ -21,10 +21,6 @@ public class Bullet extends Projectile {
 		 	obj.getRegion().addParticles(Particle.Type.SPARKLES, Color.ORANGE, 4, 0.15f, obj.centerX()-0.2f, obj.centerY()-0.2f, 0.4f, 0.4f);
 		 	this.destroy();
 		 });
-
-		this.addCollisionEvent(CollisionEvent.SLIDE);
-
-		this.removeCollisionEvent(CollisionEvent.STOP);
 	}
 	
 	private transient BufferedImage bullet = ImageTools.getImage("assets/images/weapons/bullet.png");
@@ -35,8 +31,5 @@ public class Bullet extends Projectile {
 	
 	public void loadAssets() {
 		bullet = ImageTools.getImage("assets/images/weapons/bullet.png");
-	}
-	
-	//assets\texture_packs\default\tiles
-	//assets/images/texture_packs/default/tiles
+	}                                                                    
 }

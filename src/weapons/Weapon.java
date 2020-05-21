@@ -7,6 +7,7 @@ import entities.Entity;
 import entities.misc.Particle;
 import entities.projectiles.Bullet;
 import entities.projectiles.Projectile;
+import entities.projectiles.ShotgunPellet;
 import misc.ImageTools;
 import misc.MathUtils;
 
@@ -34,8 +35,8 @@ public class Weapon implements Serializable {
 		AK_47("AK-47","ak47",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,10.0f,2.0f,30,5.0f,0.3f),
 		M4("M4","m4",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,8f,2f,25,4.0f,0.2f),
 		
-		SAWED_OFF("Sawed Off","sawed_off",CATEGORY_SHOT_GUN,FIRE_STYLE_BURST,1f,2.0f,6,20,0.4f),
-		PUMP_ACTION("Pump Action","pump_action",CATEGORY_SHOT_GUN,FIRE_STYLE_BURST,1.2f,2.5f,8,25,0.35f);
+		SAWED_OFF("Sawed Off","sawed_off",CATEGORY_SHOT_GUN,FIRE_STYLE_ONE,0.75f,2.0f,6,1f,0.4f),
+		PUMP_ACTION("Pump Action","pump_action",CATEGORY_SHOT_GUN,FIRE_STYLE_ONE,1.2f,2.5f,8,1.2f,0.35f);
 		
 		public float fireRate,
 			  reloadTime,
@@ -171,10 +172,22 @@ public class Weapon implements Serializable {
 		float dx = (float) ((owner.getWidth()/2+0.25f)*Math.cos(angle)),
 			  dy = (float) ((owner.getHeight()/2+0.25f)*Math.sin(angle));
 		float x = owner.centerX() + dx, y = owner.centerY() + dy;
-		Projectile p = new Bullet(owner, x,y,angle);
-		p.setDamage(type.firePower);
+		Projectile p;
+		if (this.type.category == CATEGORY_SHOT_GUN) {
+			for (int i = 0; i < 10; i++) {
+				inaccuracyOffset = MathUtils.random(-inAccuracyRange, inAccuracyRange);
+				angle = owner.getRotation() + inaccuracyOffset;
+				p = new ShotgunPellet(owner,x,y,angle);
+				p.setDamage(type.firePower);
+				owner.getRegion().add(p);
+			}
+		} else {
+			p = new Bullet(owner,x,y,angle);
+			p.setDamage(type.firePower);
+			owner.getRegion().add(p);
+		}
 		owner.getRegion().addParticles(Particle.Type.GUNFIRE, null, 1, 0, x, y, 0, 0);
-		owner.getRegion().add(p);
+		
 		this.loadedInMag--;
 		this.fireTime%=(1/type.fireRate);
 		owner.playSound("gun_shot");

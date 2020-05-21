@@ -506,10 +506,15 @@ public class EditorPanel extends JPanel {
 					EditorTag tag = new EditorTag(text,mp.x,mp.y);
 					this.region.addComponent(tag);
 					break;
+				case INTERACTABLE:
+					String id = JOptionPane.showInputDialog(this, "What destination?");
+					EditorInteractable inter = new EditorInteractable(id,mp.x,mp.y);
+					this.region.addComponent(inter);
+					break;
 				default:
 					break;
 				}
-				Tool[] tests = {Tool.TAG,Tool.ROAD,Tool.ROAD_ATTRIB,Tool.ROAD_LINKER,Tool.ROAD_STOP,Tool.PORTAL,Tool.OBJECT,Tool.WALL,Tool.DELETE};
+				Tool[] tests = {Tool.INTERACTABLE,Tool.TAG,Tool.ROAD,Tool.ROAD_ATTRIB,Tool.ROAD_LINKER,Tool.ROAD_STOP,Tool.PORTAL,Tool.OBJECT,Tool.WALL,Tool.DELETE};
 				for (Tool tool : tests)
 					if (curTool == tool) {
 						mouse.setIsMouseDown(Mouse.LEFT_BUTTON, false);
@@ -619,6 +624,12 @@ public class EditorPanel extends JPanel {
 				if (c == closest)
 					gw.setColor(Color.RED);
 				gw.drawString(t.text, px-gw.getFontMetrics().stringWidth(t.text)/2, py);
+			}
+			for (EditorComponent c : region.getType("interactable")) {
+				EditorInteractable i = (EditorInteractable)c;
+				int px = offX + (int)(i.x * size), py = offY + (int)(i.y * size);
+				gw.setColor(new Color(125,125,125,125));
+				gw.fillOval(px-(int)size/2, py-(int)size/2, (int)size, (int)size);
 			}
 			if (curTool == Tool.OBJECT) {
 				int px = offX  + (int)(mp.x * size), py = offY + (int)(mp.y * size);

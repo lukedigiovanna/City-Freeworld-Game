@@ -20,7 +20,8 @@ public enum Tool {
 	ROAD_LINKER("road_linker","Road Link.","Link roads together"),
 	ROAD_ATTRIB("road_attrib","Road Att.","Set the attributes of a road"),
 	ROAD_STOP("road_stop","Road Stop","Set road intersections"),
-	TAG("tag","Tag","Add a text tag");
+	TAG("tag","Tag","Add a text tag"),
+	INTERACTABLE("interactable","Interact.","Add an interactable object");
 	
 	BufferedImage img;
 	String name;

@@ -17,7 +17,7 @@ import world.Properties;
 public abstract class InteractableObject extends Entity {	
 	
 	public InteractableObject(float x, float y) {
-		super(x,y,1.0f,1.0f);
+		super(x,y,0.0f,0.0f);
 	
 		this.addTag("interactable");
 		
@@ -38,7 +38,6 @@ public abstract class InteractableObject extends Entity {
 	}
 	
 	public void draw(Camera c) {
-		c.setColor(new Color(250,250,250,150));
-		c.fillOval(getX(), getY(), getWidth(), getHeight());
+		
 	}
 }

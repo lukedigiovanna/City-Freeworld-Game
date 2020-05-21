@@ -42,13 +42,7 @@ public class Console {
 	 */
 	public void listen() {
 		if (Program.keyboard.keyPressed(KeyEvent.VK_BACK_QUOTE)) { //allows the console to be opened from any place in the application
-			this.active = !active;
-			if (!active) {
-				this.currentMessage = "";
-				UIController.setDefault();
-			} else {
-				UIController.setActiveUI("console");
-			}
+			toggle();
 		}
 		if (this.active) {
 			UI input = UICodex.get("console");
@@ -56,7 +50,7 @@ public class Console {
 			if (key == null)
 				return;
 			else if (key.keycode() == KeyEvent.VK_ESCAPE) { 
-				this.active = false;
+				this.toggle();
 			} else if (key.keycode() == KeyEvent.VK_BACK_SPACE) {
 				if (this.currentMessage.length() > 0)
 					this.currentMessage = this.currentMessage.substring(0,this.currentMessage.length()-1);
@@ -77,6 +71,16 @@ public class Console {
 					this.currentMessage+=character;
 				}
 			}
+		}
+	}
+	
+	private void toggle() {
+		this.active = !active;
+		if (!active) {
+			this.currentMessage = "";
+			UIController.setDefault();
+		} else {
+			UIController.setActiveUI("console");
 		}
 	}
 	

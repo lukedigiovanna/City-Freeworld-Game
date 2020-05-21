@@ -6,6 +6,7 @@ import java.io.*;
 import entities.*;
 import entities.misc.*;
 import entities.misc.Particle.Type;
+import entities.misc.interactables.InteractableShopObject;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
@@ -132,6 +133,18 @@ public class Region implements Serializable {
 				float y = in.read() + in.read()/256.0f;
 				Tag tag = new Tag(text,Color.WHITE,Color.BLACK,x,y);
 				this.add(tag);
+			}
+			int numOfInteractables = in.read();
+			for (int i = 0; i < numOfInteractables; i++) {
+				float x = in.read() + in.read()/256.0f;
+				float y = in.read() + in.read()/256.0f;
+				int textLength = in.read();
+				String text = "";
+				for (int j = 0; j < textLength; j++) {
+					text += in.readChar();
+				}
+				InteractableShopObject inte = new InteractableShopObject(text,x,y);
+				this.add(inte);
 			}
 			
 			this.localLightValue = in.read()/256.0f;

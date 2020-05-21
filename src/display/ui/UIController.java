@@ -32,6 +32,7 @@ public class UIController {
 	 */
 	public static void setActiveUI(UI ui) {
 		activeUI = ui;
+		System.out.println(activeUI.getID());
 	}
 	
 	/**

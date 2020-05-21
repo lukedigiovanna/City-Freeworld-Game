@@ -112,6 +112,8 @@ public class Road implements Serializable {
 			while (car.getVelocity().getLength() < this.speedLimit)
 				car.accelerate(0.2f); //accelerate 200 ms worth until we reach the speed limit
 			addCar(car);
+			
+			this.resetWait();
 		}
 		
 		//loop through each car on the road to update it
@@ -304,12 +306,12 @@ public class Road implements Serializable {
 		}
 		
 		wait = MIN_WAIT + (60-MIN_WAIT) / carRate + MathUtils.random(-4,4);
+		wait = MathUtils.max(MIN_WAIT,wait);
 	}
 	
 	private void resetWait() {
 		initiateWait();
 		//factor in the time of day
-		System.out.println("stil being called somewher");
 		float timeOfDay = this.region.getWorld().getTimeOfDay();
 		if (timeOfDay > 21 || timeOfDay < 6) { //less cars from 9pm to 6am
 			//value of sin from 0 to pi
@@ -320,7 +322,7 @@ public class Road implements Serializable {
 				time = 3 + timeOfDay;
 			double theta = time/9 * Math.PI;
 			double sin = Math.sin(theta);
-			time += 30 * sin; //additional 30 real seconds at the darkest time of night
+			wait += 30 * sin; //additional 30 real seconds at the darkest time of night
 		}
 		wait = MathUtils.max(MIN_WAIT,wait);
 	}
