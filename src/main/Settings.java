@@ -31,7 +31,7 @@ public class Settings {
 	}
 	
 	public static boolean getBoolean(String settingName) {
-		return Boolean.parseBoolean(getString(settingName));
+		return (boolean)getSetting(settingName);
 	}
 	
 	/**

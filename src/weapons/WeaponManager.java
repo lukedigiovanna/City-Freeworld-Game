@@ -13,7 +13,7 @@ import main.Program;
 public class WeaponManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private int numOfScrolls = 2;
+	private int numOfScrolls = 1;
 	private WeaponScroll[] scrolls;
 	
 	private int currentScroll = 0;
@@ -27,17 +27,14 @@ public class WeaponManager implements Serializable {
 		scrolls = new WeaponScroll[numOfScrolls];
 		for (int i = 0; i < scrolls.length; i++)
 			scrolls[i] = new WeaponScroll(player);
-		Weapon[] weapons = scrolls[0].getWeapons();
-		weapons[0] = new Weapon(player,Weapon.Type.AK_47);
-		weapons[1] = new Weapon(player,Weapon.Type.GLOCK_21);
-		weapons[2] = new Weapon(player,Weapon.Type.DESERT_EAGLE);
-		weapons[3] = new Weapon(player,Weapon.Type.REVOLVER);
-//		weapons[4] = new Weapon(player,Weapon.Type.AK_47);
-//		weapons[5] = new Weapon(player,Weapon.Type.GLOCK_21);
 	}
 	
 	public Weapon getSelectedWeapon() {
 		return scrolls[currentScroll].getSelectedWeapon();
+	}
+	
+	public WeaponScroll getWeaponScroll() {
+		return scrolls[currentScroll];
 	}
 	
 	public void update(float dt) {

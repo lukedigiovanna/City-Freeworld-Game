@@ -8,6 +8,7 @@ import display.textures.TexturePack;
 import display.ui.UIController;
 import game.Game;
 import misc.ImageTools;
+import shops.Shop;
 import soundEngine.Sounds;
 import world.World;
 
@@ -60,6 +61,8 @@ public class Program {
 		Settings.initialize();
 		UIController.initialize();
 		Game.initialize();
+		Shop.initialize();
+		
 		initFrame(); //opens up the window and creates a game panel object
 		mouse = new Mouse(panel,Program.DISPLAY_WIDTH,Program.DISPLAY_HEIGHT);
 		keyboard = new Keyboard(panel);
@@ -69,7 +72,6 @@ public class Program {
 		World.loadWorldsList();
 		
 		Runtime rt = Runtime.getRuntime();
-		
 		startingUsedMemory = rt.totalMemory()-rt.freeMemory();
 		
 		initialized = true;

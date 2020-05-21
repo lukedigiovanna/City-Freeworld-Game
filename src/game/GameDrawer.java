@@ -18,6 +18,7 @@ import main.Program;
 import misc.Color8;
 import misc.ImageTools;
 import misc.MathUtils;
+import shops.Shop;
 import weapons.Weapon;
 import world.Camera;
 import world.World;
@@ -230,6 +231,8 @@ public class GameDrawer {
 			g.drawString(time, 125-g.getFontMetrics().stringWidth(time)/2, 270);
 			
 			player.getWeaponManager().draw(g);
+			
+			Shop.drawShop(g);
 			
 			if (this.game.isOver()) {
 				g.setColor(new Color(0,0,0,(int)(MathUtils.clip(0, 1f, this.game.getTimeGameOver())/1f*160)));

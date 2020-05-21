@@ -3,6 +3,7 @@ package entities.misc.interactables;
 import java.awt.Color;
 
 import entities.Entity;
+import entities.player.Player;
 import game.Game;
 import shops.Shop;
 import world.Camera;
@@ -26,7 +27,7 @@ public abstract class InteractableObject extends Entity {
 		
 	}
 	
-	public abstract void use(); //what happens when the player tries to interact with this
+	public abstract void use(Player player); //what happens when the player tries to interact with this
 	
 	private boolean test = false;
 	public void update(float dt) {

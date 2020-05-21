@@ -5,6 +5,7 @@ import java.util.List;
 
 import entities.Entity;
 import entities.player.Player;
+import main.Settings;
 import world.World;
 import world.WorldObject;
 
@@ -27,6 +28,8 @@ public class SoundEngine {
 		if (muted)
 			return;
 		sound = sound.copy(); //make sure we create another sound object
+		if (Settings.getBoolean("muted"))
+			sound.mute();
 		sound.play();
 		sounds.add(new WorldSound(sound,pointOfOrigin));
 	}
@@ -44,6 +47,11 @@ public class SoundEngine {
 				this.sounds.remove(sound);
 				i--;
 			}
+		}
+		//check if the game is muted
+		if (Settings.getBoolean("muted")) {
+			if (!this.muted)
+				this.mute();
 		}
 	}
 	

@@ -8,6 +8,7 @@ import java.util.List;
 import display.ui.UI;
 import entities.*;
 import entities.misc.Tag;
+import entities.misc.interactables.InteractableObject;
 import entities.npcs.NPC;
 import entities.projectiles.Grenade;
 import entities.vehicles.Vehicle;
@@ -226,15 +227,25 @@ public class Player extends Human {
 				}
 			}
 			
-			if (input.keyPressed(KeyEvent.VK_F)) {
+			char findCar = Settings.getChar("find_car"),
+				 attemptRobbery = Settings.getChar("attempt_robbery"),
+				 interact = Settings.getChar("interact");
+			
+			if (input.keyPressed(findCar)) {
 				if (getRiding() == null)
 					findVehicle();
 				else
 					exitVehicle();
 			}	
 			
-			if (input.keyPressed(KeyEvent.VK_E)) {
+			if (input.keyPressed(attemptRobbery)) {
 				attemptRobbery();
+			}
+			
+			if (input.keyPressed(interact)) {
+				InteractableObject i = (InteractableObject)this.findClosest(3, "interactable");
+				if (i != null)
+					i.use(this);
 			}
 		}
 		

@@ -21,6 +21,15 @@ public class BankAccount implements Serializable {
 		this.totalIncome += amount;
 	}
 	
+	public boolean useMoney(double amount) {
+		if (this.money >= amount) {
+			this.money-=amount;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public double getMoney() {
 		return money;
 	}

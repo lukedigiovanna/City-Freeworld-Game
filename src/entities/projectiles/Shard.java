@@ -16,7 +16,7 @@ public class Shard extends Projectile {
 		this.getVelocity().r = MathUtils.random(4f,10f);
 	}
 
-	@Override
+	@Override 
 	public void draw(Camera camera) {
 		camera.setColor(Color.DARK_GRAY);
 		camera.fillRect(getX(), getY(), getWidth(), getHeight());

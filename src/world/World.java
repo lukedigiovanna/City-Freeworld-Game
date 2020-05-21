@@ -161,7 +161,7 @@ public class World implements Serializable {
 		for (int i = 0; i < 5; i++)
 			reg0.add(new NPC(15+MathUtils.random(-4,4),15+MathUtils.random(-4,4)));
 		
-		reg0.add(new InteractableShopObject(Shop.Type.WEAPONS_SHOP,15,15));
+		reg0.add(new InteractableShopObject("weapon_shop",15,15));
 		
 		//initialize starting region
 		getCurrentRegion().update(0);
@@ -215,6 +215,8 @@ public class World implements Serializable {
 			elapsedDays++;
 			timeOfDay%=24.0f;
 		}
+		
+		Shop.checkInput();
 		
 		getCurrentRegion().update(dt);
 	}

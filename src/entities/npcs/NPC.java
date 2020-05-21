@@ -109,7 +109,7 @@ public class NPC extends Human {
 	public void rob(Player robber) {
 		if (beingRobbed)
 			return;
-		if (Math.random() * fightWillingness < 0.1f) { //most people will succumb
+		if (Math.random() * fightWillingness < 0.6f) { //most people will succumb
 			//go into rob mode
 			beingRobbed = true;
 			this.robber = robber;
@@ -130,7 +130,7 @@ public class NPC extends Human {
 	private Entity focusedAt = null;
 	private State state = State.IDLE;
 	
-	private Weapon thisWeapon = new Weapon(this,Weapon.Type.AK_47);
+	private Weapon thisWeapon = new Weapon(this,Weapon.Type.GLOCK_21);
 	
 	@Override
 	public Weapon getSelectedWeapon() {
