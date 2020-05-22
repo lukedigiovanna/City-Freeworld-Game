@@ -89,7 +89,7 @@ public abstract class Human extends Entity {
 	public abstract Weapon getSelectedWeapon();
 	
 	public void walkForward(float speed)  {
-		this.walkAniSpeed = speed;
+		this.walkAniSpeed = Math.abs(speed);
 		float a = this.getRotation();
 		this.setVelocity((float)(Math.cos(a) * speed), (float)(Math.sin(a) * speed));
 	}

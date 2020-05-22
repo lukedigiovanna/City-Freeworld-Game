@@ -103,8 +103,6 @@ public class World implements Serializable {
 	private float timeOfDay = 12.0f; //up to hour 23, at 24 it resets to 0.
 	private int elapsedDays = 0;
 	
-	private SoundEngine soundEngine;
-	
 	private Player player; //the main player of the game
 	
 	public static World loadWorld(String saveName) {

@@ -315,6 +315,18 @@ public class MathUtils {
 	}
 	
 	/**
+	 * Adjusts the angle value so that it is within the range [0,2pi)
+	 * @param angle
+	 * @return
+	 */
+	public static double normalizeAngle(double angle) {
+		while (angle < 0)
+			angle+=Math.PI * 2;
+		angle%=(Math.PI * 2);
+		return angle;
+	}
+	
+	/**
 	 * Gets the distance between two points
 	 * @param x1
 	 * @param y1

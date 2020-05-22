@@ -86,6 +86,7 @@ public class Camera {
 		if (this.region != region)
 			this.timeInCurrentRegion = 0;
 		this.region = region;
+		region.setCamera(this);
 	}
 	
 	public void setFocus(Entity e) {

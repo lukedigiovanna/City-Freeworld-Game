@@ -7,10 +7,12 @@ import entities.*;
 import entities.misc.*;
 import entities.misc.Particle.Type;
 import entities.misc.interactables.InteractableShopObject;
+import main.Program;
 import misc.Line;
 import misc.MathUtils;
 import misc.Vector2;
 import soundEngine.SoundEngine;
+import world.Camera;
 import world.World;
 
 public class Region implements Serializable {
@@ -136,8 +138,8 @@ public class Region implements Serializable {
 			}
 			int numOfInteractables = in.read();
 			for (int i = 0; i < numOfInteractables; i++) {
-				float x = in.read() + in.read()/256.0f;
-				float y = in.read() + in.read()/256.0f;
+				float x = in.read() + in.read()/256.0f-0.5f;
+				float y = in.read() + in.read()/256.0f-0.5f;
 				int textLength = in.read();
 				String text = "";
 				for (int j = 0; j < textLength; j++) {
@@ -226,6 +228,25 @@ public class Region implements Serializable {
 	public Walls getWalls() {
 		return walls;
 	} 
+	
+	private Camera camera;
+	public void setCamera(Camera camera) {
+		this.camera = camera;
+	}
+	
+	/**
+	 * Gets the mouse position relative to where it is in this region
+	 * @return
+	 */
+	public Vector2 getMousePosition() {
+		if (camera == null)
+			return new Vector2(0,0);
+		float mx = Program.mouse.getX(), my = Program.mouse.getY();
+		float xPercent = mx/Program.DISPLAY_WIDTH, yPercent = my/Program.DISPLAY_HEIGHT;
+		float x = camera.getX() + camera.getWidth() * xPercent,
+			  y = camera.getY() + camera.getHeight() * yPercent;
+		return new Vector2(x,y);
+	}
 	
 	/**
 	 * Updates region stuff

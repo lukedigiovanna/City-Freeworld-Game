@@ -93,12 +93,20 @@ public class Vector2 implements Serializable {
 		this.y = y;
 	}
 	
+	public void setR(float r) {
+		this.r = r;
+	}
+	
 	public float getX() {
 		return x;
 	}
 	
 	public float getY() {
 		return y;
+	}
+	
+	public float getR() {
+		return r;
 	}
 	
 	//returns the radian value of the angle

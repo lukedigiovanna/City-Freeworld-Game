@@ -325,7 +325,7 @@ public class Road implements Serializable {
 			wait += 30 * sin; //additional 30 real seconds at the darkest time of night
 		}
 		wait = MathUtils.max(MIN_WAIT,wait);
-	}
+	} 
 	
 	public float carRate() {
 		return this.carRate;

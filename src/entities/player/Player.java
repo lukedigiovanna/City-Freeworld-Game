@@ -168,27 +168,59 @@ public class Player extends Human {
 			
 			if (this.getRiding() == null) {
 				this.enableHitbox();
-				float mag = 0.0f;
-				float r = 0.0f;
+//				float mag = 0.0f;
+//				float r = 0.0f;
+//				
+//				speed = 2;
+//				if (input.keyDown(KeyEvent.VK_SHIFT))
+//					speed = 4;
+//				
+//				if (input.keyDown(up))
+//					mag += speed;
+//				if (input.keyDown(down))
+//					mag -= speed/2;
+//				if (input.keyDown(left))
+//					r -= rotationalSpeed;
+//				if (input.keyDown(right))
+//					r += rotationalSpeed;
+//				
+//				this.getVelocity().r = r;
+//				this.walkForward(mag);
+//				this.getVelocity().setAngle(this.getRotation());
+//				if (mag < 0)
+//					this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);
+				float angleToMouse = (float)MathUtils.normalizeAngle(this.angleTo(this.getRegion().getMousePosition()));
 				
-				speed = 2;
+				float speed = 1.5f;
 				if (input.keyDown(KeyEvent.VK_SHIFT))
-					speed = 4;
+					speed*=2;
+				
+				float mag = 0;
 				
 				if (input.keyDown(up))
-					mag += speed;
+					mag+=speed;
 				if (input.keyDown(down))
-					mag -= speed/2;
-				if (input.keyDown(left))
-					r -= rotationalSpeed;
-				if (input.keyDown(right))
-					r += rotationalSpeed;
+					mag-=speed/2;
 				
-				this.getVelocity().r = r;
+				float thisAngle = (float)MathUtils.normalizeAngle(this.getRotation());
+				
+				int dir = -1;
+				float posDistance = angleToMouse - thisAngle;
+				if (angleToMouse < thisAngle)
+					posDistance = ((float)Math.PI * 2 - thisAngle) + angleToMouse;
+				if (posDistance < Math.PI)
+					dir = 1;
+				
+				if (Math.abs(thisAngle-angleToMouse) < 0.1)
+					dir = 0;
+				
+				float rotSpeed = (float)Math.PI;
+				
 				this.walkForward(mag);
-				this.getVelocity().setAngle(this.getRotation());
+				this.getVelocity().setR(rotSpeed * dir);
+				this.getVelocity().setAngle(thisAngle);
 				if (mag < 0)
-					this.getVelocity().setAngle(this.getVelocity().getAngle() + (float)Math.PI);
+					this.getVelocity().setAngle((float)Math.PI+thisAngle);
 			} else { //then we are in a car
 				this.disableHitbox();
 				
@@ -251,7 +283,7 @@ public class Player extends Human {
 		
 		Weapon selected = this.getSelectedWeapon();
 		if (selected != null) {
-			if (input.keyDown(KeyEvent.VK_UP) && getRiding() == null) 
+			if (/*input.keyDown(KeyEvent.VK_UP)*/ input.isMouseDown() && getRiding() == null) 
 				selected.pullTrigger();
 			else
 				selected.releaseTrigger();
