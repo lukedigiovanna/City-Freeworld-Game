@@ -76,10 +76,10 @@ public class GameDrawer {
 				camera.toggleRoads();
 		}
 		
-		if (input.keyDown('c'))
-			camera.zoom(0.01f);
-		if (input.keyDown('x'))
-			camera.zoom(-0.01f);
+		if (input.keyDown(KeyEvent.VK_DOWN))
+			camera.zoom(0.05f);
+		if (input.keyDown(KeyEvent.VK_UP))
+			camera.zoom(-0.05f);
 	}
 	
 	/*
@@ -231,8 +231,8 @@ public class GameDrawer {
 			g.drawString(time, 125-g.getFontMetrics().stringWidth(time)/2, 270);
 			
 			player.getWeaponManager().draw(g);
-			
 			Shop.drawShop(g);
+			player.getPhone().draw(g);
 			
 			if (this.game.isOver()) {
 				g.setColor(new Color(0,0,0,(int)(MathUtils.clip(0, 1f, this.game.getTimeGameOver())/1f*160)));

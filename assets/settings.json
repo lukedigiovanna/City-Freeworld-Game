@@ -13,5 +13,6 @@
 "max_fps":30.0,
 "vsync_enabled":true,
 "muted":true,
-"move_left":"a",
+  "move_left": "a",
+  "toggle_phone":  "c",
 }

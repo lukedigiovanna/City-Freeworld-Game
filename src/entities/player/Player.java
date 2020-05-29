@@ -18,6 +18,7 @@ import weapons.WeaponManager;
 import main.Program;
 import main.Settings;
 import misc.*;
+import phone.Phone;
 import world.Camera;
 import world.Properties;
 
@@ -25,6 +26,7 @@ public class Player extends Human {
 	
 	private String name = "Earl";
 	private BankAccount bankAct;
+	private Phone phone;
 	private transient BufferedImage profilePicture;
 	
 	private WeaponManager weaponManager;
@@ -37,6 +39,7 @@ public class Player extends Human {
 	public Player(float x, float y) {
 		super(x,y,HumanAnimationPack.CHARACTER_0);
 		this.bankAct = new BankAccount(this);
+		this.phone = new Phone(this);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
 		this.weaponManager = new WeaponManager(this);
 		this.health = new Health(this,50);
@@ -204,6 +207,7 @@ public class Player extends Human {
 				
 				float thisAngle = (float)MathUtils.normalizeAngle(this.getRotation());
 				
+				//finds the direction to rotate that is the shortest amount to our goal from our current rotation
 				int dir = -1;
 				float posDistance = angleToMouse - thisAngle;
 				if (angleToMouse < thisAngle)
@@ -211,6 +215,7 @@ public class Player extends Human {
 				if (posDistance < Math.PI)
 					dir = 1;
 				
+				//if we are 'close enough' to our goal then dont rotate
 				if (Math.abs(thisAngle-angleToMouse) < 0.1)
 					dir = 0;
 				
@@ -261,7 +266,8 @@ public class Player extends Human {
 			
 			char findCar = Settings.getChar("find_car"),
 				 attemptRobbery = Settings.getChar("attempt_robbery"),
-				 interact = Settings.getChar("interact");
+				 interact = Settings.getChar("interact"),
+				 togglePhone = Settings.getChar("toggle_phone");
 			
 			if (input.keyPressed(findCar)) {
 				if (getRiding() == null)
@@ -279,6 +285,10 @@ public class Player extends Human {
 				if (i != null)
 					i.use(this);
 			}
+			
+			if (input.keyPressed(togglePhone)) {
+				this.phone.open();
+			}
 		}
 		
 		Weapon selected = this.getSelectedWeapon();
@@ -295,6 +305,8 @@ public class Player extends Human {
 	
 		this.weaponManager.listen();
 		this.weaponManager.update(dt);
+		
+		this.phone.update(dt);
 	}
 	
 	public void attemptRobbery() {
@@ -312,5 +324,9 @@ public class Player extends Human {
 	
 	public WeaponManager getWeaponManager() {
 		return this.weaponManager;
+	}
+	
+	public Phone getPhone() {
+		return this.phone;
 	}
 }
