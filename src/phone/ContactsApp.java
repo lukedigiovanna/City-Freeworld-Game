@@ -1,6 +1,6 @@
 package phone;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 
 public class ContactsApp extends PhoneApp {
 	public ContactsApp() {
@@ -8,6 +8,7 @@ public class ContactsApp extends PhoneApp {
 	}
 	
 	public void draw(Graphics2D g) {
-		
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, Phone.SCREEN_WIDTH, Phone.SCREEN_HEIGHT);
 	}
 }

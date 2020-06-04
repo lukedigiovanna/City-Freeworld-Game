@@ -11,7 +11,10 @@ import misc.StringTools;
 public enum PhoneAppInfo {
 	
 	CONTACTS("contacts"),
-	MAPS("maps");
+	MAPS("maps"),
+	MESSAGES("messages"),
+	EMAIL("email"),
+	INTERNET("internet");
 	
 	public BufferedImage icon;
 	public String displayName, id;
