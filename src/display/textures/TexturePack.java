@@ -119,17 +119,17 @@ public class TexturePack {
 			JSONObject tile = (JSONObject)tiles.get(i);
 			JSONArray frames = (JSONArray)tile.get("frames");
 			//use class type-casting because the method returns an object
-			double id = (Double)tile.get("id");
-			double frameRate = (Double)tile.get("frame_rate");
+			double id = (double)tile.get("id");
+			double frameRate = (double)tile.get("frame_rate");
 			String stringID = (String) tile.get("string_id");
 			List<BufferedImage> images = new ArrayList<BufferedImage>();
 			//now lets go through each frame
 			for (int j = 0; j < frames.size(); j++) {
 				JSONObject fInfo = (JSONObject)frames.get(j);
-				double x = (Double)fInfo.get("x");
-				double y = (Double)fInfo.get("y");
-				double w = (Double)fInfo.get("w");
-				double h = (Double)fInfo.get("h");
+				double x = (double)fInfo.get("x");
+				double y = (double)fInfo.get("y");
+				double w = (double)fInfo.get("w");
+				double h = (double)fInfo.get("h");
 				BufferedImage frame = tileSheet.getSubimage((int)x, (int)y, (int)w, (int)h); 
 				images.add(frame);
 			}

@@ -17,7 +17,7 @@ public class Program {
 	private static final double ratio = 4.0f/3.0f; //WIDTH/HEIGHT
 	public static final int DISPLAY_WIDTH = 1080, DISPLAY_HEIGHT = (int)(DISPLAY_WIDTH/ratio);
 	
-	public static final int VERSION_MAJOR = 6, VERSION_MINOR = 0, VERSION_TINY = 0;
+	public static final int VERSION_MAJOR = 6, VERSION_MINOR = 0, VERSION_TINY = 1;
 	
 	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
@@ -27,7 +27,6 @@ public class Program {
 	
 	public static final Image PROGRAM_ICON = ImageTools.getImage("assets/icon.png");
 	
-	@SuppressWarnings("unused")
 	public static String getVersionString() {
 		String s = VERSION_PREFIX + " " + VERSION_MAJOR + "." + VERSION_MINOR;
 		if (VERSION_TINY > 0)

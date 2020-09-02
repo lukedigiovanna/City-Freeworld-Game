@@ -23,6 +23,7 @@ public interface ObjectCollisionEvent {
 			//
 			// this is solved for in each dimension: x, y, and rotational
 			float m1 = obj.getMass(), m2 = other.getMass();
+			
 			float vx1 = obj.getVelocity().x, vx2 = other.getVelocity().x;
 			//now solve in the X direction using our helper method
 			Vector2 vfx = getFinalVelocities(m1, m2, vx1, vx2);
