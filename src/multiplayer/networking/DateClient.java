@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class DateClient {
 	public static void main(String[] args) {
-		String ip = "10.0.0.3";
+		String ip = "10.0.0.12";
 		int port = 55055;
 		try (Socket socket = new Socket(ip,port)) {
 			Scanner in = new Scanner(socket.getInputStream());
