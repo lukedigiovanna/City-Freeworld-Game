@@ -13,15 +13,17 @@ public class Cell extends WorldObject {
 	
 	private transient Animation animation;
 	private int orientation = ImageTools.ROTATE_0; //0 = 0deg, 1 = 90deg, 2 = 180deg, 3 = 270deg
+	private boolean flipped = false;
 	private transient Texture texture;
 	private int id;
 	
-	public Cell(int id, int rotation, float x, float y) {
+	public Cell(int id, int rotation, int flip, float x, float y) {
 		super(x,y,1.0f,1.0f);
 		this.orientation = rotation;
 		this.setVerticalHeight(WorldObject.MIN_HEIGHT); //all tiles are at the bottom level.
 		this.setProperty(Properties.KEY_HAS_COLLISION, Properties.VALUE_HAS_COLLISION_FALSE);
 		this.id = id;
+		this.flipped = flip == 1;
 		loadAssets();
 	}
 	
@@ -48,6 +50,8 @@ public class Cell extends WorldObject {
 	
 	public BufferedImage getImage() {
 		BufferedImage aniFrame = this.animation.getCurrentFrame();
+		if (this.flipped)
+			aniFrame = ImageTools.flipVertical(aniFrame);
 		BufferedImage image = ImageTools.rotate(aniFrame, orientation);
 		return image;
 	}

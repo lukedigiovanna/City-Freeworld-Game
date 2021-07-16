@@ -91,8 +91,10 @@ public class EditorRegion {
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					int value = in.read();
-					int rotation = in.read();
-					this.setGridValue(x, y, rotation, value);
+					int rotFlip = in.read();
+					int rotation = rotFlip & 0xF;
+					int flip = rotFlip >> 4;
+					this.setGridValue(x, y, rotation, flip, value);
 				}
 			}
 			
@@ -175,34 +177,35 @@ public class EditorRegion {
 			return grid.get(x).get(y);
 	}
 	
-	public void setGridValue(int x, int y, int rotation, int value) {
+	public void setGridValue(int x, int y, int rotation, int flip, int value) {
 		if (getGridValue(x,y) >= -1) {
 			EditorCell cell = this.grid.get(x).get(y);
 			cell.value = value;
 			cell.rotation = rotation;
+			cell.flip = flip;
 		}
 	}
 	
-	public void fillRect(int x, int y, int rotation, int width, int height, int fillValue) {
+	public void fillRect(int x, int y, int rotation, int width, int height, int fillValue, int flip) {
 		for (int gx = x; gx < x + width; gx++)
 			for (int gy = y; gy < y + height; gy++)
-				setGridValue(gx,gy,rotation,fillValue);
+				setGridValue(gx,gy,rotation,fillValue, flip);
 	}
 	
-	public void fillGrid(int x, int y, int rotation, int fillValue) {
-		fillGrid(x,y,rotation,fillValue,getGridValue(x,y));		
+	public void fillGrid(int x, int y, int rotation, int flip, int fillValue) {
+		fillGrid(x,y,rotation,flip, fillValue,getGridValue(x,y));		
 	}
 	
-	public void fillGrid(int x, int y, int rotation, int fillValue, int previousValue) {
+	public void fillGrid(int x, int y, int rotation, int flip, int fillValue, int previousValue) {
 		if (getGridValue(x,y) != previousValue || fillValue == previousValue) {
 			return; //end condition
 		}
 		else {
-			setGridValue(x,y,rotation,fillValue);
-			fillGrid(x-1,y,rotation,fillValue,previousValue);
-			fillGrid(x+1,y,rotation,fillValue,previousValue);
-			fillGrid(x,y-1,rotation,fillValue,previousValue);
-			fillGrid(x,y+1,rotation,fillValue,previousValue);
+			setGridValue(x,y,rotation,flip,fillValue);
+			fillGrid(x-1,y,rotation,flip,fillValue,previousValue);
+			fillGrid(x+1,y,rotation,flip,fillValue,previousValue);
+			fillGrid(x,y-1,rotation,flip,fillValue,previousValue);
+			fillGrid(x,y+1,rotation,flip,fillValue,previousValue);
 		}
 	}
 	
@@ -268,7 +271,7 @@ public class EditorRegion {
 				for (int x = 0; x < this.width; x++) {
 					EditorCell cell = this.getGridCell(x, y);
 					out.write(cell.value);
-					out.write(cell.rotation);
+					out.write(cell.rotation | cell.flip << 4);
 				}
 			
 			

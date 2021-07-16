@@ -217,6 +217,7 @@ public class EditorPanel extends JPanel {
 	private int vw = (int)(Program.DISPLAY_WIDTH * 0.7), vh = (int)(Program.DISPLAY_HEIGHT * 0.7);
 	
 	private int rotation = 0;
+	private int flip = 0;
 	private float objRotation = 0;
 	
 	private Vector2 wallP1 = null;
@@ -238,7 +239,7 @@ public class EditorPanel extends JPanel {
 		g.setFont(new Font("Arial",Font.BOLD,12));
 		Vector2 mp = this.mouseOnRegion();
 		mp.round(0.01f);
-		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+" ("+curTile+")     X: "+mp.x+" Y: "+mp.y+"    ROT: "+rotation, 230, Program.DISPLAY_HEIGHT-8);
+		g.drawString("Tile ID: "+tiles.get(curTile).getStringID()+" ("+curTile+")     X: "+mp.x+" Y: "+mp.y+"    ROT: "+rotation + "   FLIP: " + ((flip == 0) ? "FALSE" : "TRUE"), 230, Program.DISPLAY_HEIGHT-8);
 		
 		if (this.curTool == Tool.DRAW || this.curTool == Tool.FILL) {
 			if (keyboard.keyPressed('1'))
@@ -250,8 +251,11 @@ public class EditorPanel extends JPanel {
 			if (keyboard.keyPressed('4'))
 				rotation = 3;
 			
+			if (keyboard.keyPressed('f'))
+				flip = (flip + 1) % 2;
+			
 			if (keyboard.keyPressed(KeyEvent.VK_RIGHT))
-				rotation = (rotation + 1)%4;
+				rotation = (rotation + 1) % 4;
 			if (keyboard.keyPressed(KeyEvent.VK_LEFT)) {
 				rotation--;
 				if (rotation < 0)
@@ -270,8 +274,8 @@ public class EditorPanel extends JPanel {
 		gw.setColor(Color.BLACK);
 		gw.fillRect(0, 0, vw, vh);
 		
-		//start with the tiles
 		if (region != null) {
+			//first draw the tiles on the region
 			for (int x = 0; x < region.getWidth(); x++) {
 				for (int y = 0; y < region.getHeight(); y++) {
 					int gridSize = (int)(size * 0.1);
@@ -293,8 +297,9 @@ public class EditorPanel extends JPanel {
 						int gridVal = region.getGridValue(x, y);
 						if (gridVal >= 0 && gridVal < tiles.size()) {	
 							Texture text = tiles.get(gridVal);
+							EditorCell cell = region.getGridCell(x, y);
 							if (text != null)
-								gw.drawImage(ImageTools.rotate(text.getAnimation().getCurrentFrame(),region.getRotationValue(x, y)), px, py, pw, ph, null);
+								gw.drawImage(getTileDisplayImage(gridVal, cell.rotation, cell.flip), px, py, pw, ph, null);
 						}
 					}
 					//check for mouse clicks.. only if left button
@@ -302,13 +307,13 @@ public class EditorPanel extends JPanel {
 						if (mouse.getX() > vx + px && mouse.getX() < vx + px + pw && mouse.getY() > vy + py && mouse.getY() < vy + py + ph) {
 							switch (curTool) {
 							case DRAW:
-								region.setGridValue(x, y, rotation, curTile);
+								region.setGridValue(x, y, rotation, flip, curTile);
 								break;
 							case ERASE:
-								region.setGridValue(x, y, rotation, -1);
+								region.setGridValue(x, y, 0, 0, -1);
 								break;
 							case FILL:
-								region.fillGrid(x,y, rotation, curTile);
+								region.fillGrid(x,y, rotation, flip, curTile);
 								break;
 							default:  //if any other tool, do nothing
 								break;
@@ -640,6 +645,8 @@ public class EditorPanel extends JPanel {
 				gw.rotate(-objRotation,px+pw/2,py+ph/2);
 			}
 		}
+		
+		// for multiclick usage tools
 		if (wallP1 != null) {
 			gw.setColor(Color.CYAN);
 			int px1 = (int)(wallP1.x * size + offX),
@@ -677,6 +684,8 @@ public class EditorPanel extends JPanel {
 			wallP1 = null;
 		if (curTool != Tool.ROAD)
 			curRoad = null;
+		
+		// most other tool checks
 		switch (curTool) {
 		case TOGGLE_GRID:
 			showGrid = !showGrid;
@@ -716,6 +725,7 @@ public class EditorPanel extends JPanel {
 		}
 		
 		if (this.curTool == Tool.OBJECT) {
+			// handle object rotation
 			double speed = Math.PI/50;
 			if (this.keyboard.keyDown(KeyEvent.VK_LEFT)) {
 				this.objRotation+=speed;
@@ -725,13 +735,16 @@ public class EditorPanel extends JPanel {
 			}
 		}
 		
+		// choose the correct side view depending on the tool
 		if (curTool == Tool.OBJECT)
 			sideView = SIDE_VIEW_OBJECT;
 		else if (curTool == Tool.DRAW || curTool == Tool.FILL)
 			sideView = SIDE_VIEW_TILE;
 		
+		// draw the region
 		g.drawImage(worldImg, vx, vy, vw, vh, null);
 		
+		// draw other UI elements
 		drawSideBar(g);
 		drawRegionInfo(g);
 		drawButtons(g);
@@ -778,6 +791,13 @@ public class EditorPanel extends JPanel {
 		g.drawString(info, 230, 60);
 	}
 	
+	private BufferedImage getTileDisplayImage(int textureIndex, int rotation, int flip) {
+		BufferedImage img = tiles.get(textureIndex).getAnimation().getCurrentFrame();
+		if (flip == 1)
+			img = ImageTools.flipVertical(img);
+		return ImageTools.rotate(img, rotation);
+	}
+	
 	private void drawSideBar(Graphics2D g) {
 		//left bar lists out each tile
 		g.setColor(Color.RED.darker());
@@ -785,16 +805,16 @@ public class EditorPanel extends JPanel {
 		if (sideView == SIDE_VIEW_TILE) {
 			int tileSize = 60;
 			for (int i = 0; i < tiles.size(); i++) {
-				int x = 60 - tileSize/2;
-				if (i % 2 == 1)
-					x += 80;
+				int x = 60 - tileSize/2 + ((i % 2 == 1) ? 80 : 0);
 				int y = (i / 2) * (tileSize+10) + 70 + tileScrollPos;
-				g.drawImage(ImageTools.rotate(tiles.get(i).getAnimation().getCurrentFrame(), rotation),x,y,tileSize,tileSize,null);
+				g.drawImage(getTileDisplayImage(i, rotation, flip),x,y,tileSize,tileSize,null);
+				// check if the mouse is hovering over the tile
 				if (mouse.getX() > x && mouse.getX() < x + tileSize && mouse.getY() > y && mouse.getY() < y + tileSize) {
 					g.setColor(Color.GRAY);
 					g.setStroke(new BasicStroke(4));
 					g.drawRoundRect(x-5, y-5, tileSize+10, tileSize+10, 4, 4);
 				}
+				// draw a cyan border if the tile is selected
 				if (curTile == i) {
 					g.setColor(Color.CYAN);
 					g.setStroke(new BasicStroke(4));

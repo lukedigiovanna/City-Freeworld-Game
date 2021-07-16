@@ -67,7 +67,9 @@ public class Region implements Serializable {
 			cellGrid.setDimension(width, height);
 			for (int y = 0; y < height; y++) 
 				for (int x = 0; x < width; x++) {
-					Cell cell = new Cell(in.read(), in.read(), x, y);
+					int id = in.read();
+					int rotFlip = in.read();
+					Cell cell = new Cell(id, rotFlip & 0xF, rotFlip >> 4, x, y);
 					cellGrid.set(x, y, cell);
 				}
 			int numOfPortals = in.read();

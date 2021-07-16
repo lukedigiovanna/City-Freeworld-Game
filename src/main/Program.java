@@ -21,7 +21,7 @@ public class Program {
 	
 	public static final String GAME_NAME = "Kings of San Anglos",
 							   VERSION_PREFIX = "Indev",
-							   DEVELOPMENT_PERIOD = "May 2020";
+							   DEVELOPMENT_PERIOD = "July 2021";
 	
 	public static final String FONT_FAMILY = "Consolas";
 	
