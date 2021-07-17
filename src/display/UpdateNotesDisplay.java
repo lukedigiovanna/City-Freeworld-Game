@@ -17,7 +17,11 @@ public class UpdateNotesDisplay extends Display {
 		"Implemented a world sound engine",
 		"    Dynamically updates sound based on distance between source and receiver",
 		"Added shops to the game which things can be purchased from",
-		"    Press 'q' near an interactable object to open a shop GUI"
+		"    Press 'q' near an interactable object to open a shop GUI",
+		"Added flipping tiles to make region design easier",
+		"Portals can now have custom sizes",
+		"Player follows the mouse now instead of pure keyboard control",
+		"    Also shoot with mouse clicks instead and scroll weapons with the mouse wheel"
 	};
 	
 	private Button backButton = new BackButton(0.025f,0.025f);

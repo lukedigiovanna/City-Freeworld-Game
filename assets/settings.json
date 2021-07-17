@@ -2,6 +2,7 @@
 "find_car":"f",
 "interact":"q",
 "master_volume":1.0,
+"toggle_phone":"c",
 "move_right":"d",
 "throw_utility":" ",
 "screen_brightness":0.5,
@@ -11,8 +12,7 @@
 "move_up":"w",
 "move_down":"s",
 "max_fps":30.0,
-"vsync_enabled":true,
+"vsync_enabled":false,
 "muted":true,
-  "move_left": "a",
-  "toggle_phone":  "c",
+"move_left":"a",
 }

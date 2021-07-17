@@ -72,6 +72,10 @@ public class Phone {
 			Graphics2D pg = this.image.createGraphics();
 			pg.drawImage(phoneImage,0,0,PHONE_WIDTH,PHONE_HEIGHT,null);
 			
+			if (MathUtils.colliding(mx, my, 19, 55, 6, 6))
+				if (input.isMousePressed())
+					this.currentApp = null;
+			
 			if (this.currentApp == null) { //draw the home screen
 				//loop through each app
 				for (int i = 0; i < this.apps.size(); i++) {
@@ -79,11 +83,12 @@ public class Phone {
 					int px = SCREEN_X_POS + 2 + x * (APP_SIZE+3), py = SCREEN_Y_POS + 2 + y * (APP_SIZE+3);
 					
 					BufferedImage icon = this.apps.get(i).getIcon();
-					if (mx >= px && mx < px + APP_SIZE && my >= py && my < py + APP_SIZE) {
+					if (MathUtils.colliding(mx, my, px, py, APP_SIZE, APP_SIZE)) {
 						icon = ImageTools.darken(icon, 0.5f);
 						if (input.isMousePressed())
 							this.currentApp = this.apps.get(i);
 					}
+					
 					pg.drawImage(icon,px,py,APP_SIZE,APP_SIZE,null);
 				}
 			} else {

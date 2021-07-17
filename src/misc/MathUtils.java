@@ -411,4 +411,8 @@ public class MathUtils {
 			return 0;
 		return Math.abs(number)/number;
 	}
+	
+	public static boolean colliding(int pointX, int pointY, int boxX, int boxY, int boxWidth, int boxHeight) {
+		return pointX >= boxX && pointX <= boxX + boxWidth && pointY >= boxY && pointY <= boxY + boxHeight;
+	}
 }

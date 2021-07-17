@@ -8,7 +8,7 @@ public class ContactsApp extends PhoneApp {
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.WHITE);
+		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, Phone.SCREEN_WIDTH, Phone.SCREEN_HEIGHT);
 	}
 }

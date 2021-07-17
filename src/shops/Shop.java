@@ -15,6 +15,7 @@ import display.ui.UICodex;
 import display.ui.UIController;
 import entities.player.Player;
 import main.Program;
+import main.Settings;
 import misc.MathUtils;
 import shops.items.ShopItem;
 
@@ -147,7 +148,7 @@ public class Shop {
 	public static void checkInput() {
 		if (currentShop != null) {
 			UI input = UICodex.get("shop");
-			if (input.keyPressed(KeyEvent.VK_ESCAPE)) {
+			if (input.keyPressed(KeyEvent.VK_ESCAPE) || input.keyPressed(Settings.getChar("interact"))) {
 				closeShop();
 				return;
 			}

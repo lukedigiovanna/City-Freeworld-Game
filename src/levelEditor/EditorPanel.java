@@ -224,6 +224,7 @@ public class EditorPanel extends JPanel {
 	private EditorRoad curRoad = null;
 	private EditorRoad linkingRoad = null;
 	private EditorRegion portalRegion = null; //represents the region of the portal when placing the portal down
+	private Vector2 portalPosition = null;
 	private EditorPortal portal = null; //when not null - the portal is being placed
 	
 	public void redraw() throws Exception {
@@ -376,14 +377,16 @@ public class EditorPanel extends JPanel {
 			if (mouse.isMouseDown(Mouse.LEFT_BUTTON) && !keyboard.keyDown(KeyEvent.VK_CONTROL) && mouse.getX() > vx && mouse.getX() < vx + vw && mouse.getY() > vy && mouse.getY() < vy + vh) {
 				switch (curTool) {
 				case PORTAL:
-					if (this.portal == null) {
+					if (this.portalPosition == null) {
+						this.portalPosition = new Vector2(mp.x, mp.y);
+					} else if (this.portal == null) {
 						try {
 							portal = new EditorPortal();
-							portal.x = mp.x;
-							portal.y = mp.y;
+							portal.x = this.portalPosition.x;
+							portal.y = this.portalPosition.y;
 							portal.destinationNumber = Integer.parseInt(JOptionPane.showInputDialog(this,"Enter region destination","Add Portal",JOptionPane.QUESTION_MESSAGE));
-							portal.width = 0.5f;
-							portal.height = 0.5f;
+							portal.width = mp.x - portalPosition.x;
+							portal.height = mp.y - portalPosition.y;
 							this.portalRegion = this.region;
 							this.region = new EditorRegion(this.region.getWorldName(),portal.destinationNumber);
 							this.disableToolButtons();
@@ -398,6 +401,7 @@ public class EditorPanel extends JPanel {
 						portal.destY = mp.y;
 						this.region.addComponent(portal);
 						this.portal = null;
+						this.portalPosition = null;
 						this.portalRegion = null;
 					}
 					break;
@@ -646,7 +650,7 @@ public class EditorPanel extends JPanel {
 			}
 		}
 		
-		// for multiclick usage tools
+		// drawing for multiclick usage tools
 		if (wallP1 != null) {
 			gw.setColor(Color.CYAN);
 			int px1 = (int)(wallP1.x * size + offX),
@@ -680,10 +684,18 @@ public class EditorPanel extends JPanel {
 			if (this.keyboard.keyPressed(KeyEvent.VK_ENTER))
 				curRoad = null;
 		}
+		if (portalPosition != null) {
+			gw.setColor(new Color(255, 0, 255, 125));
+			int px1 = (int)(portalPosition.x * size + offX), py1 = (int)(portalPosition.y * size + offY);
+			int px2 = (int)(mp.x * size + offX), py2 = (int)(mp.y * size + offY);
+			gw.fillRect(px1, py1, px2 - px1, py2 - py1);
+		}
 		if (curTool != Tool.WALL)
 			wallP1 = null;
 		if (curTool != Tool.ROAD)
 			curRoad = null;
+		if (curTool != Tool.PORTAL)
+			portalPosition = null;
 		
 		// most other tool checks
 		switch (curTool) {

@@ -48,12 +48,17 @@ public class WeaponManager implements Serializable {
 		uiActive = Program.keyboard.keyDown(KeyEvent.VK_TAB);
 		
 		if (uiActive) {
-			if (Program.keyboard.keyPressed(KeyEvent.VK_RIGHT))
+			int rot = Program.mouse.getWheelRotation();
+			if (rot == -1)
 				scrolls[currentScroll].addPosition();
-			if (Program.keyboard.keyPressed(KeyEvent.VK_LEFT))
+			else if (rot == 1) 
 				scrolls[currentScroll].removePosition();
-			if (Program.keyboard.keyPressed(KeyEvent.VK_SPACE))
-				currentScroll = (currentScroll+1)%scrolls.length;
+//			if (Program.keyboard.keyPressed(KeyEvent.VK_RIGHT))
+//				scrolls[currentScroll].addPosition();
+//			if (Program.keyboard.keyPressed(KeyEvent.VK_LEFT))
+//				scrolls[currentScroll].removePosition();
+//			if (Program.keyboard.keyPressed(KeyEvent.VK_SPACE))
+//				currentScroll = (currentScroll+1)%scrolls.length;
 		}
 	}
 	

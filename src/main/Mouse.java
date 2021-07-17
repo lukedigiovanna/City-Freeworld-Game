@@ -3,6 +3,8 @@ package main;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -12,6 +14,9 @@ public class Mouse {
 	private MouseEvent lastMouse = null;
 	private int screenWidth, screenHeight;
 	private JPanel panel;
+	
+	private int wheelRotation = 0;
+	private long lastScrollTime = 0;
 	
 	public Mouse(JPanel p, int sw, int sh) {
 		this.panel = p;
@@ -49,6 +54,33 @@ public class Mouse {
 			}
 		});
 		
+		panel.addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				wheelRotation = e.getWheelRotation();
+				lastScrollTime = System.currentTimeMillis();
+			}
+		});
+		
+		Thread mouseControlThread = new Thread(new Runnable() {
+			public void run() {
+				while (true) {
+					if (System.currentTimeMillis() - lastScrollTime > 100)
+						wheelRotation = 0;
+					try {
+						Thread.sleep(100);
+					} catch (Exception e) {
+						
+					}
+				}
+			}
+		});
+		mouseControlThread.start();
+	}
+	
+	public int getWheelRotation() {
+		int ret = wheelRotation;
+		wheelRotation = 0;
+		return ret;
 	}
 	
 	/**
