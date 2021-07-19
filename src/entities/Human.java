@@ -165,7 +165,7 @@ public abstract class Human extends Entity {
 		curAni = idleAni;
 		
 		Weapon selected = this.getSelectedWeapon();
-		if (selected != null && curAni == idleAni) {
+		if (selected != null && selected.getType().category != Weapon.CATEGORY_MELEE && curAni == idleAni) {
 			if (selected.isLong()) 
 				curAni = holdingLongGun;
 			else

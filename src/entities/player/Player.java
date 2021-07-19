@@ -42,6 +42,7 @@ public class Player extends Human {
 		this.phone = new Phone(this);
 		this.profilePicture = ImageTools.getImage("profile_1.png");
 		this.weaponManager = new WeaponManager(this);
+		this.weaponManager.getWeaponScroll().addWeapon(new Weapon(this, Weapon.Type.FISTS));
 		this.health = new Health(this,50);
 		this.health.setRegenerationRate(2.0f);
 		addTag("player");

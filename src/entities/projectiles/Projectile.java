@@ -21,7 +21,7 @@ public abstract class Projectile extends Entity {
 	public Projectile(Entity owner, float x, float y, float width, float height, Vector2 vi) {
 		super(x, y, width, height);
 		this.owner = owner;
-		this.setVelocity(vi);;
+		this.setVelocity(vi);
 		this.setRotation(vi.getAngle());
 		this.setProperty(Properties.KEY_INVULNERABLE, Properties.VALUE_INVULNERABLE_TRUE);
 		this.setProperty(Properties.KEY_DESTROY_ON_COLLISION, Properties.VALUE_DESTROY_ON_COLLISION_TRUE);

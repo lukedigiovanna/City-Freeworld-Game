@@ -30,6 +30,8 @@ public class NPC extends Human {
 	private float timer = MathUtils.random(5.0f,15.0f);
 	private float timerCount = 0.0f;
 	
+	private float callPoliceTimer = 0;
+	
 	@Override
 	public void update(float dt) {
 		super.update(dt);
@@ -95,6 +97,12 @@ public class NPC extends Human {
 				this.beingRobbed = false;
 				robTimer = 0;
 			}
+		}
+		
+		if (this.state == State.SCARED) {
+			this.callPoliceTimer += dt;
+		} else {
+			this.callPoliceTimer = 0; // if not scared, then don't call police
 		}
 		
 		thisWeapon.update(dt);

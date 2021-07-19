@@ -25,7 +25,7 @@ public class Portal extends Entity {
 
 	@Override
 	public void update(float dt) {
-		this.rotate((float)Math.PI*2*dt*0.5f);
+//		this.rotate((float)Math.PI*2*dt*0.5f);
 		List<Entity> checkers = this.getRegion().getEntities().get("player");
 		for (Entity e : checkers)
 			if (this.colliding(e)) 

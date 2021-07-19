@@ -119,7 +119,9 @@ public class Shop {
 		 */
 		
 		Shop weaponShop = new WeaponShop();
+		Shop mishShop = new AdultStore();
 		shops.put("weapons_shop", weaponShop);
+		shops.put("adult_store", mishShop);
 	}
 	
 	private static Player player;

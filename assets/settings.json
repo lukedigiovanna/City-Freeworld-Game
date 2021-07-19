@@ -12,7 +12,7 @@
 "move_up":"w",
 "move_down":"s",
 "max_fps":30.0,
-"vsync_enabled":false,
+"vsync_enabled":true,
 "muted":true,
 "move_left":"a",
 }

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import entities.Entity;
 import entities.misc.Particle;
 import entities.projectiles.Bullet;
+import entities.projectiles.MeleeAttack;
 import entities.projectiles.Projectile;
 import entities.projectiles.ShotgunPellet;
 import misc.ImageTools;
@@ -22,7 +23,8 @@ public class Weapon implements Serializable {
 							CATEGORY_RIFLE = 2,
 							CATEGORY_SHOT_GUN = 3,
 							CATEGORY_HEAVY_SPECIAL = 4,
-							CATEGORY_LIGHT_SPECIAL = 5;
+							CATEGORY_LIGHT_SPECIAL = 5,
+							CATEGORY_MELEE = 6;
 	
 	public static final int ICON_WIDTH = 40,
 					  ICON_HEIGHT = 15;
@@ -36,7 +38,9 @@ public class Weapon implements Serializable {
 		M4("M4","m4",CATEGORY_RIFLE,FIRE_STYLE_CONSTANT,8f,2f,25,4.0f,0.2f),
 		
 		SAWED_OFF("Sawed Off","sawed_off",CATEGORY_SHOT_GUN,FIRE_STYLE_ONE,0.75f,2.0f,6,1f,0.4f),
-		PUMP_ACTION("Pump Action","pump_action",CATEGORY_SHOT_GUN,FIRE_STYLE_ONE,1.2f,2.5f,8,1.2f,0.35f);
+		PUMP_ACTION("Pump Action","pump_action",CATEGORY_SHOT_GUN,FIRE_STYLE_ONE,1.2f,2.5f,8,1.2f,0.35f),
+		
+		FISTS("Fists", "fists", CATEGORY_MELEE, FIRE_STYLE_ONE, 1.0f, 0.0f, 1, 4.0f, 0.0f);
 		
 		public float fireRate,
 			  reloadTime,
@@ -136,7 +140,7 @@ public class Weapon implements Serializable {
 		}
 		
 		//for making the click sound when the player tries to shoot with no ammo
-		if (this.triggerPulled && this.getLoadedAmmo() == 0 && shotsFiredStreak == 0) {
+		if (this.type.category != CATEGORY_MELEE && this.triggerPulled && this.getLoadedAmmo() == 0 && shotsFiredStreak == 0) {
 			owner.playSound("gun_click");
 			shotsFiredStreak++;
 		}
@@ -173,7 +177,11 @@ public class Weapon implements Serializable {
 			  dy = (float) ((owner.getHeight()/2+0.25f)*Math.sin(angle));
 		float x = owner.centerX() + dx, y = owner.centerY() + dy;
 		Projectile p;
-		if (this.type.category == CATEGORY_SHOT_GUN) {
+		if (this.type.category == CATEGORY_MELEE) {
+			p = new MeleeAttack(owner, x - 0.25f * (float)Math.cos(angle), y - 0.25f * (float)Math.sin(angle), angle, 0.5f);
+			p.setDamage(type.firePower);
+			owner.getRegion().add(p);
+		} else if (this.type.category == CATEGORY_SHOT_GUN) {
 			for (int i = 0; i < 10; i++) {
 				inaccuracyOffset = MathUtils.random(-inAccuracyRange, inAccuracyRange);
 				angle = owner.getRotation() + inaccuracyOffset;
@@ -186,11 +194,14 @@ public class Weapon implements Serializable {
 			p.setDamage(type.firePower);
 			owner.getRegion().add(p);
 		}
-		owner.getRegion().addParticles(Particle.Type.GUNFIRE, null, 1, 0, x, y, 0, 0);
 		
-		this.loadedInMag--;
 		this.fireTime%=(1/type.fireRate);
-		owner.playSound("gun_shot");
+		
+		if (this.type.category != CATEGORY_MELEE) {			
+			owner.getRegion().addParticles(Particle.Type.GUNFIRE, null, 1, 0, x, y, 0, 0);
+			this.loadedInMag--;
+			owner.playSound("gun_shot");
+		}
 	}
 	
 	private boolean reload = false;
@@ -223,7 +234,7 @@ public class Weapon implements Serializable {
 	}
 	
 	public int getAmmoStock() {
-		return this.stock;
+		return (this.type.category == CATEGORY_MELEE) ? 1 : this.stock;
 	}
 	
 	/**
